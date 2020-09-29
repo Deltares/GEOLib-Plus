@@ -52,3 +52,5 @@ Thumbs.db
 .vscode
 *cache
 docs/build*
+.coverage
+test-reports
