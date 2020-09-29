@@ -48,3 +48,7 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Custom
+.vscode
+*cache
+docs/build*
