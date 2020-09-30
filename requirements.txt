@@ -1,17 +1,40 @@
+alabaster==0.7.12
 atomicwrites==1.4.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
 attrs==20.2.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
+babel==2.8.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
+certifi==2020.6.20
+chardet==3.0.4
 colorama==0.4.3; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 coverage==5.3; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4"
+docutils==0.16; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
+imagesize==1.2.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
 importlib-metadata==2.0.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 iniconfig==1.0.1
+jinja2==2.11.2; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+markupsafe==1.1.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
 packaging==20.4; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
 pluggy==0.13.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
 py==1.9.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0"
 pydantic==1.6.1; python_version >= "3.6"
+pygments==2.7.1; python_version >= "3.5"
 pyparsing==2.4.7; python_version >= "2.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0"
 pytest==6.1.0; python_version >= "3.5"
 pytest-cov==2.10.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+pytz==2020.1
+releases==1.6.3
+requests==2.24.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+semantic-version==2.6.0
 six==1.15.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.3.0"
+snowballstemmer==2.0.0
+sphinx==3.2.1; python_version >= "3.5"
+sphinxcontrib-applehelp==1.0.2; python_version >= "3.5"
+sphinxcontrib-devhelp==1.0.2; python_version >= "3.5"
+sphinxcontrib-htmlhelp==1.0.3; python_version >= "3.5"
+sphinxcontrib-jsmath==1.0.1; python_version >= "3.5"
+sphinxcontrib-qthelp==1.0.3; python_version >= "3.5"
+sphinxcontrib-serializinghtml==1.1.4; python_version >= "3.5"
 teamcity-messages==1.28
 toml==0.10.1
+urllib3==1.25.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4"
 zipp==3.2.0; python_version >= "3.6"
