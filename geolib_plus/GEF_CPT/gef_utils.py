@@ -1,5 +1,4 @@
 """Tools to read gef files"""
-import os
 import re
 import numpy as np
 
@@ -56,7 +55,7 @@ def read_gef(gef_file, id, key_cpt, fct_a=0.8):
     coord = list(map(float, re.sub("[ ,!\t]+", ";", data[idx_coord].strip()).split("#XYID=")[-1].split(";")[2:4]))
 
     depth = [i for i in result_dictionary['depth']]
-    z_NAP = [i - NAP for j, i in enumerate(result_dictionary['depth'])]
+    z_NAP = [NAP - i for j, i in enumerate(result_dictionary['depth'])]
 
     res = dict(name=name,
                depth=np.array(depth),
