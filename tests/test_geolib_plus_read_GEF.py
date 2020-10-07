@@ -11,7 +11,7 @@ def test_reading_gef():
 
     test_coord = [244319.00, 587520.00]
     test_depth = np.linspace(1, 20, 20)
-    test_NAP = test_depth - 0.13
+    test_NAP = 0.13 - test_depth
     test_tip = np.full(20, 1000)
     test_friction = np.full(20, 2000)
     test_friction_nbr = np.full(20, 5)
