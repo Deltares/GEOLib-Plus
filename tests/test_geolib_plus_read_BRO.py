@@ -1,4 +1,5 @@
 from geolib_plus.BRO_XML_CPT import BRO_XML_CPT
+from geolib_plus.GEF_CPT import GEF_CPT
 import numpy as np
 from pathlib import Path
 
