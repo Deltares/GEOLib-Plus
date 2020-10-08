@@ -4,9 +4,6 @@ from abc import abstractmethod
 from pathlib import Path
 from pydantic import BaseModel
 
-from .plot_cpt import plot_cpt_norm
-from .plot_settings import PlotSettings
-
 class AbstractInterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
 
@@ -16,7 +13,9 @@ class RobertsonMethod(AbstractInterpretationMethod):
 
 
 class AbstractCPT(BaseModel):
+
     """Base CPT class, should define abstract."""
+    
     #  variables
     depth = []
     coordinates = []
@@ -86,15 +85,6 @@ class AbstractCPT(BaseModel):
     # def interpret(self, method: AbstractInterpretationMethod) -> "Profile":
     #     pass
     #
-
-    def plot(self, directory: Path):
-        # plot cpt data
-        try:
-            plot_setting = PlotSettings()
-            plot_setting.assign_default_settings()
-            plot_cpt_norm(self, directory, plot_setting.general_settings)
-
-        except (ValueError, IndexError):
-            print("Cpt data and/or settings are not valid")
-        except PermissionError as error:
-            print(error)
+    # @abstractmethod
+    # def plot(self):
+    #     pass
