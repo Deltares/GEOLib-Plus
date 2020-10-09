@@ -229,7 +229,7 @@ class GefLib:
             self.__write_error_log(log_filename)
         args = (str(level), str(log_filename))
         if error or log:
-            self.__valid_messages[(error, log_filename is not None)](args)
+            self.__valid_messages[(error, log_filename is not None)](self, args)
 
 
 def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
