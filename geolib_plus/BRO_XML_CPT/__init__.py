@@ -1,5 +1,6 @@
 from geolib_plus import AbstractCPT
 from .bro_utils import xml_to_byte_string, parse_bro_xml
+from .validate_bro import validate_bro_cpt
 
 # External modules
 import numpy as np
@@ -10,6 +11,9 @@ class BRO_XML_CPT(AbstractCPT):
     __water_measurement_types = ["porePressureU1", "porePressureU2", "porePressureU3"]
 
     def read(self, bro_xml_file):
+
+        # validate bro xml file
+        validate_bro_cpt(bro_xml_file)
 
         # read the BRO_XML into Memory
         xml = xml_to_byte_string(bro_xml_file)
@@ -255,12 +259,6 @@ class BRO_XML_CPT(AbstractCPT):
         if depth.size == 0:
             depth = cpt_BRO['dataframe']['penetrationLength'].values
         return depth
-
-if __name__ == "__main__":
-
-    cpt = BRO_XML_CPT()
-    cpt.read(r"CPT000000003688_IMBRO_A.xml")
-    print(cpt)
 
 
 
