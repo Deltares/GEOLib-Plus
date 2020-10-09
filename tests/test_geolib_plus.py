@@ -79,15 +79,23 @@ def test_reading_gef():
 
 
 # System Test for geolib_plus_read_GEF & BRO based comparing result for same file
+
+testdata = [('CPT000000063044_IMBRO_A'),
+            ('CPT000000063045_IMBRO_A'),
+            ('CPT000000064413_IMBRO_A'),
+            ('CPT000000065880_IMBRO_A'),
+            ('CPT000000003688_IMBRO_A')]
+
 @pytest.mark.systemtest
-def test_reading_compare():
+@pytest.mark.parametrize("name", testdata, ids=testdata)
+def test_reading_compare(name):
     # Compare two files from bro (same CPT) in GEF and BRO Format
     # Should be comparable
 
-    bro_file = Path("../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
+    bro_file = Path("../tests/test_files/cpt/bro_xml/" + name + ".xml")
 
-    gef_file = Path("../tests/test_files/cpt/gef/CPT000000003688_IMBRO_A.gef")
-    gef_id = "CPT000000003688"
+    gef_file = Path("../tests/test_files/cpt/gef/" + name + ".gef")
+    gef_id = name.split('_')[0]
 
     gef_cpt = GEF_CPT()
     gef_cpt.read(gef_file, gef_id)
