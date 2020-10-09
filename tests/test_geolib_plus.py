@@ -7,13 +7,13 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 def test_version():
     assert __version__ == "0.1.0"
 
 
 # System Test for geolib_plus_read_BRO
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 def test_reading_bro():
     bro_file = Path("../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
     cpt = BRO_XML_CPT()
@@ -52,7 +52,7 @@ def test_reading_bro():
 
 
 # System Test for geolib_plus_read_GEF
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 def test_reading_gef():
     file = Path("../tests/test_files/cpt/gef/unit_testing/unit_testing.gef")
     gef_id = "unit_testing.gef"
@@ -79,7 +79,7 @@ def test_reading_gef():
 
 
 # System Test for geolib_plus_read_GEF & BRO based comparing result for same file
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 def test_reading_compare():
     # Compare two files from bro (same CPT) in GEF and BRO Format
     # Should be comparable
@@ -106,7 +106,7 @@ def test_reading_compare():
     np.testing.assert_array_equal(bro_cpt.friction_nbr, gef_cpt.friction_nbr)
     np.testing.assert_array_equal(bro_cpt.water, gef_cpt.water)
 
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 # Test validation of BRO-XML file structure .... with clean file
 def test_validate_bro_no_error():
     bro_xml_file_path = Path('../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml')
@@ -115,14 +115,14 @@ def test_validate_bro_no_error():
     except:  # catch *all* exceptions
         pytest.fail("Validation Error: CPT BRO_XML without error raises error")
 
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 # Test validation of BRO-XML file structure ..... with file with error
 def test_validate_bro_error():
     bro_xml_file_err_path = Path('../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A_err.xml')
     with pytest.raises(Exception):
         validate_bro_cpt(bro_xml_file_err_path)
 
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 # Test validation of gef file structure .... with usable file
 def test_validate_gef_no_error():
     # This file raises a warning - it is in another process so can't capture it
@@ -132,7 +132,7 @@ def test_validate_gef_no_error():
     except:
         pytest.fail("GEF file without error raised Error")
 
-#@pytest.mark.systemtest
+@pytest.mark.systemtest
 # Test validation of gef file structure ..... with file with error
 def test_validate_gef_error():
     # This file raises a warning
