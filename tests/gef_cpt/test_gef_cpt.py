@@ -1,8 +1,8 @@
 import pytest
-from geolib_plus import plot_utils
+from geolib_plus.gef_cpt import GefCpt
 
 # todo JN: write unit tests
-# class TestPlotUtil:
+# class TestGefCpt:
 #     @pytest.mark.unittest
-#     def test_plot_util_unit_tests(self):
+#     def test_gef_cpt_unit_tests(self):
 #         raise NotImplementedError

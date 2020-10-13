@@ -1,8 +1,8 @@
 import pytest
-from geolib_plus import plot_utils
+import geolib_plus.bro_xml_cpt
 
 # todo JN: write unit tests
-# class TestPlotUtil:
+# class TestBroXmlCpt:
 #     @pytest.mark.unittest
-#     def test_plot_util_unit_tests(self):
+#     def test_bro_xml_cpt_unit_tests(self):
 #         raise NotImplementedError

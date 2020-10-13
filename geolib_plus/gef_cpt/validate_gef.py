@@ -277,10 +277,10 @@ def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
 
     lib_handle._unload_dll()
     del lib_handle
-
     return 0
 
-def execute_cpt_gef_validation(filename: Path, logging: bool = True):
+
+def validate_gef_cpt(filename: Path, logging: bool = True):
     """
       Execution of validation. This is thread safe.
       Thus multiple versions of geflib.dll can be loaded in spawned processes without interferring.
