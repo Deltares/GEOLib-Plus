@@ -53,8 +53,7 @@ pipelines:
                 - pip
               script:
                 - pip install -r requirements.txt
-                - pytest -v --cov=geolib_plus --cov-report xml:test-reports/coverage.xml --junitxml=test-reports/report.xml tests/ -m "unittest and not workinprogress"
-                - pytest -v -m "not unittest and not workinprogress"
+                - pytest -v --cov=geolib_plus --cov-report xml:test-reports/coverage.xml --junitxml=test-reports/report.xml tests/ -m "not workinprogress"
           - step: # create documentation
               name: Create documentation.
               caches:
