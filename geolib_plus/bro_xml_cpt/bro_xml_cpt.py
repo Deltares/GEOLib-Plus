@@ -1,11 +1,11 @@
+# External modules
+import numpy as np
+
 from geolib_plus import AbstractCPT
 from .bro_utils import xml_to_byte_string, parse_bro_xml
 from .validate_bro import validate_bro_cpt
 
-# External modules
-import numpy as np
-
-class BRO_XML_CPT(AbstractCPT):
+class BroXmlCpt(AbstractCPT):
 
     water_measurement_type = []
     __water_measurement_types = ["porePressureU1", "porePressureU2", "porePressureU3"]

@@ -1,6 +1,6 @@
 from geolib_plus import __version__
-from geolib_plus.GEF_CPT import *
-from geolib_plus.BRO_XML_CPT import *
+from geolib_plus.bro_xml_cpt import *
+from geolib_plus.gef_cpt import *
 
 # External
 from pathlib import Path
@@ -15,8 +15,8 @@ def test_version():
 # System Test for geolib_plus_read_BRO
 @pytest.mark.systemtest
 def test_reading_bro():
-    bro_file = Path("../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
-    cpt = BRO_XML_CPT()
+    bro_file = Path("./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
+    cpt = BroXmlCpt()
     cpt.read(bro_file)
 
     test_coord = [91931.000, 438294.000]
@@ -54,10 +54,10 @@ def test_reading_bro():
 # System Test for geolib_plus_read_GEF
 @pytest.mark.systemtest
 def test_reading_gef():
-    file = Path("../tests/test_files/cpt/gef/unit_testing/unit_testing.gef")
+    file = Path("./test_files/cpt/gef/unit_testing/unit_testing.gef")
     gef_id = "unit_testing.gef"
 
-    cpt = GEF_CPT()
+    cpt = GefCpt()
     cpt.read(file, gef_id)
 
     test_coord = [244319.00, 587520.00]
@@ -86,25 +86,27 @@ testdata = [('CPT000000063044_IMBRO_A'),
             ('CPT000000065880_IMBRO_A'),
             ('CPT000000003688_IMBRO_A')]
 
+
+@pytest.mark.workinprogress
 @pytest.mark.systemtest
 @pytest.mark.parametrize("name", testdata, ids=testdata)
 def test_reading_compare(name):
     # Compare two files from bro (same CPT) in GEF and BRO Format
     # Should be comparable
 
-    bro_file = Path("../tests/test_files/cpt/bro_xml/" + name + ".xml")
+    bro_file = Path("./test_files/cpt/bro_xml/" + name + ".xml")
 
-    gef_file = Path("../tests/test_files/cpt/gef/" + name + ".gef")
+    gef_file = Path("./test_files/cpt/gef/" + name + ".gef")
     gef_id = name.split('_')[0]
 
-    gef_cpt = GEF_CPT()
+    gef_cpt = GefCpt()
     gef_cpt.read(gef_file, gef_id)
 
-    bro_cpt = BRO_XML_CPT()
+    bro_cpt = BroXmlCpt()
     bro_cpt.read(bro_file)
 
     np.testing.assert_array_equal(bro_cpt.name, gef_cpt.name)
-    np.testing.assert_array_equal(bro_cpt.coordinates, bro_cpt.coordinates)
+    np.testing.assert_array_equal(bro_cpt.coordinates, gef_cpt.coordinates)
 
     # todo: JN The following tests current fail, the arrays are different size as are the depths
     np.testing.assert_array_equal(bro_cpt.depth, gef_cpt.depth)
@@ -117,7 +119,7 @@ def test_reading_compare(name):
 @pytest.mark.systemtest
 # Test validation of BRO-XML file structure .... with clean file
 def test_validate_bro_no_error():
-    bro_xml_file_path = Path('../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml')
+    bro_xml_file_path = Path('./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml')
     try:
         validate_bro_cpt(bro_xml_file_path)
     except:  # catch *all* exceptions
@@ -126,7 +128,7 @@ def test_validate_bro_no_error():
 @pytest.mark.systemtest
 # Test validation of BRO-XML file structure ..... with file with error
 def test_validate_bro_error():
-    bro_xml_file_err_path = Path('../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A_err.xml')
+    bro_xml_file_err_path = Path('./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A_err.xml')
     with pytest.raises(Exception):
         validate_bro_cpt(bro_xml_file_err_path)
 
@@ -134,9 +136,9 @@ def test_validate_bro_error():
 # Test validation of gef file structure .... with usable file
 def test_validate_gef_no_error():
     # This file raises a warning - it is in another process so can't capture it
-    gef_file = Path("../tests/test_files/cpt/gef/CPT000000003688_IMBRO_A.gef")
+    gef_file = Path("./test_files/cpt/gef/CPT000000003688_IMBRO_A.gef")
     try:
-        validate_gef.execute_cpt_gef_validation(gef_file)
+        validate_gef_cpt(gef_file)
     except:
         pytest.fail("GEF file without error raised Error")
 
@@ -144,6 +146,6 @@ def test_validate_gef_no_error():
 # Test validation of gef file structure ..... with file with error
 def test_validate_gef_error():
     # This file raises a warning
-    gef_file = Path("../tests/test_files/cpt/gef/CPT000000003688_IMBRO_A_err.gef")
+    gef_file = Path("./test_files/cpt/gef/CPT000000003688_IMBRO_A_err.gef")
     with pytest.raises(Exception):
-        validate_gef.execute_cpt_gef_validation(gef_file)
+        validate_gef_cpt(gef_file)
