@@ -1,15 +1,25 @@
 import pytest
-
+from pathlib import Path
 from geolib_plus.GEF_CPT.gef_cpt import GefCpt
 
 
-# todo JN: write unit tests
 class TestGefCpt:
-    # @pytest.mark.integrationtest
-    # def test_gefcpt_read_given_no_arguments_throws(self):
-    #     with pytest.raises(Exception) as e_info:
-    #         gef_cpt = GefCpt()
-    #         gef_cpt.read(None)
+    @pytest.mark.integrationtest
+    @pytest.mark.parametrize(
+        "gef_file, arg_id, expectation",
+        [
+            (None, None, pytest.raises(ValueError)),
+            ("path_not_found", None, pytest.raises(ValueError)),
+            ("path_not_found", 42, pytest.raises(FileNotFoundError)),
+            (None, 42, pytest.raises(ValueError)),
+        ],
+    )
+    def test_gefcpt_read_given_not_valid_gef_file_throws_file_not_found(
+        self, gef_file: Path, arg_id: int, expectation
+    ):
+        with expectation:
+            gef_cpt = GefCpt()
+            gef_cpt.read(gef_file, arg_id)
 
     @pytest.mark.unittest
     @pytest.mark.workinprogress

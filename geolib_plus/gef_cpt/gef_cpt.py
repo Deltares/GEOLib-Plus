@@ -8,6 +8,13 @@ class GefCpt(AbstractCPT):
     def read(self, gef_file: Path, id, key_cpt=None):
 
         # validate gef_file
+        if not gef_file:
+            raise ValueError(gef_file)
+        if not id:
+            raise ValueError(id)
+        gef_file = Path(gef_file)
+        if not gef_file.is_file():
+            raise FileNotFoundError(gef_file)
         validate_gef_cpt(gef_file)
 
         if key_cpt is None:
