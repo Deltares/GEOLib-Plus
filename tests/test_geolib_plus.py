@@ -15,7 +15,7 @@ def test_version():
 # System Test for geolib_plus_read_BRO
 @pytest.mark.systemtest
 def test_reading_bro():
-    bro_file = Path("../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
+    bro_file = Path("./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
     cpt = BroXmlCpt()
     cpt.read(bro_file)
 
@@ -54,7 +54,7 @@ def test_reading_bro():
 # System Test for geolib_plus_read_GEF
 @pytest.mark.systemtest
 def test_reading_gef():
-    file = Path("../tests/test_files/cpt/gef/unit_testing/unit_testing.gef")
+    file = Path("./test_files/cpt/gef/unit_testing/unit_testing.gef")
     gef_id = "unit_testing.gef"
 
     cpt = GefCpt()
@@ -94,9 +94,9 @@ def test_reading_compare(name):
     # Compare two files from bro (same CPT) in GEF and BRO Format
     # Should be comparable
 
-    bro_file = Path("../tests/test_files/cpt/bro_xml/" + name + ".xml")
+    bro_file = Path("./test_files/cpt/bro_xml/" + name + ".xml")
 
-    gef_file = Path("../tests/test_files/cpt/gef/" + name + ".gef")
+    gef_file = Path("./test_files/cpt/gef/" + name + ".gef")
     gef_id = name.split('_')[0]
 
     gef_cpt = GefCpt()
@@ -119,7 +119,7 @@ def test_reading_compare(name):
 @pytest.mark.systemtest
 # Test validation of BRO-XML file structure .... with clean file
 def test_validate_bro_no_error():
-    bro_xml_file_path = Path('../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml')
+    bro_xml_file_path = Path('./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml')
     try:
         validate_bro_cpt(bro_xml_file_path)
     except:  # catch *all* exceptions
@@ -128,7 +128,7 @@ def test_validate_bro_no_error():
 @pytest.mark.systemtest
 # Test validation of BRO-XML file structure ..... with file with error
 def test_validate_bro_error():
-    bro_xml_file_err_path = Path('../tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A_err.xml')
+    bro_xml_file_err_path = Path('./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A_err.xml')
     with pytest.raises(Exception):
         validate_bro_cpt(bro_xml_file_err_path)
 
@@ -136,7 +136,7 @@ def test_validate_bro_error():
 # Test validation of gef file structure .... with usable file
 def test_validate_gef_no_error():
     # This file raises a warning - it is in another process so can't capture it
-    gef_file = Path("../tests/test_files/cpt/gef/CPT000000003688_IMBRO_A.gef")
+    gef_file = Path("./test_files/cpt/gef/CPT000000003688_IMBRO_A.gef")
     try:
         validate_gef_cpt(gef_file)
     except:
@@ -146,6 +146,6 @@ def test_validate_gef_no_error():
 # Test validation of gef file structure ..... with file with error
 def test_validate_gef_error():
     # This file raises a warning
-    gef_file = Path("../tests/test_files/cpt/gef/CPT000000003688_IMBRO_A_err.gef")
+    gef_file = Path("./test_files/cpt/gef/CPT000000003688_IMBRO_A_err.gef")
     with pytest.raises(Exception):
         validate_gef_cpt(gef_file)
