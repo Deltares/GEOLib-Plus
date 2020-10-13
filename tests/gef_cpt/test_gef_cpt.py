@@ -1,9 +1,16 @@
 import pytest
+<<<<<<< HEAD:tests/GEF_CPT/test_GEF_CPT.py
 from geolib_plus.GEF_CPT import GEF_CPT
 import numpy as np
+=======
+from geolib_plus.gef_cpt import GefCpt
+>>>>>>> fb3e7dcdf4646e315885acbeddb67bfd1c133131:tests/gef_cpt/test_gef_cpt.py
 
+
+# todo JN: write unit tests
 class TestGefCpt:
     @pytest.mark.unittest
+    @pytest.mark.workinprogress
     def test_gef_cpt_unit_tests(self):
         # simple read test of the cpt
         cpt = GEF_CPT()

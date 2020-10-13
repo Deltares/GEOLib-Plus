@@ -1,11 +1,18 @@
 import pytest
+<<<<<<< HEAD:tests/GEF_CPT/test_gef_utils.py
 from geolib_plus.GEF_CPT import gef_utils
 import numpy as np
 import re
 
+=======
+from geolib_plus.gef_cpt import gef_utils
+>>>>>>> fb3e7dcdf4646e315885acbeddb67bfd1c133131:tests/gef_cpt/test_gef_utils.py
 
+
+# todo JN: write unit tests
 class TestGefUtil:
     @pytest.mark.unittest
+    @pytest.mark.workinprogress
     def test_gef_util_unit_tests(self):
         raise NotImplementedError
 
