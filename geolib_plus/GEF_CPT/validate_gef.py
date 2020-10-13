@@ -1,326 +1,302 @@
-# Based on MDCPTData.pas
 from ctypes import *
-from os.path import splitext
+from os.path import splitext, join
 from os import remove
 import warnings
 from multiprocessing import Pool
 from pathlib import Path
-import sys
 
-######################## GEF2 - Functions ##############################################
-class gef2_dll:
+
+class GefLib:
+
+    """
+    Wrapper class and functions around geflib (gef2.dll) functions required for validating of gef input files (.gef)
+    Collection of helper functions for validating gef files.
+    """
 
     def __init__(self):
 
-        sourceDLL = r"..\geolib_plus\resources\geflib.dll"
+        source_dll = r"..\geolib_plus\resources\geflib.dll"
 
-        self.hDLL = WinDLL(sourceDLL)
-        # Load DLL into memory.
+        # Load DLL into memory. (Only works for windows)
+        self.__lib_handle = WinDLL(source_dll)
 
-        func = self.hDLL['init_gef']
+        # Initialize DLL into memory.
+        func = self.__lib_handle['init_gef']
         func.restype = c_int
         result = func()
         if result == 1:
             return
         else:
-            raise Exception("geflib.dll not found")
+            raise FileNotFoundError(f"{source_dll} not found")
 
-    def test_gef(self, item):
-        func = self.hDLL['test_gef']
+    def __test_gef(self, component: str):
+        func = self.__lib_handle['test_gef']
         func.restype = c_int
         func.argtype = c_char_p
-        return func(item.encode('utf-8'))
+        return func(component.encode('utf-8'))
 
-    def free_gef(self):
-        func = self.hDLL['free_gef']
+    def __free_gef(self):
+        func = self.__lib_handle['free_gef']
         func.restype = c_int
         return func()
 
-    def unload_dll(self):
-        self.free_gef()
-        del self.hDLL
+    def _unload_dll(self):
+        self.__free_gef()
+        del self.__lib_handle
 
-    def read_gef(self, cFile: Path) -> int:
-        func = self.hDLL['read_gef']
-        func.restype = c_int
-        func.argtype = c_char_p
-        return func(str(cFile).encode('utf-8'))
-
-    def get_procedurecode_flag(self) -> int:
-        func = self.hDLL['get_procedurecode_flag']
-        func.restype = c_int
-        return func()
-
-    def get_procedurecode_code(self) -> str:
-        func = self.hDLL['get_procedurecode_code']
-        func.restype = c_char_p
-        return func()
-    
-    def get_procedurecode_release(self) -> int:
-        func = self.hDLL['get_procedurecode_release']
-        func.restype = c_int
-        return func()
-
-    def get_procedurecode_versie(self) -> int:
-        func = self.hDLL['get_procedurecode_versie']
-        func.restype = c_int
-        return func()
-
-    def get_procedurecode_update(self) -> int:
-        func = self.hDLL['get_procedurecode_update']
-        func.restype = c_int
-        return func()
-
-    def get_procedurecode_isoref(self) -> int:
-        func = self.hDLL['get_procedurecode_code']
-        func.restype = c_char_p
-        return func()
-
-    def get_reportcode_flag(self) -> int:
-        func = self.hDLL['get_reportcode_flag']
-        func.restype = c_int
-        return func()
-
-    def get_reportcode_code(self) -> str:
-        func = self.hDLL['get_reportcode_code']
-        func.restype = c_char_p
-        return func()
-
-    def get_reportcode_release(self) -> int:
-        func = self.hDLL['get_reportcode_release']
-        func.restype = c_int
-        return func()
-
-    def get_reportcode_versie(self) -> int:
-        func = self.hDLL['get_reportcode_versie']
-        func.restype = c_int
-        return func()
-
-    def get_reportcode_update(self) -> int:
-        func = self.hDLL['get_reportcode_update']
-        func.restype = c_int
-        return func()
-
-    def get_reportcode_isoref(self) -> int:
-        func = self.hDLL['get_reportcode_code']
-        func.restype = c_char_p
-        return func()
-
-    def get_analysiscode_flag(self) -> int:
-        func = self.hDLL['get_analysiscode_flag']
-        func.restype = c_int
-        return func()
-
-    def get_analysiscode_code(self) -> str:
-        func = self.hDLL['get_analysiscode_code']
-        func.restype = c_char_p
-        return func()
-    
-    def get_analysiscode_release(self) -> int:
-        func = self.hDLL['get_analysiscode_release']
-        func.restype = c_int
-        return func()
-
-    def get_analysiscode_versie(self) -> int:
-        func = self.hDLL['get_analysiscode_versie']
-        func.restype = c_int
-        return func()
-
-    def get_analysiscode_update(self) -> int:
-        func = self.hDLL['get_analysiscode_update']
-        func.restype = c_int
-        return func()
-
-    def get_analysiscode_isoref(self) -> int:
-        func = self.hDLL['get_analysiscode_code']
-        func.restype = c_char_p
-        return func()
-    
-    def get_measurementcode_flag(self) -> int:
-        func = self.hDLL['get_measurementcode_flag']
-        func.restype = c_int
-        return func()
-
-    def get_measurementcode_code(self) -> str:
-        func = self.hDLL['get_measurementcode_code']
-        func.restype = c_char_p
-        return func()
-
-    def get_measurementcode_release(self) -> int:
-        func = self.hDLL['get_measurementcode_release']
-        func.restype = c_int
-        return func()
-
-    def get_measurementcode_versie(self) -> int:
-        func = self.hDLL['get_measurementcode_versie']
-        func.restype = c_int
-        return func()
-
-    def get_measurementcode_update(self) -> int:
-        func = self.hDLL['get_measurementcode_update']
-        func.restype = c_int
-        return func()
-
-    def get_measurementcode_isoref(self) -> int:
-        func = self.hDLL['get_measurementcode_code']
-        func.restype = c_char_p
-        return func()
-
-    def get_error_level_all(self) -> int:
-        func = self.hDLL['get_error_level_all']
-        func.restype = c_int
-        return func()
-
-    def get_error_text(self, error_code: int) -> str:
-        func = self.hDLL['get_error_text']
-        func.restype = c_char_p
-        func.argtype = c_int
-        return func(error_code).decode('utf-8')
-
-    def write_error_log(self, cFile: str) -> int:
-        func = self.hDLL['write_error_log']
+    def _read_gef(self, file_path: Path) -> int:
+        func = self.__lib_handle['read_gef']
         func.restype = c_int
         func.argtype = c_char_p
-        return func(cFile.encode('utf-8'))
+        return func(str(file_path).encode('utf-8'))
 
-######################## D Series - GeoLib Function ##############################################
+    def __get_procedurecode_flag(self) -> int:
+        func = self.__lib_handle['get_procedurecode_flag']
+        func.restype = c_int
+        return func()
 
-def GetCode(ACode: str) -> str:
+    def __get_procedurecode_code(self) -> str:
+        func = self.__lib_handle['get_procedurecode_code']
+        func.restype = c_char_p
+        return func()
 
-    CsGEFBOREReport: str = 'GEF-BORE-REPORT'
-    CsGEFCPTReport: str = 'GEF-CPT-REPORT'
-    CsShortGEFCPTReport: str = 'CPT-REPORT'
-    CsGEFZSTEENINVOER: str = 'GEF-ZSTEEN-INVOER'
+    def __get_reportcode_flag(self) -> int:
+        func = self.__lib_handle['get_reportcode_flag']
+        func.restype = c_int
+        return func()
 
-    ACode = ACode.decode("utf-8").strip(' ').upper()
+    def __get_reportcode_code(self) -> str:
+        func = self.__lib_handle['get_reportcode_code']
+        func.restype = c_char_p
+        return func()
 
-    if (ACode == CsGEFCPTReport) or (ACode == CsShortGEFCPTReport):
-        return "gefCPTReport"
+    def __get_analysiscode_flag(self) -> int:
+        func = self.__lib_handle['get_analysiscode_flag']
+        func.restype = c_int
+        return func()
 
-    if 'CPT-A' in ACode:
-        return "gefCPTAnalysis"
+    def __get_analysiscode_code(self) -> str:
+        func = self.__lib_handle['get_analysiscode_code']
+        func.restype = c_char_p
+        return func()
 
-    if 'CPT-M' in ACode:
-        return "gefCPTMeasurement"
+    def __get_measurementcode_flag(self) -> int:
+        func = self.__lib_handle['get_measurementcode_flag']
+        func.restype = c_int
+        return func()
 
-    if ACode == CsGEFBOREReport:
-        return "gefBoringReport"
+    def __get_measurementcode_code(self) -> str:
+        func = self.__lib_handle['get_measurementcode_code']
+        func.restype = c_char_p
+        return func()
 
-    if 'BoreA' in ACode:
-        return "gefBoringAnalysis"
+    def __get_error_level_all(self) -> int:
+        func = self.__lib_handle['get_error_level_all']
+        func.restype = c_int
+        return func()
 
-    if 'BoreM' in ACode:
-        return "gefBoringMeasurement"
+    def __write_error_log(self, file_path: Path) -> int:
+        func = self.__lib_handle['write_error_log']
+        func.restype = c_int
+        func.argtype = c_char_p
+        return func(str(file_path).encode('utf-8'))
 
-    if ACode == CsGEFZSTEENINVOER:
-        return "gefWave"
+    @staticmethod
+    def _get_code(code: str) -> str:
+        """
+        Converts Code to gef file code to procedure code.
 
-    return None
+        :param code: gef file code
+        :type code: str
+        :return: gef procedure code
+        :rtype str
+        """
 
+        cs_gefbore_report: str = 'GEF-BORE-REPORT'
+        cs_gefcpt_report: str = 'GEF-CPT-REPORT'
+        cs_short_gefcpt_report: str = 'CPT-REPORT'
+        cs_gefzsteeninvoer: str = 'GEF-ZSTEEN-INVOER'
 
-def GetGefType(hDLL: gef2_dll, AFileName) -> str:
-    Result = None  # gef unknown
-    hDLL.read_gef(AFileName)
-    # Try for REPORT first( for CPTs, this can be in reportcode or in procedurecode)
-    flag = hDLL.get_procedurecode_flag()
-    if flag == 1:
-        return GetCode(hDLL.get_procedurecode_code())
+        code = code.decode("utf-8").strip(' ').upper()
 
-    if Result is None:
-        flag = hDLL.get_reportcode_flag()
+        if (code == cs_gefcpt_report) or (code == cs_short_gefcpt_report):
+            return "gefCPTReport"
+        if 'CPT-A' in code:
+            return "gefCPTAnalysis"
+        if 'CPT-M' in code:
+            return "gefCPTMeasurement"
+        if code == cs_gefbore_report:
+            return "gefBoringReport"
+        if 'BoreA' in code:
+            return "gefBoringAnalysis"
+        if 'BoreM' in code:
+            return "gefBoringMeasurement"
+        if code == cs_gefzsteeninvoer:
+            return "gefWave"
+        return "NotFound"
+
+    def _get_gef_type(self) -> str:
+        """
+        Returns the type of the gef file. gef must have been read first
+
+        :return: type of gef file
+        :rtype str
+        """
+
+        # Try for REPORT first( for CPTs, this can be in reportcode or in procedurecode)
+        flag = self.__get_procedurecode_flag()
         if flag == 1:
-            return GetCode(hDLL.get_reportcode_code())
+            return self._get_code(self.__get_procedurecode_code())
 
-    # when GEF is not recognized as a kind of report, try for Analysis
-    if Result is None:
-        flag = hDLL.get_analysiscode_flag()
+        flag = self.__get_reportcode_flag()
         if flag == 1:
-            return GetCode(hDLL.get_analysiscode_code())
+            return self._get_code(self.__get_reportcode_code())
 
-    # when GEF is still not recognized, try for Measurement
-    if Result is None:
-        flag = hDLL.get_measurementcode_flag()
+        # when GEF is not recognized as a kind of report, try for Analysis
+        flag = self.__get_analysiscode_flag()
         if flag == 1:
-            return GetCode(hDLL.get_measurementcode_code())
+            return self._get_code(self.__get_analysiscode_code())
 
-    # when GEF is still not recognized, try for Database BORE Measurement file. To be recognized by GEF-BORE as code
-    if Result is None:
-        flag = hDLL.get_procedurecode_flag()
+        # when GEF is still not recognized, try for Measurement
+        flag = self.__get_measurementcode_flag()
         if flag == 1:
-            LCode = hDLL.get_procedurecode_code().upper()
-            if 'GEF-BORE' in LCode:
+            return self._get_code(self.__get_measurementcode_code())
+
+        # when GEF is still not recognized, try for Database BORE Measurement file. To be recognized by GEF-BORE as code
+        flag = self.__get_procedurecode_flag()
+        if flag == 1:
+            l_code = self.__get_procedurecode_code().upper()
+            if 'GEF-BORE' in l_code:
                 return "gefBoringMeasurement"
-    else:
-        return None
+        else:
+            return "NotFound"
+
+    def _does_gef_contain_serious_errors(self) -> (bool, bool, int):
+
+        """
+        Returns errors, warnings for reading the gef file
+
+        :return: is there an error
+        :rtype bool
+        :return l_log: is a log generated (i.e. Error or Warning)
+        :rtype bool
+        :return l_error_level: the level of error in the gef file
+        :rtype int
+        """
+
+        self.__test_gef('Header')
+
+        l_log = False
+        l_error_level = self.__get_error_level_all()
+        l_error = l_error_level in [1, 2, 11, 12]
+
+        if not l_error:
+            # Only continue check when nothing serious so far.
+            self.__test_gef('Data')
+            l_error_level = self.__get_error_level_all()
+            l_error = l_error_level in [1, 2, 11, 12]
+
+        if (l_error_level > -1) and (l_error_level not in [5, 6, 15, 16]):
+            l_log = True
+
+        return l_error, l_log, l_error_level
+
+    # validation errors and warnings
+    
+    def __error_log(self, args):
+        raise ValueError(f'Validation Error: Severe GEF Error: Code {args[0]}. See Log File: {args[1]}')
+
+    def __error_no_log(self, args):
+        raise ValueError(f'Validation Error: Severe GEF Error: Code {args[0]}. '
+                         f'Check that the file conforms to GEF CPT Standard')
+
+    def __no_error_log(self, args):
+        warnings.warn(f'Validation Warning: This file has raised a GEF warning: Code {args[0]}.  '
+                      f'See Log File: {args[1]}')
+
+    def __no_error_no_log(self, args):
+        warnings.warn(f'Validation Warning: This file has raised the GEF warning: Code {args[0]}). '
+                      f'Check that the file conforms to GEF CPT Standard')
+
+    __valid_messages = {
+        (True, True): __error_log,
+        (True, False): __error_no_log,
+        (False, True): __no_error_log,
+        (False, False): __no_error_no_log}
+
+    def _error_handling(self, error: bool, log: bool, level: int, log_filename: Path = None):
+        if (error or log) and log_filename is not None:
+            self.__write_error_log(log_filename)
+        args = (str(level), str(log_filename))
+        if error or log:
+            self.__valid_messages[(error, log_filename is not None)](self, args)
 
 
-def DoesGEFContainSeriousErrors(hDLL: gef2_dll) -> (bool, bool, int):
-    hDLL.test_gef('Header')
+def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
+    """
+          Raises errors or warnings and returns 0
 
-    LLog = False
-    LErrorLevel = hDLL.get_error_level_all()
-    LError = LErrorLevel in [1, 2, 11, 12]
+          :param filename: path to gef file
+          :type filename: Path
+          :param logging: generate warning and error log file
+          :type logging: bool
+          :return l_error: is there an error
+          :rtype bool
+          :return l_log: is a log generated (i.e. Error or Warning)
+          :rtype bool
+          :return l_error_level: the level of error in the gef file
+          :rtype int
+    """
 
-    if not LError:
-        # Only continue check when nothing serious so far.
-        hDLL.test_gef('Data')
-        LErrorLevel = hDLL.get_error_level_all()
-        LError = LErrorLevel in [1, 2, 11, 12]
+    lib_handle = GefLib()
 
-    if (LErrorLevel > -1) and (LErrorLevel not in [5, 6, 15, 16]):
-        LLog = True
+    result = lib_handle._read_gef(filename)
+    if result != 1:
+        raise FileNotFoundError(f"{filename} not found")
 
-    return LError, LLog, LErrorLevel
+    l_err_filename = None
 
-
-def ValidateCPTFromGEF(AFileName: str, ALogging: bool = True) -> int:
-
-    if ALogging:
+    if logging:
         # file name for err \ delete existing if necessary
-        pre, ext = splitext(AFileName)
-        LErrFileName = pre + '.err'
+        pre, ext = splitext(str(filename))
+        l_err_filename = Path(join(pre + '.err'))
         try:
             # remove file if present
-            remove(LErrFileName)
-        except:
+            remove(l_err_filename)
+        except FileNotFoundError:
             pass
-    try:
-        hDLL = gef2_dll()
-        gef_type = GetGefType(hDLL, AFileName)
 
-        if gef_type in ['gefCPTReport', 'gefCPTMeasurement', 'gefCPTAnalysis']:  # JN: I think we might only want gefCPTReport
-            LError, LLog, LErrorLevel = DoesGEFContainSeriousErrors(hDLL)
+    gef_type = lib_handle._get_gef_type()
 
-            if LLog and ALogging:
-                hDLL.write_error_log(LErrFileName)
+    # JN: I think we might only want gefCPTReport
+    if gef_type in ['gefCPTReport', 'gefCPTMeasurement', 'gefCPTAnalysis']:
+        l_error, l_log, l_error_level = lib_handle._does_gef_contain_serious_errors()
+        lib_handle._error_handling(l_error, l_log, l_error_level, l_err_filename)
+    else:
+        raise ValueError(f'GEF File is not of type CPT Type: {gef_type}')
 
-            if LError:
-                if ALogging:
-                    raise Exception('Validation Error: Severe GEF Error: Code ' + str(LErrorLevel) +
-                                    ' - See Log File: ' + LErrFileName + ')')
-                else:
-                    raise Exception('Validation Error: Severe GEF Error: Code ' + str(LErrorLevel) +
-                                    ' - Check that the file conforms to GEF CPT Standard')
-            elif LLog:
-                if ALogging:
-                    warnings.warn('Validation Warning: This file has raised a  '
-                                  'GEF warning (Code ' + str(LErrorLevel) + ' - See Log File: ' + LErrFileName + ')')
-                else:
-                    warnings.warn('Validation Warning: This file has raised the '
-                                  'GEF warning(Code ' + str(LErrorLevel) + '). Check that the file conforms to GEF CPT Standard')
-        else:
-            raise Exception("GEF File is not of type CPT Type:", gef_type)
-    finally:
-        hDLL.unload_dll()
-        del hDLL
+    lib_handle._unload_dll()
+    del lib_handle
+
     return 0
 
-def ExecuteGEFValidation(AFileName: str, ALogging: bool = True) -> int:
+def execute_cpt_gef_validation(filename: Path, logging: bool = True):
+    """
+      Execution of validation. This is thread safe.
+      Thus multiple versions of geflib.dll can be loaded in spawned processes without interferring.
+
+      :param filename: path to gef file
+      :type filename: Path
+      :param logging: generate warning and error log file
+      :type logging: bool
+    """
     pool = Pool(processes=1)
-    result = pool.apply_async(ValidateCPTFromGEF, args=(AFileName, ALogging))
-    result.get()
+    results = pool.apply_async(_validate_cpt_from_gef, args=(filename, logging))
+    results.get()
     pool.close()
     pool.join()
+
+
 
 
 

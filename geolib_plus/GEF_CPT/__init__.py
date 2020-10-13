@@ -1,13 +1,13 @@
 from geolib_plus import AbstractCPT
 from .gef_utils import read_gef
-from .validate_gef import ExecuteGEFValidation
+from .validate_gef import execute_cpt_gef_validation
 
 class GEF_CPT(AbstractCPT):
 
     def read(self, gef_file, id, key_cpt=None):
 
         # validate gef_file
-        ExecuteGEFValidation(gef_file)
+        execute_cpt_gef_validation(gef_file)
 
         if key_cpt is None:
             key_cpt = {'depth': 1, 'tip': 2, 'friction': 3, 'friction_nb': 4, 'pwp': 6}
