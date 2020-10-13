@@ -133,7 +133,11 @@ def parse_bro_xml(xml):
     # cpt time of result
     for cpt in root.iter(ns + "conePenetrationTest"):
         for loc in cpt.iter(ns5 + "resultTime"):
-            data["result_time"] = loc.text
+            if loc.text.strip() == '':
+                for loc2 in loc.iter(ns3 + 'timePosition'):
+                    data["result_time"] = loc2.text
+            else:
+                data["result_time"] = loc.text
 
     # Pre drilled depth
     for loc in root.iter(ns + "predrilledDepth"):
