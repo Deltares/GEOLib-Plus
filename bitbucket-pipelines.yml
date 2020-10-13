@@ -30,14 +30,14 @@ pipelines:
               - pip
             script:
               - pip install -r requirements.txt
-              - pytest -v --junitxml=test-reports/report_integration.xml -m "integrationtest and not workinprogress"
+              - pytest -v --junitxml=test-reports/report_integration.xml tests/ -m "integrationtest and not workinprogress"
         - step: # Run systemtest
             name: Run systemtest.
             caches:
               - pip
             script:
               - pip install -r requirements.txt
-              - pytest -v --junitxml=test-reports/report_system.xml -m "systemtest and not workinprogress"
+              - pytest -v --junitxml=test-reports/report_system.xml tests/ -m "systemtest and not workinprogress"
   branches:
     master:
       - step: # Install packages.
@@ -53,8 +53,7 @@ pipelines:
                 - pip
               script:
                 - pip install -r requirements.txt
-                - pytest -v --cov=geolib_plus --cov-report xml:test-reports/coverage.xml --junitxml=test-reports/report.xml tests/ -m "unittest and not workinprogress"
-                - pytest -v -m "not unittest and not workinprogress"
+                - pytest -v --cov=geolib_plus --cov-report xml:test-reports/coverage.xml --junitxml=test-reports/report.xml tests/ -m "not workinprogress"
           - step: # create documentation
               name: Create documentation.
               caches:
