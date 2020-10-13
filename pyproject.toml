@@ -35,5 +35,7 @@ testpaths = [
 ]
 markers = [
     "unittest",
+    "integrationtest",
     "systemtest",
+    "acceptancetest"
 ]
