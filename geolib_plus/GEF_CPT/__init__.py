@@ -4,7 +4,7 @@ from .validate_gef import ExecuteGEFValidation
 
 class GEF_CPT(AbstractCPT):
 
-    def read(self, gef_file, id, key_cpt=None):
+    def read(self, gef_file: str, id, key_cpt=None):
 
         # validate gef_file
         ExecuteGEFValidation(gef_file)

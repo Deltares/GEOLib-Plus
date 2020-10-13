@@ -12,7 +12,7 @@ class gef2_dll:
 
     def __init__(self):
 
-        sourceDLL = r"..\geolib_plus\resources\geflib.dll"
+        sourceDLL = r".\\geolib_plus\\resources\\geflib.dll"
 
         self.hDLL = WinDLL(sourceDLL)
         # Load DLL into memory.
