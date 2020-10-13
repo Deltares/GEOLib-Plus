@@ -1,7 +1,7 @@
 import numpy as np
 
-class PlotSettings:
 
+class PlotSettings:
     def __init__(self):
         self.plot_qc_settings = {}
         self.plot_friction_settings = {}

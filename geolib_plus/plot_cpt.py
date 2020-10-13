@@ -5,7 +5,7 @@ import sys
 import os
 import warnings
 
-from .plot_utils import *
+from geolib_plus import plot_utils as pu
 
 def get_values_which_exceed_threshold(threshold, values, y_data, show_interval):
     """
@@ -43,6 +43,7 @@ def trim_values_at_exceeding_threshold(threshold, values):
     :param values:
     :return trimmed values:
     """
+
     return np.clip(values, threshold[0], threshold[1])
 
 
@@ -206,18 +207,19 @@ def define_inclination_ticks_and_labels(cpt, depth, inclination, ylim, settings)
     return tick_locations_inclination, tick_labels_inclination
 
 
-def save_figures(figures, path, cpt):
+def save_figures(figures, cpt):
     """
     Saves all plots of current cpt in one pdf file
 
-    :param figures: list fo plot figures
-    :param path: path to plot files
+    :param fig: current figure
+    :param ylims: all vertical limits of current cpt
     :param cpt: cpt data
+    :param plot_nr: number of the plot
     :return:
     """
 
     import matplotlib.backends.backend_pdf
-    pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(path, cpt.name) + ".pdf")
+    pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(cpt.output_folder, cpt.name) + ".pdf")
 
     for fig in figures:
         pdf.savefig(fig)
@@ -252,10 +254,10 @@ def generate_plot(cpt, settings, ylim, ylims, plot_nr):
             ax.plot(trimmed_data, depths, color=graph["graph_color"], linestyle=graph["line_style"])
 
             # set x axis
-            ax = set_x_axis(ax, graph, settings, ylim, )
+            ax = pu.set_x_axis(ax, graph, settings, ylim, )
 
             # set text boxes at values which exceed the threshold
-            set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data,
+            pu.set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data,
                                       graph["threshold"] * graph["unit_converter"], graph["position_label"])
             axes.append(ax)
 
@@ -264,33 +266,33 @@ def generate_plot(cpt, settings, ylim, ylims, plot_nr):
     # set the y axis
     tick_locations_inclination, tick_labels_inclination = define_inclination_ticks_and_labels(
         cpt, depths, inclination, ylim, settings)
-    set_y_axis(axes[0], ylim, settings, cpt, tick_locations_inclination, tick_labels_inclination)
+    pu.set_y_axis(axes[0], ylim, settings, cpt, tick_locations_inclination, tick_labels_inclination)
 
     # set surface line
-    set_local_reference_line(cpt, axes[0], axes[0].get_xlim(), settings["language"])
+    pu.set_local_reference_line(cpt, axes[0], axes[0].get_xlim(), settings["language"])
 
     # create custom grid
-    create_custom_grid(axes[0], axes[0].get_xlim(), ylim, settings["grid"])
+    pu.create_custom_grid(axes[0], axes[0].get_xlim(), ylim, settings["grid"])
 
     # set size in inches
-    set_figure_size(fig, ylim)
+    pu.set_figure_size(fig, ylim)
 
     scale = 0.8
 
     fig.subplots_adjust(top=scale, left=1 - scale)
-    create_information_box(axes[0], scale, cpt, plot_nr, ylims)
+    pu.create_information_box(axes[0], scale, cpt, plot_nr, ylims)
     return fig
 
 
-def plot_cpt_norm(cpt, path, settings):
+def plot_cpt_norm(cpt, settings):
     """
     Plots and saves all data in the current cpt according to the norm written in NEN @@@
 
     :param cpt: cpt data
-    :param path: path to save plots
     :param settings: general settings
     :return:
     """
+
     # Get vertical limits of the plotted data
     ylims = get_y_lims(cpt, settings)
 
@@ -299,7 +301,7 @@ def plot_cpt_norm(cpt, path, settings):
     for plot_nr, ylim in enumerate(ylims):
         figures.append(generate_plot(cpt, settings, ylim, ylims, plot_nr))
 
-    save_figures(figures, path, cpt)
+    save_figures(figures, cpt)
 
 
 
