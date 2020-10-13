@@ -87,7 +87,7 @@ testdata = [('CPT000000063044_IMBRO_A'),
             ('CPT000000003688_IMBRO_A')]
 
 
-@pytest.mark.skip(reason="The values in these files should match, however some rows are missing in each type")
+@pytest.mark.workinprogress
 @pytest.mark.systemtest
 @pytest.mark.parametrize("name", testdata, ids=testdata)
 def test_reading_compare(name):
