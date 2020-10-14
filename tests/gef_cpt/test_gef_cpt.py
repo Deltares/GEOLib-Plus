@@ -2,7 +2,7 @@ import pytest
 from pathlib import Path
 from tests.utils import TestUtils
 
-from geolib_plus.GEF_CPT.gef_cpt import GefCpt
+from geolib_plus.gef_cpt.gef_cpt import GefCpt
 
 
 class TestGefCpt:
