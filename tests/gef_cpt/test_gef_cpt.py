@@ -1,5 +1,7 @@
 import pytest
 from pathlib import Path
+from tests.utils import TestUtils
+
 from geolib_plus.GEF_CPT.gef_cpt import GefCpt
 
 
@@ -21,7 +23,18 @@ class TestGefCpt:
             gef_cpt = GefCpt()
             gef_cpt.read(gef_file, arg_id)
 
-    @pytest.mark.unittest
-    @pytest.mark.workinprogress
-    def test_gef_cpt_unit_tests(self):
-        raise NotImplementedError
+    @pytest.mark.integrationtest
+    def test_gef_cpt_given_valid_arguments_throws_nothing(self):
+        # 1. Set up test data
+        test_dir = TestUtils.get_local_test_data_dir("cpt\\gef")
+        filename = Path("CPT000000003688_IMBRO_A.gef")
+        test_file = test_dir / filename
+
+        # 2. Verify initial expectations
+        assert test_file.is_file()
+
+        # 3. Run test
+        generated_output = GefCpt().read(test_file, 42)
+
+        # 4. Verify final expectations
+        assert generated_output
