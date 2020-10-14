@@ -1,9 +1,10 @@
 import pytest
 import numpy as np
 from geolib_plus.gef_cpt import GefCpt
+from pathlib import Path
+from tests.utils import TestUtils
 
 
-# todo JN: write unit tests
 class TestGefCpt:
     @pytest.mark.unittest
     @pytest.mark.workinprogress
@@ -25,3 +26,37 @@ class TestGefCpt:
         assert cpt.friction_nbr is not []
         assert cpt.water is not []
         assert cpt.coordinates == [130880.66, 497632.94]
+
+    @pytest.mark.integrationtest
+    @pytest.mark.parametrize(
+        "gef_file, expectation",
+        [
+            (None, pytest.raises(ValueError)),
+            ("path_not_found", pytest.raises(FileNotFoundError)),
+            ("path_not_found", pytest.raises(FileNotFoundError)),
+            (None, pytest.raises(ValueError)),
+        ],
+    )
+    def test_gefcpt_read_given_not_valid_gef_file_throws_file_not_found(
+        self, gef_file: Path, expectation
+    ):
+        with expectation:
+            gef_cpt = GefCpt()
+            gef_cpt.read(gef_file)
+
+    @pytest.mark.integrationtest
+    def test_gef_cpt_given_valid_arguments_throws_nothing(self):
+        # 1. Set up test data
+        test_dir = TestUtils.get_local_test_data_dir("cpt\\gef")
+        filename = Path("CPT000000003688_IMBRO_A.gef")
+        test_file = test_dir / filename
+
+        # 2. Verify initial expectations
+        assert test_file.is_file()
+
+        # 3. Run test
+        generated_output = GefCpt()
+        generated_output.read(test_file)
+
+        # 4. Verify final expectations
+        assert generated_output

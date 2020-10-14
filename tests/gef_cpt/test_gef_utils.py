@@ -4,6 +4,7 @@ import re
 from geolib_plus.gef_cpt import gef_utils
 import logging
 
+
 # todo JN: write unit tests
 class TestGefUtil:
     @pytest.mark.unittest
