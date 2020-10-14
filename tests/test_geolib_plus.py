@@ -1,11 +1,12 @@
 from geolib_plus import __version__
-from geolib_plus.bro_xml_cpt import *
-from geolib_plus.gef_cpt import *
+from geolib_plus.bro_xml_cpt.bro_xml_cpt import *
+from geolib_plus.gef_cpt.gef_cpt import *
 
 # External
 from pathlib import Path
 import numpy as np
 import pytest
+
 
 @pytest.mark.systemtest
 def test_version():
@@ -25,14 +26,44 @@ def test_reading_bro():
 
     test_NAP = -1.75 - test_depth
 
-    test_tip_first = [845.,  353., 2190., 4276., 5663., 6350., 7498., 8354., 9148., 9055.]
-    test_tip_last = [32677., 32305., 31765., 31038., 30235., 29516., 28695., 27867., 26742., 25233.]
+    test_tip_first = [
+        845.0,
+        353.0,
+        2190.0,
+        4276.0,
+        5663.0,
+        6350.0,
+        7498.0,
+        8354.0,
+        9148.0,
+        9055.0,
+    ]
+    test_tip_last = [
+        32677.0,
+        32305.0,
+        31765.0,
+        31038.0,
+        30235.0,
+        29516.0,
+        28695.0,
+        27867.0,
+        26742.0,
+        25233.0,
+    ]
 
-    test_friction_first = np.array([19., 25., 31., 38., 40., 36., 62., 63., 75., 91.])
-    test_friction_last = np.array([266., 273., 279., 276., 273., 264., 253., 241., 230., 219.])
+    test_friction_first = np.array(
+        [19.0, 25.0, 31.0, 38.0, 40.0, 36.0, 62.0, 63.0, 75.0, 91.0]
+    )
+    test_friction_last = np.array(
+        [266.0, 273.0, 279.0, 276.0, 273.0, 264.0, 253.0, 241.0, 230.0, 219.0]
+    )
 
-    test_friction_nbr_first = np.array([0.7, 1.,  1.,  1.,  1.,  0.6, 0.9, 0.9, 1.,  1.1])
-    test_friction_nbr_last= np.array([0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8])
+    test_friction_nbr_first = np.array(
+        [0.7, 1.0, 1.0, 1.0, 1.0, 0.6, 0.9, 0.9, 1.0, 1.1]
+    )
+    test_friction_nbr_last = np.array(
+        [0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8]
+    )
 
     test_water_first = np.full(10, 0)
     test_water_last = np.full(10, 0)
@@ -80,11 +111,13 @@ def test_reading_gef():
 
 # System Test for geolib_plus_read_GEF & BRO based comparing result for same file
 
-testdata = [('CPT000000063044_IMBRO_A'),
-            ('CPT000000063045_IMBRO_A'),
-            ('CPT000000064413_IMBRO_A'),
-            ('CPT000000065880_IMBRO_A'),
-            ('CPT000000003688_IMBRO_A')]
+testdata = [
+    ("CPT000000063044_IMBRO_A"),
+    ("CPT000000063045_IMBRO_A"),
+    ("CPT000000064413_IMBRO_A"),
+    ("CPT000000065880_IMBRO_A"),
+    ("CPT000000003688_IMBRO_A"),
+]
 
 
 @pytest.mark.workinprogress
@@ -97,7 +130,7 @@ def test_reading_compare(name):
     bro_file = Path("./test_files/cpt/bro_xml/" + name + ".xml")
 
     gef_file = Path("./test_files/cpt/gef/" + name + ".gef")
-    gef_id = name.split('_')[0]
+    gef_id = name.split("_")[0]
 
     gef_cpt = GefCpt()
     gef_cpt.read(gef_file, gef_id)
@@ -110,27 +143,34 @@ def test_reading_compare(name):
 
     # todo: JN The following tests current fail, the arrays are different size as are the depths
     np.testing.assert_array_equal(bro_cpt.depth, gef_cpt.depth)
-    np.testing.assert_array_equal(bro_cpt.depth_to_reference, gef_cpt.depth_to_reference)
+    np.testing.assert_array_equal(
+        bro_cpt.depth_to_reference, gef_cpt.depth_to_reference
+    )
     np.testing.assert_array_equal(bro_cpt.tip, gef_cpt.tip)
     np.testing.assert_array_equal(bro_cpt.friction, gef_cpt.friction)
     np.testing.assert_array_equal(bro_cpt.friction_nbr, gef_cpt.friction_nbr)
     np.testing.assert_array_equal(bro_cpt.water, gef_cpt.water)
 
+
 @pytest.mark.systemtest
 # Test validation of BRO-XML file structure .... with clean file
 def test_validate_bro_no_error():
-    bro_xml_file_path = Path('./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml')
+    bro_xml_file_path = Path("./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
     try:
         validate_bro_cpt(bro_xml_file_path)
     except:  # catch *all* exceptions
         pytest.fail("Validation Error: CPT BRO_XML without error raises error")
 
+
 @pytest.mark.systemtest
 # Test validation of BRO-XML file structure ..... with file with error
 def test_validate_bro_error():
-    bro_xml_file_err_path = Path('./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A_err.xml')
+    bro_xml_file_err_path = Path(
+        "./test_files/cpt/bro_xml/CPT000000003688_IMBRO_A_err.xml"
+    )
     with pytest.raises(Exception):
         validate_bro_cpt(bro_xml_file_err_path)
+
 
 @pytest.mark.systemtest
 # Test validation of gef file structure .... with usable file
@@ -141,6 +181,7 @@ def test_validate_gef_no_error():
         validate_gef_cpt(gef_file)
     except:
         pytest.fail("GEF file without error raised Error")
+
 
 @pytest.mark.systemtest
 # Test validation of gef file structure ..... with file with error

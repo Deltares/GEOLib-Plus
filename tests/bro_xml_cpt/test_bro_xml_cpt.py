@@ -1,5 +1,5 @@
 import pytest
-import geolib_plus.bro_xml_cpt
+import geolib_plus.bro_xml_cpt.bro_xml_cpt
 
 
 # todo JN: write unit tests
