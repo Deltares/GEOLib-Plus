@@ -15,13 +15,13 @@ class GefLib:
 
     def __init__(self):
 
-        source_dll = r"..\geolib_plus\resources\geflib.dll"
+        source_dll = r".\\geolib_plus\\resources\\geflib.dll"
 
         # Load DLL into memory. (Only works for windows)
         self.__lib_handle = WinDLL(source_dll)
 
         # Initialize DLL into memory.
-        func = self.__lib_handle['init_gef']
+        func = self.__lib_handle["init_gef"]
         func.restype = c_int
         result = func()
         if result == 1:
@@ -30,13 +30,13 @@ class GefLib:
             raise FileNotFoundError(f"{source_dll} not found")
 
     def __test_gef(self, component: str):
-        func = self.__lib_handle['test_gef']
+        func = self.__lib_handle["test_gef"]
         func.restype = c_int
         func.argtype = c_char_p
-        return func(component.encode('utf-8'))
+        return func(component.encode("utf-8"))
 
     def __free_gef(self):
-        func = self.__lib_handle['free_gef']
+        func = self.__lib_handle["free_gef"]
         func.restype = c_int
         return func()
 
@@ -45,61 +45,61 @@ class GefLib:
         del self.__lib_handle
 
     def _read_gef(self, file_path: Path) -> int:
-        func = self.__lib_handle['read_gef']
+        func = self.__lib_handle["read_gef"]
         func.restype = c_int
         func.argtype = c_char_p
-        return func(str(file_path).encode('utf-8'))
+        return func(str(file_path).encode("utf-8"))
 
     def __get_procedurecode_flag(self) -> int:
-        func = self.__lib_handle['get_procedurecode_flag']
+        func = self.__lib_handle["get_procedurecode_flag"]
         func.restype = c_int
         return func()
 
     def __get_procedurecode_code(self) -> str:
-        func = self.__lib_handle['get_procedurecode_code']
+        func = self.__lib_handle["get_procedurecode_code"]
         func.restype = c_char_p
         return func()
 
     def __get_reportcode_flag(self) -> int:
-        func = self.__lib_handle['get_reportcode_flag']
+        func = self.__lib_handle["get_reportcode_flag"]
         func.restype = c_int
         return func()
 
     def __get_reportcode_code(self) -> str:
-        func = self.__lib_handle['get_reportcode_code']
+        func = self.__lib_handle["get_reportcode_code"]
         func.restype = c_char_p
         return func()
 
     def __get_analysiscode_flag(self) -> int:
-        func = self.__lib_handle['get_analysiscode_flag']
+        func = self.__lib_handle["get_analysiscode_flag"]
         func.restype = c_int
         return func()
 
     def __get_analysiscode_code(self) -> str:
-        func = self.__lib_handle['get_analysiscode_code']
+        func = self.__lib_handle["get_analysiscode_code"]
         func.restype = c_char_p
         return func()
 
     def __get_measurementcode_flag(self) -> int:
-        func = self.__lib_handle['get_measurementcode_flag']
+        func = self.__lib_handle["get_measurementcode_flag"]
         func.restype = c_int
         return func()
 
     def __get_measurementcode_code(self) -> str:
-        func = self.__lib_handle['get_measurementcode_code']
+        func = self.__lib_handle["get_measurementcode_code"]
         func.restype = c_char_p
         return func()
 
     def __get_error_level_all(self) -> int:
-        func = self.__lib_handle['get_error_level_all']
+        func = self.__lib_handle["get_error_level_all"]
         func.restype = c_int
         return func()
 
     def __write_error_log(self, file_path: Path) -> int:
-        func = self.__lib_handle['write_error_log']
+        func = self.__lib_handle["write_error_log"]
         func.restype = c_int
         func.argtype = c_char_p
-        return func(str(file_path).encode('utf-8'))
+        return func(str(file_path).encode("utf-8"))
 
     @staticmethod
     def _get_code(code: str) -> str:
@@ -112,24 +112,24 @@ class GefLib:
         :rtype str
         """
 
-        cs_gefbore_report: str = 'GEF-BORE-REPORT'
-        cs_gefcpt_report: str = 'GEF-CPT-REPORT'
-        cs_short_gefcpt_report: str = 'CPT-REPORT'
-        cs_gefzsteeninvoer: str = 'GEF-ZSTEEN-INVOER'
+        cs_gefbore_report: str = "GEF-BORE-REPORT"
+        cs_gefcpt_report: str = "GEF-CPT-REPORT"
+        cs_short_gefcpt_report: str = "CPT-REPORT"
+        cs_gefzsteeninvoer: str = "GEF-ZSTEEN-INVOER"
 
-        code = code.decode("utf-8").strip(' ').upper()
+        code = code.decode("utf-8").strip(" ").upper()
 
         if (code == cs_gefcpt_report) or (code == cs_short_gefcpt_report):
             return "gefCPTReport"
-        if 'CPT-A' in code:
+        if "CPT-A" in code:
             return "gefCPTAnalysis"
-        if 'CPT-M' in code:
+        if "CPT-M" in code:
             return "gefCPTMeasurement"
         if code == cs_gefbore_report:
             return "gefBoringReport"
-        if 'BoreA' in code:
+        if "BoreA" in code:
             return "gefBoringAnalysis"
-        if 'BoreM' in code:
+        if "BoreM" in code:
             return "gefBoringMeasurement"
         if code == cs_gefzsteeninvoer:
             return "gefWave"
@@ -166,7 +166,7 @@ class GefLib:
         flag = self.__get_procedurecode_flag()
         if flag == 1:
             l_code = self.__get_procedurecode_code().upper()
-            if 'GEF-BORE' in l_code:
+            if "GEF-BORE" in l_code:
                 return "gefBoringMeasurement"
         else:
             return "NotFound"
@@ -184,7 +184,7 @@ class GefLib:
         :rtype int
         """
 
-        self.__test_gef('Header')
+        self.__test_gef("Header")
 
         l_log = False
         l_error_level = self.__get_error_level_all()
@@ -192,7 +192,7 @@ class GefLib:
 
         if not l_error:
             # Only continue check when nothing serious so far.
-            self.__test_gef('Data')
+            self.__test_gef("Data")
             l_error_level = self.__get_error_level_all()
             l_error = l_error_level in [1, 2, 11, 12]
 
@@ -202,29 +202,40 @@ class GefLib:
         return l_error, l_log, l_error_level
 
     # validation errors and warnings
-    
+
     def __error_log(self, args):
-        raise ValueError(f'Validation Error: Severe GEF Error: Code {args[0]}. See Log File: {args[1]}')
+        raise ValueError(
+            f"Validation Error: Severe GEF Error: Code {args[0]}. See Log File: {args[1]}"
+        )
 
     def __error_no_log(self, args):
-        raise ValueError(f'Validation Error: Severe GEF Error: Code {args[0]}. '
-                         f'Check that the file conforms to GEF CPT Standard')
+        raise ValueError(
+            f"Validation Error: Severe GEF Error: Code {args[0]}. "
+            f"Check that the file conforms to GEF CPT Standard"
+        )
 
     def __no_error_log(self, args):
-        warnings.warn(f'Validation Warning: This file has raised a GEF warning: Code {args[0]}.  '
-                      f'See Log File: {args[1]}')
+        warnings.warn(
+            f"Validation Warning: This file has raised a GEF warning: Code {args[0]}.  "
+            f"See Log File: {args[1]}"
+        )
 
     def __no_error_no_log(self, args):
-        warnings.warn(f'Validation Warning: This file has raised the GEF warning: Code {args[0]}). '
-                      f'Check that the file conforms to GEF CPT Standard')
+        warnings.warn(
+            f"Validation Warning: This file has raised the GEF warning: Code {args[0]}). "
+            f"Check that the file conforms to GEF CPT Standard"
+        )
 
     __valid_messages = {
         (True, True): __error_log,
         (True, False): __error_no_log,
         (False, True): __no_error_log,
-        (False, False): __no_error_no_log}
+        (False, False): __no_error_no_log,
+    }
 
-    def _error_handling(self, error: bool, log: bool, level: int, log_filename: Path = None):
+    def _error_handling(
+        self, error: bool, log: bool, level: int, log_filename: Path = None
+    ):
         if (error or log) and log_filename is not None:
             self.__write_error_log(log_filename)
         args = (str(level), str(log_filename))
@@ -234,18 +245,18 @@ class GefLib:
 
 def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
     """
-          Raises errors or warnings and returns 0
+    Raises errors or warnings and returns 0
 
-          :param filename: path to gef file
-          :type filename: Path
-          :param logging: generate warning and error log file
-          :type logging: bool
-          :return l_error: is there an error
-          :rtype bool
-          :return l_log: is a log generated (i.e. Error or Warning)
-          :rtype bool
-          :return l_error_level: the level of error in the gef file
-          :rtype int
+    :param filename: path to gef file
+    :type filename: Path
+    :param logging: generate warning and error log file
+    :type logging: bool
+    :return l_error: is there an error
+    :rtype bool
+    :return l_log: is a log generated (i.e. Error or Warning)
+    :rtype bool
+    :return l_error_level: the level of error in the gef file
+    :rtype int
     """
 
     lib_handle = GefLib()
@@ -259,7 +270,7 @@ def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
     if logging:
         # file name for err \ delete existing if necessary
         pre, ext = splitext(str(filename))
-        l_err_filename = Path(join(pre + '.err'))
+        l_err_filename = Path(join(pre + ".err"))
         try:
             # remove file if present
             remove(l_err_filename)
@@ -269,11 +280,11 @@ def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
     gef_type = lib_handle._get_gef_type()
 
     # JN: I think we might only want gefCPTReport
-    if gef_type in ['gefCPTReport', 'gefCPTMeasurement', 'gefCPTAnalysis']:
+    if gef_type in ["gefCPTReport", "gefCPTMeasurement", "gefCPTAnalysis"]:
         l_error, l_log, l_error_level = lib_handle._does_gef_contain_serious_errors()
         lib_handle._error_handling(l_error, l_log, l_error_level, l_err_filename)
     else:
-        raise ValueError(f'GEF File is not of type CPT Type: {gef_type}')
+        raise ValueError(f"GEF File is not of type CPT Type: {gef_type}")
 
     lib_handle._unload_dll()
     del lib_handle
@@ -282,29 +293,16 @@ def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
 
 def validate_gef_cpt(filename: Path, logging: bool = True):
     """
-      Execution of validation. This is thread safe.
-      Thus multiple versions of geflib.dll can be loaded in spawned processes without interferring.
+    Execution of validation. This is thread safe.
+    Thus multiple versions of geflib.dll can be loaded in spawned processes without interferring.
 
-      :param filename: path to gef file
-      :type filename: Path
-      :param logging: generate warning and error log file
-      :type logging: bool
+    :param filename: path to gef file
+    :type filename: Path
+    :param logging: generate warning and error log file
+    :type logging: bool
     """
     pool = Pool(processes=1)
     results = pool.apply_async(_validate_cpt_from_gef, args=(filename, logging))
     results.get()
     pool.close()
     pool.join()
-
-
-
-
-
-
-
-
-
-
-
-
-
