@@ -2,6 +2,7 @@
 import re
 import numpy as np
 from typing import List, Dict, Union, Iterable
+from pathlib import Path
 from pydantic import BaseModel
 from logging import warning
 
@@ -16,11 +17,11 @@ class GefProperty(BaseModel):
 
 class GefFileReader:
     def __init__(self):
-        self.property_dict = self._initialize_property_dict_()
+        self.property_dict = self.__get_default_property_dict()
         self.name = ""
         self.coord = []
 
-    def _initialize_property_dict_(self):
+    def __get_default_property_dict(self) -> Dict:
         return {
             "depth": GefProperty(gef_key=1, multiplication_factor=1.0),
             "tip": GefProperty(gef_key=2, multiplication_factor=1000.0),
@@ -29,25 +30,53 @@ class GefFileReader:
             "pwp": GefProperty(gef_key=6, multiplication_factor=1000.0),
         }
 
-    def read_gef(self, gef_file, fct_a=0.8):
+    @staticmethod
+    def get_line_index_from_data(code_string: str, data: List[str]) -> int:
+        values = [i for i, val in enumerate(data) if val.startswith(code_string)]
+        if not values:
+            # if not having values IS NOT okay.
+            raise ValueError(
+                f"No values found for field {code_string} of the gef file."
+            )
+        return values[0]
+
+    @staticmethod
+    def get_line_index_from_data_ends_with(
+        code_string: str, data: List[str]
+    ) -> Union[int, None]:
+        values = [i for i, val in enumerate(data) if val.endswith(code_string)]
+        if not values:
+            return None
+        return values[0]
+
+    def read_gef(self, gef_file: Path, fct_a: float = 0.8) -> Dict:
+        """
+        Opens and reads gef file. Returns dictionary containing all possible
+        inputs from gef file.
+        """
         # read gef file
         with open(gef_file, "r") as f:
             data = f.readlines()
 
         # search NAP
-        idx_nap = [i for i, val in enumerate(data) if val.startswith(r"#ZID=")][0]
+        idx_nap = GefFileReader.get_line_index_from_data(
+            code_string=r"#ZID=", data=data
+        )
         NAP = float(data[idx_nap].split(",")[1])
         # search end of header
-        idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
+        idx_EOH = GefFileReader.get_line_index_from_data(
+            code_string=r"#EOH=", data=data
+        )
         # # search for coordinates
-        idx_coord = [i for i, val in enumerate(data) if val.startswith(r"#XYID=")][0]
+        idx_coord = GefFileReader.get_line_index_from_data(
+            code_string=r"#XYID=", data=data
+        )
         # search index depth
         for key_name in self.property_dict:
-            self.property_dict[
-                key_name
-            ].gef_column_index = self.read_column_index_for_gef_data(
+            gef_column_index = self.read_column_index_for_gef_data(
                 self.property_dict[key_name].gef_key, data
             )
+            self.property_dict[key_name].gef_column_index = gef_column_index
 
         # read error codes
         idx_errors_raw_text = [
@@ -63,13 +92,11 @@ class GefFileReader:
 
         try:
             # search index coefficient a
-            idx_a = [
-                i
-                for i, val in enumerate(data)
-                if val.endswith("Netto oppervlaktequotient van de conuspunt\n")
-            ][0]
+            idx_a = GefFileReader.get_line_index_from_data_ends_with(
+                code_string="Netto oppervlaktequotient van de conuspunt\n", data=data
+            )
             fct_a = float(data[idx_a].split(",")[1])
-        except IndexError:
+        except TypeError:
             fct_a = fct_a
 
         # remove empty lines
@@ -84,11 +111,12 @@ class GefFileReader:
         correct_for_negatives = ["tip", "friction", "friction_nb"]
         self.correct_negatives_and_zeros(correct_for_negatives)
 
-        self.name = [
-            val.split("#TESTID=")[-1].strip()
-            for i, val in enumerate(data)
-            if val.startswith(r"#TESTID=")
-        ][0]
+        idx_name = GefFileReader.get_line_index_from_data(
+            code_string=r"#TESTID=", data=data
+        )
+        self.name = data[idx_name].split("#TESTID=")[-1].strip()
+        # From the line of the coordinates retrieve the text line
+        # and return list of coordinates [x,y]
         self.coord = list(
             map(
                 float,
@@ -103,7 +131,7 @@ class GefFileReader:
             NAP - i for j, i in enumerate(self.property_dict["depth"].values_from_gef)
         ]
 
-        res = dict(
+        return dict(
             name=self.name,
             depth=np.array(self.property_dict["depth"].values_from_gef),
             depth_to_reference=np.array(z_NAP),
@@ -114,7 +142,6 @@ class GefFileReader:
             coordinates=self.coord,
             water=np.array(self.property_dict["pwp"].values_from_gef),
         )
-        return res
 
     def read_column_index_for_gef_data(self, key_cpt: int, data: List[str]):
         """In the gef file '#COLUMNINFO=id , name , column_number' format is used.
