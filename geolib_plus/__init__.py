@@ -18,6 +18,7 @@ class RobertsonMethod(AbstractInterpretationMethod):
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
     #  variables
+    penetration_length = []
     depth = []
     coordinates = []
     local_reference_level = []

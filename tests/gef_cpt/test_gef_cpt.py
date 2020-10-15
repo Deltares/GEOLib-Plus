@@ -16,11 +16,10 @@ class TestGefCpt:
         )
         # check that all values are initialized
         assert cpt
-        assert max(cpt.depth) == 25.52
-        assert min(cpt.depth) == 1.7
-        reference_depth = -1.97
-        assert min(cpt.depth_to_reference) == reference_depth - max(cpt.depth)
-        assert max(cpt.depth_to_reference) == reference_depth - min(cpt.depth)
+        assert max(cpt.penetration_length) == 25.52
+        assert min(cpt.penetration_length) == 1.7
+        assert min(cpt.depth_to_reference) == cpt.local_reference_level - max(cpt.depth)
+        assert max(cpt.depth_to_reference) == cpt.local_reference_level - min(cpt.depth)
         assert cpt.tip is not []
         assert cpt.friction is not []
         assert cpt.friction_nbr is not []

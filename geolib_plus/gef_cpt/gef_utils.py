@@ -6,28 +6,42 @@ from pathlib import Path
 from pydantic import BaseModel
 from logging import warning
 
-
 class GefProperty(BaseModel):
     gef_key: int
-    values_from_gef: Union[Iterable, None] = None
-    multiplication_factor: float
     error_code: Union[str, float, None] = None
+    values_from_gef: Union[Iterable, str, None] = None
+
+class GefColumnProperty(GefProperty):
+    multiplication_factor: float = 1
     gef_column_index: Union[int, None] = None
 
 
 class GefFileReader:
     def __init__(self):
         self.property_dict = self.__get_default_property_dict()
+        self.information_dict = self.__get_default_information_dict()
+
         self.name = ""
         self.coord = []
 
+    def __get_default_information_dict(self) -> Dict:
+        return {
+            "cpt_type": GefProperty(gef_key=4),
+            'cpt_standard': GefProperty(gef_key=6), # "and class [quality_class]"
+            "vertical_datum": GefProperty(gef_key=8),
+            "local_reference": GefProperty(gef_key=9),
+
+        }
+
     def __get_default_property_dict(self) -> Dict:
         return {
-            "depth": GefProperty(gef_key=1, multiplication_factor=1.0),
-            "tip": GefProperty(gef_key=2, multiplication_factor=1000.0),
-            "friction": GefProperty(gef_key=3, multiplication_factor=1000.0),
-            "friction_nb": GefProperty(gef_key=4, multiplication_factor=1.0),
-            "pwp": GefProperty(gef_key=6, multiplication_factor=1000.0),
+            "penetration_length": GefColumnProperty(gef_key=1, multiplication_factor=1.0),
+            "depth": GefColumnProperty(gef_key=11, multiplication_factor=1.0),
+            "tip": GefColumnProperty(gef_key=2, multiplication_factor=1000.0),
+            "friction": GefColumnProperty(gef_key=3, multiplication_factor=1000.0),
+            "friction_nb": GefColumnProperty(gef_key=4, multiplication_factor=1.0),
+            "pwp": GefColumnProperty(gef_key=6, multiplication_factor=1000.0),
+            "inclination_resultant": GefColumnProperty(gef_key=8),
         }
 
     @staticmethod
@@ -71,6 +85,14 @@ class GefFileReader:
         idx_coord = GefFileReader.get_line_index_from_data(
             code_string=r"#XYID=", data=data
         )
+
+        # read result time
+        self.result_time = self.read_date_cpt(data)
+
+        # get values for information dict
+        for key_name in self.information_dict:
+            self.information_dict[key_name].values_from_gef = self.read_information_for_gef_data(key_name, data)
+
         # search index depth
         for key_name in self.property_dict:
             gef_column_index = self.read_column_index_for_gef_data(
@@ -133,6 +155,7 @@ class GefFileReader:
 
         return dict(
             name=self.name,
+            penetration_length=np.array(self.property_dict["penetration_length"].values_from_gef),
             depth=np.array(self.property_dict["depth"].values_from_gef),
             depth_to_reference=np.array(z_NAP),
             tip=np.array(self.property_dict["tip"].values_from_gef),
@@ -141,6 +164,12 @@ class GefFileReader:
             a=fct_a,
             coordinates=self.coord,
             water=np.array(self.property_dict["pwp"].values_from_gef),
+            inclination_resultant=np.array(self.property_dict["inclination_resultant"].values_from_gef),
+            local_reference_level=NAP,
+            vertical_datum=self.information_dict["vertical_datum"].values_from_gef,
+            local_reference=self.information_dict["local_reference"].values_from_gef,
+            cpt_standard=self.information_dict["cpt_standard"].values_from_gef,
+            cpt_type=self.information_dict["cpt_type"].values_from_gef,
         )
 
     def read_column_index_for_gef_data(self, key_cpt: int, data: List[str]):
@@ -155,6 +184,37 @@ class GefFileReader:
             ):
                 result = int(val.split(",")[0].split("=")[-1]) - 1
         return result
+
+    def read_date_cpt(self, data: List[str]) -> str:
+        """
+        Reads the date from the cpt. If startdate is present, the date is defined as the startdate.
+        Else the date is equal to the filedate, which is always present.
+        :return:
+        """
+        code_file_date = r"#FILEDATE= "
+        code_start_date = r"#STARTDATE= "
+        result_date = None
+        for i, val in enumerate(data):
+            if val.startswith(code_file_date) and result_date is None:
+                result_date = val.split(code_file_date)[-1]
+
+            if val.startswith(code_start_date):
+                result_date = val.split(code_start_date)[-1]
+                return result_date
+            if val.startswith(r"#EOH="):
+                return result_date
+
+    def read_information_for_gef_data(self, key_name: str, data: List[str]) -> str:
+        """
+        Reads header information from the gef data.
+        """
+        code_string = r"#MEASUREMENTTEXT= " + str(self.information_dict[key_name].gef_key)
+        for i, val in enumerate(data):
+            if val.startswith(code_string):
+                information = val.split(code_string)[-1]
+                return information
+            if val.startswith(r"#EOH="):
+                return ""
 
     def match_idx_with_error(
         self,
