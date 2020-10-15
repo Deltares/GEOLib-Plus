@@ -7,11 +7,9 @@ from tests.utils import TestUtils
 
 class TestGefCpt:
     @pytest.mark.unittest
-    @pytest.mark.workinprogress
     def test_gef_cpt_unit_tests(self):
         # simple read test of the cpt
-        cpt = GefCpt()
-        cpt.read(
+        cpt = GefCpt(
             gef_file="tests\\test_files\\cpt\\gef\\unit_testing\\test_gef_cpt_unit_tests.gef",
         )
         # check that all values are initialized
@@ -41,8 +39,7 @@ class TestGefCpt:
         self, gef_file: Path, expectation
     ):
         with expectation:
-            gef_cpt = GefCpt()
-            gef_cpt.read(gef_file)
+            GefCpt(gef_file)
 
     @pytest.mark.integrationtest
     def test_gef_cpt_given_valid_arguments_throws_nothing(self):
@@ -55,8 +52,7 @@ class TestGefCpt:
         assert test_file.is_file()
 
         # 3. Run test
-        generated_output = GefCpt()
-        generated_output.read(test_file)
+        generated_output = GefCpt(test_file)
 
         # 4. Verify final expectations
         assert generated_output

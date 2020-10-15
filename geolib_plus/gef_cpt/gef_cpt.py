@@ -5,11 +5,11 @@ from .validate_gef import validate_gef_cpt
 
 
 class GefCpt(AbstractCPT):
-    def __init__(self, gef_filepath: Path):
-        if not gef_filepath:
-            raise ValueError(gef_filepath)
+    def __init__(self, gef_file: Path):
+        if not gef_file:
+            raise ValueError(gef_file)
 
-        gef_file = Path(gef_filepath)
+        gef_file = Path(gef_file)
         if not gef_file.is_file():
             raise FileNotFoundError(gef_file)
 
