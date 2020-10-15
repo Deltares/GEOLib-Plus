@@ -25,7 +25,7 @@ class TestGefUtil:
         ).all()
         assert gef_reader.property_dict["tip"].values_from_gef == [-1, -2, -9]
 
-    @pytest.mark.unittest
+    @pytest.mark.system
     def test_read_data_no_pore_pressure(self):
         # initialise model
         gef_reader = gef_file_reader.GefFileReader()
@@ -50,7 +50,7 @@ class TestGefUtil:
         assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000.0
         assert gef_reader.property_dict["pwp"].values_from_gef[-1] == 0.0
 
-    @pytest.mark.unittest
+    @pytest.mark.system
     def test_read_data_error_raised(self):
         # depth input was not find in the cpt file
         # initialise model
@@ -238,7 +238,7 @@ class TestGefUtil:
         assert gef_reader.property_dict["pwp"].error_code == "string"
 
     @pytest.mark.unittest
-    def test_match_idx_with_error_raises(self):
+    def test_match_idx_with_error_raises_1(self):
         # Set the inputs. One value is missing from the list
         error_string_list = ["-1", "-2", "-3", "string", "-4"]
 
@@ -396,3 +396,42 @@ class TestGefUtil:
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387.0
         assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000.0
         assert gef_reader.property_dict["pwp"].values_from_gef[-1] == -99999000.0
+
+    @pytest.mark.unittest
+    def test_get_line_index_from_data(self):
+        # set inputs
+        data = [
+            "#SPECIMENVAR=  1 ,   0.00, m, ",
+            "#TESTID= DKMP1_1317-0162-000",
+            "#REPORTCODE= GEF-CPT-Report,1,1,0",
+            "#STARTDATE= 2017,07,03",
+            "#STARTTIME= 14,13,53",
+            "#OS= DOS",
+        ]
+        code_string = r"#STARTDATE="
+        # run test
+        test_id = gef_file_reader.GefFileReader.get_line_index_from_data(
+            code_string=code_string, data=data
+        )
+        assert test_id == 3
+
+    @pytest.mark.unittest
+    def test_get_line_index_from_data_error(self):
+        # set inputs
+        data = [
+            "#SPECIMENVAR=  1 ,   0.00, m, ",
+            "#TESTID= DKMP1_1317-0162-000",
+            "#REPORTCODE= GEF-CPT-Report,1,1,0",
+            "#STARTDATE= 2017,07,03",
+            "#STARTTIME= 14,13,53",
+            "#OS= DOS",
+        ]
+        code_string = r"#IAMNOTINTHEFILE="
+        # Run test
+        with pytest.raises(ValueError) as excinfo:
+            gef_file_reader.GefFileReader.get_line_index_from_data(
+                code_string=code_string, data=data
+            )
+        assert "No values found for field #IAMNOTINTHEFILE= of the gef file." in str(
+            excinfo.value
+        )
