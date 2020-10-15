@@ -119,7 +119,6 @@ testdata = [
 ]
 
 
-@pytest.mark.workinprogress
 @pytest.mark.systemtest
 @pytest.mark.parametrize("name", testdata, ids=testdata)
 def test_reading_compare(name):

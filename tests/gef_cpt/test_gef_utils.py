@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import re
-from geolib_plus.gef_cpt import gef_utils
+from geolib_plus.gef_cpt import gef_file_reader
 import logging
 
 
@@ -10,7 +10,7 @@ class TestGefUtil:
     @pytest.mark.unittest
     def test_correct_negatives_and_zeros(self):
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # define keys that cannot be zero
         list_non_zero = ["depth"]
         gef_reader.property_dict["depth"].gef_column_index = 1
@@ -28,7 +28,7 @@ class TestGefUtil:
     @pytest.mark.unittest
     def test_read_data_no_pore_pressure(self):
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         gef_reader.property_dict["depth"].gef_column_index = 0
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = 1
@@ -54,7 +54,7 @@ class TestGefUtil:
     def test_read_data_error_raised(self):
         # depth input was not find in the cpt file
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         gef_reader.property_dict["depth"].gef_column_index = None
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = 1
@@ -77,7 +77,7 @@ class TestGefUtil:
     @pytest.mark.unittest
     def test_remove_points_with_error(self):
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # set inputs
         gef_reader.property_dict["depth"].values_from_gef = np.linspace(2, 20, 6)
         gef_reader.property_dict["friction"].values_from_gef = np.array(
@@ -118,7 +118,7 @@ class TestGefUtil:
     def test_remove_points_with_error_raises(self):
         # value pwp size is minimized to raise error
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # set inputs
         gef_reader.property_dict["depth"].values_from_gef = np.linspace(2, 20, 6)
         gef_reader.property_dict["friction"].values_from_gef = np.array(
@@ -161,7 +161,7 @@ class TestGefUtil:
         # indexes that match columns in gef file
         indexes = [1, 2, 3, 4, 6, 21, 22, 99, 11, 12]
         # initialise the model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # Run the test
         for counter, index in enumerate(indexes):
             assert counter == gef_reader.read_column_index_for_gef_data(
@@ -187,7 +187,7 @@ class TestGefUtil:
         # indexes don't match the columns in gef file
         index = 5
         # initialise the model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # Run the test
         assert not (
             gef_reader.read_column_index_for_gef_data(key_cpt=index, data=doc_snippet)
@@ -209,7 +209,7 @@ class TestGefUtil:
             "-10",
         ]
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # set inputs
         gef_reader.property_dict["depth"].gef_key = 0
         gef_reader.property_dict["tip"].gef_key = 1
@@ -243,7 +243,7 @@ class TestGefUtil:
         error_string_list = ["-1", "-2", "-3", "string", "-4"]
 
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         gef_reader.property_dict["depth"].multiplication_factor = 1
         gef_reader.property_dict["friction"].multiplication_factor = 1000
         gef_reader.property_dict["pwp"].multiplication_factor = 1000
@@ -264,7 +264,7 @@ class TestGefUtil:
         gef_file = "./tests/test_files/cpt/gef/unit_testing/unit_testing.gef"
 
         # initialise the model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # run the test
         cpt = gef_reader.read_gef(gef_file=gef_file)
         test_coord = [244319.00, 587520.00]
@@ -303,7 +303,7 @@ class TestGefUtil:
     )
     def test_read_gef_missing_field_error(self, filename: str, error: str):
         # initialise the model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # test exceptions
         with pytest.raises(Exception) as excinfo:
             gef_reader.read_gef(gef_file=filename)
@@ -330,7 +330,7 @@ class TestGefUtil:
         # define logger
         LOGGER.info("Testing now.")
         # initialise the model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # test exceptions
         result_dictionary = gef_reader.read_gef(gef_file=filename)
         assert warning in caplog.text
@@ -340,7 +340,7 @@ class TestGefUtil:
         filename = "./tests/test_files/cpt/gef/unit_testing/Exception_9999.gef"
 
         # initialise the model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # run the test
         cpt = gef_reader.read_gef(gef_file=filename)
 
@@ -367,7 +367,7 @@ class TestGefUtil:
     def test_read_data(self):
 
         # initialise model
-        gef_reader = gef_utils.GefFileReader()
+        gef_reader = gef_file_reader.GefFileReader()
         # set inputs
         gef_reader.property_dict["depth"].multiplication_factor = 1
         gef_reader.property_dict["friction"].multiplication_factor = 1000
