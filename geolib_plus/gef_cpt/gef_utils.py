@@ -20,7 +20,7 @@ class GefFileReader:
         self.name = ""
         self.coord = []
 
-    def _initialize_property_dict_(self):
+    def _initialize_property_dict_(self) -> dict:
         return {
             "depth": GefProperty(gef_key=1, multiplication_factor=1.0),
             "tip": GefProperty(gef_key=2, multiplication_factor=1000.0),
@@ -29,7 +29,7 @@ class GefFileReader:
             "pwp": GefProperty(gef_key=6, multiplication_factor=1000.0),
         }
 
-    def read_gef(self, gef_file, fct_a=0.8):
+    def read_gef(self, gef_file, fct_a=0.8) -> dict:
         # read gef file
         with open(gef_file, "r") as f:
             data = f.readlines()
@@ -129,10 +129,7 @@ class GefFileReader:
                 result = int(val.split(",")[0].split("=")[-1]) - 1
         return result
 
-    def match_idx_with_error(
-        self,
-        idx_errors: List[str],
-    ) -> None:
+    def match_idx_with_error(self, idx_errors: List[str],) -> None:
         """
         In the gef file each of the parameters has a value that is written
         when an error in the cpt data accumulation ocurred.
