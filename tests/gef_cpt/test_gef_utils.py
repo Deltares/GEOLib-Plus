@@ -1,5 +1,5 @@
 import pytest
-from geolib_plus.gef_cpt import gef_utils
+import geolib_plus.gef_cpt.gef_utils
 
 
 # todo JN: write unit tests

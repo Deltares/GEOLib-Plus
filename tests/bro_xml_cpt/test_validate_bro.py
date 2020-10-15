@@ -1,5 +1,5 @@
 import pytest
-from geolib_plus.bro_xml_cpt import validate_bro
+from geolib_plus.bro_xml_cpt.validate_bro import validate_bro
 
 
 # todo JN: write unit tests
