@@ -19,7 +19,7 @@ import ours.CPTtool.bro as bro
 import ours.CPTtool.cpt_module as cpt_module
 import numpy as np
 from geolib_plus.BRO_XML_CPT import bro_utils as bu
-from geolib_plus.GEF_CPT import gef_utils as gu
+from geolib_plus.GEF_CPT import gef_cpt as g_cpt
 
 class TestPlotCpt(unittest.TestCase):
     def setUp(self):
@@ -30,14 +30,16 @@ class TestPlotCpt(unittest.TestCase):
         output_folder = r'D:\software_development\geolib-plus\tests\test_output'
 
         # read xml files in byte-string
-        cpt_byte_string = bro.xml_to_byte_string(cpt_name)
+        # cpt_byte_string = bro.xml_to_byte_string(cpt_name)
 
         # parse bro data
-        data_cpt = gu.read_gef(cpt_name)
-        data_cpt = bu.parse_bro_xml(cpt_byte_string)
-        data_cpt['predrilled_z'] = 0.
-        self.cpt = cpt_module.CPT(output_folder)
-        self.cpt.parse_bro(data_cpt,convert_to_kPa=False)
+        gef_cpt = g_cpt.GefCpt()
+        gef_cpt.read(cpt_name,'test')
+        self.cpt = gef_cpt
+        # # data_cpt = bu.parse_bro_xml(cpt_byte_string)
+        # data_cpt['predrilled_z'] = 0.
+        # self.cpt = cpt_module.CPT(output_folder)
+        # self.cpt.parse_bro(data_cpt,convert_to_kPa=False)
 
         # self.gef_cpt =
 
@@ -215,9 +217,11 @@ class TestPlotCpt(unittest.TestCase):
         settings = plot_settings.PlotSettings()
         settings.assign_default_settings()
 
-        plot_cpt.plot_cpt_norm(self.cpt, settings.general_settings)
+        output_folder = r'D:\software_development\geolib-plus\tests\test_output'
 
-        self.assertTrue(os.path.isfile(os.path.join(self.cpt.output_folder, self.cpt.name + '.pdf')))
+        plot_cpt.plot_cpt_norm(self.cpt, settings.general_settings, output_folder)
+
+        self.assertTrue(os.path.isfile(os.path.join(output_folder, self.cpt.name + '.pdf')))
         # os.remove(os.path.join(self.cpt.output_folder, self.cpt.name + '.pdf'))
 
     def test_generate_fig_with_inverse_friction_nbr(self):
