@@ -1,11 +1,11 @@
 from geolib_plus import AbstractCPT
+from .gef_utils import GefFileReader
 from pathlib import Path
-from .gef_utils import read_gef
 from .validate_gef import validate_gef_cpt
 
 
 class GefCpt(AbstractCPT):
-    def read(self, gef_file: Path, id, key_cpt=None):
+    def read(self, gef_file: Path):
 
         # validate gef_file
         if not gef_file:
@@ -17,11 +17,9 @@ class GefCpt(AbstractCPT):
             raise FileNotFoundError(gef_file)
         validate_gef_cpt(gef_file)
 
-        if key_cpt is None:
-            key_cpt = {"depth": 1, "tip": 2, "friction": 3, "friction_nb": 4, "pwp": 6}
-
         # read the gef
-        gef = read_gef(gef_file, id, key_cpt)
+        gef_reader = GefFileReader()
+        gef = gef_reader.read_gef(gef_file)
 
         # if gef is not a dictionary: returns error message
         if not isinstance(gef, dict):
