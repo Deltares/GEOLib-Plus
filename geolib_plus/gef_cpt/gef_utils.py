@@ -28,6 +28,7 @@ class GefFileReader:
             "friction": GefProperty(gef_key=3, multiplication_factor=1000.0),
             "friction_nb": GefProperty(gef_key=4, multiplication_factor=1.0),
             "pwp": GefProperty(gef_key=6, multiplication_factor=1000.0),
+            "inclination": GefProperty(gef_key=8, multiplication_factor=1)
         }
 
     @staticmethod
@@ -141,6 +142,8 @@ class GefFileReader:
             a=fct_a,
             coordinates=self.coord,
             water=np.array(self.property_dict["pwp"].values_from_gef),
+            local_reference_level=NAP,
+            inclination_resultant=np.array(self.property_dict["inclination"].values_from_gef)
         )
 
     def read_column_index_for_gef_data(self, key_cpt: int, data: List[str]):

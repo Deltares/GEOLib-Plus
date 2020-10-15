@@ -15,7 +15,7 @@ class GefCpt(AbstractCPT):
         gef_file = Path(gef_file)
         if not gef_file.is_file():
             raise FileNotFoundError(gef_file)
-        validate_gef_cpt(gef_file)
+        # validate_gef_cpt(gef_file)
 
         # read the gef
         gef_reader = GefFileReader()

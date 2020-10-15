@@ -10,6 +10,8 @@ from geolib_plus import plot_cpt
 import unittest
 import os
 
+from pathlib import Path
+
 from teamcity import is_running_under_teamcity
 from teamcity.unittestpy import TeamcityTestRunner
 
@@ -34,7 +36,7 @@ class TestPlotCpt(unittest.TestCase):
 
         # parse bro data
         gef_cpt = g_cpt.GefCpt()
-        gef_cpt.read(cpt_name,'test')
+        gef_cpt.read(Path(cpt_name))
         self.cpt = gef_cpt
         # # data_cpt = bu.parse_bro_xml(cpt_byte_string)
         # data_cpt['predrilled_z'] = 0.

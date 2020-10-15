@@ -1,11 +1,17 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from geolib_plus import AbstractCPT
+
 import numpy as np
 import matplotlib.pylab as plt
 
-import sys
 import os
 import warnings
 
 from geolib_plus import plot_utils as pu
+
 
 def get_values_which_exceed_threshold(threshold, values, y_data, show_interval):
     """
@@ -47,7 +53,7 @@ def trim_values_at_exceeding_threshold(threshold, values):
     return np.clip(values, threshold[0], threshold[1])
 
 
-def get_y_lims(cpt, settings):
+def get_y_lims(cpt: AbstractCPT, settings):
     """
     Gets all the vertical plot limits of the cpt. If the length of the cpt exceeds the vertical limit of the plot, a new
     plot is generated. The top of the new plot is the bottom of the previous plot plus the repeated distance
@@ -207,7 +213,7 @@ def define_inclination_ticks_and_labels(cpt, depth, inclination, ylim, settings)
     return tick_locations_inclination, tick_labels_inclination
 
 
-def save_figures(figures, cpt):
+def save_figures(figures, cpt, output_folder):
     """
     Saves all plots of current cpt in one pdf file
 
@@ -219,7 +225,7 @@ def save_figures(figures, cpt):
     """
 
     import matplotlib.backends.backend_pdf
-    pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(cpt.output_folder, cpt.name) + ".pdf")
+    pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(output_folder, cpt.name) + ".pdf")
 
     for fig in figures:
         pdf.savefig(fig)
@@ -228,7 +234,7 @@ def save_figures(figures, cpt):
     pdf.close()
 
 
-def generate_plot(cpt, settings, ylim, ylims, plot_nr):
+def generate_plot(cpt: 'AbstractCPT', settings, ylim, ylims, plot_nr):
     """
     Plots cpt data within vertical limits
 
@@ -284,7 +290,7 @@ def generate_plot(cpt, settings, ylim, ylims, plot_nr):
     return fig
 
 
-def plot_cpt_norm(cpt, settings):
+def plot_cpt_norm(cpt, settings, output_folder):
     """
     Plots and saves all data in the current cpt according to the norm written in NEN @@@
 
@@ -301,7 +307,7 @@ def plot_cpt_norm(cpt, settings):
     for plot_nr, ylim in enumerate(ylims):
         figures.append(generate_plot(cpt, settings, ylim, ylims, plot_nr))
 
-    save_figures(figures, cpt)
+    save_figures(figures, cpt, output_folder)
 
 
 
