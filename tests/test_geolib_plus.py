@@ -88,8 +88,7 @@ def test_reading_gef():
     file = Path("./test_files/cpt/gef/unit_testing/unit_testing.gef")
     gef_id = "unit_testing.gef"
 
-    cpt = GefCpt()
-    cpt.read(file, gef_id)
+    cpt = GefCpt(file)
 
     test_coord = [244319.00, 587520.00]
     test_depth = np.linspace(1, 20, 20)
@@ -132,8 +131,7 @@ def test_reading_compare(name):
     gef_file = Path("./test_files/cpt/gef/" + name + ".gef")
     gef_id = name.split("_")[0]
 
-    gef_cpt = GefCpt()
-    gef_cpt.read(gef_file, gef_id)
+    gef_cpt = GefCpt(gef_file)
 
     bro_cpt = BroXmlCpt()
     bro_cpt.read(bro_file)
