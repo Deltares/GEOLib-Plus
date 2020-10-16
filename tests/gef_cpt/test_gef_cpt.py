@@ -61,7 +61,7 @@ class TestGefCpt:
     @pytest.mark.integrationtest
     def test_gef_cpt_given_valid_arguments_throws_nothing(self):
         # 1. Set up test data
-        test_dir = TestUtils.get_local_test_data_dir("cpt\\gef")
+        test_dir = TestUtils.get_local_test_data_dir("cpt/gef")
         filename = Path("CPT000000003688_IMBRO_A.gef")
         test_file = test_dir / filename
 

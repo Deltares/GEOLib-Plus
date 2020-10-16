@@ -65,6 +65,10 @@ class TestUtils:
         return directory
 
     @staticmethod
+    def get_local_test_file(filepath: str) -> Path:
+        return Path(__file__).parent / TestUtils._name_local / filepath
+
+    @staticmethod
     def get_local_test_data_dir(dir_name: str) -> Path:
         """
         Returns the desired directory relative to the test data.
