@@ -440,5 +440,67 @@ class TestGefUtil:
             excinfo.value
         )
 
+    @pytest.mark.unittest
     def test_read_information_for_gef_data(self):
-        pass
+        # set input
+        data = [
+            "#MEASUREMENTTEXT= 1, -, opdrachtgever",
+            "#MEASUREMENTTEXT= 2, GRONDONDERZOEK T.B.V. NIEUW GEMAAL MONNICKENDAM WATERSTAND = NAP -0.47 m, projectnaam",
+            "#MEASUREMENTTEXT= 3, Monnikendam, plaatsnaam",
+            "#MEASUREMENTTEXT= 4, CP15-CF75PB1SN2/1701-1524, conus type/serienummer",
+            "#MEASUREMENTTEXT= 5, RUPS3/PJW/JBK, sondeerapparaat/operator",
+            "#MEASUREMENTTEXT= 6, ISO 22476-1 Toepassingsklasse 2, gevolgde norm",
+            "#MEASUREMENTTEXT= 8, NAP",
+            "#MEASUREMENTTEXT= 9, maaiveld, vast horizontaal vlak",
+        ]
+
+        # execute test
+        gef_reader = gef_utils.GefFileReader()
+        for key_name in gef_reader.information_dict:
+            gef_reader.information_dict[key_name].values_from_gef = \
+                gef_reader.read_information_for_gef_data(key_name, data)
+
+        # assert
+        assert gef_reader.information_dict["cpt_type"].values_from_gef == \
+               ", CP15-CF75PB1SN2/1701-1524, conus type/serienummer"
+        assert gef_reader.information_dict["cpt_standard"].values_from_gef == \
+               ", ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
+        assert gef_reader.information_dict["vertical_datum"].values_from_gef == ", NAP"
+        assert gef_reader.information_dict["local_reference"].values_from_gef == ", maaiveld, vast horizontaal vlak"
+
+    @pytest.mark.unittest
+    def test_read_information_for_empty_gef_data(self):
+        # set input
+        data = []
+
+        # execute test
+        gef_reader = gef_utils.GefFileReader()
+        for key_name in gef_reader.information_dict:
+            gef_reader.information_dict[key_name].values_from_gef = \
+                gef_reader.read_information_for_gef_data(key_name, data)
+
+        # assert
+        assert gef_reader.information_dict["cpt_type"].values_from_gef == ""
+        assert gef_reader.information_dict["cpt_standard"].values_from_gef == ""
+        assert gef_reader.information_dict["vertical_datum"].values_from_gef == ""
+        assert gef_reader.information_dict["local_reference"].values_from_gef == ""
+
+    @pytest.mark.unittest
+    def test_read_information_for_different_gef_data(self):
+        # set input
+        data = ['test',
+                'test',
+                '#EOH=']
+
+        # execute test
+        gef_reader = gef_utils.GefFileReader()
+        for key_name in gef_reader.information_dict:
+            gef_reader.information_dict[key_name].values_from_gef = \
+                gef_reader.read_information_for_gef_data(key_name, data)
+
+        # assert
+        assert gef_reader.information_dict["cpt_type"].values_from_gef == ""
+        assert gef_reader.information_dict["cpt_standard"].values_from_gef == ""
+        assert gef_reader.information_dict["vertical_datum"].values_from_gef == ""
+        assert gef_reader.information_dict["local_reference"].values_from_gef == ""
+        

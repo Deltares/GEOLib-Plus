@@ -265,6 +265,7 @@ class GefFileReader:
                 return information
             if val.startswith(r"#EOH="):
                 return ""
+        return ""
 
     def match_idx_with_error(
         self,
