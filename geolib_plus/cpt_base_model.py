@@ -106,7 +106,7 @@ class AbstractCPT(BaseModel):
     __water_measurement_types = None
 
     @classmethod
-    def read(cls, filepath: Path) -> AbstractCPT:
+    def read(cls, filepath: Path):
         if not filepath:
             raise ValueError(filepath)
 
