@@ -106,7 +106,7 @@ class AbstractCPT(BaseModel):
     __water_measurement_types = None
 
     @classmethod
-    def read(cls, filepath: Path):
+    def read(cls, filepath: Path) -> AbstractCPT:
         if not filepath:
             raise ValueError(filepath)
 
@@ -116,7 +116,10 @@ class AbstractCPT(BaseModel):
 
         cpt_reader = cls.get_cpt_reader()
         cpt_data = cpt_reader.read_file(filepath)
-        cls(**cpt_data)
+        cpt_model = cls()
+        for cpt_key, cpt_value in cpt_data.items():
+            setattr(cpt_model, cpt_key, cpt_value)
+        return cpt_model
 
     @classmethod
     @abstractmethod
