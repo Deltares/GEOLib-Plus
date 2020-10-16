@@ -139,7 +139,7 @@ class GefFileReader:
         data = list(filter(None, data))
 
         # read data & correct depth to NAP
-        self.read_data(data, idx_EOH)
+        self.read_column_data(data, idx_EOH)
 
         # remove the points with error: value == -9999
         self.remove_points_with_error()
@@ -258,7 +258,7 @@ class GefFileReader:
             )
         return None
 
-    def read_data(self, data: List[str], idx_EOH: int) -> None:
+    def read_column_data(self, data: List[str], idx_EOH: int) -> None:
         """
         Read column data from the gef file table.
         """

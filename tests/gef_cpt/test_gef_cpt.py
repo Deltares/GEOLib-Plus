@@ -9,9 +9,12 @@ class TestGefCpt:
     @pytest.mark.unittest
     def test_gef_cpt_unit_tests(self):
         # simple read test of the cpt
-        cpt = GefCpt(
-            gef_file="tests\\test_files\\cpt\\gef\\unit_testing\\test_gef_cpt_unit_tests.gef",
+        test_file = (
+            TestUtils.get_local_test_data_dir("cpt\\gef\\unit_testing")
+            / "test_gef_cpt_unit_tests.gef"
         )
+        assert test_file.is_file()
+        cpt = GefCpt(gef_file=test_file,)
         # check that all values are initialized
         assert cpt
         assert max(cpt.depth) == 25.52

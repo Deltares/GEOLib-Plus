@@ -2,6 +2,7 @@ import pytest
 from typing import List, Dict
 import numpy as np
 import re
+from tests.utils import TestUtils
 from geolib_plus.gef_cpt.gef_file_reader import GefFileReader, GefProperty
 import logging
 
@@ -177,9 +178,9 @@ class TestCorrectNegativesAndZeros:
         assert gef_reader.property_dict["tip"].values_from_gef == [-1, -2, -9]
 
 
-class TestReadData:
+class TestReadColumnData:
     @pytest.mark.systemtest
-    def test_read_data_no_pore_pressure(self):
+    def test_read_column_data_no_pore_pressure(self):
         # initialise model
         gef_reader = GefFileReader()
         gef_reader.property_dict["depth"].gef_column_index = 0
@@ -188,7 +189,11 @@ class TestReadData:
         gef_reader.property_dict["pwp"].gef_column_index = None
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # read gef file
-        gef_file = ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_data.gef"
+        gef_file = (
+            TestUtils.get_local_test_data_dir("cpt\\gef\\unit_testing")
+            / "test_read_column_data.gef"
+        )
+        assert gef_file.is_file()
         with open(gef_file, "r") as f:
             data = f.readlines()
         idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
@@ -196,7 +201,7 @@ class TestReadData:
             re.sub("[ :,!\t]+", ";", i.lstrip()) for i in data[idx_EOH + 1 :]
         ]
         # Run test
-        gef_reader.read_data(data, idx_EOH)
+        gef_reader.read_column_data(data, idx_EOH)
         # Check output
         assert gef_reader.property_dict["depth"].values_from_gef[-1] == 25.61
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387.0
@@ -204,7 +209,7 @@ class TestReadData:
         assert gef_reader.property_dict["pwp"].values_from_gef[-1] == 0.0
 
     @pytest.mark.systemtest
-    def test_read_data_error_raised(self):
+    def test_read_column_data_error_raised(self):
         # depth input was not find in the cpt file
         # initialise model
         gef_reader = GefFileReader()
@@ -214,7 +219,9 @@ class TestReadData:
         gef_reader.property_dict["pwp"].gef_column_index = None
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # read gef file
-        gef_file = ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_data.gef"
+        gef_file = (
+            ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_column_data.gef"
+        )
         with open(gef_file, "r") as f:
             data = f.readlines()
         idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
@@ -224,11 +231,11 @@ class TestReadData:
         # Run test
 
         with pytest.raises(Exception) as excinfo:
-            gef_reader.read_data(data, idx_EOH)
+            gef_reader.read_column_data(data, idx_EOH)
         assert "CPT key: depth not part of GEF file" == str(excinfo.value)
 
     @pytest.mark.unittest
-    def test_read_data(self):
+    def test_read_column_data(self):
 
         # initialise model
         gef_reader = GefFileReader()
@@ -245,7 +252,9 @@ class TestReadData:
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
 
         # read gef file
-        gef_file = ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_data.gef"
+        gef_file = (
+            ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_column_data.gef"
+        )
         with open(gef_file, "r") as f:
             data = f.readlines()
         idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
@@ -254,7 +263,7 @@ class TestReadData:
         ]
 
         # Run test
-        gef_reader.read_data(data, idx_EOH)
+        gef_reader.read_column_data(data, idx_EOH)
         # Check output
         assert gef_reader.property_dict["depth"].values_from_gef[-1] == 25.61
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387.0
