@@ -101,9 +101,6 @@ class AbstractCPT(BaseModel):
     # fixed values
     g: float = 9.81
     Pa: float = 100.0
-    # fixed values
-    g = 9.81
-    Pa = 100.0
 
     # private variables
     __water_measurement_types = None
