@@ -6,10 +6,12 @@ from pathlib import Path
 from pydantic import BaseModel
 from logging import warning
 
+
 class GefProperty(BaseModel):
     gef_key: int
     error_code: Union[str, float, None] = None
     values_from_gef: Union[Iterable, str, None] = None
+
 
 class GefColumnProperty(GefProperty):
     multiplication_factor: float = 1
@@ -27,8 +29,6 @@ class GefFileReader:
 
         self.name = ""
         self.coord = []
-
-
 
     def __get_default_information_dict(self) -> Dict:
         return {
@@ -176,16 +176,15 @@ class GefFileReader:
             )
         )
 
-        depth = [i for i in self.property_dict["depth"].values_from_gef]
-        z_NAP = [
-            NAP - i for j, i in enumerate(self.property_dict["depth"].values_from_gef)
-        ]
+        #todo move calculation z_NAP outside reader
+        # z_NAP = [
+        #     NAP - i for j, i in enumerate(self.property_dict["depth"].values_from_gef)
+        # ]
 
         return dict(
             name=self.name,
             penetration_length=np.array(self.property_dict["penetration_length"].values_from_gef),
             depth=np.array(self.property_dict["depth"].values_from_gef),
-            depth_to_reference=np.array(z_NAP),
             tip=np.array(self.property_dict["tip"].values_from_gef),
             friction=np.array(self.property_dict["friction"].values_from_gef),
             friction_nbr=np.array(self.property_dict["friction_nb"].values_from_gef),
@@ -295,7 +294,7 @@ class GefFileReader:
                         ]
                 else:
                     # the key is missing from the gef file
-                    if key in ["depth", "tip"]:
+                    if key in ["penetration_length", "tip"]:
                         raise Exception(f"Key {key} should be defined in the gef file.")
                     else:
                         warning(f"Key {key} is not defined in the gef file.")
@@ -340,11 +339,12 @@ class GefFileReader:
         """
         Read column data from the gef file table.
         """
+        pore_pressure_types = ["pwp_u1", "pwp_u2", "pwp_u3"]
         for key in self.property_dict:
-            if key == "pwp" and not (self.property_dict["pwp"].gef_column_index):
+            if key in pore_pressure_types and not (self.property_dict[key].gef_column_index):
                 # Pore pressures are not inputted
-                self.property_dict["pwp"].values_from_gef = np.zeros(
-                    len(self.property_dict["depth"].values_from_gef)
+                self.property_dict[key].values_from_gef = np.zeros(
+                    len(self.property_dict["penetration_length"].values_from_gef)
                 )
             else:
                 if self.property_dict[key].gef_column_index is not None:
@@ -356,7 +356,7 @@ class GefFileReader:
                         for i in range(idx_EOH + 1, len(data))
                     ]
                 else:
-                    if key in ["depth", "tip"]:
+                    if key in ["penetration_length", "tip"]:
                         raise Exception(f"CPT key: {key} not part of GEF file")
                     else:
                         warning(f"Key {key} is not defined in the gef file.")
