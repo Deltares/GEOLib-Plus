@@ -1,7 +1,6 @@
 from geolib_plus import AbstractCPT
 from .gef_file_reader import GefFileReader
 from pathlib import Path
-from .validate_gef import validate_gef_cpt
 
 
 class GefCpt(AbstractCPT):

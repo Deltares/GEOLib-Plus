@@ -1,6 +1,7 @@
 """Tools to read gef files."""
 import re
 import numpy as np
+from .validate_gef import validate_gef_cpt
 from typing import List, Dict, Union, Iterable
 from pathlib import Path
 from pydantic import BaseModel
@@ -148,6 +149,7 @@ class GefFileReader:
         Opens and reads gef file. Returns dictionary containing all possible
         inputs from gef file.
         """
+        validate_gef_cpt(gef_file)
         # read gef file
         with open(gef_file, "r") as f:
             data = f.readlines()
