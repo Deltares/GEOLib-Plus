@@ -190,7 +190,7 @@ class TestReadColumnData:
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # read gef file
         gef_file = (
-            TestUtils.get_local_test_data_dir("cpt\\gef\\unit_testing")
+            TestUtils.get_local_test_data_dir("cpt/gef/unit_testing")
             / "test_read_column_data.gef"
         )
         assert gef_file.is_file()
@@ -224,9 +224,10 @@ class TestReadColumnData:
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # read gef file
         gef_file = (
-            TestUtils.get_local_test_data_dir("cpt\\gef\\unit_testing")
+            TestUtils.get_local_test_data_dir("cpt/gef/unit_testing")
             / "test_read_column_data.gef"
         )
+        assert gef_file.is_file()
         with open(gef_file, "r") as f:
             data = f.readlines()
         idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
@@ -258,7 +259,7 @@ class TestReadColumnData:
 
         # read gef file
         gef_file = (
-            TestUtils.get_local_test_data_dir("cpt\\gef\\unit_testing")
+            TestUtils.get_local_test_data_dir("cpt/gef/unit_testing")
             / "test_read_column_data.gef"
         )
         with open(gef_file, "r") as f:
