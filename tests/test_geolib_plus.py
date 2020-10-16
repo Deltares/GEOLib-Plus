@@ -97,7 +97,7 @@ def test_reading_gef():
     test_friction_nbr = np.full(20, 5)
     test_water = np.full(20, 3000)
 
-    np.testing.assert_array_equal("unit_testing.gef", cpt.name)
+    np.testing.assert_array_equal('DKP302', cpt.name)
     np.testing.assert_array_equal(test_coord, cpt.coordinates)
     np.testing.assert_array_equal(test_depth, cpt.depth)
     np.testing.assert_array_equal(test_nap, cpt.depth_to_reference)
