@@ -6,7 +6,6 @@ from multiprocessing import Pool
 from pathlib import Path
 import platform
 
-
 class GefLib:
 
     """
@@ -24,7 +23,7 @@ class GefLib:
             source_lib = Path("./geolib_plus/resources/libgeflib.so.1")
         else:
             # name = "osx.dylib" - missing
-            raise ValueError("Platform not found")
+            raise ValueError(f"Platform {platform.uname()[0]} not found")
 
         # Load library into memory.
         self.__lib_handle = cdll.LoadLibrary(source_lib)
