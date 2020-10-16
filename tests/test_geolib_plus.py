@@ -1,6 +1,7 @@
 from geolib_plus import __version__
 from geolib_plus.bro_xml_cpt.bro_xml_cpt import *
 from geolib_plus.gef_cpt.gef_cpt import *
+from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
 from tests.utils import TestUtils
 
 # External
@@ -132,12 +133,12 @@ def test_reading_compare(name):
     # Should be comparable
 
     test_dir = TestUtils.get_local_test_data_dir("cpt")
-    bro_file = test_dir / "bro_xml" / name + ".xml"
+    bro_file = test_dir / "bro_xml" / f"{name}.xml"
     assert bro_file.is_file()
-    gef_file = test_dir / "gef" / name + ".gef"
+    gef_file = test_dir / "gef" / f"{name}.gef"
     assert gef_file.is_file()
 
-    gef_cpt = GefCpt(gef_file)
+    gef_cpt = GefCpt().read(gef_file)
 
     bro_cpt = BroXmlCpt()
     bro_cpt.read(bro_file)
