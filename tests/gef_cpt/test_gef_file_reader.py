@@ -182,11 +182,11 @@ class TestReadColumnData:
     @pytest.mark.systemtest
     def test_read_column_data_no_pore_pressure(self):
         # initialise model
-        gef_reader = GefFileReader()
-        gef_reader.property_dict["depth"].gef_column_index = 0
+        gef_reader = gef_utils.GefFileReader()
+        gef_reader.property_dict["penetration_length"].gef_column_index = 0
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = 1
-        gef_reader.property_dict["pwp"].gef_column_index = None
+        gef_reader.property_dict["pwp_u2"].gef_column_index = None
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # read gef file
         gef_file = (
@@ -203,20 +203,24 @@ class TestReadColumnData:
         # Run test
         gef_reader.read_column_data(data, idx_EOH)
         # Check output
-        assert gef_reader.property_dict["depth"].values_from_gef[-1] == 25.61
-        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387.0
-        assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000.0
-        assert gef_reader.property_dict["pwp"].values_from_gef[-1] == 0.0
+        assert (
+            gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
+        )
+        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387000.0
+        assert (
+            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000000.0
+        )
+        assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == 0.0
 
     @pytest.mark.systemtest
     def test_read_column_data_error_raised(self):
         # depth input was not find in the cpt file
         # initialise model
-        gef_reader = GefFileReader()
-        gef_reader.property_dict["depth"].gef_column_index = None
+        gef_reader = gef_utils.GefFileReader()
+        gef_reader.property_dict["penetration_length"].gef_column_index = None
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = 1
-        gef_reader.property_dict["pwp"].gef_column_index = None
+        gef_reader.property_dict["pwp_u2"].gef_column_index = None
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # read gef file
         gef_file = (
@@ -231,8 +235,8 @@ class TestReadColumnData:
         # Run test
 
         with pytest.raises(Exception) as excinfo:
-            gef_reader.read_column_data(data, idx_EOH)
-        assert "CPT key: depth not part of GEF file" == str(excinfo.value)
+            gef_reader.read_data(data, idx_EOH)
+        assert "CPT key: penetration_length not part of GEF file" == str(excinfo.value)
 
     @pytest.mark.unittest
     def test_read_column_data(self):
@@ -281,18 +285,18 @@ class TestRemovePointsWithError:
         gef_reader.property_dict["friction"].values_from_gef = np.array(
             [-1, -2, -999, -999, -3, -4]
         )
-        gef_reader.property_dict["pwp"].values_from_gef = np.full(6, 1000)
+        gef_reader.property_dict["pwp_u2"].values_from_gef = np.full(6, 1000)
         gef_reader.property_dict["friction_nb"].values_from_gef = np.full(6, 5)
 
         gef_reader.property_dict["depth"].error_code = -1
         gef_reader.property_dict["friction"].error_code = -999
-        gef_reader.property_dict["pwp"].error_code = -1
+        gef_reader.property_dict["pwp_u2"].error_code = -1
         gef_reader.property_dict["friction_nb"].error_code = -1
 
         gef_reader.property_dict["depth"].gef_column_index = 4
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = 1
-        gef_reader.property_dict["pwp"].gef_column_index = 3
+        gef_reader.property_dict["pwp_u2"].gef_column_index = 3
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
 
         # initialise the model
@@ -309,7 +313,7 @@ class TestRemovePointsWithError:
             gef_reader.property_dict["friction_nb"].values_from_gef == np.full(4, 5)
         ).all()
         assert (
-            gef_reader.property_dict["pwp"].values_from_gef == np.full(4, 1000)
+            gef_reader.property_dict["pwp_u2"].values_from_gef == np.full(4, 1000)
         ).all()
 
     @pytest.mark.unittest
@@ -322,23 +326,25 @@ class TestRemovePointsWithError:
         gef_reader.property_dict["friction"].values_from_gef = np.array(
             [-1, -2, -3, -4, -999, -999]
         )
-        gef_reader.property_dict["pwp"].values_from_gef = np.full(5, 1000)
+        gef_reader.property_dict["pwp_u2"].values_from_gef = np.full(5, 1000)
         gef_reader.property_dict["friction_nb"].values_from_gef = np.full(6, 5)
 
         gef_reader.property_dict["depth"].error_code = -1
         gef_reader.property_dict["friction"].error_code = -999
-        gef_reader.property_dict["pwp"].error_code = -1
+        gef_reader.property_dict["pwp_u2"].error_code = -1
         gef_reader.property_dict["friction_nb"].error_code = -1
 
         gef_reader.property_dict["depth"].gef_column_index = 4
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = 1
-        gef_reader.property_dict["pwp"].gef_column_index = 3
+        gef_reader.property_dict["pwp_u2"].gef_column_index = 3
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # Run test
         with pytest.raises(Exception) as excinfo:
             gef_reader.remove_points_with_error()
-        assert "Index <4> excides the length of list of key 'pwp'" == str(excinfo.value)
+        assert "Index <4> excides the length of list of key 'pwp_u2'" == str(
+            excinfo.value
+        )
 
 
 class TestReadColumnIndexForGefData:
@@ -413,31 +419,31 @@ class TestMatchIdxWithError:
         # initialise model
         gef_reader = GefFileReader()
         # set inputs
-        gef_reader.property_dict["depth"].gef_key = 0
+        gef_reader.property_dict["penetration_length"].gef_key = 0
         gef_reader.property_dict["tip"].gef_key = 1
         gef_reader.property_dict["friction"].gef_key = 2
-        gef_reader.property_dict["pwp"].gef_key = 4
+        gef_reader.property_dict["pwp_u2"].gef_key = 4
         gef_reader.property_dict["friction_nb"].gef_key = 3
 
-        gef_reader.property_dict["depth"].multiplication_factor = 1
+        gef_reader.property_dict["penetration_length"].multiplication_factor = 1
         gef_reader.property_dict["friction"].multiplication_factor = 1000
-        gef_reader.property_dict["pwp"].multiplication_factor = 1000
+        gef_reader.property_dict["pwp_u2"].multiplication_factor = 1000
         gef_reader.property_dict["friction_nb"].multiplication_factor = 1000
 
-        gef_reader.property_dict["depth"].gef_column_index = 4
+        gef_reader.property_dict["penetration_length"].gef_column_index = 4
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = 1
-        gef_reader.property_dict["pwp"].gef_column_index = 3
+        gef_reader.property_dict["pwp_u2"].gef_column_index = 3
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
 
         # Run test
         gef_reader.match_idx_with_error(error_string_list)
         # Check expectations
-        assert gef_reader.property_dict["depth"].error_code == -5
-        assert gef_reader.property_dict["tip"].error_code == -2 * 1000
+        assert gef_reader.property_dict["penetration_length"].error_code == -5
+        assert gef_reader.property_dict["tip"].error_code == -2 * 1e6
         assert gef_reader.property_dict["friction"].error_code == -3 * 1000
         assert gef_reader.property_dict["friction_nb"].error_code == "string"
-        assert gef_reader.property_dict["pwp"].error_code == "string"
+        assert gef_reader.property_dict["pwp_u2"].error_code == "string"
 
     @pytest.mark.unittest
     def test_match_idx_with_error_raises_1(self):
@@ -445,16 +451,16 @@ class TestMatchIdxWithError:
         error_string_list = ["-1", "-2", "-3", "string", "-4"]
 
         # initialise model
-        gef_reader = GefFileReader()
-        gef_reader.property_dict["depth"].multiplication_factor = 1
+        gef_reader = gef_utils.GefFileReader()
+        gef_reader.property_dict["penetration_length"].multiplication_factor = 1
         gef_reader.property_dict["friction"].multiplication_factor = 1000
-        gef_reader.property_dict["pwp"].multiplication_factor = 1000
+        gef_reader.property_dict["pwp_u2"].multiplication_factor = 1000
         gef_reader.property_dict["friction_nb"].multiplication_factor = 1000
 
-        gef_reader.property_dict["depth"].gef_column_index = 4
+        gef_reader.property_dict["penetration_length"].gef_column_index = 4
         gef_reader.property_dict["friction"].gef_column_index = 2
         gef_reader.property_dict["tip"].gef_column_index = None
-        gef_reader.property_dict["pwp"].gef_column_index = 3
+        gef_reader.property_dict["pwp_u2"].gef_column_index = 3
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # Run test
         with pytest.raises(Exception) as excinfo:
@@ -465,6 +471,7 @@ class TestMatchIdxWithError:
 class TestReadGef:
     @pytest.mark.intergration
     def test_read_gef_1(self):
+        # todo move calculation of depth_to_reference outside reader
         gef_file = "./tests/test_files/cpt/gef/unit_testing/unit_testing.gef"
 
         # initialise the model
@@ -475,19 +482,19 @@ class TestReadGef:
 
         test_depth = np.linspace(1, 20, 20)
         test_NAP = -1 * test_depth + 0.13
-        test_tip = np.full(20, 1000)
-        test_friction = np.full(20, 2000)
+        test_tip = np.full(20, 1e6)
+        test_friction = np.full(20, 2e6)
         test_friction_nbr = np.full(20, 5)
-        test_water = np.full(20, 3000)
+        test_water = np.full(20, 3e6)
 
         assert "DKP302" == cpt["name"]
         assert test_coord == cpt["coordinates"]
-        assert (test_depth == cpt["depth"]).all()
-        assert (test_NAP == cpt["depth_to_reference"]).all()
+        assert (test_depth == cpt["penetration_length"]).all()
+        # assert (test_NAP == cpt["depth_to_reference"]).all()
         assert (test_tip == cpt["tip"]).all()
         assert (test_friction == cpt["friction"]).all()
         assert (test_friction_nbr == cpt["friction_nbr"]).all()
-        assert (test_water == cpt["water"]).all()
+        assert (test_water == cpt["pore_pressure_u2"]).all()
 
     @pytest.mark.intergration
     @pytest.mark.parametrize(
@@ -495,8 +502,8 @@ class TestReadGef:
         [
             pytest.param(
                 "./tests/test_files/cpt/gef/unit_testing/Exception_NoLength.gef",
-                "Key depth should be defined in the gef file.",
-                id="no depth",
+                "Key penetration_length should be defined in the gef file.",
+                id="no penetration_length",
             ),
             pytest.param(
                 "./tests/test_files/cpt/gef/unit_testing/Exception_NoTip.gef",
@@ -539,8 +546,10 @@ class TestReadGef:
         result_dictionary = gef_reader.read_gef(gef_file=filename)
         assert warning in caplog.text
 
+    @pytest.mark.workinprogress
     @pytest.mark.intergration
     def test_read_gef_3(self):
+        # todo move calculation of depth_to_reference outside reader
         filename = "./tests/test_files/cpt/gef/unit_testing/Exception_9999.gef"
 
         # initialise the model
@@ -552,17 +561,167 @@ class TestReadGef:
         test_coord = [244319.00, 587520.00]
         test_depth = np.linspace(2, 20, 19)
         test_NAP = -1 * test_depth + 0.13
-        test_tip = np.full(19, 1000)
-        test_friction = np.full(19, 2000)
+        test_tip = np.full(19, 1e6)
+        test_friction = np.full(19, 2e6)
         test_friction_nbr = np.full(19, 5)
-        test_water = np.full(19, 3000)
+        test_water = np.full(19, 3e6)
 
         # test expectations
         assert "DKP302" == cpt["name"]
         assert test_coord == cpt["coordinates"]
-        assert (test_depth == cpt["depth"]).all()
-        assert (test_NAP == cpt["depth_to_reference"]).all()
+        assert (test_depth == cpt["penetration_length"]).all()
+        # assert (test_NAP == cpt["depth_to_reference"]).all()
         assert (test_tip == cpt["tip"]).all()
         assert (test_friction == cpt["friction"]).all()
         assert (test_friction_nbr == cpt["friction_nbr"]).all()
-        assert (test_water == cpt["water"]).all()
+        assert (test_water == cpt["pore_pressure_u2"]).all()
+
+    @pytest.mark.unittest
+    def test_read_data(self):
+
+        # initialise model
+        gef_reader = gef_utils.GefFileReader()
+        # set inputs
+        gef_reader.property_dict["penetration_length"].multiplication_factor = 1
+        gef_reader.property_dict["friction"].multiplication_factor = 1000
+        gef_reader.property_dict["pwp_u2"].multiplication_factor = 1000
+        gef_reader.property_dict["friction_nb"].multiplication_factor = 1000
+
+        gef_reader.property_dict["penetration_length"].gef_column_index = 0
+        gef_reader.property_dict["friction"].gef_column_index = 2
+        gef_reader.property_dict["tip"].gef_column_index = 1
+        gef_reader.property_dict["pwp_u2"].gef_column_index = 3
+        gef_reader.property_dict["friction_nb"].gef_column_index = 5
+
+        # read gef file
+        gef_file = ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_data.gef"
+        with open(gef_file, "r") as f:
+            data = f.readlines()
+        idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
+        data[idx_EOH + 1 :] = [
+            re.sub("[ :,!\t]+", ";", i.lstrip()) for i in data[idx_EOH + 1 :]
+        ]
+
+        # Run test
+        gef_reader.read_data(data, idx_EOH)
+        # Check output
+        assert (
+            gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
+        )
+        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387000.0
+        assert (
+            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0 * 1e3
+        )
+        assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == -99999.0 * 1e3
+
+    @pytest.mark.unittest
+    def test_get_line_index_from_data(self):
+        # set inputs
+        data = [
+            "#SPECIMENVAR=  1 ,   0.00, m, ",
+            "#TESTID= DKMP1_1317-0162-000",
+            "#REPORTCODE= GEF-CPT-Report,1,1,0",
+            "#STARTDATE= 2017,07,03",
+            "#STARTTIME= 14,13,53",
+            "#OS= DOS",
+        ]
+        code_string = r"#STARTDATE="
+        # run test
+        test_id = gef_utils.GefFileReader.get_line_index_from_data(
+            code_string=code_string, data=data
+        )
+        assert test_id == 3
+
+    @pytest.mark.unittest
+    def test_get_line_index_from_data_error(self):
+        # set inputs
+        data = [
+            "#SPECIMENVAR=  1 ,   0.00, m, ",
+            "#TESTID= DKMP1_1317-0162-000",
+            "#REPORTCODE= GEF-CPT-Report,1,1,0",
+            "#STARTDATE= 2017,07,03",
+            "#STARTTIME= 14,13,53",
+            "#OS= DOS",
+        ]
+        code_string = r"#IAMNOTINTHEFILE="
+        # Run test
+        with pytest.raises(ValueError) as excinfo:
+            gef_utils.GefFileReader.get_line_index_from_data(
+                code_string=code_string, data=data
+            )
+        assert "No values found for field #IAMNOTINTHEFILE= of the gef file." in str(
+            excinfo.value
+        )
+
+    @pytest.mark.unittest
+    def test_read_information_for_gef_data(self):
+        # set input
+        data = [
+            "#MEASUREMENTTEXT= 1, -, opdrachtgever",
+            "#MEASUREMENTTEXT= 2, GRONDONDERZOEK T.B.V. NIEUW GEMAAL MONNICKENDAM WATERSTAND = NAP -0.47 m, projectnaam",
+            "#MEASUREMENTTEXT= 3, Monnikendam, plaatsnaam",
+            "#MEASUREMENTTEXT= 4, CP15-CF75PB1SN2/1701-1524, conus type/serienummer",
+            "#MEASUREMENTTEXT= 5, RUPS3/PJW/JBK, sondeerapparaat/operator",
+            "#MEASUREMENTTEXT= 6, ISO 22476-1 Toepassingsklasse 2, gevolgde norm",
+            "#MEASUREMENTTEXT= 8, NAP",
+            "#MEASUREMENTTEXT= 9, maaiveld, vast horizontaal vlak",
+        ]
+
+        # execute test
+        gef_reader = gef_utils.GefFileReader()
+        for key_name in gef_reader.information_dict:
+            gef_reader.information_dict[
+                key_name
+            ].values_from_gef = gef_reader.read_information_for_gef_data(key_name, data)
+
+        # assert
+        assert (
+            gef_reader.information_dict["cpt_type"].values_from_gef
+            == ", CP15-CF75PB1SN2/1701-1524, conus type/serienummer"
+        )
+        assert (
+            gef_reader.information_dict["cpt_standard"].values_from_gef
+            == ", ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
+        )
+        assert gef_reader.information_dict["vertical_datum"].values_from_gef == ", NAP"
+        assert (
+            gef_reader.information_dict["local_reference"].values_from_gef
+            == ", maaiveld, vast horizontaal vlak"
+        )
+
+    @pytest.mark.unittest
+    def test_read_information_for_empty_gef_data(self):
+        # set input
+        data = []
+
+        # execute test
+        gef_reader = gef_utils.GefFileReader()
+        for key_name in gef_reader.information_dict:
+            gef_reader.information_dict[
+                key_name
+            ].values_from_gef = gef_reader.read_information_for_gef_data(key_name, data)
+
+        # assert
+        assert gef_reader.information_dict["cpt_type"].values_from_gef == ""
+        assert gef_reader.information_dict["cpt_standard"].values_from_gef == ""
+        assert gef_reader.information_dict["vertical_datum"].values_from_gef == ""
+        assert gef_reader.information_dict["local_reference"].values_from_gef == ""
+
+    @pytest.mark.unittest
+    def test_read_information_for_different_gef_data(self):
+        # set input
+        data = ["test", "test", "#EOH="]
+
+        # execute test
+        gef_reader = gef_utils.GefFileReader()
+        for key_name in gef_reader.information_dict:
+            gef_reader.information_dict[
+                key_name
+            ].values_from_gef = gef_reader.read_information_for_gef_data(key_name, data)
+
+        # assert
+        assert gef_reader.information_dict["cpt_type"].values_from_gef == ""
+        assert gef_reader.information_dict["cpt_standard"].values_from_gef == ""
+        assert gef_reader.information_dict["vertical_datum"].values_from_gef == ""
+        assert gef_reader.information_dict["local_reference"].values_from_gef == ""
+

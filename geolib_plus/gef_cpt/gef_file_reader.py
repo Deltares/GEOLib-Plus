@@ -9,25 +9,85 @@ from logging import warning
 
 class GefProperty(BaseModel):
     gef_key: int
-    values_from_gef: Union[Iterable, None] = None
-    multiplication_factor: float
     error_code: Union[str, float, None] = None
+    values_from_gef: Union[Iterable, str, None] = None
+
+
+class GefColumnProperty(GefProperty):
+    multiplication_factor: float = 1
     gef_column_index: Union[int, None] = None
 
 
 class GefFileReader:
     def __init__(self):
+        self.__mpa_to_pa = 1e6
+        self.__kN_to_N = 1e3
+
         self.property_dict = self.__get_default_property_dict()
+        self.information_dict = self.__get_default_information_dict()
+
         self.name = ""
         self.coord = []
 
+    def __get_default_information_dict(self) -> Dict:
+        return {
+            "cpt_type": GefProperty(gef_key=4),
+            "cpt_standard": GefProperty(gef_key=6),  # "and class [quality_class]"
+            "vertical_datum": GefProperty(gef_key=8),
+            "local_reference": GefProperty(gef_key=9),
+        }
+
     def __get_default_property_dict(self) -> Dict:
         return {
-            "depth": GefProperty(gef_key=1, multiplication_factor=1.0),
-            "tip": GefProperty(gef_key=2, multiplication_factor=1000.0),
-            "friction": GefProperty(gef_key=3, multiplication_factor=1000.0),
-            "friction_nb": GefProperty(gef_key=4, multiplication_factor=1.0),
-            "pwp": GefProperty(gef_key=6, multiplication_factor=1000.0),
+            "penetration_length": GefColumnProperty(gef_key=1),
+            "tip": GefColumnProperty(gef_key=2, multiplication_factor=self.__mpa_to_pa),
+            "friction": GefColumnProperty(
+                gef_key=3, multiplication_factor=self.__mpa_to_pa
+            ),
+            "friction_nb": GefColumnProperty(gef_key=4),
+            "pwp_u1": GefColumnProperty(
+                gef_key=5, multiplication_factor=self.__mpa_to_pa
+            ),
+            "pwp_u2": GefColumnProperty(
+                gef_key=6, multiplication_factor=self.__mpa_to_pa
+            ),
+            "pwp_u3": GefColumnProperty(
+                gef_key=7, multiplication_factor=self.__mpa_to_pa
+            ),
+            "inclination_resultant": GefColumnProperty(gef_key=8),
+            "inclination_ns": GefColumnProperty(gef_key=9),
+            "inclination_ew": GefColumnProperty(gef_key=10),
+            "depth": GefColumnProperty(gef_key=11),
+            "time": GefColumnProperty(gef_key=12),
+            "corrected_tip": GefColumnProperty(
+                gef_key=13, multiplication_factor=self.__mpa_to_pa
+            ),
+            "net_tip": GefColumnProperty(
+                gef_key=14, multiplication_factor=self.__mpa_to_pa
+            ),
+            "pore_ratio": GefColumnProperty(gef_key=15),
+            "tip_nbr": GefColumnProperty(gef_key=16),
+            "unit_weight": GefColumnProperty(
+                gef_key=17, multiplication_factor=self.__kN_to_N
+            ),
+            "pwp_ini": GefColumnProperty(
+                gef_key=18, multiplication_factor=self.__mpa_to_pa
+            ),
+            "total_pressure": GefColumnProperty(
+                gef_key=19, multiplication_factor=self.__mpa_to_pa
+            ),
+            "effective_pressure": GefColumnProperty(
+                gef_key=20, multiplication_factor=self.__mpa_to_pa
+            ),
+            "inclination_x": GefColumnProperty(gef_key=21),
+            "inclination_y": GefColumnProperty(gef_key=22),
+            "electric_cond": GefColumnProperty(gef_key=23),
+            "magnetic_strength_x": GefColumnProperty(gef_key=31),
+            "magnetic_strength_y": GefColumnProperty(gef_key=32),
+            "magnetic_strength_z": GefColumnProperty(gef_key=33),
+            "magnetic_strength_tot": GefColumnProperty(gef_key=34),
+            "magnetic_inclination": GefColumnProperty(gef_key=35),
+            "magnetic_declination": GefColumnProperty(gef_key=36),
         }
 
     @staticmethod
@@ -105,6 +165,16 @@ class GefFileReader:
         idx_coord = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#XYID=", data=data
         )
+
+        # read result time
+        result_time = self.read_date_cpt(data)
+
+        # get values for information dict
+        for key_name in self.information_dict:
+            self.information_dict[
+                key_name
+            ].values_from_gef = self.read_information_for_gef_data(key_name, data)
+
         # search index depth
         for key_name in self.property_dict:
             gef_column_index = self.read_column_index_for_gef_data(
@@ -162,21 +232,77 @@ class GefFileReader:
             )
         )
 
-        depth = [i for i in self.property_dict["depth"].values_from_gef]
-        z_NAP = [
-            NAP - i for j, i in enumerate(self.property_dict["depth"].values_from_gef)
-        ]
+        # todo move calculation z_NAP outside reader
+        # z_NAP = [
+        #     NAP - i for j, i in enumerate(self.property_dict["depth"].values_from_gef)
+        # ]
 
         return dict(
             name=self.name,
+            penetration_length=np.array(
+                self.property_dict["penetration_length"].values_from_gef
+            ),
             depth=np.array(self.property_dict["depth"].values_from_gef),
-            depth_to_reference=np.array(z_NAP),
             tip=np.array(self.property_dict["tip"].values_from_gef),
             friction=np.array(self.property_dict["friction"].values_from_gef),
             friction_nbr=np.array(self.property_dict["friction_nb"].values_from_gef),
             a=fct_a,
             coordinates=self.coord,
-            water=np.array(self.property_dict["pwp"].values_from_gef),
+            pore_pressure_u1=np.array(self.property_dict["pwp_u1"].values_from_gef),
+            pore_pressure_u2=np.array(self.property_dict["pwp_u2"].values_from_gef),
+            pore_pressure_u3=np.array(self.property_dict["pwp_u3"].values_from_gef),
+            inclination_resultant=np.array(
+                self.property_dict["inclination_resultant"].values_from_gef
+            ),
+            inclination_ns=np.array(
+                self.property_dict["inclination_ns"].values_from_gef
+            ),
+            inclination_ew=np.array(
+                self.property_dict["inclination_ew"].values_from_gef
+            ),
+            inclination_x=np.array(self.property_dict["inclination_x"].values_from_gef),
+            inclination_y=np.array(self.property_dict["inclination_y"].values_from_gef),
+            time=np.array(self.property_dict["time"].values_from_gef),
+            qt=np.array(self.property_dict["corrected_tip"].values_from_gef),
+            net_tip=np.array(self.property_dict["net_tip"].values_from_gef),
+            pore_ratio=np.array(self.property_dict["pore_ratio"].values_from_gef),
+            tip_nbr=np.array(self.property_dict["tip_nbr"].values_from_gef),
+            unit_weight_measured=np.array(
+                self.property_dict["unit_weight"].values_from_gef
+            ),
+            pwp_ini=np.array(self.property_dict["pwp_ini"].values_from_gef),
+            total_pressure_measured=np.array(
+                self.property_dict["total_pressure"].values_from_gef
+            ),
+            effective_pressure_measured=np.array(
+                self.property_dict["effective_pressure"].values_from_gef
+            ),
+            electric_cond=np.array(self.property_dict["electric_cond"].values_from_gef),
+            magnetic_strength_x=np.array(
+                self.property_dict["magnetic_strength_x"].values_from_gef
+            ),
+            magnetic_strength_y=np.array(
+                self.property_dict["magnetic_strength_y"].values_from_gef
+            ),
+            magnetic_strength_z=np.array(
+                self.property_dict["magnetic_strength_z"].values_from_gef
+            ),
+            magnetic_strength_tot=np.array(
+                self.property_dict["magnetic_strength_tot"].values_from_gef
+            ),
+            magnetic_inclination=np.array(
+                self.property_dict["magnetic_inclination"].values_from_gef
+            ),
+            magnetic_declination=np.array(
+                self.property_dict["magnetic_declination"].values_from_gef
+            ),
+            local_reference_level=NAP,
+            vertical_datum=self.information_dict["vertical_datum"].values_from_gef,
+            local_reference=self.information_dict["local_reference"].values_from_gef,
+            cpt_standard=self.information_dict["cpt_standard"].values_from_gef,
+            quality_class=self.information_dict["cpt_standard"].values_from_gef,
+            cpt_type=self.information_dict["cpt_type"].values_from_gef,
+            result_time=result_time,
         )
 
     def read_column_index_for_gef_data(self, key_cpt: int, data: List[str]):
@@ -191,6 +317,40 @@ class GefFileReader:
             ):
                 result = int(val.split(",")[0].split("=")[-1]) - 1
         return result
+
+    def read_date_cpt(self, data: List[str]) -> str:
+        """
+        Reads the date from the cpt. If startdate is present, the date is defined as the startdate.
+        Else the date is equal to the filedate, which is always present.
+        :return:
+        """
+        code_file_date = r"#FILEDATE= "
+        code_start_date = r"#STARTDATE= "
+        result_date = None
+        for i, val in enumerate(data):
+            if val.startswith(code_file_date) and result_date is None:
+                result_date = val.split(code_file_date)[-1]
+            if val.startswith(code_start_date):
+                result_date = val.split(code_start_date)[-1]
+                return result_date.replace("\n", "")
+            if val.startswith(r"#EOH="):
+                return result_date.replace("\n", "")
+
+    def read_information_for_gef_data(self, key_name: str, data: List[str]) -> str:
+        """
+        Reads header information from the gef data.
+        """
+        code_string = r"#MEASUREMENTTEXT= " + str(
+            self.information_dict[key_name].gef_key
+        )
+
+        for i, val in enumerate(data):
+            if val.startswith(code_string):
+                information = val.split(code_string)[-1]
+                return information.replace("\n", "")
+            if val.startswith(r"#EOH="):
+                return ""
+        return ""
 
     def match_idx_with_error(self, idx_errors: List[str],) -> None:
         """
@@ -217,7 +377,7 @@ class GefFileReader:
                         ]
                 else:
                     # the key is missing from the gef file
-                    if key in ["depth", "tip"]:
+                    if key in ["penetration_length", "tip"]:
                         raise Exception(f"Key {key} should be defined in the gef file.")
                     else:
                         warning(f"Key {key} is not defined in the gef file.")
@@ -262,11 +422,14 @@ class GefFileReader:
         """
         Read column data from the gef file table.
         """
+        pore_pressure_types = ["pwp_u1", "pwp_u2", "pwp_u3"]
         for key in self.property_dict:
-            if key == "pwp" and not (self.property_dict["pwp"].gef_column_index):
+            if key in pore_pressure_types and not (
+                self.property_dict[key].gef_column_index
+            ):
                 # Pore pressures are not inputted
-                self.property_dict["pwp"].values_from_gef = np.zeros(
-                    len(self.property_dict["depth"].values_from_gef)
+                self.property_dict[key].values_from_gef = np.zeros(
+                    len(self.property_dict["penetration_length"].values_from_gef)
                 )
             else:
                 if self.property_dict[key].gef_column_index is not None:
@@ -278,7 +441,7 @@ class GefFileReader:
                         for i in range(idx_EOH + 1, len(data))
                     ]
                 else:
-                    if key in ["depth", "tip"]:
+                    if key in ["penetration_length", "tip"]:
                         raise Exception(f"CPT key: {key} not part of GEF file")
                     else:
                         warning(f"Key {key} is not defined in the gef file.")

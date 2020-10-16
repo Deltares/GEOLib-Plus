@@ -20,6 +20,7 @@ class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
 
     #  variables
+    penetration_length = []
     depth = []
     coordinates = []
     local_reference_level = []
@@ -46,6 +47,10 @@ class AbstractCPT(BaseModel):
     poisson = []
     damping = []
 
+    pore_pressure_u1 = []
+    pore_pressure_u2 = []
+    pore_pressure_u3 = []
+
     water = []
     lithology = []
     litho_points = []
@@ -55,7 +60,27 @@ class AbstractCPT(BaseModel):
     index_merged = []
     vertical_datum = []
     local_reference = []
+    inclination_x = []
+    inclination_y = []
+    inclination_ns = []
+    inclination_ew = []
     inclination_resultant = []
+    time = []
+    net_tip = []
+    pore_ratio = []
+    tip_nbr = []
+    unit_weight_measured = []
+    pwp_ini = []
+    total_pressure_measured = []
+    effective_pressure_measured = []
+    electric_cond = []
+    magnetic_strength_x = []
+    magnetic_strength_y = []
+    magnetic_strength_z = []
+    magnetic_strength_tot = []
+    magnetic_inclination = []
+    magnetic_declination = []
+
     cpt_standard = []
     quality_class = []
     cpt_type = []
