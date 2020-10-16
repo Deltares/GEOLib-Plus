@@ -1,6 +1,7 @@
 """Tools to read gef files."""
 import re
 import numpy as np
+from .validate_gef import validate_gef_cpt
 from typing import List, Dict, Union, Iterable
 from pathlib import Path
 from pydantic import BaseModel
@@ -19,7 +20,6 @@ class GefColumnProperty(GefProperty):
 
 
 class GefFileReader:
-
     def __init__(self):
         self.__mpa_to_pa = 1e6
         self.__kN_to_N = 1e3
@@ -33,34 +33,53 @@ class GefFileReader:
     def __get_default_information_dict(self) -> Dict:
         return {
             "cpt_type": GefProperty(gef_key=4),
-            'cpt_standard': GefProperty(gef_key=6), # "and class [quality_class]"
+            "cpt_standard": GefProperty(gef_key=6),  # "and class [quality_class]"
             "vertical_datum": GefProperty(gef_key=8),
             "local_reference": GefProperty(gef_key=9),
-
         }
 
     def __get_default_property_dict(self) -> Dict:
         return {
             "penetration_length": GefColumnProperty(gef_key=1),
             "tip": GefColumnProperty(gef_key=2, multiplication_factor=self.__mpa_to_pa),
-            "friction": GefColumnProperty(gef_key=3, multiplication_factor=self.__mpa_to_pa),
+            "friction": GefColumnProperty(
+                gef_key=3, multiplication_factor=self.__mpa_to_pa
+            ),
             "friction_nb": GefColumnProperty(gef_key=4),
-            "pwp_u1": GefColumnProperty(gef_key=5, multiplication_factor=self.__mpa_to_pa),
-            "pwp_u2": GefColumnProperty(gef_key=6, multiplication_factor=self.__mpa_to_pa),
-            "pwp_u3": GefColumnProperty(gef_key=7, multiplication_factor=self.__mpa_to_pa),
+            "pwp_u1": GefColumnProperty(
+                gef_key=5, multiplication_factor=self.__mpa_to_pa
+            ),
+            "pwp_u2": GefColumnProperty(
+                gef_key=6, multiplication_factor=self.__mpa_to_pa
+            ),
+            "pwp_u3": GefColumnProperty(
+                gef_key=7, multiplication_factor=self.__mpa_to_pa
+            ),
             "inclination_resultant": GefColumnProperty(gef_key=8),
             "inclination_ns": GefColumnProperty(gef_key=9),
             "inclination_ew": GefColumnProperty(gef_key=10),
             "depth": GefColumnProperty(gef_key=11),
             "time": GefColumnProperty(gef_key=12),
-            "corrected_tip": GefColumnProperty(gef_key=13, multiplication_factor=self.__mpa_to_pa),
-            "net_tip": GefColumnProperty(gef_key=14, multiplication_factor=self.__mpa_to_pa),
+            "corrected_tip": GefColumnProperty(
+                gef_key=13, multiplication_factor=self.__mpa_to_pa
+            ),
+            "net_tip": GefColumnProperty(
+                gef_key=14, multiplication_factor=self.__mpa_to_pa
+            ),
             "pore_ratio": GefColumnProperty(gef_key=15),
             "tip_nbr": GefColumnProperty(gef_key=16),
-            "unit_weight": GefColumnProperty(gef_key=17, multiplication_factor=self.__kN_to_N),
-            "pwp_ini": GefColumnProperty(gef_key=18, multiplication_factor=self.__mpa_to_pa),
-            "total_pressure": GefColumnProperty(gef_key=19, multiplication_factor=self.__mpa_to_pa),
-            "effective_pressure": GefColumnProperty(gef_key=20, multiplication_factor=self.__mpa_to_pa),
+            "unit_weight": GefColumnProperty(
+                gef_key=17, multiplication_factor=self.__kN_to_N
+            ),
+            "pwp_ini": GefColumnProperty(
+                gef_key=18, multiplication_factor=self.__mpa_to_pa
+            ),
+            "total_pressure": GefColumnProperty(
+                gef_key=19, multiplication_factor=self.__mpa_to_pa
+            ),
+            "effective_pressure": GefColumnProperty(
+                gef_key=20, multiplication_factor=self.__mpa_to_pa
+            ),
             "inclination_x": GefColumnProperty(gef_key=21),
             "inclination_y": GefColumnProperty(gef_key=22),
             "electric_cond": GefColumnProperty(gef_key=23),
@@ -73,44 +92,79 @@ class GefFileReader:
         }
 
     @staticmethod
-    def get_line_index_from_data(code_string: str, data: List[str]) -> int:
-        values = [i for i, val in enumerate(data) if val.startswith(code_string)]
-        if not values:
-            # if not having values IS NOT okay.
+    def get_line_index_from_data_starts_with(code_string: str, data: List[str]) -> int:
+        """Given a list of strings it returns the position of the first one which starts by the code string given.
+
+        Args:
+            code_string (str): The line that needs to be found.
+            data (List[str]): Collection of strings representing lines.
+
+        Raises:
+            ValueError: When the code_string argument is not given or is None.
+            ValueError: When the data argument is not given or is None.
+            ValueError: When no values where found for the given arguments.
+
+        Returns:
+            int: Line index where the data can be found.
+        """
+        if not code_string:
+            raise ValueError(code_string)
+        if not data:
+            raise ValueError(data)
+
+        line_found = next(
+            (i for i, val in enumerate(data) if val.startswith(code_string)), None
+        )
+        if not line_found:
+            # if not having line_found IS NOT okay.
             raise ValueError(
                 f"No values found for field {code_string} of the gef file."
             )
-        return values[0]
+        return line_found
 
     @staticmethod
-    def get_line_index_from_data_ends_with(
-        code_string: str, data: List[str]
-    ) -> Union[int, None]:
-        values = [i for i, val in enumerate(data) if val.endswith(code_string)]
-        if not values:
-            return None
-        return values[0]
+    def get_line_from_data_that_ends_with(code_string: str, data: List[str]) -> str:
+        """Given a list of strings it returns the first one ending with the given code_string.
+
+        Args:
+            code_string (str): Code string to find at the end of each line.
+            data (List[str]): List of strings to iterate through.
+
+        Raises:
+            ValueError: When no code_string argument is given.
+            ValueError: When no data argument is given.
+
+        Returns:
+            str: Line ending with the requested code_string.
+        """
+        if not code_string:
+            raise ValueError(code_string)
+        if not data:
+            raise ValueError(data)
+
+        return next((line for line in data if line.endswith(code_string)), None)
 
     def read_gef(self, gef_file: Path, fct_a: float = 0.8) -> Dict:
         """
         Opens and reads gef file. Returns dictionary containing all possible
         inputs from gef file.
         """
+        validate_gef_cpt(gef_file)
         # read gef file
         with open(gef_file, "r") as f:
             data = f.readlines()
 
         # search NAP
-        idx_nap = GefFileReader.get_line_index_from_data(
+        idx_nap = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#ZID=", data=data
         )
         NAP = float(data[idx_nap].split(",")[1])
         # search end of header
-        idx_EOH = GefFileReader.get_line_index_from_data(
+        idx_EOH = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#EOH=", data=data
         )
         # # search for coordinates
-        idx_coord = GefFileReader.get_line_index_from_data(
+        idx_coord = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#XYID=", data=data
         )
 
@@ -119,7 +173,9 @@ class GefFileReader:
 
         # get values for information dict
         for key_name in self.information_dict:
-            self.information_dict[key_name].values_from_gef = self.read_information_for_gef_data(key_name, data)
+            self.information_dict[
+                key_name
+            ].values_from_gef = self.read_information_for_gef_data(key_name, data)
 
         # search index depth
         for key_name in self.property_dict:
@@ -130,9 +186,7 @@ class GefFileReader:
 
         # read error codes
         idx_errors_raw_text = [
-            val.split(",")[1]
-            for val in data
-            if val.startswith(r"#COLUMNVOID=")
+            val.split(",")[1] for val in data if val.startswith(r"#COLUMNVOID=")
         ]
         self.match_idx_with_error(idx_errors_raw_text)
         # rewrite data with separator ;
@@ -140,20 +194,22 @@ class GefFileReader:
             re.sub("[ :,!\t]+", ";", i.lstrip()) for i in data[idx_EOH + 1 :]
         ]
 
-        try:
-            # search index coefficient a
-            idx_a = GefFileReader.get_line_index_from_data_ends_with(
-                code_string="Netto oppervlaktequotient van de conuspunt\n", data=data
-            )
-            fct_a = float(data[idx_a].split(",")[1])
-        except TypeError:
-            fct_a = fct_a
+        # search line with coefficient a
+        line_found = GefFileReader.get_line_from_data_that_ends_with(
+            code_string="Netto oppervlaktequotient van de conuspunt\n", data=data
+        )
+        if line_found:
+            try:
+                fct_a = float(line_found.split(",")[1])
+            except (ValueError, TypeError):
+                # We keep on with the default value.
+                fct_a = fct_a
 
         # remove empty lines
         data = list(filter(None, data))
 
         # read data & correct depth to NAP
-        self.read_data(data, idx_EOH)
+        self.read_column_data(data, idx_EOH)
 
         # remove the points with error: value == -9999
         self.remove_points_with_error()
@@ -161,7 +217,7 @@ class GefFileReader:
         correct_for_negatives = ["tip", "friction", "friction_nb"]
         self.correct_negatives_and_zeros(correct_for_negatives)
 
-        idx_name = GefFileReader.get_line_index_from_data(
+        idx_name = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#TESTID=", data=data
         )
         self.name = data[idx_name].split("#TESTID=")[-1].strip()
@@ -176,45 +232,90 @@ class GefFileReader:
             )
         )
 
-        #todo move calculation z_NAP outside reader
+        # todo move calculation z_NAP outside reader
         # z_NAP = [
         #     NAP - i for j, i in enumerate(self.property_dict["depth"].values_from_gef)
         # ]
 
         return dict(
             name=self.name,
-            penetration_length=self.get_as_np_array(self.property_dict["penetration_length"].values_from_gef),
+            penetration_length=self.get_as_np_array(
+                self.property_dict["penetration_length"].values_from_gef
+            ),
             depth=self.get_as_np_array(self.property_dict["depth"].values_from_gef),
             tip=self.get_as_np_array(self.property_dict["tip"].values_from_gef),
-            friction=self.get_as_np_array(self.property_dict["friction"].values_from_gef),
-            friction_nbr=self.get_as_np_array(self.property_dict["friction_nb"].values_from_gef),
+            friction=self.get_as_np_array(
+                self.property_dict["friction"].values_from_gef
+            ),
+            friction_nbr=self.get_as_np_array(
+                self.property_dict["friction_nb"].values_from_gef
+            ),
             a=fct_a,
             coordinates=self.coord,
-            pore_pressure_u1=self.get_as_np_array(self.property_dict["pwp_u1"].values_from_gef),
-            pore_pressure_u2=self.get_as_np_array(self.property_dict["pwp_u2"].values_from_gef),
-            pore_pressure_u3=self.get_as_np_array(self.property_dict["pwp_u3"].values_from_gef),
-            inclination_resultant=self.get_as_np_array(self.property_dict["inclination_resultant"].values_from_gef),
-            inclination_ns=self.get_as_np_array(self.property_dict["inclination_ns"].values_from_gef),
-            inclination_ew=self.get_as_np_array(self.property_dict["inclination_ew"].values_from_gef),
-            inclination_x=self.get_as_np_array(self.property_dict["inclination_x"].values_from_gef),
-            inclination_y=self.get_as_np_array(self.property_dict["inclination_y"].values_from_gef),
+            pore_pressure_u1=self.get_as_np_array(
+                self.property_dict["pwp_u1"].values_from_gef
+            ),
+            pore_pressure_u2=self.get_as_np_array(
+                self.property_dict["pwp_u2"].values_from_gef
+            ),
+            pore_pressure_u3=self.get_as_np_array(
+                self.property_dict["pwp_u3"].values_from_gef
+            ),
+            inclination_resultant=self.get_as_np_array(
+                self.property_dict["inclination_resultant"].values_from_gef
+            ),
+            inclination_ns=self.get_as_np_array(
+                self.property_dict["inclination_ns"].values_from_gef
+            ),
+            inclination_ew=self.get_as_np_array(
+                self.property_dict["inclination_ew"].values_from_gef
+            ),
+            inclination_x=self.get_as_np_array(
+                self.property_dict["inclination_x"].values_from_gef
+            ),
+            inclination_y=self.get_as_np_array(
+                self.property_dict["inclination_y"].values_from_gef
+            ),
             time=self.get_as_np_array(self.property_dict["time"].values_from_gef),
-            qt=self.get_as_np_array(self.property_dict["corrected_tip"].values_from_gef),
+            qt=self.get_as_np_array(
+                self.property_dict["corrected_tip"].values_from_gef
+            ),
             net_tip=self.get_as_np_array(self.property_dict["net_tip"].values_from_gef),
-            pore_ratio=self.get_as_np_array(self.property_dict["pore_ratio"].values_from_gef),
+            pore_ratio=self.get_as_np_array(
+                self.property_dict["pore_ratio"].values_from_gef
+            ),
             tip_nbr=self.get_as_np_array(self.property_dict["tip_nbr"].values_from_gef),
-            unit_weight_measured=self.get_as_np_array(self.property_dict["unit_weight"].values_from_gef),
+            unit_weight_measured=self.get_as_np_array(
+                self.property_dict["unit_weight"].values_from_gef
+            ),
             pwp_ini=self.get_as_np_array(self.property_dict["pwp_ini"].values_from_gef),
-            total_pressure_measured=self.get_as_np_array(self.property_dict["total_pressure"].values_from_gef),
-            effective_pressure_measured=self.get_as_np_array(self.property_dict["effective_pressure"].values_from_gef),
-            electric_cond=self.get_as_np_array(self.property_dict["electric_cond"].values_from_gef),
-            magnetic_strength_x=self.get_as_np_array(self.property_dict["magnetic_strength_x"].values_from_gef),
-            magnetic_strength_y=self.get_as_np_array(self.property_dict["magnetic_strength_y"].values_from_gef),
-            magnetic_strength_z=self.get_as_np_array(self.property_dict["magnetic_strength_z"].values_from_gef),
-            magnetic_strength_tot=self.get_as_np_array(self.property_dict["magnetic_strength_tot"].values_from_gef),
-            magnetic_inclination=self.get_as_np_array(self.property_dict["magnetic_inclination"].values_from_gef),
-            magnetic_declination=self.get_as_np_array(self.property_dict["magnetic_declination"].values_from_gef),
-
+            total_pressure_measured=self.get_as_np_array(
+                self.property_dict["total_pressure"].values_from_gef
+            ),
+            effective_pressure_measured=self.get_as_np_array(
+                self.property_dict["effective_pressure"].values_from_gef
+            ),
+            electric_cond=self.get_as_np_array(
+                self.property_dict["electric_cond"].values_from_gef
+            ),
+            magnetic_strength_x=self.get_as_np_array(
+                self.property_dict["magnetic_strength_x"].values_from_gef
+            ),
+            magnetic_strength_y=self.get_as_np_array(
+                self.property_dict["magnetic_strength_y"].values_from_gef
+            ),
+            magnetic_strength_z=self.get_as_np_array(
+                self.property_dict["magnetic_strength_z"].values_from_gef
+            ),
+            magnetic_strength_tot=self.get_as_np_array(
+                self.property_dict["magnetic_strength_tot"].values_from_gef
+            ),
+            magnetic_inclination=self.get_as_np_array(
+                self.property_dict["magnetic_inclination"].values_from_gef
+            ),
+            magnetic_declination=self.get_as_np_array(
+                self.property_dict["magnetic_declination"].values_from_gef
+            ),
             local_reference_level=NAP,
             vertical_datum=self.information_dict["vertical_datum"].values_from_gef,
             local_reference=self.information_dict["local_reference"].values_from_gef,
@@ -267,20 +368,19 @@ class GefFileReader:
         """
         Reads header information from the gef data.
         """
-        code_string = r"#MEASUREMENTTEXT= " + str(self.information_dict[key_name].gef_key)
+        code_string = r"#MEASUREMENTTEXT= " + str(
+            self.information_dict[key_name].gef_key
+        )
 
         for val in data:
             if val.startswith(code_string):
                 information = val.split(code_string)[-1]
-                return information.replace("\n","")
+                return information.replace("\n", "")
             if val.startswith(r"#EOH="):
                 return ""
         return ""
 
-    def match_idx_with_error(
-        self,
-        idx_errors: List[str],
-    ) -> None:
+    def match_idx_with_error(self, idx_errors: List[str],) -> None:
         """
         In the gef file each of the parameters has a value that is written
         when an error in the cpt data accumulation ocurred.
@@ -346,13 +446,15 @@ class GefFileReader:
             )
         return None
 
-    def read_data(self, data: List[str], idx_EOH: int) -> None:
+    def read_column_data(self, data: List[str], idx_EOH: int) -> None:
         """
         Read column data from the gef file table.
         """
         pore_pressure_types = ["pwp_u1", "pwp_u2", "pwp_u3"]
         for key in self.property_dict:
-            if key in pore_pressure_types and not (self.property_dict[key].gef_column_index):
+            if key in pore_pressure_types and not (
+                self.property_dict[key].gef_column_index
+            ):
                 # Pore pressures are not inputted
                 self.property_dict[key].values_from_gef = np.zeros(
                     len(self.property_dict["penetration_length"].values_from_gef)
@@ -373,11 +475,13 @@ class GefFileReader:
                         warning(f"Key {key} is not defined in the gef file.")
         return None
 
-    def correct_negatives_and_zeros(self, correct_for_negatives: List[str]) -> None:
+    def correct_negatives_and_zeros(self, correct_for_negatives: List[str]):
         """
         Values tip / friction / friction cannot be negative so they
         have to be zero.
         """
+        if not correct_for_negatives:
+            return
         for key in correct_for_negatives:
             if self.property_dict[key].gef_column_index is not None:
                 self.property_dict[key].values_from_gef = np.array(
@@ -386,4 +490,3 @@ class GefFileReader:
                 self.property_dict[key].values_from_gef[
                     self.property_dict[key].values_from_gef < 0
                 ] = 0
-        return None

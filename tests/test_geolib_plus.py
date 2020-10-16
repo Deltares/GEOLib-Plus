@@ -12,6 +12,7 @@ import pytest
 def test_version():
     assert __version__ == "0.1.0"
 
+
 # System Test for geolib_plus_read_BRO
 @pytest.mark.systemtest
 def test_reading_bro():
@@ -86,8 +87,7 @@ def test_reading_bro():
 def test_reading_gef():
     file = Path("./tests/test_files/cpt/gef/unit_testing/unit_testing.gef")
 
-    cpt = GefCpt()
-    cpt.read(file)
+    cpt = GefCpt(file)
 
     test_coord = [244319.00, 587520.00]
     test_depth = np.linspace(1, 20, 20)
@@ -97,7 +97,7 @@ def test_reading_gef():
     test_friction_nbr = np.full(20, 5)
     test_water = np.full(20, 3000)
 
-    np.testing.assert_array_equal('DKP302', cpt.name)
+    np.testing.assert_array_equal("DKP302", cpt.name)
     np.testing.assert_array_equal(test_coord, cpt.coordinates)
     np.testing.assert_array_equal(test_depth, cpt.depth)
     np.testing.assert_array_equal(test_nap, cpt.depth_to_reference)
@@ -118,7 +118,6 @@ testdata = [
 ]
 
 
-@pytest.mark.workinprogress
 @pytest.mark.systemtest
 @pytest.mark.parametrize("name", testdata, ids=testdata)
 def test_reading_compare(name):
@@ -129,8 +128,7 @@ def test_reading_compare(name):
 
     gef_file = Path("./tests/test_files/cpt/gef/" + name + ".gef")
 
-    gef_cpt = GefCpt()
-    gef_cpt.read(gef_file)
+    gef_cpt = GefCpt(gef_file)
 
     bro_cpt = BroXmlCpt()
     bro_cpt.read(bro_file)
@@ -152,7 +150,9 @@ def test_reading_compare(name):
 @pytest.mark.systemtest
 # Test validation of BRO-XML file structure .... with clean file
 def test_validate_bro_no_error():
-    bro_xml_file_path = Path("./tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml")
+    bro_xml_file_path = Path(
+        "./tests/test_files/cpt/bro_xml/CPT000000003688_IMBRO_A.xml"
+    )
     try:
         validate_bro_cpt(bro_xml_file_path)
     except:  # catch *all* exceptions

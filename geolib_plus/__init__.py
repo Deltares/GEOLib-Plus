@@ -8,6 +8,7 @@ from typing import List, Optional, Iterable
 from .plot_cpt import plot_cpt_norm
 from .plot_settings import PlotSettings
 
+
 class AbstractInterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
 
@@ -18,6 +19,7 @@ class RobertsonMethod(AbstractInterpretationMethod):
 
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
+
     #  variables
     penetration_length: Optional[Iterable]
     depth: Optional[Iterable]
@@ -92,15 +94,17 @@ class AbstractCPT(BaseModel):
 
     # fixed values
     g: float = 9.81
-    Pa: float = 100.
+    Pa: float = 100.0
 
     # private variables
     __water_measurement_types = None
 
-    @classmethod
-    @abstractmethod
-    def read(cls, file: Path):
-        pass
+    # Carles Soriano: An object which represents a data structure should not be
+    # responsible to read data. A reader should be doing that instead.
+    # @classmethod
+    # @abstractmethod
+    # def read(cls, file: Path):
+    #     pass
 
     # @property
     # @abstractmethod
