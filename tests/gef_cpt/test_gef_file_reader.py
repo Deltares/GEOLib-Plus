@@ -25,7 +25,7 @@ class TestGefUtil:
         ).all()
         assert gef_reader.property_dict["tip"].values_from_gef == [-1, -2, -9]
 
-    @pytest.mark.system
+    @pytest.mark.systemtest
     def test_read_data_no_pore_pressure(self):
         # initialise model
         gef_reader = gef_file_reader.GefFileReader()
@@ -50,7 +50,7 @@ class TestGefUtil:
         assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000.0
         assert gef_reader.property_dict["pwp"].values_from_gef[-1] == 0.0
 
-    @pytest.mark.system
+    @pytest.mark.systemtest
     def test_read_data_error_raised(self):
         # depth input was not find in the cpt file
         # initialise model
