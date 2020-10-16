@@ -43,33 +43,6 @@ PandasDataFrame = TypeVar("pandas.core.frame.DataFrame")
 searchstring = b"<gml:featureMember>"
 footer = b"</gml:FeatureCollection>"
 
-columns = [
-    "penetrationLength",
-    "depth",
-    "elapsedTime",
-    "coneResistance",
-    "correctedConeResistance",
-    "netConeResistance",
-    "magneticFieldStrengthX",
-    "magneticFieldStrengthY",
-    "magneticFieldStrengthZ",
-    "magneticFieldStrengthTotal",
-    "electricalConductivity",
-    "inclinationEW",
-    "inclinationNS",
-    "inclinationX",
-    "inclinationY",
-    "inclinationResultant",
-    "magneticInclination",
-    "magneticDeclination",
-    "localFriction",
-    "poreRatio",
-    "temperature",
-    "porePressureU1",
-    "porePressureU2",
-    "porePressureU3",
-    "frictionRatio",
-]
 req_columns = ["penetrationLength", "coneResistance", "localFriction", "frictionRatio"]
 
 ns = "{http://www.broservices.nl/xsd/cptcommon/1.1}"

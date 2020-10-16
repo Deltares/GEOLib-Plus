@@ -10,6 +10,7 @@ from geolib_plus.bro_xml_cpt.bro_utils import XMLBroCPTReader
 
 # todo JN: write unit tests
 class TestBroXmlCpt:
+    @pytest.mark.system
     def test_read(self):
         # simple test for reading xml file from bro
         # define input path to xml
@@ -29,6 +30,7 @@ class TestBroXmlCpt:
         assert min(cpt.depth) == 0
         assert max(cpt.depth) == 24.34
 
+    @pytest.mark.unittest
     def test__get_depth_from_bro_depth_is_set(self):
         # define the inputs
         d = {
@@ -45,6 +47,7 @@ class TestBroXmlCpt:
         assert cpt
         assert d["depth"] == list(depth)
 
+    @pytest.mark.unittest
     def test__get_depth_from_bro_no_depth_no_inclination(self):
         # define the inputs
         d = {
@@ -60,6 +63,7 @@ class TestBroXmlCpt:
         assert depth.all()
         assert d["penetrationLength"] == list(depth)
 
+    @pytest.mark.unittest
     def test__get_depth_from_bro_no_depth(self):
         # define the inputs
         d = {
@@ -87,6 +91,7 @@ class TestBroXmlCpt:
         assert depth.all()
         assert list(result) == list(depth)
 
+    @pytest.mark.system
     def test__pre_drill_with_predrill(self):
 
         # make a cpt with the pre_drill option
@@ -125,6 +130,7 @@ class TestBroXmlCpt:
         assert cpt.name == "cpt_name"
         assert cpt.a == 0.8
 
+    @pytest.mark.system
     def test__pre_drill_with_pore_pressure(self):
 
         # Set the values of the cpt
@@ -172,6 +178,7 @@ class TestBroXmlCpt:
         assert cpt.name == "cpt_name"
         assert cpt.a == 0.73
 
+    @pytest.mark.system
     def test__pre_drill_Raise_Exception1(self):
 
         # Define the cpt values
@@ -200,6 +207,7 @@ class TestBroXmlCpt:
         # check if the returned message is the appropriate
         assert "File cpt_name has a length smaller than 10" == aux
 
+    @pytest.mark.system
     def test__pre_drill_Raise_Exception2(self):
 
         # Define the cpt values
@@ -228,6 +236,7 @@ class TestBroXmlCpt:
         # check if the returned message is the appropriate
         assert "File cpt_name has a number of samples smaller than 10" == aux
 
+    @pytest.mark.system
     def test_read_BRO_Raise_Exception1(self):
 
         # Define the cpt values
@@ -256,6 +265,7 @@ class TestBroXmlCpt:
         # check if the returned message is the appropriate
         assert "File cpt_name is corrupted" == aux
 
+    @pytest.mark.system
     def test_read_BRO_Raise_Exception2(self):
 
         # Define the cpt values
