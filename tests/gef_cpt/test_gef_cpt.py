@@ -6,7 +6,7 @@ from tests.utils import TestUtils
 
 
 class TestGefCpt:
-    @pytest.mark.unittest
+    @pytest.mark.integrationtest
     def test_gef_cpt_unit_tests(self):
         # simple read test of the cpt
         test_file = (
@@ -14,7 +14,8 @@ class TestGefCpt:
             / "test_gef_cpt_unit_tests.gef"
         )
         assert test_file.is_file(), f"File was not found at location {test_file}."
-        cpt = GefCpt(gef_file=test_file,)
+        cpt = GefCpt()
+        cpt.read(test_file)
         # check that all values are initialized
         assert cpt
         assert max(cpt.penetration_length) == 25.52
@@ -55,12 +56,12 @@ class TestGefCpt:
         self, gef_file: Path, expectation
     ):
         with expectation:
-            GefCpt(gef_file)
+            GefCpt().read(gef_file)
 
     @pytest.mark.integrationtest
     def test_gef_cpt_given_valid_arguments_throws_nothing(self):
         # 1. Set up test data
-        test_dir = TestUtils.get_local_test_data_dir("cpt\\gef")
+        test_dir = TestUtils.get_local_test_data_dir("cpt/gef")
         filename = Path("CPT000000003688_IMBRO_A.gef")
         test_file = test_dir / filename
 
@@ -68,7 +69,7 @@ class TestGefCpt:
         assert test_file.is_file()
 
         # 3. Run test
-        generated_output = GefCpt(test_file)
+        generated_output = GefCpt().read(test_file)
 
         # 4. Verify final expectations
         assert generated_output

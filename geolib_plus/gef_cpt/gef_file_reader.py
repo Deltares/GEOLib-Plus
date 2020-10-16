@@ -2,6 +2,7 @@
 import re
 import numpy as np
 from .validate_gef import validate_gef_cpt
+from geolib_plus.cpt_base_model import CptReader
 from typing import List, Dict, Union, Iterable
 from pathlib import Path
 from pydantic import BaseModel
@@ -19,7 +20,7 @@ class GefColumnProperty(GefProperty):
     gef_column_index: Union[int, None] = None
 
 
-class GefFileReader:
+class GefFileReader(CptReader):
     def __init__(self):
         self.__mpa_to_pa = 1e6
         self.__kN_to_N = 1e3
@@ -143,6 +144,9 @@ class GefFileReader:
             raise ValueError(data)
 
         return next((line for line in data if line.endswith(code_string)), None)
+
+    def read_file(self, filepath: Path) -> dict:
+        return self.read_gef(gef_file=filepath)
 
     def read_gef(self, gef_file: Path, fct_a: float = 0.8) -> Dict:
         """

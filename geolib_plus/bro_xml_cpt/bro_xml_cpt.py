@@ -4,8 +4,8 @@ from pathlib import Path
 import pandas as pd
 from typing import Dict, List, Union, Iterable
 
-from geolib_plus import AbstractCPT
 from .bro_utils import XMLBroCPTReader
+from geolib_plus.cpt_base_model import AbstractCPT
 from .validate_bro import validate_bro_cpt
 
 
