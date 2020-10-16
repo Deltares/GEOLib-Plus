@@ -73,6 +73,45 @@ class TestGetLineIndexFromDataStartsWith:
         # 3. Validate final expectation
         assert result == expected_result
 
+    @pytest.mark.systemtest
+    def test_given_real_data_returns_expected_result(self):
+        # set inputs
+        data = [
+            "#SPECIMENVAR=  1 ,   0.00, m, ",
+            "#TESTID= DKMP1_1317-0162-000",
+            "#REPORTCODE= GEF-CPT-Report,1,1,0",
+            "#STARTDATE= 2017,07,03",
+            "#STARTTIME= 14,13,53",
+            "#OS= DOS",
+        ]
+        code_string = r"#STARTDATE="
+        # run test
+        test_id = GefFileReader.get_line_index_from_data_starts_with(
+            code_string=code_string, data=data
+        )
+        assert test_id == 3
+
+    @pytest.mark.unittest
+    def test_given_real_data_when_index_not_found_raises_error(self):
+        # set inputs
+        data = [
+            "#SPECIMENVAR=  1 ,   0.00, m, ",
+            "#TESTID= DKMP1_1317-0162-000",
+            "#REPORTCODE= GEF-CPT-Report,1,1,0",
+            "#STARTDATE= 2017,07,03",
+            "#STARTTIME= 14,13,53",
+            "#OS= DOS",
+        ]
+        code_string = r"#IAMNOTINTHEFILE="
+        # Run test
+        with pytest.raises(ValueError) as excinfo:
+            GefFileReader.get_line_index_from_data_starts_with(
+                code_string=code_string, data=data
+            )
+        assert "No values found for field #IAMNOTINTHEFILE= of the gef file." in str(
+            excinfo.value
+        )
+
 
 class TestGetLineFromDataEndsWith:
 
@@ -189,6 +228,42 @@ class TestReadData:
         assert "CPT key: depth not part of GEF file" == str(excinfo.value)
 
     @pytest.mark.unittest
+    def test_read_data(self):
+
+        # initialise model
+        gef_reader = GefFileReader()
+        # set inputs
+        gef_reader.property_dict["depth"].multiplication_factor = 1
+        gef_reader.property_dict["friction"].multiplication_factor = 1000
+        gef_reader.property_dict["pwp"].multiplication_factor = 1000
+        gef_reader.property_dict["friction_nb"].multiplication_factor = 1000
+
+        gef_reader.property_dict["depth"].gef_column_index = 0
+        gef_reader.property_dict["friction"].gef_column_index = 2
+        gef_reader.property_dict["tip"].gef_column_index = 1
+        gef_reader.property_dict["pwp"].gef_column_index = 3
+        gef_reader.property_dict["friction_nb"].gef_column_index = 5
+
+        # read gef file
+        gef_file = ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_data.gef"
+        with open(gef_file, "r") as f:
+            data = f.readlines()
+        idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
+        data[idx_EOH + 1 :] = [
+            re.sub("[ :,!\t]+", ";", i.lstrip()) for i in data[idx_EOH + 1 :]
+        ]
+
+        # Run test
+        gef_reader.read_data(data, idx_EOH)
+        # Check output
+        assert gef_reader.property_dict["depth"].values_from_gef[-1] == 25.61
+        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387.0
+        assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000.0
+        assert gef_reader.property_dict["pwp"].values_from_gef[-1] == -99999000.0
+
+
+class TestRemovePointsWithError:
+    @pytest.mark.unittest
     def test_remove_points_with_error(self):
         # initialise model
         gef_reader = GefFileReader()
@@ -256,6 +331,8 @@ class TestReadData:
             gef_reader.remove_points_with_error()
         assert "Index <4> excides the length of list of key 'pwp'" == str(excinfo.value)
 
+
+class TestReadColumnIndexForGefData:
     @pytest.mark.unittest
     def test_read_column_index_for_gef_data(self):
         # define all inputs
@@ -307,6 +384,8 @@ class TestReadData:
             gef_reader.read_column_index_for_gef_data(key_cpt=index, data=doc_snippet)
         )
 
+
+class TestMatchIdxWithError:
     @pytest.mark.unittest
     def test_match_idx_with_error(self):
         # Set the inputs
@@ -373,6 +452,8 @@ class TestReadData:
             gef_reader.match_idx_with_error(error_string_list)
         assert "Key tip should be defined in the gef file" in str(excinfo.value)
 
+
+class TestReadGef:
     @pytest.mark.intergration
     def test_read_gef_1(self):
         gef_file = "./tests/test_files/cpt/gef/unit_testing/unit_testing.gef"
@@ -476,76 +557,3 @@ class TestReadData:
         assert (test_friction == cpt["friction"]).all()
         assert (test_friction_nbr == cpt["friction_nbr"]).all()
         assert (test_water == cpt["water"]).all()
-
-    @pytest.mark.unittest
-    def test_read_data(self):
-
-        # initialise model
-        gef_reader = GefFileReader()
-        # set inputs
-        gef_reader.property_dict["depth"].multiplication_factor = 1
-        gef_reader.property_dict["friction"].multiplication_factor = 1000
-        gef_reader.property_dict["pwp"].multiplication_factor = 1000
-        gef_reader.property_dict["friction_nb"].multiplication_factor = 1000
-
-        gef_reader.property_dict["depth"].gef_column_index = 0
-        gef_reader.property_dict["friction"].gef_column_index = 2
-        gef_reader.property_dict["tip"].gef_column_index = 1
-        gef_reader.property_dict["pwp"].gef_column_index = 3
-        gef_reader.property_dict["friction_nb"].gef_column_index = 5
-
-        # read gef file
-        gef_file = ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_data.gef"
-        with open(gef_file, "r") as f:
-            data = f.readlines()
-        idx_EOH = [i for i, val in enumerate(data) if val.startswith(r"#EOH=")][0]
-        data[idx_EOH + 1 :] = [
-            re.sub("[ :,!\t]+", ";", i.lstrip()) for i in data[idx_EOH + 1 :]
-        ]
-
-        # Run test
-        gef_reader.read_data(data, idx_EOH)
-        # Check output
-        assert gef_reader.property_dict["depth"].values_from_gef[-1] == 25.61
-        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387.0
-        assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000.0
-        assert gef_reader.property_dict["pwp"].values_from_gef[-1] == -99999000.0
-
-    @pytest.mark.unittest
-    def test_get_line_index_from_data(self):
-        # set inputs
-        data = [
-            "#SPECIMENVAR=  1 ,   0.00, m, ",
-            "#TESTID= DKMP1_1317-0162-000",
-            "#REPORTCODE= GEF-CPT-Report,1,1,0",
-            "#STARTDATE= 2017,07,03",
-            "#STARTTIME= 14,13,53",
-            "#OS= DOS",
-        ]
-        code_string = r"#STARTDATE="
-        # run test
-        test_id = GefFileReader.get_line_index_from_data_starts_with(
-            code_string=code_string, data=data
-        )
-        assert test_id == 3
-
-    @pytest.mark.unittest
-    def test_get_line_index_from_data_error(self):
-        # set inputs
-        data = [
-            "#SPECIMENVAR=  1 ,   0.00, m, ",
-            "#TESTID= DKMP1_1317-0162-000",
-            "#REPORTCODE= GEF-CPT-Report,1,1,0",
-            "#STARTDATE= 2017,07,03",
-            "#STARTTIME= 14,13,53",
-            "#OS= DOS",
-        ]
-        code_string = r"#IAMNOTINTHEFILE="
-        # Run test
-        with pytest.raises(ValueError) as excinfo:
-            GefFileReader.get_line_index_from_data_starts_with(
-                code_string=code_string, data=data
-            )
-        assert "No values found for field #IAMNOTINTHEFILE= of the gef file." in str(
-            excinfo.value
-        )
