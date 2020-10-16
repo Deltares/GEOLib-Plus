@@ -1,4 +1,5 @@
 import pytest
+from typing import List, Dict
 import numpy as np
 import re
 from geolib_plus.gef_cpt.gef_file_reader import GefFileReader, GefProperty
@@ -21,6 +22,39 @@ class TestGefFileReaderInit:
         assert file_reader.coord == []
         assert isinstance(file_reader.property_dict, dict)
         assert file_reader.__eq__(expected_dict)
+
+
+class TestGetLineIndexFromData:
+    @pytest.mark.unittest
+    @pytest.mark.xfail(raises=ValueError)
+    @pytest.mark.parametrize(
+        "code_string, data, expectation",
+        [
+            (None, None, pytest.raises(ValueError)),
+            (None, [], pytest.raises(ValueError)),
+            (None, ["alpha"], pytest.raises(ValueError)),
+            ("alpha", None, pytest.raises(ValueError)),
+            ("alpha", [], pytest.raises(ValueError)),
+            ("alpha", ["beta"], pytest.raises(ValueError)),
+        ],
+    )
+    def test_given_test_case_arguments_then_raises_exception(
+        self, code_string: str, data: List[str], expectation
+    ):
+        with expectation:
+            GefFileReader.get_line_index_from_data(code_string, data)
+
+    def test_given_valid_arguments_then_returns_expected_line(self):
+        # 1. Define test data
+        code_string = "beta"
+        data = ["24 42 beta", "42 24 alpha", "alpha 42 24", "beta 24 42"]
+        expected_result = 3
+
+        # 2. Run test
+        result = GefFileReader.get_line_index_from_data(code_string, data)
+
+        # 3. Validate final expectation
+        assert result == expected_result
 
 
 class TestGefUtil:

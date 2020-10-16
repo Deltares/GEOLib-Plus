@@ -32,13 +32,34 @@ class GefFileReader:
 
     @staticmethod
     def get_line_index_from_data(code_string: str, data: List[str]) -> int:
-        values = [i for i, val in enumerate(data) if val.startswith(code_string)]
-        if not values:
-            # if not having values IS NOT okay.
+        """Given a list of strings it returns the line index of all of them if possible.
+
+        Args:
+            code_string (str): The line that needs to be found.
+            data (List[str]): Collection of strings representing lines.
+
+        Raises:
+            ValueError: When the code_string argument is not given or is None.
+            ValueError: When the data argument is not given or is None.
+            ValueError: When no values where found for the given arguments.
+
+        Returns:
+            int: Line index where the data can be found.
+        """
+        if not code_string:
+            raise ValueError(code_string)
+        if not data:
+            raise ValueError(data)
+
+        line_found = next(
+            (i for i, val in enumerate(data) if val.startswith(code_string)), None
+        )
+        if not line_found:
+            # if not having line_found IS NOT okay.
             raise ValueError(
                 f"No values found for field {code_string} of the gef file."
             )
-        return values[0]
+        return line_found
 
     @staticmethod
     def get_line_index_from_data_ends_with(
