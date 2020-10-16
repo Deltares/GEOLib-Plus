@@ -89,3 +89,25 @@ class TestBroUtil:
         # run test
         result = model.search_values_in_root(root=root, search_item="childofwrong")
         assert not (result)
+
+    @pytest.mark.unittest
+    def test_find_availed_data_columns(self):
+        # set inputs
+        root = etree.Element(
+            "{http://www.broservices.nl/xsd/cptcommon/1.1}" + "parameters"
+        )
+        child_1 = etree.SubElement(root, "parameter1")
+        child_1.text = "ja"
+        child_2 = etree.SubElement(root, "parameter2")
+        child_2.text = "nee"
+        child_3 = etree.SubElement(root, "parameter3")
+        child_3.text = "ja"
+        child_4 = etree.SubElement(root, "parameter4")
+        child_4.text = "nee"
+
+        # set model
+        model = bro.XMLBroCPTReader()
+        # run test
+        result_list = model.find_availed_data_columns(root=root)
+        # check results
+        assert len(result_list) == 2
