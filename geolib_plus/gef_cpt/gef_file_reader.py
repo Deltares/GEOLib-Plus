@@ -62,10 +62,8 @@ class GefFileReader:
         return line_found
 
     @staticmethod
-    def get_line_index_from_data_ends_with(
-        code_string: str, data: List[str]
-    ) -> Union[int, None]:
-        """Given a list of strings it returns the position of the first one ending with the given code_string.
+    def get_line_from_data_that_ends_with(code_string: str, data: List[str]) -> str:
+        """Given a list of strings it returns the first one ending with the given code_string.
 
         Args:
             code_string (str): Code string to find at the end of each line.
@@ -76,16 +74,14 @@ class GefFileReader:
             ValueError: When no data argument is given.
 
         Returns:
-            Union[int, None]: Line position where it was found or None otherwise.
+            str: Line ending with the requested code_string.
         """
         if not code_string:
             raise ValueError(code_string)
         if not data:
             raise ValueError(data)
 
-        return next(
-            (i for i, val in enumerate(data) if val.endswith(code_string)), None
-        )
+        return next((line for line in data if line.endswith(code_string)), None)
 
     def read_gef(self, gef_file: Path, fct_a: float = 0.8) -> Dict:
         """
@@ -128,14 +124,16 @@ class GefFileReader:
             re.sub("[ :,!\t]+", ";", i.lstrip()) for i in data[idx_EOH + 1 :]
         ]
 
-        try:
-            # search index coefficient a
-            idx_a = GefFileReader.get_line_index_from_data_ends_with(
-                code_string="Netto oppervlaktequotient van de conuspunt\n", data=data
-            )
-            fct_a = float(data[idx_a].split(",")[1])
-        except TypeError:
-            fct_a = fct_a
+        # search line with coefficient a
+        line_found = GefFileReader.get_line_from_data_that_ends_with(
+            code_string="Netto oppervlaktequotient van de conuspunt\n", data=data
+        )
+        if line_found:
+            try:
+                fct_a = float(line_found.split(",")[1])
+            except (ValueError, TypeError):
+                # We keep on with the default value.
+                fct_a = fct_a
 
         # remove empty lines
         data = list(filter(None, data))
@@ -286,11 +284,13 @@ class GefFileReader:
                         warning(f"Key {key} is not defined in the gef file.")
         return None
 
-    def correct_negatives_and_zeros(self, correct_for_negatives: List[str]) -> None:
+    def correct_negatives_and_zeros(self, correct_for_negatives: List[str]):
         """
         Values tip / friction / friction cannot be negative so they
         have to be zero.
         """
+        if not correct_for_negatives:
+            return
         for key in correct_for_negatives:
             if self.property_dict[key].gef_column_index is not None:
                 self.property_dict[key].values_from_gef = np.array(
@@ -299,4 +299,3 @@ class GefFileReader:
                 self.property_dict[key].values_from_gef[
                     self.property_dict[key].values_from_gef < 0
                 ] = 0
-        return None

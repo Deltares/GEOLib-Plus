@@ -24,7 +24,7 @@ class TestGefFileReaderInit:
         assert file_reader.__eq__(expected_dict)
 
 
-class TestGetLineIndexFromData:
+class TestGetLineIndexFromDataStartsWith:
 
     test_cases_raise_exception = [
         pytest.param(None, None, pytest.raises(ValueError), id="None arguments"),
@@ -73,6 +73,28 @@ class TestGetLineIndexFromData:
         # 3. Validate final expectation
         assert result == expected_result
 
+
+class TestGetLineFromDataEndsWith:
+
+    test_cases_raise_exception = [
+        pytest.param(None, None, pytest.raises(ValueError), id="None arguments"),
+        pytest.param(
+            None, [], pytest.raises(ValueError), id="None code_string, Empty data."
+        ),
+        pytest.param(
+            None,
+            ["alpha"],
+            pytest.raises(ValueError),
+            id="None code_string, Valid data.",
+        ),
+        pytest.param(
+            "alpha", None, pytest.raises(ValueError), id="Valid code_string, None data."
+        ),
+        pytest.param(
+            "alpha", [], pytest.raises(ValueError), id="Valid code_string, Empty data"
+        ),
+    ]
+
     @pytest.mark.unittest
     @pytest.mark.parametrize(
         "code_string, data, expectation", test_cases_raise_exception,
@@ -81,24 +103,24 @@ class TestGetLineIndexFromData:
         self, code_string: str, data: List[str], expectation
     ):
         with expectation:
-            GefFileReader.get_line_index_from_data_ends_with(code_string, data)
+            GefFileReader.get_line_from_data_that_ends_with(code_string, data)
 
     def test_when_data_ends_given_valid_arguments_then_returns_expected_line(self):
         # 1. Define test data
         code_string = "beta"
         data = ["24 42 beta", "42 24 alpha", "alpha 42 24", "beta 24 42"]
-        expected_result = 0
+        expected_result = data[0]
 
         # 2. Run test
-        result = GefFileReader.get_line_index_from_data_ends_with(code_string, data)
+        result = GefFileReader.get_line_from_data_that_ends_with(code_string, data)
 
         # 3. Validate final expectation
         assert result == expected_result
 
 
-class TestGefUtil:
+class TestCorrectNegativesAndZeros:
     @pytest.mark.unittest
-    def test_correct_negatives_and_zeros(self):
+    def test_given_valid_input_then_returns_expected_correction(self):
         # initialise model
         gef_reader = GefFileReader()
         # define keys that cannot be zero
@@ -115,6 +137,8 @@ class TestGefUtil:
         ).all()
         assert gef_reader.property_dict["tip"].values_from_gef == [-1, -2, -9]
 
+
+class TestReadData:
     @pytest.mark.systemtest
     def test_read_data_no_pore_pressure(self):
         # initialise model
