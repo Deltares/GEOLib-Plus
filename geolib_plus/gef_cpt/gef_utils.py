@@ -115,7 +115,7 @@ class GefFileReader:
         )
 
         # read result time
-        self.result_time = self.read_date_cpt(data)
+        result_time = self.read_date_cpt(data)
 
         # get values for information dict
         for key_name in self.information_dict:
@@ -219,7 +219,9 @@ class GefFileReader:
             vertical_datum=self.information_dict["vertical_datum"].values_from_gef,
             local_reference=self.information_dict["local_reference"].values_from_gef,
             cpt_standard=self.information_dict["cpt_standard"].values_from_gef,
+            quality_class=self.information_dict["cpt_standard"].values_from_gef,
             cpt_type=self.information_dict["cpt_type"].values_from_gef,
+            result_time=result_time,
         )
 
     def read_column_index_for_gef_data(self, key_cpt: int, data: List[str]):
@@ -247,22 +249,22 @@ class GefFileReader:
         for i, val in enumerate(data):
             if val.startswith(code_file_date) and result_date is None:
                 result_date = val.split(code_file_date)[-1]
-
             if val.startswith(code_start_date):
                 result_date = val.split(code_start_date)[-1]
-                return result_date
+                return result_date.replace("\n", "")
             if val.startswith(r"#EOH="):
-                return result_date
+                return result_date.replace("\n", "")
 
     def read_information_for_gef_data(self, key_name: str, data: List[str]) -> str:
         """
         Reads header information from the gef data.
         """
         code_string = r"#MEASUREMENTTEXT= " + str(self.information_dict[key_name].gef_key)
+
         for i, val in enumerate(data):
             if val.startswith(code_string):
                 information = val.split(code_string)[-1]
-                return information
+                return information.replace("\n","")
             if val.startswith(r"#EOH="):
                 return ""
         return ""
