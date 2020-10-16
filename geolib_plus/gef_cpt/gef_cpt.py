@@ -1,4 +1,4 @@
-from geolib_plus import AbstractCPT
+from geolib_plus.cpt_base_model import AbstractCPT
 from .gef_file_reader import GefFileReader
 from pathlib import Path
 
