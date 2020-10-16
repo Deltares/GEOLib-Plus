@@ -18,10 +18,10 @@ class GefLib:
 
         if platform.uname()[0] == "Windows":
             # Load DLL into memory.
-            source_lib = Path("./resources/geflib.dll")
+            source_lib = Path("./geolib_plus/resources/geflib.dll")
         elif platform.uname()[0] == "Linux":
             # Load SO into memory
-            source_lib = Path("./resources/libgeflib.so.1")
+            source_lib = Path("./geolib_plus/resources/libgeflib.so.1")
         else:
             # name = "osx.dylib" - missing
             raise ValueError("Platform not found")
