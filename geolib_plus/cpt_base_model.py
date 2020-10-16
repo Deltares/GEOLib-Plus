@@ -114,7 +114,8 @@ class AbstractCPT(BaseModel):
         if not filepath.is_file():
             raise FileNotFoundError(filepath)
 
-        cpt_data = cls.cpt_reader().read_file(filepath)
+        cpt_reader = cls.get_cpt_reader()
+        cpt_data = cpt_reader.read_file(filepath)
         cls(**cpt_data)
 
     @classmethod

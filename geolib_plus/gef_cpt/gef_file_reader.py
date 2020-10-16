@@ -145,6 +145,9 @@ class GefFileReader(CptReader):
 
         return next((line for line in data if line.endswith(code_string)), None)
 
+    def read_file(self, filepath: Path) -> dict:
+        return self.read_gef(gef_file=filepath)
+
     def read_gef(self, gef_file: Path, fct_a: float = 0.8) -> Dict:
         """
         Opens and reads gef file. Returns dictionary containing all possible
