@@ -25,33 +25,72 @@ class TestGefFileReaderInit:
 
 
 class TestGetLineIndexFromData:
+
+    test_cases_raise_exception = [
+        pytest.param(None, None, pytest.raises(ValueError), id="None arguments"),
+        pytest.param(
+            None, [], pytest.raises(ValueError), id="None code_string, Empty data."
+        ),
+        pytest.param(
+            None,
+            ["alpha"],
+            pytest.raises(ValueError),
+            id="None code_string, Valid data.",
+        ),
+        pytest.param(
+            "alpha", None, pytest.raises(ValueError), id="Valid code_string, None data."
+        ),
+        pytest.param(
+            "alpha", [], pytest.raises(ValueError), id="Valid code_string, Empty data"
+        ),
+        pytest.param(
+            "alpha",
+            ["beta"],
+            pytest.raises(ValueError),
+            id="Valid arguments, Value not found.",
+        ),
+    ]
+
     @pytest.mark.unittest
-    @pytest.mark.xfail(raises=ValueError)
     @pytest.mark.parametrize(
-        "code_string, data, expectation",
-        [
-            (None, None, pytest.raises(ValueError)),
-            (None, [], pytest.raises(ValueError)),
-            (None, ["alpha"], pytest.raises(ValueError)),
-            ("alpha", None, pytest.raises(ValueError)),
-            ("alpha", [], pytest.raises(ValueError)),
-            ("alpha", ["beta"], pytest.raises(ValueError)),
-        ],
+        "code_string, data, expectation", test_cases_raise_exception,
     )
-    def test_given_test_case_arguments_then_raises_exception(
+    def test_when_data_starts_given_test_case_then_raises_exception(
         self, code_string: str, data: List[str], expectation
     ):
         with expectation:
-            GefFileReader.get_line_index_from_data(code_string, data)
+            GefFileReader.get_line_index_from_data_starts_with(code_string, data)
 
-    def test_given_valid_arguments_then_returns_expected_line(self):
+    def test_when_data_starts_given_valid_arguments_then_returns_expected_line(self,):
         # 1. Define test data
         code_string = "beta"
         data = ["24 42 beta", "42 24 alpha", "alpha 42 24", "beta 24 42"]
         expected_result = 3
 
         # 2. Run test
-        result = GefFileReader.get_line_index_from_data(code_string, data)
+        result = GefFileReader.get_line_index_from_data_starts_with(code_string, data)
+
+        # 3. Validate final expectation
+        assert result == expected_result
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize(
+        "code_string, data, expectation", test_cases_raise_exception,
+    )
+    def test_when_data_ends_given_test_case_arguments_then_raises_exception(
+        self, code_string: str, data: List[str], expectation
+    ):
+        with expectation:
+            GefFileReader.get_line_index_from_data_ends_with(code_string, data)
+
+    def test_when_data_ends_given_valid_arguments_then_returns_expected_line(self):
+        # 1. Define test data
+        code_string = "beta"
+        data = ["24 42 beta", "42 24 alpha", "alpha 42 24", "beta 24 42"]
+        expected_result = 0
+
+        # 2. Run test
+        result = GefFileReader.get_line_index_from_data_ends_with(code_string, data)
 
         # 3. Validate final expectation
         assert result == expected_result
@@ -461,7 +500,7 @@ class TestGefUtil:
         ]
         code_string = r"#STARTDATE="
         # run test
-        test_id = GefFileReader.get_line_index_from_data(
+        test_id = GefFileReader.get_line_index_from_data_starts_with(
             code_string=code_string, data=data
         )
         assert test_id == 3
@@ -480,7 +519,9 @@ class TestGefUtil:
         code_string = r"#IAMNOTINTHEFILE="
         # Run test
         with pytest.raises(ValueError) as excinfo:
-            GefFileReader.get_line_index_from_data(code_string=code_string, data=data)
+            GefFileReader.get_line_index_from_data_starts_with(
+                code_string=code_string, data=data
+            )
         assert "No values found for field #IAMNOTINTHEFILE= of the gef file." in str(
             excinfo.value
         )

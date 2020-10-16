@@ -31,8 +31,8 @@ class GefFileReader:
         }
 
     @staticmethod
-    def get_line_index_from_data(code_string: str, data: List[str]) -> int:
-        """Given a list of strings it returns the line index of all of them if possible.
+    def get_line_index_from_data_starts_with(code_string: str, data: List[str]) -> int:
+        """Given a list of strings it returns the position of the first one which starts by the code string given.
 
         Args:
             code_string (str): The line that needs to be found.
@@ -65,10 +65,27 @@ class GefFileReader:
     def get_line_index_from_data_ends_with(
         code_string: str, data: List[str]
     ) -> Union[int, None]:
-        values = [i for i, val in enumerate(data) if val.endswith(code_string)]
-        if not values:
-            return None
-        return values[0]
+        """Given a list of strings it returns the position of the first one ending with the given code_string.
+
+        Args:
+            code_string (str): Code string to find at the end of each line.
+            data (List[str]): List of strings to iterate through.
+
+        Raises:
+            ValueError: When no code_string argument is given.
+            ValueError: When no data argument is given.
+
+        Returns:
+            Union[int, None]: Line position where it was found or None otherwise.
+        """
+        if not code_string:
+            raise ValueError(code_string)
+        if not data:
+            raise ValueError(data)
+
+        return next(
+            (i for i, val in enumerate(data) if val.endswith(code_string)), None
+        )
 
     def read_gef(self, gef_file: Path, fct_a: float = 0.8) -> Dict:
         """
@@ -80,16 +97,16 @@ class GefFileReader:
             data = f.readlines()
 
         # search NAP
-        idx_nap = GefFileReader.get_line_index_from_data(
+        idx_nap = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#ZID=", data=data
         )
         NAP = float(data[idx_nap].split(",")[1])
         # search end of header
-        idx_EOH = GefFileReader.get_line_index_from_data(
+        idx_EOH = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#EOH=", data=data
         )
         # # search for coordinates
-        idx_coord = GefFileReader.get_line_index_from_data(
+        idx_coord = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#XYID=", data=data
         )
         # search index depth
@@ -132,7 +149,7 @@ class GefFileReader:
         correct_for_negatives = ["tip", "friction", "friction_nb"]
         self.correct_negatives_and_zeros(correct_for_negatives)
 
-        idx_name = GefFileReader.get_line_index_from_data(
+        idx_name = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#TESTID=", data=data
         )
         self.name = data[idx_name].split("#TESTID=")[-1].strip()
