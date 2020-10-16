@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from .plot_cpt import plot_cpt_norm
 from .plot_settings import PlotSettings
 
+
 class AbstractInterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
 
@@ -17,6 +18,7 @@ class RobertsonMethod(AbstractInterpretationMethod):
 
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
+
     #  variables
     depth = []
     coordinates = []
@@ -67,7 +69,7 @@ class AbstractCPT(BaseModel):
 
     # fixed values
     g = 9.81
-    Pa = 100.
+    Pa = 100.0
 
     # private variables
     __water_measurement_types = None
