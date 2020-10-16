@@ -2,7 +2,7 @@
 import re
 import numpy as np
 from .validate_gef import validate_gef_cpt
-from cpt_base_model import CptReader
+from geolib_plus.cpt_base_model import CptReader
 from typing import List, Dict, Union, Iterable
 from pathlib import Path
 from pydantic import BaseModel

@@ -122,16 +122,6 @@ class AbstractCPT(BaseModel):
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
 
-    # @property
-    # @abstractmethod
-    # def valid(self) -> bool:
-    #     pass
-    #
-    # @abstractmethod
-    # def interpret(self, method: AbstractInterpretationMethod) -> "Profile":
-    #     pass
-    #
-
     def plot(self, directory: Path):
         # plot cpt data
         try:
