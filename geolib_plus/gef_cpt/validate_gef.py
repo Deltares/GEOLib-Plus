@@ -21,7 +21,7 @@ class GefLib:
             source_lib = Path("./resources/geflib.dll")
         elif platform.uname()[0] == "Linux":
             # Load SO into memory
-            source_lib = Path("./resources/libgeflib.so")
+            source_lib = Path("./resources/libgeflib.so.1")
         else:
             # name = "osx.dylib" - missing
             raise ValueError("Platform not found")
