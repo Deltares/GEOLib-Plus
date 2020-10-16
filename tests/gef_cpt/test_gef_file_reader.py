@@ -224,7 +224,8 @@ class TestReadColumnData:
         gef_reader.property_dict["friction_nb"].gef_column_index = 5
         # read gef file
         gef_file = (
-            ".\\tests\\test_files\\cpt\\gef\\unit_testing\\test_read_column_data.gef"
+            TestUtils.get_local_test_data_dir("cpt\\gef\\unit_testing")
+            / "test_read_column_data.gef"
         )
         with open(gef_file, "r") as f:
             data = f.readlines()

@@ -187,9 +187,7 @@ class GefFileReader(CptReader):
 
         # read error codes
         idx_errors_raw_text = [
-            val.split(",")[1]
-            for i, val in enumerate(data)
-            if val.startswith(r"#COLUMNVOID=")
+            val.split(",")[1] for val in data if val.startswith(r"#COLUMNVOID=")
         ]
         self.match_idx_with_error(idx_errors_raw_text)
         # rewrite data with separator ;
@@ -242,61 +240,81 @@ class GefFileReader(CptReader):
 
         return dict(
             name=self.name,
-            penetration_length=np.array(
+            penetration_length=self.get_as_np_array(
                 self.property_dict["penetration_length"].values_from_gef
             ),
-            depth=np.array(self.property_dict["depth"].values_from_gef),
-            tip=np.array(self.property_dict["tip"].values_from_gef),
-            friction=np.array(self.property_dict["friction"].values_from_gef),
-            friction_nbr=np.array(self.property_dict["friction_nb"].values_from_gef),
+            depth=self.get_as_np_array(self.property_dict["depth"].values_from_gef),
+            tip=self.get_as_np_array(self.property_dict["tip"].values_from_gef),
+            friction=self.get_as_np_array(
+                self.property_dict["friction"].values_from_gef
+            ),
+            friction_nbr=self.get_as_np_array(
+                self.property_dict["friction_nb"].values_from_gef
+            ),
             a=fct_a,
             coordinates=self.coord,
-            pore_pressure_u1=np.array(self.property_dict["pwp_u1"].values_from_gef),
-            pore_pressure_u2=np.array(self.property_dict["pwp_u2"].values_from_gef),
-            pore_pressure_u3=np.array(self.property_dict["pwp_u3"].values_from_gef),
-            inclination_resultant=np.array(
+            pore_pressure_u1=self.get_as_np_array(
+                self.property_dict["pwp_u1"].values_from_gef
+            ),
+            pore_pressure_u2=self.get_as_np_array(
+                self.property_dict["pwp_u2"].values_from_gef
+            ),
+            pore_pressure_u3=self.get_as_np_array(
+                self.property_dict["pwp_u3"].values_from_gef
+            ),
+            inclination_resultant=self.get_as_np_array(
                 self.property_dict["inclination_resultant"].values_from_gef
             ),
-            inclination_ns=np.array(
+            inclination_ns=self.get_as_np_array(
                 self.property_dict["inclination_ns"].values_from_gef
             ),
-            inclination_ew=np.array(
+            inclination_ew=self.get_as_np_array(
                 self.property_dict["inclination_ew"].values_from_gef
             ),
-            inclination_x=np.array(self.property_dict["inclination_x"].values_from_gef),
-            inclination_y=np.array(self.property_dict["inclination_y"].values_from_gef),
-            time=np.array(self.property_dict["time"].values_from_gef),
-            qt=np.array(self.property_dict["corrected_tip"].values_from_gef),
-            net_tip=np.array(self.property_dict["net_tip"].values_from_gef),
-            pore_ratio=np.array(self.property_dict["pore_ratio"].values_from_gef),
-            tip_nbr=np.array(self.property_dict["tip_nbr"].values_from_gef),
-            unit_weight_measured=np.array(
+            inclination_x=self.get_as_np_array(
+                self.property_dict["inclination_x"].values_from_gef
+            ),
+            inclination_y=self.get_as_np_array(
+                self.property_dict["inclination_y"].values_from_gef
+            ),
+            time=self.get_as_np_array(self.property_dict["time"].values_from_gef),
+            qt=self.get_as_np_array(
+                self.property_dict["corrected_tip"].values_from_gef
+            ),
+            net_tip=self.get_as_np_array(self.property_dict["net_tip"].values_from_gef),
+            pore_ratio=self.get_as_np_array(
+                self.property_dict["pore_ratio"].values_from_gef
+            ),
+            tip_nbr=self.get_as_np_array(self.property_dict["tip_nbr"].values_from_gef),
+            unit_weight_measured=self.get_as_np_array(
                 self.property_dict["unit_weight"].values_from_gef
             ),
-            pwp_ini=np.array(self.property_dict["pwp_ini"].values_from_gef),
-            total_pressure_measured=np.array(
+            pwp_ini=self.get_as_np_array(self.property_dict["pwp_ini"].values_from_gef),
+            total_pressure_measured=self.get_as_np_array(
                 self.property_dict["total_pressure"].values_from_gef
             ),
-            effective_pressure_measured=np.array(
+            effective_pressure_measured=self.get_as_np_array(
                 self.property_dict["effective_pressure"].values_from_gef
             ),
-            electric_cond=np.array(self.property_dict["electric_cond"].values_from_gef),
-            magnetic_strength_x=np.array(
+            electric_cond=self.get_as_np_array(
+                self.property_dict["electric_cond"].values_from_gef
+            ),
+            magnetic_strength_x=self.get_as_np_array(
                 self.property_dict["magnetic_strength_x"].values_from_gef
             ),
-            magnetic_strength_y=np.array(
+            magnetic_strength_y=self.get_as_np_array(
                 self.property_dict["magnetic_strength_y"].values_from_gef
             ),
-            magnetic_strength_z=np.array(
+            magnetic_strength_z=self.get_as_np_array(
                 self.property_dict["magnetic_strength_z"].values_from_gef
             ),
-            magnetic_strength_tot=np.array(
+            magnetic_strength_tot=self.get_as_np_array(
                 self.property_dict["magnetic_strength_tot"].values_from_gef
             ),
-            magnetic_inclination=np.array(
+            magnetic_inclination=self.get_as_np_array(
                 self.property_dict["magnetic_inclination"].values_from_gef
             ),
-            magnetic_declination=np.array(
+            magnetic_declination=self.get_as_np_array(
                 self.property_dict["magnetic_declination"].values_from_gef
             ),
             local_reference_level=NAP,
@@ -307,6 +325,14 @@ class GefFileReader(CptReader):
             cpt_type=self.information_dict["cpt_type"].values_from_gef,
             result_time=result_time,
         )
+
+    def get_as_np_array(self, values_from_gef: Iterable):
+        """
+        Converts iterable to np array
+        :param values_from_gef:
+        :return:
+        """
+        return np.array(values_from_gef)
 
     def read_column_index_for_gef_data(self, key_cpt: int, data: List[str]):
         """In the gef file '#COLUMNINFO=id , name , column_number' format is used.
@@ -330,7 +356,7 @@ class GefFileReader(CptReader):
         code_file_date = r"#FILEDATE= "
         code_start_date = r"#STARTDATE= "
         result_date = None
-        for i, val in enumerate(data):
+        for val in data:
             if val.startswith(code_file_date) and result_date is None:
                 result_date = val.split(code_file_date)[-1]
             if val.startswith(code_start_date):
@@ -347,7 +373,7 @@ class GefFileReader(CptReader):
             self.information_dict[key_name].gef_key
         )
 
-        for i, val in enumerate(data):
+        for val in data:
             if val.startswith(code_string):
                 information = val.split(code_string)[-1]
                 return information.replace("\n", "")

@@ -4,7 +4,7 @@ from os import remove
 import warnings
 from multiprocessing import Pool
 from pathlib import Path
-
+import platform
 
 class GefLib:
 
@@ -15,10 +15,18 @@ class GefLib:
 
     def __init__(self):
 
-        source_dll = r".\\geolib_plus\\resources\\geflib.dll"
+        if platform.uname()[0] == "Windows":
+            # Load DLL into memory.
+            source_lib = Path("./geolib_plus/resources/geflib.dll")
+        elif platform.uname()[0] == "Linux":
+            # Load SO into memory
+            source_lib = Path("./geolib_plus/resources/libgeflib.so.1")
+        else:
+            # name = "osx.dylib" - missing
+            raise ValueError(f"Platform {platform.uname()[0]} not found")
 
-        # Load DLL into memory. (Only works for windows)
-        self.__lib_handle = WinDLL(source_dll)
+        # Load library into memory.
+        self.__lib_handle = cdll.LoadLibrary(source_lib)
 
         # Initialize DLL into memory.
         func = self.__lib_handle["init_gef"]
@@ -27,7 +35,7 @@ class GefLib:
         if result == 1:
             return
         else:
-            raise FileNotFoundError(f"{source_dll} not found")
+            raise FileNotFoundError(f"{source_lib} not found")
 
     def __test_gef(self, component: str):
         func = self.__lib_handle["test_gef"]
