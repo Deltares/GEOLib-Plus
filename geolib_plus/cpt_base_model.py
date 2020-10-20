@@ -91,6 +91,7 @@ class AbstractCPT(BaseModel):
     quality_class: Optional[str]
     cpt_type: Optional[str]
     result_time: Optional[str]
+    water_measurement_type: Optional[str]
 
     # NEN results
     litho_NEN = []
