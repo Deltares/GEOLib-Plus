@@ -10,7 +10,7 @@ from geolib_plus.bro_xml_cpt.bro_utils import XMLBroCPTReader
 
 # todo JN: write unit tests
 class TestBroXmlCpt:
-    @pytest.mark.system
+    @pytest.mark.systemtest
     def test_read(self):
         # simple test for reading xml file from bro
         # define input path to xml
@@ -20,7 +20,7 @@ class TestBroXmlCpt:
         # initialise model
         cpt = bro_xml_cpt.BroXmlCpt()
         # run test
-        cpt.read(bro_xml_file=test_file)
+        cpt.read(test_file)
         # check expectations
         assert cpt
         assert cpt.name == "CPT000000003688"

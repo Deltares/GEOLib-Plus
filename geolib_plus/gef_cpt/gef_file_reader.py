@@ -384,7 +384,10 @@ class GefFileReader(CptReader):
                 return ""
         return ""
 
-    def match_idx_with_error(self, idx_errors: List[str],) -> None:
+    def match_idx_with_error(
+        self,
+        idx_errors: List[str],
+    ) -> None:
         """
         In the gef file each of the parameters has a value that is written
         when an error in the cpt data accumulation ocurred.

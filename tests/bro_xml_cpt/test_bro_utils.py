@@ -41,7 +41,7 @@ class TestBroUtil:
             "frictionRatio",
         ]
         cl_cpt = bro.XMLBroCPTReader()
-        test_columns = cl_cpt.columns_string_list
+        test_columns = cl_cpt.bro_data.columns_string_list
         assert test_columns == columns
 
     @pytest.mark.unittest
