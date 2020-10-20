@@ -433,7 +433,9 @@ class XMLBroCPTReader(CptReader):
         if not result_dictionary["water_measurement_type"]:
             result_dictionary["water_measurement_type"] = "no_measurements"
         else:
-            result_dictionary["water_measurement_type"] = self.water_measurement_type[0]
+            result_dictionary["water_measurement_type"] = result_dictionary[
+                "water_measurement_type"
+            ][0]
 
         # check criteria of minimum length
         if (
