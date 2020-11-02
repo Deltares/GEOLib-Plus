@@ -379,7 +379,8 @@ class GefFileReader(CptReader):
         for val in data:
             if val.startswith(code_string):
                 information = val.split(code_string)[-1]
-                return information.replace("\n", "")
+                information = information.replace("\n", "")
+                return information.replace(", ", "", 1)
             if val.startswith(r"#EOH="):
                 return ""
         return ""
