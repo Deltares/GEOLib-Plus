@@ -170,21 +170,24 @@ class AbstractCPT(BaseModel):
     @staticmethod
     def __correct_for_negatives(data):
         """
-                Values tip / friction / friction cannot be negative so they
-                have to be zero.
-                """
-        if data.size != 0 is not None:
-            data[data<0] = 0
+        Values tip / friction / friction cannot be negative so they
+        have to be zero.
+        """
+        if data is not None:
+            if data.size != 0 and not data.ndim:
+                data[data<0] = 0
             return data
 
     def __get_water_data(self):
-        if self.pore_pressure_u1.size and self.pore_pressure_u1.ndim:
-            self.water = deepcopy(self.pore_pressure_u1)
-        elif self.pore_pressure_u2.size and self.pore_pressure_u2.ndim:
-            self.water = deepcopy(self.pore_pressure_u2)
-        elif self.pore_pressure_u3.size and self.pore_pressure_u3.ndim:
-            self.water = deepcopy(self.pore_pressure_u3)
-        else:
+
+        pore_pressure_data = [self.pore_pressure_u1, self.pore_pressure_u2, self.pore_pressure_u3]
+
+        for data in pore_pressure_data:
+            if data is not None:
+                if data.size and data.ndim:
+                    self.water = deepcopy(data)
+                    break
+        if self.water is None:
             self.water = np.zeros(len(self.penetration_length))
 
     def pre_process_data(self):

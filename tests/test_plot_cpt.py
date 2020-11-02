@@ -44,6 +44,7 @@ def gef_cpt():
     filename = "CPT000000003688_IMBRO_A.gef"
     test_file = test_folder / filename
     cpt = GefCpt().read(test_file)
+    cpt.pre_process_data()
     return cpt
 
 @pytest.fixture
@@ -52,7 +53,7 @@ def bro_xml_cpt():
     filename = "CPT000000003688_IMBRO_A.xml"
     test_file = test_folder / filename
     cpt = BroXmlCpt().read(test_file)
-
+    cpt.pre_process_data()
 
     return cpt
 
