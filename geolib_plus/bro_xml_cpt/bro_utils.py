@@ -147,13 +147,6 @@ class XMLBroCPTReader(CptReader):
             "porePressureU3",
         ]
 
-    def parse_bro_to_cpt(self, xml_file_path: Path):
-        # read the BRO_XML into Memory
-        xml = self.xml_to_byte_string(xml_file_path)
-
-        # parse the BRO_XML to BRO CPT Dataset
-        self.parse_bro_xml(xml)
-
     @staticmethod
     def xml_to_byte_string(fn: Path) -> bytes:
         """
@@ -182,17 +175,12 @@ class XMLBroCPTReader(CptReader):
         return avail_columns
 
     def parse_bro_xml(self, xml: bytes):
-        """Parse bro CPT xml.
-        Searches for the cpt data, but also
-        - location
-        - offset z
-        - id
-        - predrilled_z
-        TODO Replace iter by single search
-        as iter can give multiple results
+        """
+        Populates class with xml data. No interpretation of results occurs
+        at this function. This is simply reading the xml.
+        TODO Replace iter by single search as iter can give multiple results
 
         :param xml: XML bytes
-        :returns: dict -- parsed CPT data + metadata
         """
         root = etree.fromstring(xml)
 
@@ -215,10 +203,10 @@ class XMLBroCPTReader(CptReader):
             for element in cpt.iter(ns + "values"):
                 # Load string data and parse as 2d array
                 sar = StringIO(element.text.replace(";", "\n"))
-                ar = np.loadtxt(sar, delimiter=",", ndmin=2)
+                array_data = np.loadtxt(sar, delimiter=",", ndmin=2)
 
                 # Check shape of array
-                found_rows, found_columns = ar.shape
+                found_rows, found_columns = array_data.shape
                 if found_columns != len(self.bro_data.columns_string_list):
                     logging.warning(
                         "Data has the wrong size! {} columns instead of {}".format(
@@ -230,8 +218,8 @@ class XMLBroCPTReader(CptReader):
                 # Replace nodata constant with nan
                 # Create a DataFrame from array
                 # and sort by depth
-                ar[ar == nodata] = np.nan
-                df = pd.DataFrame(ar, columns=self.bro_data.columns_string_list)
+                array_data[array_data == nodata] = np.nan
+                df = pd.DataFrame(array_data, columns=self.bro_data.columns_string_list)
                 df = df[avail_columns]
                 df.sort_values(by=["penetrationLength"], inplace=True)
 
@@ -292,7 +280,7 @@ class XMLBroCPTReader(CptReader):
         return x, y
 
     def get_all_data_from_bro(self, root: _Element) -> None:
-        """ Extract values from bro,"""
+        """ Extract values from bro. From the xml elements."""
         # BRO Id
         self.bro_data.id = self.search_values_in_root(
             root=root, search_item=ns4 + "broId"
@@ -343,7 +331,11 @@ class XMLBroCPTReader(CptReader):
         # validate bro xml file
         validate_bro_cpt(filepath)
 
-        self.parse_bro_to_cpt(filepath)
+        # read the BRO_XML into Memory
+        xml = self.xml_to_byte_string(filepath)
+
+        # parse the BRO_XML to BRO CPT Dataset
+        self.parse_bro_xml(xml)
 
         # add the BRO_XML attributes to CPT structure
         return self.__parse_bro()
@@ -356,7 +348,7 @@ class XMLBroCPTReader(CptReader):
         convert_to_kPa: bool = True,
     ):
         """
-        Parse the BRO information into the object structure
+        Values are interpreted from the xml and appended into the result_dictionary.
 
         Parameters
         ----------
@@ -365,7 +357,7 @@ class XMLBroCPTReader(CptReader):
         :param minimum_samples: (optional) minimum samples that cpt files needs to have
         :param minimum_ratio: (optional) minimum ratio of positive values that cpt files needs to have
         :param convert_to_kPa: (optional) convert units to kPa
-        :return:
+        :return: result_dictionary
         """
         # create result dictionary
         result_dictionary = {}
@@ -401,27 +393,29 @@ class XMLBroCPTReader(CptReader):
 
         # parse local reference point
         result_dictionary["local_reference"] = (
-            self.bro_data.local_reference if self.bro_data.vertical_datum else []
+            self.bro_data.local_reference if self.bro_data.local_reference else []
         )
 
         # parse quality class
         result_dictionary["quality_class"] = (
-            self.bro_data.quality_class if self.bro_data.vertical_datum else []
+            self.bro_data.quality_class if self.bro_data.quality_class else []
         )
 
         # parse cone penetrator type
         result_dictionary["cpt_type"] = (
-            self.bro_data.cone_penetrometer_type if self.bro_data.vertical_datum else []
+            self.bro_data.cone_penetrometer_type
+            if self.bro_data.cone_penetrometer_type
+            else []
         )
 
         # parse cpt standard
         result_dictionary["cpt_standard"] = (
-            self.bro_data.cpt_standard if self.bro_data.vertical_datum else []
+            self.bro_data.cpt_standard if self.bro_data.cpt_standard else []
         )
 
         # parse result time
         result_dictionary["result_time"] = (
-            self.bro_data.result_time if self.bro_data.vertical_datum else []
+            self.bro_data.result_time if self.bro_data.result_time else []
         )
 
         # parse measurement type of pore pressure
