@@ -86,6 +86,7 @@ class AbstractCPT(BaseModel):
     magnetic_strength_tot: Optional[Iterable]
     magnetic_inclination: Optional[Iterable]
     magnetic_declination: Optional[Iterable]
+    temperature: Optional[Iterable]
 
     cpt_standard: Optional[str]
     quality_class: Optional[str]

@@ -28,4 +28,4 @@ class TestBroXmlCpt:
         assert cpt.cpt_type == "F7.5CKE/V-1214"
         assert cpt.local_reference_level == -1.75
         assert min(cpt.depth) == 0
-        assert max(cpt.depth) == 24.34
+        assert max(cpt.depth) == 24.56
