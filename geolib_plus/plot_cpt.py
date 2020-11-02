@@ -32,7 +32,7 @@ def get_values_which_exceed_threshold(threshold, values, y_data, show_interval):
                 shown_values.append(value)
                 y_coord_shown_value.append(y_data[idx])
 
-    return shown_values, y_coord_shown_value
+    return np.array(shown_values), np.array(y_coord_shown_value)
 
 
 def trim_values_at_exceeding_threshold(threshold, values):
@@ -158,7 +158,7 @@ def trim_cpt_data(settings, vertical_settings, cpt, y_lim):
     trimmed_values = trim_values_at_exceeding_threshold(threshold, data_within_lim * settings["unit_converter"])
 
     # get values past exceeding thresholds which has to be shown in graph
-    shown_values, y_coord_shown_value = get_values_which_exceed_threshold(threshold, data_within_lim, depth_in_range,
+    shown_values, y_coord_shown_value = get_values_which_exceed_threshold(threshold, data_within_lim * settings["unit_converter"], depth_in_range,
                                         vertical_settings["spacing_shown_cut_off_value"])
 
     return trimmed_values, shown_values, y_coord_shown_value, depth_in_range, inclination_in_range
@@ -256,7 +256,7 @@ def generate_plot(cpt, settings, ylim, ylims, plot_nr):
 
             # set text boxes at values which exceed the threshold
             set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data,
-                                      graph["threshold"] * graph["unit_converter"], graph["position_label"])
+                                      np.array(graph["threshold"]) * graph["unit_converter"], graph["position_label"])
             axes.append(ax)
 
     axes[0].xaxis.tick_top()  # todo improve this, as this assumes a fixed order of the added data

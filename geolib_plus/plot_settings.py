@@ -62,27 +62,27 @@ class PlotSettings:
         """
 
         self.plot_qc_settings = {"data_key": self.__data_keys[0],
-                                 "threshold": [0, 28],
+                                 "threshold": [0, 28000],
                                  "graph_color": "red",
                                  "line_style": self.__line_styles[0],
                                  "label": {self.__languages[0]: "Conusweerstand [MPa]",
                                            self.__languages[1]: "Tip resistance [MPa]"},
                                  "position_label": self.__label_positions[0],
-                                 "scale_unit": 2,
+                                 "scale_unit": 2000,
                                  "shift_graph": 0,
-                                 "unit_converter": self.__unit_converters["None"],
+                                 "unit_converter": self.__unit_converters["kPa_To_MPa"],
                                  "ticks": np.arange(0, 30, 10).tolist()}
 
         self.plot_friction_settings = {"data_key": self.__data_keys[1],
-                                       "threshold": [0, 0.7],
+                                       "threshold": [0, 700],
                                        "graph_color": "blue",
                                        "line_style": self.__line_styles[1],
                                        "label": {self.__languages[0]: "Wrijvingsweerstand [MPa]",
                                                  self.__languages[1]: "Friction resistance [MPa]"},
                                        "position_label": self.__label_positions[2],
-                                       "scale_unit": 0.05,
+                                       "scale_unit": 50,
                                        "shift_graph": 0,
-                                       "unit_converter": self.__unit_converters["None"],
+                                       "unit_converter": self.__unit_converters["kPa_To_MPa"],
                                        "ticks": np.arange(0, 0.3, 0.1).tolist()}
 
         self.plot_friction_nbr_settings = {"data_key": self.__data_keys[2],
@@ -110,15 +110,15 @@ class PlotSettings:
                                            "ticks": np.arange(0, 600, 100).tolist()}
 
         self.plot_water_settings = {"data_key": self.__data_keys[3],
-                                    "threshold": [-0.2, 1],
+                                    "threshold": [-200, 1000],
                                     "graph_color": "saddlebrown",
                                     "line_style": self.__line_styles[3],
                                     "label": {self.__languages[0]: "Waterdruk [MPa]",
                                               self.__languages[1]: "Water pressure [MPa]"},
                                     "position_label": self.__label_positions[4],
-                                    "scale_unit": 0.2,
+                                    "scale_unit": 200,
                                     "shift_graph": 1,
-                                    "unit_converter": self.__unit_converters["None"],
+                                    "unit_converter": self.__unit_converters["kPa_To_MPa"],
                                     "ticks": np.arange(0, 1.0, 0.2).tolist()}
 
         graph_settings = {self.__data_keys[0]: self.plot_qc_settings,
