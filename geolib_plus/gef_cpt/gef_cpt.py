@@ -7,3 +7,12 @@ class GefCpt(AbstractCPT):
     @classmethod
     def get_cpt_reader(cls) -> CptReader:
         return GefFileReader()
+
+    def pre_process_data(self):
+        super(GefCpt, self).pre_process_data()
+
+        #todo remove points with error
+
+
+        pass
+

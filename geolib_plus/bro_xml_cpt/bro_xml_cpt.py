@@ -7,3 +7,10 @@ class BroXmlCpt(AbstractCPT):
     @classmethod
     def get_cpt_reader(cls) -> CptReader:
         return XMLBroCPTReader()
+
+    def pre_process_data(self):
+        super(BroXmlCpt, self).pre_process_data()
+
+        #todo pre process like it is now in the bro reader
+        pass
+
