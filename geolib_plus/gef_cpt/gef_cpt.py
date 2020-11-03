@@ -1,10 +1,10 @@
-from geolib_plus import AbstractCPT
-from .gef_utils import GefFileReader
+from geolib_plus.cpt_base_model import AbstractCPT, CptReader
+from .gef_file_reader import GefFileReader
 from pathlib import Path
-from .validate_gef import validate_gef_cpt
 
 
 class GefCpt(AbstractCPT):
+
     def read(self, gef_file: Path):
 
         # validate gef_file
@@ -29,3 +29,23 @@ class GefCpt(AbstractCPT):
 
         for k in gef.keys():
             setattr(self, k, gef[k])
+
+    @classmethod
+    def get_cpt_reader(cls) -> CptReader:
+        return GefFileReader()
+
+    def pre_process_data(self):
+        super(GefCpt, self).pre_process_data()
+        pa_to_mpa = 1e-6
+
+
+        self.tip = self.tip * pa_to_mpa
+        self.friction = self.friction * pa_to_mpa
+        self.water = self.water * pa_to_mpa
+
+        #todo remove points with error
+
+
+        pass
+
+
