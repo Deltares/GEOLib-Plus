@@ -22,8 +22,7 @@ def test_reading_bro():
         "cpt/bro_xml/CPT000000003688_IMBRO_A.xml"
     )
     assert bro_file.is_file()
-    cpt = BroXmlCpt()
-    cpt.read(bro_file)
+    cpt = BroXmlCpt().read(bro_file)
 
     test_coord = [91931.000, 438294.000]
     test_depth = np.arange(0.0, 24.341, 0.02)
@@ -164,9 +163,10 @@ def test_reading_compare(name):
     assert gef_file.is_file()
 
     gef_cpt = GefCpt().read(gef_file)
+    gef_cpt.pre_process_data()
 
-    bro_cpt = BroXmlCpt()
-    bro_cpt.read(bro_file)
+    bro_cpt = BroXmlCpt().read(bro_file)
+    bro_cpt.pre_process_data()
 
     np.testing.assert_array_equal(bro_cpt.name, gef_cpt.name)
     np.testing.assert_array_equal(bro_cpt.coordinates, gef_cpt.coordinates)
