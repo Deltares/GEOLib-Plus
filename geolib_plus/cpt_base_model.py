@@ -140,7 +140,7 @@ class AbstractCPT(BaseModel):
         :return: corrected depth
         """
         corrected_d_depth = np.diff(self.penetration_length) * np.cos(
-            np.radians(self.inclination_resultant[:-1])
+            np.radians(np.nan_to_num(self.inclination_resultant[:-1]))
         )
         corrected_depth = np.concatenate(
             (
@@ -190,7 +190,17 @@ class AbstractCPT(BaseModel):
         if self.water is None:
             self.water = np.zeros(len(self.penetration_length))
 
+    def __calculate_inclination_resultant(self):
+        #todo if inclionation resultant is not available, calculate from inclination_x and inclination_y,
+        # or from inclination_ns and inclination_ew if available. If not available set to Nan
+
+        if self.inclination_resultant.size == 0 or self.inclination_resultant.ndim == 0:
+            self.inclination_resultant = np.empty(len(self.penetration_length)) * np.nan
+
+
     def pre_process_data(self):
+
+        self.__calculate_inclination_resultant()
         self.calculate_depth()
         self.depth_to_reference = self.local_reference_level - self.depth
 
@@ -198,6 +208,7 @@ class AbstractCPT(BaseModel):
         self.tip = self.__correct_for_negatives(self.tip)
         self.friction = self.__correct_for_negatives(self.friction)
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
+
 
         self.__get_water_data()
         pass
