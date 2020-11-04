@@ -7,12 +7,13 @@ from .plot_cpt import plot_cpt_norm
 from .plot_settings import PlotSettings
 
 
-class AbstractInterpretationMethod:
+class InterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
-
-
-class RobertsonMethod(AbstractInterpretationMethod):
-    """Scientific explanation about this method."""
+    @abstractmethod
+    def interpret(self, data):
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
 
 
 class CptReader:
@@ -35,7 +36,7 @@ class AbstractCPT(BaseModel):
     tip: Optional[Iterable]
     friction: Optional[Iterable]
     friction_nbr: Optional[Iterable]
-    a: Optional[Iterable]
+    a: Optional[float]
     name: Optional[str]
     rho: Optional[Iterable]
     total_stress: Optional[Iterable]
@@ -126,6 +127,16 @@ class AbstractCPT(BaseModel):
     @abstractmethod
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
+
+    def get_interpretation_method(cls, method) -> InterpretationMethod:
+        return method()
+
+    def interpret_cpt(cls, method: InterpretationMethod):
+        method = cls.get_interpretation_method(method)
+        interpreted_data = method.interpret(cls)
+        #for interpreted_key, interpreted_value in interpreted_data.items():
+        #    setattr(cls, interpreted_key, interpreted_value)
+
 
     def plot(self, directory: Path):
         # plot cpt data

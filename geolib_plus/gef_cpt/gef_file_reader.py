@@ -92,6 +92,8 @@ class GefFileReader(CptReader):
             "magnetic_declination": GefColumnProperty(gef_key=36),
         }
 
+
+
     @staticmethod
     def get_line_index_from_data_starts_with(code_string: str, data: List[str]) -> int:
         """Given a list of strings it returns the position of the first one which starts by the code string given.
@@ -320,6 +322,7 @@ class GefFileReader(CptReader):
             magnetic_declination=self.get_as_np_array(
                 self.property_dict["magnetic_declination"].values_from_gef
             ),
+            water=water,
             local_reference_level=NAP,
             vertical_datum=self.information_dict["vertical_datum"].values_from_gef,
             local_reference=self.information_dict["local_reference"].values_from_gef,
