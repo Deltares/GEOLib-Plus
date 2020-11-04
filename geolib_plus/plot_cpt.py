@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from geolib_plus import AbstractCPT
+    from geolib_plus.cpt_base_model import AbstractCPT
+    from geolib_plus.BRO_XML_CPT.bro_xml_cpt import BroXmlCpt
+    from geolib_plus.GEF_CPT.gef_cpt import GefCpt
 
 import numpy as np
 import matplotlib.pylab as plt
@@ -288,11 +290,16 @@ def generate_plot(cpt: 'AbstractCPT', settings, ylim, ylims, plot_nr):
     scale = 0.8
 
     fig.subplots_adjust(top=scale, left=1 - scale)
+
+    # add information_box
     pu.create_information_box(axes[0], scale, cpt, plot_nr, ylims)
+
     return fig
 
 
-def plot_cpt_norm(cpt, settings, output_folder):
+
+
+def plot_cpt_norm(cpt, output_folder, settings):
     """
     Plots and saves all data in the current cpt according to the norm written in NEN @@@
 

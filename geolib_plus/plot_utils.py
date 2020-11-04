@@ -271,7 +271,8 @@ def __add_text_in_rectangle(ax, text, rectangle, rel_vertical_position, hor_spac
                 annotation_clip=False, fontsize=9)
 
 
-def create_information_box(ax, scale, cpt, plot_nr, ylims):
+
+def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     """
 
     :param ax: current axis
@@ -356,6 +357,91 @@ def create_information_box(ax, scale, cpt, plot_nr, ylims):
 
     ax.add_patch(empty_box)
 
+
+def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
+    """
+
+    :param ax: current axis
+    :param scale: scale of the plot on the paper
+    :param cpt: cpt data
+    :param plot_nr: number of the plot within the current cpt data
+    :param ylims: all vertical limits for the current cpt data
+    :return:
+    """
+    from datetime import date
+
+    y_min = ylims[plot_nr][1]
+    y_max = ylims[plot_nr][0]
+
+    y_tick_size = (y_max - y_min) / ax.yaxis.major.formatter.axis.major.locator.locs.size
+
+    height_box = 3.5 * y_tick_size * scale  # [m]
+    distance_from_plot = -1
+
+    xmin = ax.dataLim.x0
+    xmax = ax.dataLim.x1
+
+    total_width = xmax - xmin
+
+    cpt_number_box = Rectangle((xmin, y_max + height_box + distance_from_plot + height_box * 3 / 4),
+                               total_width * 2 / 4,
+                               height_box * 1 / 4, facecolor='none', clip_on=False, edgecolor="black")
+
+    cpt_type_box = Rectangle((xmin, y_max + height_box + distance_from_plot + height_box * 2 / 4), total_width * 1 / 2,
+                             height_box * 1 / 4, facecolor='none', clip_on=False, edgecolor="black")
+
+    cpt_class_box = Rectangle((xmin, y_max + height_box + distance_from_plot + height_box * 1 / 4), total_width * 2 / 2,
+                              height_box * 1 / 4, facecolor='none', clip_on=False, edgecolor="black")
+
+    coordinate_box = Rectangle(
+        (xmin + total_width * 3 / 6, y_max + height_box + distance_from_plot + height_box * 2 / 4),
+        total_width * 1 / 6, height_box * 2 / 4, facecolor='none', clip_on=False, edgecolor="black")
+    page_box = Rectangle(
+        (xmin + total_width * 5 / 6, y_max + height_box + distance_from_plot + height_box * 0 / 4), total_width * 1 / 6,
+        height_box * 1 / 4, facecolor='none', clip_on=False, edgecolor="black")
+
+    cpt_date_box = Rectangle(
+        (xmin + total_width * 2 / 3, y_max + height_box + distance_from_plot + height_box * 3 / 4),
+        total_width * 1 / 3, height_box * 1 / 4, facecolor='none', clip_on=False, edgecolor="black")
+    plot_data_box = Rectangle(
+        (xmin + total_width * 2 / 3, y_max + height_box + distance_from_plot + height_box * 2 / 4),
+        total_width * 1 / 3, height_box * 1 / 4, facecolor='none', clip_on=False, edgecolor="black")
+
+    empty_box = Rectangle(
+        (xmin + total_width * 0 / 6, y_max + height_box + distance_from_plot + height_box * 0 / 4),
+        total_width * 5 / 6, height_box * 1 / 4, facecolor='none', clip_on=False, edgecolor="black")
+
+    hor_spacing = (xmax - xmin) / 100
+
+    ax.add_patch(cpt_number_box)
+    __add_text_in_rectangle(ax, "Gef id: " + cpt.name, ax.patches[-1], 1 / 2, hor_spacing)
+
+    ax.add_patch(cpt_type_box)
+    __add_text_in_rectangle(ax, "Conustype: " + cpt.cpt_type, ax.patches[-1], 1 / 2, hor_spacing)
+
+    ax.add_patch(cpt_class_box)
+    __add_text_in_rectangle(ax, "Norm en klasse: " + cpt.quality_class, ax.patches[-1], 1 / 2, hor_spacing)
+
+    ax.add_patch(coordinate_box)
+    __add_text_in_rectangle(ax, "x = " + "{:.1f}".format(cpt.coordinates[0]), ax.patches[-1], 2 / 3, hor_spacing)
+    __add_text_in_rectangle(ax, "y = " + "{:.1f}".format(cpt.coordinates[1]), ax.patches[-1], 1 / 3, hor_spacing)
+
+    ax.add_patch(page_box)
+    __add_text_in_rectangle(ax, "Blad: " + str(plot_nr + 1) + "/" + str(len(ylims)), ax.patches[-1], 1 / 2, hor_spacing)
+
+    ax.add_patch(cpt_date_box)
+    __add_text_in_rectangle(ax, "Datum meting: " + cpt.result_time, ax.patches[-1], 1 / 2, hor_spacing)
+
+    ax.add_patch(plot_data_box)
+    __add_text_in_rectangle(ax, "Datum plot: " + str(date.today()), ax.patches[-1], 1 / 2, hor_spacing)
+
+    ax.add_patch(empty_box)
+
+def create_information_box(ax, scale, cpt, plot_nr, ylims):
+    if cpt.__class__.__name__ == 'BroXmlCpt':
+        create_bro_information_box(ax, scale, cpt, plot_nr, ylims)
+    elif cpt.__class__.__name__ == 'GefCpt':
+        create_gef_information_box(ax, scale, cpt, plot_nr, ylims)
 
 def set_figure_size(fig, ylim):
     """
