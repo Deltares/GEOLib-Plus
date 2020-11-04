@@ -14,15 +14,16 @@ import warnings
 from geolib_plus import plot_utils as pu
 
 
-def get_values_which_exceed_threshold(threshold, values, y_data, show_interval):
+def get_values_which_exceed_threshold(threshold: List, values: np.ndarray, y_data: np.ndarray, show_interval: float) \
+        -> Tuple[np.ndarray, np.ndarray]:
     """
     Gets the values which exceed the given threshold which has to be shown, where a value is shown if the distance
     regarding the previous shown value is greater than the show interval and the value exceeds the threshold.
 
-    :param threshold:
-    :param values:
-    :param y_data:
-    :param show_interval:
+    :param threshold:               Threshold values of plotted data
+    :param values:                  Plotted data
+    :param y_data:                  Depth data
+    :param show_interval:           Min distance between shown values
     :return shown_values:           Values past threshold which are shown in text boxes
     :return y_coord_shown_value:    Vertical coordinates of the shown_values
     """
@@ -42,7 +43,7 @@ def get_values_which_exceed_threshold(threshold, values, y_data, show_interval):
     return np.array(shown_values), np.array(y_coord_shown_value)
 
 
-def trim_values_at_exceeding_threshold(threshold, values):
+def trim_values_at_exceeding_threshold(threshold: List, values: np.ndarray) -> np.ndarray:
     """
     Trims a graph on threshold values when the threshold is exceeded.
 
