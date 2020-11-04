@@ -2,6 +2,8 @@ from abc import abstractmethod
 from pathlib import Path
 from typing import Optional, Iterable, List
 from pydantic import BaseModel
+from copy import deepcopy
+import numpy as np
 
 from .plot_cpt import plot_cpt_norm
 from .plot_settings import PlotSettings
@@ -137,6 +139,77 @@ class AbstractCPT(BaseModel):
         #for interpreted_key, interpreted_value in interpreted_data.items():
         #    setattr(cls, interpreted_key, interpreted_value)
 
+	def __calculate_corrected_depth(self) -> np.ndarray:
+        """
+        Correct the penetration length with the inclination angle
+
+
+        :param penetration_length: measured penetration length
+        :param inclination: measured inclination of the cone
+        :return: corrected depth
+        """
+        corrected_d_depth = np.diff(self.penetration_length) * np.cos(
+            np.radians(self.inclination_resultant[:-1])
+        )
+        corrected_depth = np.concatenate(
+            (
+                self.penetration_length[0],
+                self.penetration_length[0] + np.cumsum(corrected_d_depth),
+            ),
+            axis=None,
+        )
+        return corrected_depth
+
+    def calculate_depth(self):
+        """
+        If depth is present in the bro cpt and is valid, the depth is parsed from depth
+        elseif resultant inclination angle is present and valid in the bro cpt, the penetration length is corrected with
+        the inclination angle.
+        if both depth and inclination angle are not present/valid, the depth is parsed from the penetration length.
+        :param cpt_BRO: dataframe
+        :return:
+        """
+
+        if self.depth.size == 0:
+            if self.inclination_resultant.size != 0:
+                self.depth = self.__calculate_corrected_depth()
+            else:
+                self.depth = deepcopy(self.penetration_length)
+
+    @staticmethod
+    def __correct_for_negatives(data):
+        """
+        Values tip / friction / friction cannot be negative so they
+        have to be zero.
+        """
+        if data is not None:
+            if data.size != 0 and not data.ndim:
+                data[data<0] = 0
+            return data
+
+    def __get_water_data(self):
+
+        pore_pressure_data = [self.pore_pressure_u1, self.pore_pressure_u2, self.pore_pressure_u3]
+
+        for data in pore_pressure_data:
+            if data is not None:
+                if data.size and data.ndim:
+                    self.water = deepcopy(data)
+                    break
+        if self.water is None:
+            self.water = np.zeros(len(self.penetration_length))
+
+    def pre_process_data(self):
+        self.calculate_depth()
+        self.depth_to_reference = self.local_reference_level - self.depth
+
+        # correct tip friction and friction number for negative values
+        self.tip = self.__correct_for_negatives(self.tip)
+        self.friction = self.__correct_for_negatives(self.friction)
+        self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
+
+        self.__get_water_data()
+        pass
 
     def plot(self, directory: Path):
         # plot cpt data
