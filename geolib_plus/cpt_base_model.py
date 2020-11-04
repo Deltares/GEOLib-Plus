@@ -170,8 +170,8 @@ class AbstractCPT(BaseModel):
         :return:
         """
 
-        if self.depth.size == 0:
-            if self.inclination_resultant.size != 0:
+        if self.depth.size == 0 or self.depth.ndim == 0:
+            if self.inclination_resultant.size != 0 and self.inclination_resultant.ndim != 0:
                 self.depth = self.__calculate_corrected_depth()
             else:
                 self.depth = deepcopy(self.penetration_length)
@@ -193,7 +193,7 @@ class AbstractCPT(BaseModel):
 
         for data in pore_pressure_data:
             if data is not None:
-                if data.size and data.ndim:
+                if data.size and data.ndim and not np.all(data == 0):
                     self.water = deepcopy(data)
                     break
         if self.water is None:

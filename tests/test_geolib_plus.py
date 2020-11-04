@@ -1,8 +1,10 @@
 from geolib_plus import __version__
+
 from geolib_plus.bro_xml_cpt.bro_xml_cpt import *
 from geolib_plus.gef_cpt.gef_cpt import *
 from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
 from geolib_plus.robertson_cpt_interpretation import *
+
 from tests.utils import TestUtils
 
 # External
@@ -23,8 +25,7 @@ def test_reading_bro():
         "cpt/bro_xml/CPT000000003688_IMBRO_A.xml"
     )
     assert bro_file.is_file()
-    cpt = BroXmlCpt()
-    cpt_res = cpt.read(bro_file)
+    cpt = BroXmlCpt().read(bro_file)
 
     test_coord = [91931.000, 438294.000]
     test_depth = np.arange(0.0, 24.341, 0.02)
@@ -74,18 +75,18 @@ def test_reading_bro():
     test_water_first = np.full(10, 0)
     test_water_last = np.full(10, 0)
 
-    np.testing.assert_array_equal("CPT000000003688", cpt_res.name)
-    np.testing.assert_array_equal(test_coord, cpt_res.coordinates)
-    np.testing.assert_array_almost_equal(test_depth, cpt_res.depth)
-    np.testing.assert_array_almost_equal(test_NAP, cpt_res.depth_to_reference)
-    np.testing.assert_array_equal(test_tip_first, cpt_res.tip[0:10])
-    np.testing.assert_array_equal(test_tip_last, cpt_res.tip[-10:])
-    np.testing.assert_array_equal(test_friction_first, cpt_res.friction[0:10])
-    np.testing.assert_array_equal(test_friction_last, cpt_res.friction[-10:])
-    np.testing.assert_array_equal(test_friction_nbr_first, cpt_res.friction_nbr[0:10])
-    np.testing.assert_array_equal(test_friction_nbr_last, cpt_res.friction_nbr[-10:])
-    np.testing.assert_array_equal(test_water_first, cpt_res.water[0:10])
-    np.testing.assert_array_equal(test_water_last, cpt_res.water[-10:])
+    np.testing.assert_array_equal("CPT000000003688", cpt.name)
+    np.testing.assert_array_equal(test_coord, cpt.coordinates)
+    np.testing.assert_array_almost_equal(test_depth, cpt.depth)
+    np.testing.assert_array_almost_equal(test_NAP, cpt.depth_to_reference)
+    np.testing.assert_array_equal(test_tip_first, cpt.tip[0:10])
+    np.testing.assert_array_equal(test_tip_last, cpt.tip[-10:])
+    np.testing.assert_array_equal(test_friction_first, cpt.friction[0:10])
+    np.testing.assert_array_equal(test_friction_last, cpt.friction[-10:])
+    np.testing.assert_array_equal(test_friction_nbr_first, cpt.friction_nbr[0:10])
+    np.testing.assert_array_equal(test_friction_nbr_last, cpt.friction_nbr[-10:])
+    np.testing.assert_array_equal(test_water_first, cpt.water[0:10])
+    np.testing.assert_array_equal(test_water_last, cpt.water[-10:])
 
 
 # System Test for geolib_plus_read_GEF
@@ -126,6 +127,31 @@ testdata = [
     ("CPT000000003688_IMBRO_A"),
 ]
 
+@pytest.mark.integrationtest
+def test_pre_process_gef_data():
+    """
+    Tests pre process of gef data
+    """
+    test_file = TestUtils.get_local_test_data_dir(
+        "cpt/gef/unit_testing/unit_testing.gef"
+    )
+    assert test_file.is_file()
+
+    cpt = GefCpt().read(test_file)
+
+    # check cpt before preprocess
+    assert cpt.depth.ndim == 0
+    assert cpt.depth_to_reference is None
+    assert cpt.water is None
+
+    expected_depth = cpt.penetration_length[0] + \
+                     np.cumsum(np.diff(cpt.penetration_length) * np.cos(np.radians(cpt.inclination_resultant[:-1])))
+
+    # process data
+    cpt.pre_process_data()
+    np.testing.assert_array_almost_equal(cpt.depth_to_reference, cpt.local_reference_level - cpt.depth)
+    np.testing.assert_array_almost_equal(cpt.depth[1:], expected_depth)
+    np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("name", testdata, ids=testdata)
@@ -140,9 +166,10 @@ def test_reading_compare(name):
     assert gef_file.is_file()
 
     gef_cpt = GefCpt().read(gef_file)
+    gef_cpt.pre_process_data()
 
-    bro_cpt = BroXmlCpt()
-    bro_cpt.read(bro_file)
+    bro_cpt = BroXmlCpt().read(bro_file)
+    bro_cpt.pre_process_data()
 
     np.testing.assert_array_equal(bro_cpt.name, gef_cpt.name)
     np.testing.assert_array_equal(bro_cpt.coordinates, gef_cpt.coordinates)
