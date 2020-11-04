@@ -1,14 +1,20 @@
+
+from typing import List
+
 import numpy as np
+
 
 from matplotlib.patches import Rectangle
 from matplotlib.offsetbox import AnchoredOffsetbox, TextArea, HPacker
+from matplotlib.axes import Axes
 
 CALIBRATED_LENGTH_FIGURE_SIZE = 21  # layout figure is calibrated using a plotted depth of 21 m
 A4_WIDTH = 8.27  # inches
 A4_LENGTH = 11.69  # inches
 
 
-def set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data, threshold, location):
+def set_textbox_at_thresholds(ax:Axes , ylim: List, max_data: np.ndarray,
+                              found_depths_data: np.ndarray, threshold: List, location: str):
     """
     Set textboxes in the plot at the location off maximum values past the cut off value.
 
@@ -159,7 +165,7 @@ def set_local_reference_line(cpt, ax, xlim, language):
 
     xbox = HPacker(children=box, align="center", pad=0, sep=5)
 
-    anchored_xbox = AnchoredOffsetbox(loc=loc, child=xbox, pad=0, frameon=True,
+    anchored_xbox = AnchoredOffsetbox(loc=loc, child=xbox, pad=0.25, frameon=True,
                                       bbox_to_anchor=bbox_to_anchor,
                                       bbox_transform=ax.transAxes, borderpad=0.)
     ax.add_artist(anchored_xbox)
