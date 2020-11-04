@@ -1,7 +1,7 @@
 from geolib_plus import __version__
-from geolib_plus.bro_xml_cpt.bro_xml_cpt import *
-from geolib_plus.gef_cpt.gef_cpt import *
-from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
+from geolib_plus.BRO_XML_CPT.bro_xml_cpt import *
+from geolib_plus.GEF_CPT.gef_cpt import *
+from geolib_plus.GEF_CPT.validate_gef import validate_gef_cpt
 from tests.utils import TestUtils
 
 # External
@@ -22,8 +22,7 @@ def test_reading_bro():
         "cpt/bro_xml/CPT000000003688_IMBRO_A.xml"
     )
     assert bro_file.is_file()
-    cpt = BroXmlCpt()
-    cpt.read(bro_file)
+    cpt = BroXmlCpt().read(bro_file)
 
     test_coord = [91931.000, 438294.000]
     test_depth = np.arange(0.0, 24.341, 0.02)
@@ -125,6 +124,31 @@ testdata = [
     ("CPT000000003688_IMBRO_A"),
 ]
 
+@pytest.mark.integrationtest
+def test_pre_process_gef_data():
+    """
+    Tests pre process of gef data
+    """
+    test_file = TestUtils.get_local_test_data_dir(
+        "cpt/gef/unit_testing/unit_testing.gef"
+    )
+    assert test_file.is_file()
+
+    cpt = GefCpt().read(test_file)
+
+    # check cpt before preprocess
+    assert cpt.depth.ndim == 0
+    assert cpt.depth_to_reference is None
+    assert cpt.water is None
+
+    expected_depth = cpt.penetration_length[0] + \
+                     np.cumsum(np.diff(cpt.penetration_length) * np.cos(np.radians(cpt.inclination_resultant[:-1])))
+
+    # process data
+    cpt.pre_process_data()
+    np.testing.assert_array_almost_equal(cpt.depth_to_reference, cpt.local_reference_level - cpt.depth)
+    np.testing.assert_array_almost_equal(cpt.depth[1:], expected_depth)
+    np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("name", testdata, ids=testdata)
@@ -139,9 +163,10 @@ def test_reading_compare(name):
     assert gef_file.is_file()
 
     gef_cpt = GefCpt().read(gef_file)
+    gef_cpt.pre_process_data()
 
-    bro_cpt = BroXmlCpt()
-    bro_cpt.read(bro_file)
+    bro_cpt = BroXmlCpt().read(bro_file)
+    bro_cpt.pre_process_data()
 
     np.testing.assert_array_equal(bro_cpt.name, gef_cpt.name)
     np.testing.assert_array_equal(bro_cpt.coordinates, gef_cpt.coordinates)
