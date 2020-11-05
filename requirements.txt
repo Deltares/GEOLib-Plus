@@ -3,6 +3,7 @@ atomicwrites==1.4.0; sys_platform == "win32"
 attrs==20.3.0
 babel==2.8.0
 certifi==2020.6.20
+cftime==1.2.1
 chardet==3.0.4
 colorama==0.4.4; sys_platform == "win32"
 coverage==5.3
@@ -19,6 +20,7 @@ lxml==4.6.1
 markupsafe==1.1.1
 matplotlib==3.3.2
 more-itertools==8.6.0
+netcdf4==1.5.4
 numpy==1.19.4
 packaging==20.4
 pandas==1.1.4
