@@ -147,13 +147,6 @@ class XMLBroCPTReader(CptReader):
             "porePressureU3",
         ]
 
-    def parse_bro_to_cpt(self, xml_file_path: Path):
-        # read the BRO_XML into Memory
-        xml = self.xml_to_byte_string(xml_file_path)
-
-        # parse the BRO_XML to BRO CPT Dataset
-        self.parse_bro_xml(xml)
-
     @staticmethod
     def xml_to_byte_string(fn: Path) -> bytes:
         """
@@ -182,17 +175,12 @@ class XMLBroCPTReader(CptReader):
         return avail_columns
 
     def parse_bro_xml(self, xml: bytes):
-        """Parse bro CPT xml.
-        Searches for the cpt data, but also
-        - location
-        - offset z
-        - id
-        - predrilled_z
-        TODO Replace iter by single search
-        as iter can give multiple results
+        """
+        Populates class with xml data. No interpretation of results occurs
+        at this function. This is simply reading the xml.
+        TODO Replace iter by single search as iter can give multiple results
 
         :param xml: XML bytes
-        :returns: dict -- parsed CPT data + metadata
         """
         root = etree.fromstring(xml)
 
@@ -215,10 +203,10 @@ class XMLBroCPTReader(CptReader):
             for element in cpt.iter(ns + "values"):
                 # Load string data and parse as 2d array
                 sar = StringIO(element.text.replace(";", "\n"))
-                ar = np.loadtxt(sar, delimiter=",", ndmin=2)
+                array_data = np.loadtxt(sar, delimiter=",", ndmin=2)
 
                 # Check shape of array
-                found_rows, found_columns = ar.shape
+                found_rows, found_columns = array_data.shape
                 if found_columns != len(self.bro_data.columns_string_list):
                     logging.warning(
                         "Data has the wrong size! {} columns instead of {}".format(
@@ -230,8 +218,8 @@ class XMLBroCPTReader(CptReader):
                 # Replace nodata constant with nan
                 # Create a DataFrame from array
                 # and sort by depth
-                ar[ar == nodata] = np.nan
-                df = pd.DataFrame(ar, columns=self.bro_data.columns_string_list)
+                array_data[array_data == nodata] = np.nan
+                df = pd.DataFrame(array_data, columns=self.bro_data.columns_string_list)
                 df = df[avail_columns]
                 df.sort_values(by=["penetrationLength"], inplace=True)
 
@@ -292,7 +280,7 @@ class XMLBroCPTReader(CptReader):
         return x, y
 
     def get_all_data_from_bro(self, root: _Element) -> None:
-        """ Extract values from bro,"""
+        """ Extract values from bro. From the xml elements."""
         # BRO Id
         self.bro_data.id = self.search_values_in_root(
             root=root, search_item=ns4 + "broId"
@@ -343,10 +331,147 @@ class XMLBroCPTReader(CptReader):
         # validate bro xml file
         validate_bro_cpt(filepath)
 
-        self.parse_bro_to_cpt(filepath)
+        # read the BRO_XML into Memory
+        xml = self.xml_to_byte_string(filepath)
+
+        # parse the BRO_XML to BRO CPT Dataset
+        self.parse_bro_xml(xml)
 
         # add the BRO_XML attributes to CPT structure
-        return self.__parse_bro()
+        result_dictionary = self.__parse_bro_raw_data()
+
+        # validate bro xml data
+        self.validate_length_and_samples_cpt()
+
+        return result_dictionary
+
+    def __parse_bro_raw_data(self) -> Dict:
+        result_dictionary = {
+            "name": self.bro_data.id,
+            "coordinates": [
+                self.bro_data.location_x,
+                self.bro_data.location_y,
+            ],
+            "vertical_datum": self.bro_data.vertical_datum,
+            "local_reference": self.bro_data.local_reference,
+            "quality_class": self.bro_data.quality_class,
+            "cpt_type": self.bro_data.cone_penetrometer_type,
+            "cpt_standard": self.bro_data.cpt_standard,
+            "result_time": self.bro_data.result_time,
+            "local_reference_level": self.bro_data.offset_z,
+            "a": [self.bro_data.a],
+            "predrilled_z": self.bro_data.predrilled_z,
+        }
+        result_dictionary["water_measurement_type"] = [
+            water_measurement_type
+            for water_measurement_type in self.__water_measurement_types
+            if water_measurement_type in self.bro_data.dataframe
+        ]
+
+        # extract values from dataframe
+        if self.bro_data.dataframe is not None:
+            bro_dataframe = self.bro_data.dataframe
+            result_dictionary["penetration_length"] = bro_dataframe.get(
+                "penetrationLength"
+            )
+            result_dictionary["depth"] = bro_dataframe.get("depth")
+            result_dictionary["time"] = bro_dataframe.get("elapsedTime")
+            result_dictionary["qt"] = bro_dataframe.get("coneResistance")
+            result_dictionary["Qtn"] = bro_dataframe.get("correctedConeResistance")
+            result_dictionary["net_tip"] = bro_dataframe.get("netConeResistance")
+            result_dictionary["magnetic_strength_x"] = bro_dataframe.get(
+                "magneticFieldStrengthX"
+            )
+            result_dictionary["magnetic_strength_y"] = bro_dataframe.get(
+                "magneticFieldStrengthY"
+            )
+            result_dictionary["magnetic_strength_z"] = bro_dataframe.get(
+                "magneticFieldStrengthZ"
+            )
+            result_dictionary["magnetic_strength_tot"] = bro_dataframe.get(
+                "magneticFieldStrengthTotal"
+            )
+            result_dictionary["electric_cond"] = bro_dataframe.get(
+                "electricalConductivity"
+            )
+            result_dictionary["inclination_ew"] = bro_dataframe.get("inclinationEW")
+            result_dictionary["inclination_ns"] = bro_dataframe.get("inclinationNS")
+            result_dictionary["inclination_x"] = bro_dataframe.get("inclinationX")
+            result_dictionary["inclination_y"] = bro_dataframe.get("inclinationY")
+            result_dictionary["inclination_resultant"] = bro_dataframe.get(
+                "inclinationResultant"
+            )
+            result_dictionary["magnetic_inclination"] = bro_dataframe.get(
+                "magneticInclination"
+            )
+            result_dictionary["magnetic_declination"] = bro_dataframe.get(
+                "magneticDeclination"
+            )
+            result_dictionary["friction"] = bro_dataframe.get("localFriction")
+            result_dictionary["pore_ratio"] = bro_dataframe.get("poreRatio")
+            result_dictionary["temperature"] = bro_dataframe.get("temperature")
+            result_dictionary["pore_pressure_u1"] = bro_dataframe.get("porePressureU1")
+            result_dictionary["pore_pressure_u2"] = bro_dataframe.get("porePressureU2")
+            result_dictionary["pore_pressure_u3"] = bro_dataframe.get("porePressureU3")
+            result_dictionary["IC"] = bro_dataframe.get("frictionRatio")
+        return self.transform_dict_fields_to_arrays(dictionary=result_dictionary)
+
+    @staticmethod
+    def transform_dict_fields_to_arrays(dictionary: Dict) -> Dict:
+        for key, value in dictionary.items():
+            if isinstance(value, pd.Series):
+                dictionary[key] = value.values
+        return dictionary
+
+    def check_file_contains_data(self):
+        if len(self.bro_data.dataframe.penetrationLength) == 0:
+            logging.warning("File " + self.bro_data.id + " contains no data")
+            return
+
+    def check_data_different_than_zero(self):
+        keys = ["penetrationLength", "coneResistance", "localFriction", "frictionRatio"]
+        for k in keys:
+            if all(self.bro_data.dataframe[k] == 0):
+                logging.warning("File " + self.bro_data.id + " contains empty data")
+                return
+
+    def check_criteria_minimum_length(self, minimum_length: int):
+        if (
+            np.max(np.abs(self.bro_data.dataframe.penetrationLength.values))
+            < minimum_length
+        ):
+            logging.warning(
+                "File "
+                + self.bro_data.id
+                + " has a length smaller than "
+                + str(minimum_length)
+            )
+            return
+
+    def check_minimum_sample_criteria(self, minimum_samples: int):
+        if len(self.bro_data.dataframe.penetrationLength.values) < minimum_samples:
+            logging.warning(
+                "File "
+                + self.bro_data.id
+                + " has a number of samples smaller than "
+                + str(minimum_samples)
+            )
+            return
+
+    def validate_length_and_samples_cpt(
+        self, minimum_length: int = 5, minimum_samples: int = 50
+    ):
+        """
+        Performs initial checks regarding the availability of
+        data in the cpt. Returns a string that contains all the
+        error messages.
+        """
+
+        self.check_file_contains_data()
+        self.check_data_different_than_zero()
+        self.check_criteria_minimum_length(minimum_length)
+        self.check_minimum_sample_criteria(minimum_samples)
+        return
 
     def __parse_bro(
         self,
@@ -356,7 +481,7 @@ class XMLBroCPTReader(CptReader):
         convert_to_kPa: bool = True,
     ):
         """
-        Parse the BRO information into the object structure
+        Values are interpreted from the xml and appended into the result_dictionary.
 
         Parameters
         ----------
@@ -365,11 +490,12 @@ class XMLBroCPTReader(CptReader):
         :param minimum_samples: (optional) minimum samples that cpt files needs to have
         :param minimum_ratio: (optional) minimum ratio of positive values that cpt files needs to have
         :param convert_to_kPa: (optional) convert units to kPa
-        :return:
+        :return: result_dictionary
         """
         # create result dictionary
         result_dictionary = {}
 
+        # TODO this is not part of raw data
         # remove NAN row from the dataframe
         for key in self.bro_data.dataframe:
             self.bro_data.dataframe = self.bro_data.dataframe.dropna(subset=[key])
@@ -401,27 +527,29 @@ class XMLBroCPTReader(CptReader):
 
         # parse local reference point
         result_dictionary["local_reference"] = (
-            self.bro_data.local_reference if self.bro_data.vertical_datum else []
+            self.bro_data.local_reference if self.bro_data.local_reference else []
         )
 
         # parse quality class
         result_dictionary["quality_class"] = (
-            self.bro_data.quality_class if self.bro_data.vertical_datum else []
+            self.bro_data.quality_class if self.bro_data.quality_class else []
         )
 
         # parse cone penetrator type
         result_dictionary["cpt_type"] = (
-            self.bro_data.cone_penetrometer_type if self.bro_data.vertical_datum else []
+            self.bro_data.cone_penetrometer_type
+            if self.bro_data.cone_penetrometer_type
+            else []
         )
 
         # parse cpt standard
         result_dictionary["cpt_standard"] = (
-            self.bro_data.cpt_standard if self.bro_data.vertical_datum else []
+            self.bro_data.cpt_standard if self.bro_data.cpt_standard else []
         )
 
         # parse result time
         result_dictionary["result_time"] = (
-            self.bro_data.result_time if self.bro_data.vertical_datum else []
+            self.bro_data.result_time if self.bro_data.result_time else []
         )
 
         # parse measurement type of pore pressure
@@ -438,6 +566,7 @@ class XMLBroCPTReader(CptReader):
             ][0]
 
         # check criteria of minimum length
+        # TODO minimum length is a check that should be implemented for non-raw data
         if (
             np.max(np.abs(self.bro_data.dataframe.penetrationLength.values))
             < minimum_length
@@ -451,6 +580,7 @@ class XMLBroCPTReader(CptReader):
             return message
 
         # check criteria of minimum samples
+        # TODO minimum samples is a check that should be implemented for non-raw data
         if len(self.bro_data.dataframe.penetrationLength.values) < minimum_samples:
             message = (
                 "File "
@@ -473,14 +603,6 @@ class XMLBroCPTReader(CptReader):
             local_friction,
             pore_pressure,
         ) = self.__define_pre_drill(length_of_average_points=minimum_samples)
-
-        # parse inclination resultant
-        if "inclinationResultant" in self.bro_data.dataframe:
-            result_dictionary["inclination_resultant"] = self.bro_data.dataframe[
-                "inclinationResultant"
-            ].values
-        else:
-            result_dictionary["inclination_resultant"] = np.empty(len(depth)) * np.nan
 
         # check quality of CPT
         # if more than minimum_ratio CPT is corrupted: discard CPT
