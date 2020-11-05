@@ -18,9 +18,9 @@ class TestBroXmlCpt:
         filename = "CPT000000003688_IMBRO_A.xml"
         test_file = test_folder / filename
         # initialise model
-        cpt_read = bro_xml_cpt.BroXmlCpt()
+        cpt = bro_xml_cpt.BroXmlCpt()
         # run test
-        cpt = cpt_read.read(test_file)
+        cpt.read(test_file)
         # check expectations
         assert cpt
         assert cpt.name == "CPT000000003688"
@@ -38,18 +38,18 @@ class TestBroXmlCpt:
         filename = "CPT000000003688_IMBRO_A.xml"
         test_file = test_folder / filename
         # initialise model
-        cpt_read = bro_xml_cpt.BroXmlCpt()
+        cpt = bro_xml_cpt.BroXmlCpt()
         # run test
-        cpt = cpt_read.read(test_file)
-        cpt_nans = cpt_read.drop_nan_values(cpt=cpt)
+        cpt.read(test_file)
+        cpt_nans = cpt.drop_nan_values(cpt=cpt)
         # check expectations
         assert cpt_nans
         assert cpt.name == cpt_nans.name
         assert cpt.quality_class == cpt_nans.quality_class
         assert cpt.cpt_type == cpt_nans.cpt_type
         assert cpt.local_reference_level == cpt_nans.local_reference_level
-        assert len(cpt.depth) == len(cpt.IC)
-        assert len(cpt.IC) == 1215
+        assert len(cpt.depth) == len(cpt.friction_nbr)
+        assert len(cpt.friction_nbr) == 1215
 
     @pytest.mark.systemtest
     def test_drop_duplicate_depth_values(self):
@@ -61,18 +61,18 @@ class TestBroXmlCpt:
         # initialise model
         cpt_read = bro_xml_cpt.BroXmlCpt()
         # run test
-        cpt = cpt_read.read(test_file)
+        cpt_read.read(test_file)
         # set duplicate values
-        cpt.penetration_length[1] = 0
-        cpt.penetration_length[2] = 0
-        cpt.penetration_length[3] = 0
+        cpt_read.penetration_length[1] = 0
+        cpt_read.penetration_length[2] = 0
+        cpt_read.penetration_length[3] = 0
         # save expectation
-        previous_length = len(cpt.penetration_length)
+        previous_length = len(cpt_read.penetration_length)
         # run test
-        cpt = cpt_read.drop_duplicate_depth_values(cpt=cpt)
+        cpt_read = cpt_read.drop_duplicate_depth_values(cpt=cpt_read)
         # check expectations
-        assert len(cpt.penetration_length) == previous_length - 3
-        assert len(cpt.IC) == len(cpt.penetration_length)
+        assert len(cpt_read.penetration_length) == previous_length - 3
+        assert len(cpt_read.friction_nbr) == len(cpt_read.penetration_length)
 
     @pytest.mark.systemtest
     def test__pre_drill_with_predrill(self):

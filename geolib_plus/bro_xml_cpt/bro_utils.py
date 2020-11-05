@@ -376,7 +376,7 @@ class XMLBroCPTReader(CptReader):
             )
             result_dictionary["depth"] = bro_dataframe.get("depth")
             result_dictionary["time"] = bro_dataframe.get("elapsedTime")
-            result_dictionary["qt"] = bro_dataframe.get("coneResistance")
+            result_dictionary["tip"] = bro_dataframe.get("coneResistance")
             result_dictionary["Qtn"] = bro_dataframe.get("correctedConeResistance")
             result_dictionary["net_tip"] = bro_dataframe.get("netConeResistance")
             result_dictionary["magnetic_strength_x"] = bro_dataframe.get(
@@ -413,7 +413,7 @@ class XMLBroCPTReader(CptReader):
             result_dictionary["pore_pressure_u1"] = bro_dataframe.get("porePressureU1")
             result_dictionary["pore_pressure_u2"] = bro_dataframe.get("porePressureU2")
             result_dictionary["pore_pressure_u3"] = bro_dataframe.get("porePressureU3")
-            result_dictionary["IC"] = bro_dataframe.get("frictionRatio")
+            result_dictionary["friction_nbr"] = bro_dataframe.get("frictionRatio")
         return self.transform_dict_fields_to_arrays(dictionary=result_dictionary)
 
     @staticmethod
