@@ -98,13 +98,13 @@ class PlotSettings:
                                            "ticks": np.arange(0, 12, 2).tolist()}
 
         self.plot_inv_friction_nbr_settings = {"data_key": self.__data_keys[4],
-                                           "threshold": [0, 0.900],
+                                           "threshold": [0, 900],
                                            "graph_color": "green",
                                            "line_style": self.__line_styles[2],
                                            "label": {self.__languages[0]: "qc / fs [-]",
                                                      self.__languages[1]: "qc / fs [-]"},
                                            "position_label": self.__label_positions[3],
-                                           "scale_unit": 0.100,
+                                           "scale_unit": 100,
                                            "shift_graph": 0,
                                            "unit_converter": self.__unit_converters["None"],
                                            "ticks": np.arange(0, 600, 100).tolist()}
@@ -118,7 +118,7 @@ class PlotSettings:
                                     "position_label": self.__label_positions[4],
                                     "scale_unit": 0.200,
                                     "shift_graph": 1,
-                                    "unit_converter": self.__unit_converters["kPa_To_MPa"],
+                                    "unit_converter": self.__unit_converters["None"],
                                     "ticks": np.arange(0, 1.0, 0.2).tolist()}
 
         graph_settings = {self.__data_keys[0]: self.plot_qc_settings,

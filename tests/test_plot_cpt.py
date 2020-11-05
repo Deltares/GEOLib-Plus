@@ -232,22 +232,17 @@ class TestPlotCpt():
         self.assertTrue(os.path.isfile(os.path.join(output_folder, self.cpt.name + '.pdf')))
         # os.remove(os.path.join(self.cpt.output_folder, self.cpt.name + '.pdf'))
 
-    def test_generate_fig_with_inverse_friction_nbr(self):
-        settings = plot_settings.PlotSettings()
-        settings.assign_default_settings()
-        settings.set_inversed_friction_number_in_plot()
+    @pytest.mark.integrationtest
+    def test_generate_fig_with_inverse_friction_nbr(self, bro_xml_cpt, plot_settings):
+        plot_settings.assign_default_settings()
+        plot_settings.set_inversed_friction_number_in_plot()
 
-        plot_cpt.plot_cpt_norm(self.cpt, settings.general_settings)
+        output_path = Path(TestUtils._name_output)
+        plot_cpt.plot_cpt_norm(bro_xml_cpt, output_path, plot_settings.general_settings)
 
-        self.assertTrue(os.path.isfile(os.path.join(self.cpt.output_folder, self.cpt.name + '.pdf')))
+        output_file_name = bro_xml_cpt.name + '.pdf'
+        assert Path(output_path / output_file_name).is_file()
         # os.remove(os.path.join(self.cpt.output_folder, self.cpt.name + '.pdf'))
-
-
-    @pytest.mark.unittest
-    @pytest.mark.workinprogress
-    def test_plot_cpt_unit_tests(self):
-        raise NotImplementedError
-
 
     @pytest.mark.integrationtest
     def test_generate_fig_with_default_settings_from_xml(self, bro_xml_cpt, plot_settings):
@@ -293,8 +288,8 @@ def gef_cpt():
 @pytest.fixture
 def bro_xml_cpt():
     test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-    # filename = "CPT000000003688_IMBRO_A.xml"
-    filename = "cpt_with_water.xml"
+    filename = "CPT000000003688_IMBRO_A.xml"
+    # filename = "cpt_with_water.xml"
     test_file = test_folder / filename
     cpt = BroXmlCpt().read(test_file)
     cpt.pre_process_data()
