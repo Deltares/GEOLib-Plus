@@ -17,6 +17,7 @@ numpy = "^1.19.2"
 matplotlib = "^3.3.2"
 Shapely = "^1.7.1"
 pyshp = "^2.1.2"
+more-itertools = "^8.6.0"
 
 [tool.poetry.dev-dependencies]
 teamcity-messages = "^1.28"
