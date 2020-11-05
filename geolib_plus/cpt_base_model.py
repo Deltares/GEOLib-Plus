@@ -139,7 +139,7 @@ class AbstractCPT(BaseModel):
         #for interpreted_key, interpreted_value in interpreted_data.items():
         #    setattr(cls, interpreted_key, interpreted_value)
 
-	def __calculate_corrected_depth(self) -> np.ndarray:
+    def __calculate_corrected_depth(self) -> np.ndarray:
         """
         Correct the penetration length with the inclination angle
 

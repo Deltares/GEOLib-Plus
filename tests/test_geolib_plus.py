@@ -235,7 +235,7 @@ def test_robertson_validation():
     gef_file = TestUtils.get_local_test_data_dir(
         "cpt/gef/KW19-3.gef"
     )
-    cpt = GefCpt()
-    cpt_res = cpt.read(gef_file)
-    cpt_res.interpret_cpt(RobertsonCptInterpretation)
-
+    cpt = GefCpt().read(gef_file)
+    cpt.pre_process_data()
+    cpt.interpret_cpt(RobertsonCptInterpretation)
+    print(cpt.lithology)

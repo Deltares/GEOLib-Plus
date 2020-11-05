@@ -553,7 +553,6 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
-        self.data.qt = list(self.data.qt)
 
     def merge_thickness(self, minimum_layer_thickness):
         """
