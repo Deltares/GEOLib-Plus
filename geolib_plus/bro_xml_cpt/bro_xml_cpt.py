@@ -9,7 +9,14 @@ class BroXmlCpt(AbstractCPT):
         return XMLBroCPTReader()
 
     def pre_process_data(self):
-        super(BroXmlCpt, self).pre_process_data()
+        """
+        Pre processes data which is read from bro xml files.
+
+        Units are converted to MPa.
+        #todo extend
+        :return:
+        """
+        super().pre_process_data()
         kpa_to_mpa = 1e-3
 
         self.tip = self.tip * kpa_to_mpa

@@ -154,22 +154,23 @@ class AbstractCPT(BaseModel):
 
     def calculate_depth(self):
         """
-        If depth is present in the bro cpt and is valid, the depth is parsed from depth
-        elseif resultant inclination angle is present and valid in the bro cpt, the penetration length is corrected with
+        If depth is present in the cpt and is valid, the depth is parsed from depth
+        elseif resultant inclination angle is present and valid in the cpt, the penetration length is corrected with
         the inclination angle.
         if both depth and inclination angle are not present/valid, the depth is parsed from the penetration length.
-        :param cpt_BRO: dataframe
         :return:
         """
 
-        if self.depth.size == 0 or self.depth.ndim == 0:
-            if self.inclination_resultant.size != 0 and self.inclination_resultant.ndim != 0:
-                self.depth = self.__calculate_corrected_depth()
-            else:
-                self.depth = deepcopy(self.penetration_length)
+        if self.depth.size > 0 and self.depth.ndim > 0:
+            # no calculations needed
+            return
+        if self.inclination_resultant.size != 0 and self.inclination_resultant.ndim != 0:
+            self.depth = self.__calculate_corrected_depth()
+        else:
+            self.depth = deepcopy(self.penetration_length)
 
     @staticmethod
-    def __correct_for_negatives(data):
+    def __correct_for_negatives(data: np.ndarray) -> np.ndarray:
         """
         Values tip / friction / friction cannot be negative so they
         have to be zero.
@@ -192,6 +193,15 @@ class AbstractCPT(BaseModel):
             self.water = np.zeros(len(self.penetration_length))
 
     def pre_process_data(self):
+        """
+        Pre processes data which is read from a gef file or bro xml file.
+
+        Depth is calculated based on available data.
+        Relevant data is corrected for negative values.
+        Pore pressure is retrieved from available data.
+        #todo extend
+        :return:
+        """
         self.calculate_depth()
         self.depth_to_reference = self.local_reference_level - self.depth
 
@@ -201,7 +211,8 @@ class AbstractCPT(BaseModel):
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
 
         self.__get_water_data()
-        pass
+
+        #todo extend pre process data
 
 
     def plot(self, directory: Path):

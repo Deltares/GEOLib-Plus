@@ -134,7 +134,8 @@ class TestGeolibPlusReading:
         )
         assert test_file.is_file()
 
-        cpt = GefCpt().read(test_file)
+        cpt = GefCpt()
+        cpt.read(test_file)
 
         # check cpt before preprocess
         assert cpt.depth.ndim == 0
