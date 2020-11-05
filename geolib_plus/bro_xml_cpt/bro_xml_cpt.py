@@ -72,7 +72,7 @@ class BroXmlCpt(AbstractCPT):
         update_dict = pd.DataFrame(update_dict).dropna().to_dict("list")
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(self, value, update_dict.get(value))
+            setattr(self, value, np.array(update_dict.get(value)))
         return
 
     def drop_duplicate_depth_values(self):
@@ -95,7 +95,7 @@ class BroXmlCpt(AbstractCPT):
         )
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(self, value, update_dict.get(value))
+            setattr(self, value, np.array(update_dict.get(value)))
         return
 
     @staticmethod
@@ -122,10 +122,15 @@ class BroXmlCpt(AbstractCPT):
         # add zero
         self.depth = np.append(0, self.depth)
         for value_name in self.__list_of_array_values:
-            if (getattr(self, value_name) is not None) and (value_name is not "depth"):
+            data = getattr(self, value_name)
+            if (
+                (data is not None)
+                and (value_name is not "depth")
+                and not (all(v is None for v in data))
+            ):
                 value_to_add = np.append(
-                    np.average(getattr(self, value_name)[:length_of_average_points]),
-                    getattr(self, value_name),
+                    np.average(data[:length_of_average_points]),
+                    data,
                 )
                 setattr(self, value_name, value_to_add)
         return
@@ -153,14 +158,18 @@ class BroXmlCpt(AbstractCPT):
             )
             for value_name in self.__list_of_array_values:
                 # depth value and Nones should be skipped
-                if (getattr(self, value_name) is not None) and (
-                    value_name
-                    not in [
-                        "depth",
-                        "pore_pressure_u1",
-                        "pore_pressure_u2",
-                        "pore_pressure_u3",
-                    ]
+                if (
+                    (getattr(self, value_name) is not None)
+                    and not (all(v is None for v in getattr(self, value_name)))
+                    and (
+                        value_name
+                        not in [
+                            "depth",
+                            "pore_pressure_u1",
+                            "pore_pressure_u2",
+                            "pore_pressure_u3",
+                        ]
+                    )
                 ):
                     setattr(
                         self,
@@ -177,7 +186,9 @@ class BroXmlCpt(AbstractCPT):
             # as the first in the Pore Pressure array.
             for water_measurement_type in self.__water_measurement_types:
                 pore_pressure_type = getattr(self, water_measurement_type)
-                if pore_pressure_type is not None:
+                if pore_pressure_type is not None and not (
+                    all(v is None for v in pore_pressure_type)
+                ):
                     local_pore_pressure = np.linspace(
                         0,
                         pore_pressure_type[0],
@@ -202,20 +213,22 @@ class BroXmlCpt(AbstractCPT):
             self.__correct_missing_samples_top_CPT(length_of_average_points)
         return
 
-    def correct_for_negatives(self):
+    def pre_process_data(self):
         """
-        Negative values are tranformed into zero for properties tip, friction, friction_nbr.
-        """
-        neg_to_correct = ["tip", "friction", "friction_nbr"]
-        for value in neg_to_correct:
-            data = np.array(getattr(self, value))
-            if data is not None:
-                data[data <= 0] = 0.0
-                setattr(self, value, data)
-        return
+        Pre processes data which is read from bro xml files.
 
-    def parse_NAP_to_depth(self):
+        Units are converted to MPa.
+        #todo extend
+        :return:
         """
-        Property depth_to_reference is calculated by taken into account the local_reference_level.
-        """
-        self.depth_to_reference = self.local_reference_level - np.array(self.depth)
+        self.drop_nan_values()
+        self.drop_duplicate_depth_values()
+        self.perform_pre_drill_interpretation()
+
+        super().pre_process_data()
+
+        kpa_to_mpa = 1e-3
+
+        self.tip = np.array(self.tip) * kpa_to_mpa
+        self.friction = np.array(self.friction) * kpa_to_mpa
+        self.water = np.array(self.water) * kpa_to_mpa

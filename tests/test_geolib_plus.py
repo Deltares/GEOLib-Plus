@@ -1,8 +1,7 @@
 from geolib_plus import __version__
-from geolib_plus.bro_xml_cpt.bro_xml_cpt import *
-from geolib_plus.gef_cpt.gef_cpt import *
+from geolib_plus.bro_xml_cpt import *
+from geolib_plus.gef_cpt import *
 from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
-from geolib_plus.bro_xml_cpt.validate_bro import validate_bro_cpt
 from tests.utils import TestUtils
 
 # External
@@ -113,6 +112,68 @@ class TestGeolibPlusReading:
         ("CPT000000065880_IMBRO_A"),
         ("CPT000000003688_IMBRO_A"),
     ]
+
+    @pytest.mark.integrationtest
+    def test_pre_process_gef_data(self):
+        """
+        Tests pre process of gef data
+        """
+        test_file = TestUtils.get_local_test_data_dir(
+            "cpt/gef/unit_testing/unit_testing.gef"
+        )
+        assert test_file.is_file()
+
+        cpt = GefCpt()
+        cpt.read(test_file)
+
+        # check cpt before preprocess
+        assert cpt.depth.ndim == 0
+        assert cpt.depth_to_reference is None
+        assert cpt.water is None
+
+        expected_depth = cpt.penetration_length[0] + np.cumsum(
+            np.diff(cpt.penetration_length)
+            * np.cos(np.radians(cpt.inclination_resultant[:-1]))
+        )
+
+        # process data
+        cpt.pre_process_data()
+        np.testing.assert_array_almost_equal(
+            cpt.depth_to_reference, cpt.local_reference_level - cpt.depth
+        )
+        np.testing.assert_array_almost_equal(cpt.depth[1:], expected_depth)
+        np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
+
+    def test_pre_process_bro_data(self):
+        """
+        Tests pre process of gef data
+        """
+        test_file = TestUtils.get_local_test_data_dir(
+            "cpt/bro_xml/CPT000000064413_IMBRO_A.xml"
+        )
+        assert test_file.is_file()
+
+        cpt = BroXmlCpt()
+        cpt.read(test_file)
+        cpt.pore_pressure_u2 = np.array(cpt.depth * 10)
+
+        # check cpt before preprocess
+        assert cpt.depth.ndim == 1
+        assert cpt.depth_to_reference is None
+        assert cpt.water is None
+
+        expected_depth = cpt.penetration_length[0] + np.cumsum(
+            np.diff(cpt.penetration_length)
+            * np.cos(np.radians(cpt.inclination_resultant[:-1]))
+        )
+
+        # process data
+        cpt.pre_process_data()
+        np.testing.assert_array_almost_equal(
+            cpt.depth_to_reference, cpt.local_reference_level - cpt.depth
+        )
+        np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[9:108])
+        np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2 * 1e-3)
 
     @pytest.mark.systemtest
     @pytest.mark.parametrize("name", testdata, ids=testdata)
