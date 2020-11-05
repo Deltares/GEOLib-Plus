@@ -41,13 +41,10 @@ class TestBroXmlCpt:
         cpt = bro_xml_cpt.BroXmlCpt()
         # run test
         cpt.read(test_file)
-        cpt_nans = cpt.drop_nan_values(cpt=cpt)
+        cpt.drop_nan_values()
         # check expectations
-        assert cpt_nans
-        assert cpt.name == cpt_nans.name
-        assert cpt.quality_class == cpt_nans.quality_class
-        assert cpt.cpt_type == cpt_nans.cpt_type
-        assert cpt.local_reference_level == cpt_nans.local_reference_level
+        assert cpt
+        assert cpt.name == "CPT000000003688"
         assert len(cpt.depth) == len(cpt.friction_nbr)
         assert len(cpt.friction_nbr) == 1215
 
@@ -69,7 +66,7 @@ class TestBroXmlCpt:
         # save expectation
         previous_length = len(cpt_read.penetration_length)
         # run test
-        cpt_read = cpt_read.drop_duplicate_depth_values(cpt=cpt_read)
+        cpt_read.drop_duplicate_depth_values()
         # check expectations
         assert len(cpt_read.penetration_length) == previous_length - 3
         assert len(cpt_read.friction_nbr) == len(cpt_read.penetration_length)

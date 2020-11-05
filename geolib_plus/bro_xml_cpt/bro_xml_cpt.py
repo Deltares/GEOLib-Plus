@@ -8,6 +8,11 @@ from geolib_plus.cpt_base_model import AbstractCPT, CptReader
 
 
 class BroXmlCpt(AbstractCPT):
+    """
+    Class that contains gets the reader and contains pre-processing functions.
+    That can be used to modify the raw data.
+    """
+
     @classmethod
     def get_cpt_reader(cls) -> CptReader:
         return XMLBroCPTReader()
@@ -52,27 +57,36 @@ class BroXmlCpt(AbstractCPT):
             "IC",
         ]
 
-    def drop_nan_values(self, cpt: AbstractCPT) -> AbstractCPT:
+    def drop_nan_values(self):
+        """
+        Updates fields by removing depths that contain nan values.
+        This means that all the properties in __list_of_array_values will be updated.
+        """
         # transform to dataframe
         update_dict = {}
         for value in self.__list_of_array_values:
             # ignore None values
-            if dict(cpt)[value] is not None:
-                update_dict[value] = dict(cpt)[value]
+            if getattr(self, value) is not None:
+                update_dict[value] = getattr(self, value)
         # perform action
         update_dict = pd.DataFrame(update_dict).dropna().to_dict("list")
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(cpt, value, update_dict.get(value))
-        return cpt
+            setattr(self, value, update_dict.get(value))
+        return
 
-    def drop_duplicate_depth_values(self, cpt: AbstractCPT) -> AbstractCPT:
+    def drop_duplicate_depth_values(self):
+        """
+        Updates fields by removing penetration_length that are duplicate.
+        This means that all the properties in __list_of_array_values will be updated.
+        """
+        # TODO maybe here it makes more sense for the user to define what should not be duplicate
         # transform to dataframe
         update_dict = {}
         for value in self.__list_of_array_values:
             # ignore None values
-            if dict(cpt)[value] is not None:
-                update_dict[value] = dict(cpt)[value]
+            if getattr(self, value) is not None:
+                update_dict[value] = getattr(self, value)
         # perform action
         update_dict = (
             pd.DataFrame(update_dict)
@@ -81,13 +95,17 @@ class BroXmlCpt(AbstractCPT):
         )
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(cpt, value, update_dict.get(value))
-        return cpt
+            setattr(self, value, update_dict.get(value))
+        return
 
     @staticmethod
     def __update_value_with_pre_drill(
         local_depth: Iterable, values: Iterable, length_of_average_points: int
     ) -> Iterable:
+        """
+        Appends average value defined from length_of_average_points from missing
+        inputs defined from the size of the local depth input.
+        """
         # calculate the average along the depth for this value
         average = np.average(values[:length_of_average_points])
         # the pre-drill part consists of repeated values of this kind
@@ -96,6 +114,11 @@ class BroXmlCpt(AbstractCPT):
         return np.append(local_values, values)
 
     def __correct_missing_samples_top_CPT(self, length_of_average_points: int):
+        """
+        All values except from the value of depth should be updated. This function
+        inserts in the beginning of the arrays, the average value of the property
+        for length length_of_average_points.
+        """
         # add zero
         self.depth = np.append(0, self.depth)
         for value_name in self.__list_of_array_values:
@@ -180,6 +203,9 @@ class BroXmlCpt(AbstractCPT):
         return
 
     def correct_for_negatives(self):
+        """
+        Negative values are tranformed into zero for properties tip, friction, friction_nbr.
+        """
         neg_to_correct = ["tip", "friction", "friction_nbr"]
         for value in neg_to_correct:
             data = np.array(getattr(self, value))
@@ -189,4 +215,7 @@ class BroXmlCpt(AbstractCPT):
         return
 
     def parse_NAP_to_depth(self):
+        """
+        Property depth_to_reference is calculated by taken into account the local_reference_level.
+        """
         self.depth_to_reference = self.local_reference_level - np.array(self.depth)
