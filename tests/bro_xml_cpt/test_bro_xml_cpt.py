@@ -14,9 +14,9 @@ class TestBroXmlCpt:
     def test_read(self):
         # simple test for reading xml file from bro
         # define input path to xml
-        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-        filename = "CPT000000003688_IMBRO_A.xml"
-        test_file = test_folder / filename
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
+        )
         # initialise model
         cpt = bro_xml_cpt.BroXmlCpt()
         # run test
@@ -34,9 +34,9 @@ class TestBroXmlCpt:
     def test_read_drop_nans(self):
         # simple test for reading xml file from bro
         # define input path to xml
-        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-        filename = "CPT000000003688_IMBRO_A.xml"
-        test_file = test_folder / filename
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
+        )
         # initialise model
         cpt = bro_xml_cpt.BroXmlCpt()
         # run test
@@ -52,9 +52,9 @@ class TestBroXmlCpt:
     def test_drop_duplicate_depth_values(self):
         # simple test for reading xml file from bro
         # define input path to xml
-        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-        filename = "CPT000000003688_IMBRO_A.xml"
-        test_file = test_folder / filename
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
+        )
         # initialise model
         cpt_read = bro_xml_cpt.BroXmlCpt()
         # run test
