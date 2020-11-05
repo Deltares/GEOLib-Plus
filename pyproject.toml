@@ -16,6 +16,7 @@ lxml = "^4.5.2"
 numpy = "^1.19.2"
 matplotlib = "^3.3.2"
 Shapely = "^1.7.1"
+pyshp = "^2.1.2"
 
 [tool.poetry.dev-dependencies]
 teamcity-messages = "^1.28"
