@@ -3,6 +3,7 @@ from geolib_plus.bro_xml_cpt.bro_xml_cpt import *
 from geolib_plus.gef_cpt.gef_cpt import *
 from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
 from geolib_plus.bro_xml_cpt.validate_bro import validate_bro_cpt
+from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
 from tests.utils import TestUtils
 
 # External
@@ -189,3 +190,14 @@ class TestGeolibPlusValidate:
         )
         with pytest.raises(Exception):
             validate_gef_cpt(gef_file)
+
+
+    def test_robertson_interpretation_test(self):
+        gef_file = TestUtils.get_local_test_data_dir(
+            "cpt/gef/KW19-3.gef"
+        )
+        cpt = GefCpt()
+        cpt.read(gef_file)
+        cpt.pre_process_data()
+        cpt.interpret_cpt(RobertsonCptInterpretation)
+        print(cpt.lithology)
