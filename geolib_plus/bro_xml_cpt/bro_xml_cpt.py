@@ -23,6 +23,8 @@ class BroXmlCpt(AbstractCPT):
     @property
     def __list_of_array_values(self):
         return [
+            "tip",
+            "friction_nbr",
             "penetration_length",
             "depth",
             "time",
@@ -84,10 +86,10 @@ class BroXmlCpt(AbstractCPT):
 
     @staticmethod
     def __update_value_with_pre_drill(
-        local_depth: Iterable, values: Iterable
+        local_depth: Iterable, values: Iterable, length_of_average_points: int
     ) -> Iterable:
         # calculate the average along the depth for this value
-        average = np.average(values)
+        average = np.average(values[:length_of_average_points])
         # the pre-drill part consists of repeated values of this kind
         local_values = np.repeat(average, len(local_depth))
         # new values are appended to the result
@@ -97,11 +99,12 @@ class BroXmlCpt(AbstractCPT):
         # add zero
         self.depth = np.append(0, self.depth)
         for value_name in self.__list_of_array_values:
-            value_to_add = np.append(
-                np.average(getattr(self, value_name)[:length_of_average_points]),
-                getattr(self, value_name),
-            )
-            setattr(self, value_name, value_to_add)
+            if (getattr(self, value_name) is not None) and (value_name is not "depth"):
+                value_to_add = np.append(
+                    np.average(getattr(self, value_name)[:length_of_average_points]),
+                    getattr(self, value_name),
+                )
+                setattr(self, value_name, value_to_add)
         return
 
     def perform_pre_drill_interpretation(self, length_of_average_points: int = 3):
@@ -126,13 +129,25 @@ class BroXmlCpt(AbstractCPT):
                 starting_depth, float(self.predrilled_z), discretization
             )
             for value_name in self.__list_of_array_values:
-                setattr(
-                    self,
-                    value_name,
-                    self.__update_value_with_pre_drill(
-                        local_depth=local_depth, values=getattr(self, value_name)
-                    ),
-                )
+                # depth value and Nones should be skipped
+                if (getattr(self, value_name) is not None) and (
+                    value_name
+                    not in [
+                        "depth",
+                        "pore_pressure_u1",
+                        "pore_pressure_u2",
+                        "pore_pressure_u3",
+                    ]
+                ):
+                    setattr(
+                        self,
+                        value_name,
+                        self.__update_value_with_pre_drill(
+                            local_depth=local_depth,
+                            values=getattr(self, value_name),
+                            length_of_average_points=length_of_average_points,
+                        ),
+                    )
             # if there is pore water pressure
             # Here the endpoint is False so that for the final of
             # local_pore_pressure I don't end up with the same value
@@ -167,11 +182,11 @@ class BroXmlCpt(AbstractCPT):
     def correct_for_negatives(self):
         neg_to_correct = ["tip", "friction", "friction_nbr"]
         for value in neg_to_correct:
-            data = getattr(self, name=value)
+            data = np.array(getattr(self, value))
             if data is not None:
                 data[data <= 0] = 0.0
-                setattr(self, name=value, value=data)
+                setattr(self, value, data)
         return
 
     def parse_NAP_to_depth(self):
-        self.depth_to_reference = self.local_reference_level - self.depth
+        self.depth_to_reference = self.local_reference_level - np.array(self.depth)
