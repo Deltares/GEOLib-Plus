@@ -1,7 +1,7 @@
 from geolib_plus import __version__
-from geolib_plus.BRO_XML_CPT.bro_xml_cpt import *
-from geolib_plus.GEF_CPT.gef_cpt import *
-from geolib_plus.GEF_CPT.validate_gef import validate_gef_cpt
+from geolib_plus.bro_xml_cpt.bro_xml_cpt import *
+from geolib_plus.gef_cpt.gef_cpt import *
+from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
 from tests.utils import TestUtils
 
 # External
