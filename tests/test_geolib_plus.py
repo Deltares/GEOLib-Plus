@@ -14,7 +14,6 @@ import pytest
 def test_version():
     assert __version__ == "0.1.0"
 
-
 class TestGeolibPlusReading:
     # System Test for geolib_plus_read_BRO
 

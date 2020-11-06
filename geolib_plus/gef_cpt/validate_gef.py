@@ -1,10 +1,11 @@
 from ctypes import *
-from os.path import splitext, join
+from os.path import splitext, join, dirname
 from os import remove
 import warnings
 from multiprocessing import Pool
 from pathlib import Path
 import platform
+
 
 class GefLib:
 
@@ -14,19 +15,19 @@ class GefLib:
     """
 
     def __init__(self):
-
+        resources_dir = join(dirname(__file__), 'resources')
         if platform.uname()[0] == "Windows":
             # Load DLL into memory.
-            source_lib = Path("./geolib_plus/resources/geflib.dll")
+            source_lib = Path(join(resources_dir, "geflib.dll"))
         elif platform.uname()[0] == "Linux":
             # Load SO into memory
-            source_lib = Path("./geolib_plus/resources/libgeflib.so.1")
+            source_lib = Path(join(resources_dir, "libgeflib.so.1"))
         else:
             # name = "osx.dylib" - missing
             raise ValueError(f"Platform {platform.uname()[0]} not found")
 
         # Load library into memory.
-        self.__lib_handle = cdll.LoadLibrary(source_lib)
+        self.__lib_handle = cdll.LoadLibrary(str(source_lib))
 
         # Initialize DLL into memory.
         func = self.__lib_handle["init_gef"]
