@@ -1,5 +1,6 @@
 #GEFID= 1, 1, 0
-#COLUMN= 7
+#COLUMN= 8
+#COLUMNINFO= 1, m (meter), sondeertrajectlengte, 1
 #COLUMNINFO= 2, MPa (megaPascal), conusweerstand, 2
 #COLUMNINFO= 3, m (meter), diepte, 11
 #COLUMNINFO= 4, s (seconde), verlopen tijd, 12

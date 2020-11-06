@@ -1,5 +1,4 @@
 from ctypes import *
-from os.path import splitext, join, dirname
 from os import remove
 import warnings
 from multiprocessing import Pool
@@ -15,13 +14,13 @@ class GefLib:
     """
 
     def __init__(self):
-        resources_dir = join(dirname(__file__), 'resources')
+        resources_dir = Path(__file__).parent/'resources'
         if platform.uname()[0] == "Windows":
             # Load DLL into memory.
-            source_lib = Path(join(resources_dir, "geflib.dll"))
+            source_lib = resources_dir.joinpath("geflib.dll")
         elif platform.uname()[0] == "Linux":
             # Load SO into memory
-            source_lib = Path(join(resources_dir, "libgeflib.so.1"))
+            source_lib = resources_dir.joinpath("libgeflib.so.1")
         else:
             # name = "osx.dylib" - missing
             raise ValueError(f"Platform {platform.uname()[0]} not found")
@@ -111,7 +110,7 @@ class GefLib:
         return func(str(file_path).encode("utf-8"))
 
     @staticmethod
-    def _get_code(code: str) -> str:
+    def get_code(code: str) -> str:
         """
         Converts Code to gef file code to procedure code.
 
@@ -155,21 +154,21 @@ class GefLib:
         # Try for REPORT first( for CPTs, this can be in reportcode or in procedurecode)
         flag = self.__get_procedurecode_flag()
         if flag == 1:
-            return self._get_code(self.__get_procedurecode_code())
+            return self.get_code(self.__get_procedurecode_code())
 
         flag = self.__get_reportcode_flag()
         if flag == 1:
-            return self._get_code(self.__get_reportcode_code())
+            return self.get_code(self.__get_reportcode_code())
 
         # when GEF is not recognized as a kind of report, try for Analysis
         flag = self.__get_analysiscode_flag()
         if flag == 1:
-            return self._get_code(self.__get_analysiscode_code())
+            return self.get_code(self.__get_analysiscode_code())
 
         # when GEF is still not recognized, try for Measurement
         flag = self.__get_measurementcode_flag()
         if flag == 1:
-            return self._get_code(self.__get_measurementcode_code())
+            return self.get_code(self.__get_measurementcode_code())
 
         # when GEF is still not recognized, try for Database BORE Measurement file. To be recognized by GEF-BORE as code
         flag = self.__get_procedurecode_flag()
@@ -195,17 +194,20 @@ class GefLib:
 
         self.__test_gef("Header")
 
+        l_critical_errors = [1, 2, 11, 12]
+        l_non_critical_error_levels = [5, 6, 15, 16]
+
         l_log = False
         l_error_level = self.__get_error_level_all()
-        l_error = l_error_level in [1, 2, 11, 12]
+        l_error = l_error_level in l_critical_errors
 
         if not l_error:
             # Only continue check when nothing serious so far.
             self.__test_gef("Data")
             l_error_level = self.__get_error_level_all()
-            l_error = l_error_level in [1, 2, 11, 12]
+            l_error = l_error_level in l_critical_errors
 
-        if (l_error_level > -1) and (l_error_level not in [5, 6, 15, 16]):
+        if (l_error_level > -1) and (l_error_level not in l_non_critical_error_levels):
             l_log = True
 
         return l_error, l_log, l_error_level
@@ -272,14 +274,14 @@ def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
 
     result = lib_handle._read_gef(filename)
     if result != 1:
-        raise FileNotFoundError(f"{filename} not found")
+        raise ValueError(f"{filename} unable to read file, critical error, no feedback provided. "
+                         f"Please check consistency of file structure")
 
     l_err_filename = None
 
     if logging:
         # file name for err \ delete existing if necessary
-        pre, ext = splitext(str(filename))
-        l_err_filename = Path(join(pre + ".err"))
+        l_err_filename = filename.with_suffix('.err')
         try:
             # remove file if present
             remove(l_err_filename)

@@ -217,7 +217,7 @@ class TestGeolibPlusValidate:
             pytest.fail("GEF file without error raised Error")
 
     @pytest.mark.systemtest
-    # Test validation of gef file structure ..... with file with error
+    # Test validation of gef file structure ..... with file with error (need to add more errors)
     def test_validate_gef_error(self):
         # This file raises a warning
         gef_file = TestUtils.get_local_test_data_dir(
