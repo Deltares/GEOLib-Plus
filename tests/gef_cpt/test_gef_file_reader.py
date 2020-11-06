@@ -609,16 +609,16 @@ class TestReadInformationForGefData:
         # assert
         assert (
             gef_reader.information_dict["cpt_type"].values_from_gef
-            == ", CP15-CF75PB1SN2/1701-1524, conus type/serienummer"
+            == "CP15-CF75PB1SN2/1701-1524, conus type/serienummer"
         )
         assert (
             gef_reader.information_dict["cpt_standard"].values_from_gef
-            == ", ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
+            == "ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
         )
-        assert gef_reader.information_dict["vertical_datum"].values_from_gef == ", NAP"
+        assert gef_reader.information_dict["vertical_datum"].values_from_gef == "NAP"
         assert (
             gef_reader.information_dict["local_reference"].values_from_gef
-            == ", maaiveld, vast horizontaal vlak"
+            == "maaiveld, vast horizontaal vlak"
         )
 
     @pytest.mark.unittest
