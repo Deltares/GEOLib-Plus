@@ -218,6 +218,10 @@ def save_figures(figures, path, cpt):
     """
 
     import matplotlib.backends.backend_pdf
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
     pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(path, cpt.name) + ".pdf")
 
     for fig in figures:
