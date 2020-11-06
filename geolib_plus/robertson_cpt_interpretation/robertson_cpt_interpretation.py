@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Iterable, List
 from enum import IntEnum
 
-from geolib_plus.cpt_base_model import InterpretationMethod, AbstractCPT
+from geolib_plus.cpt_base_model import AbstractInterpretationMethod, AbstractCPT
 from geolib_plus.cpt_utils import (
     resource_path,
     NetCDF,
@@ -37,7 +37,7 @@ class ShearWaveVelocityMethod(IntEnum):
     AHMED = 5
 
 
-class RobertsonCptInterpretation(InterpretationMethod):
+class RobertsonCptInterpretation(AbstractInterpretationMethod):
     r"""
     Robertson soil classification.
 
@@ -505,7 +505,7 @@ class RobertsonCptInterpretation(InterpretationMethod):
                     * self.data.effective_stress
                     / self.data.Pa
                     * self.data.g
-                    / self.data.gamma
+                    / self.gamma
                 )
                 ** 0.5
             )
