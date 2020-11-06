@@ -2,20 +2,23 @@ import pytest
 from pathlib import Path
 from geolib_plus import plot_cpt
 from tests.utils import TestUtils
-from geolib_plus.GEF_CPT import GefCpt
-from geolib_plus.BRO_XML_CPT import BroXmlCpt
+from geolib_plus.gef_cpt import GefCpt
+from geolib_plus.bro_xml_cpt import BroXmlCpt
 from geolib_plus.plot_settings import PlotSettings
 import os
 
+
 class TestPlotCpt:
     @pytest.mark.integrationtest
-    def test_generate_fig_with_default_settings_from_xml(self, bro_xml_cpt, plot_settings):
+    def test_generate_fig_with_default_settings_from_xml(
+        self, bro_xml_cpt, plot_settings
+    ):
         plot_settings.assign_default_settings()
 
         output_path = Path(TestUtils._name_output)
-        plot_cpt.plot_cpt_norm(bro_xml_cpt,output_path, plot_settings.general_settings)
+        plot_cpt.plot_cpt_norm(bro_xml_cpt, output_path, plot_settings.general_settings)
 
-        output_file_name = bro_xml_cpt.name + '.pdf'
+        output_file_name = bro_xml_cpt.name + ".pdf"
         assert Path(output_path / output_file_name).is_file()
         (output_path / output_file_name).unlink()
 
@@ -25,12 +28,11 @@ class TestPlotCpt:
         plot_settings.assign_default_settings()
 
         output_path = Path(TestUtils._name_output)
-        plot_cpt.plot_cpt_norm(gef_cpt,output_path, plot_settings.general_settings)
+        plot_cpt.plot_cpt_norm(gef_cpt, output_path, plot_settings.general_settings)
 
-        output_file_name = gef_cpt.name + '.pdf'
+        output_file_name = gef_cpt.name + ".pdf"
         assert Path(output_path / output_file_name).is_file()
-        (output_path/output_file_name).unlink()
-
+        (output_path / output_file_name).unlink()
 
     @pytest.fixture
     def gef_cpt(self):

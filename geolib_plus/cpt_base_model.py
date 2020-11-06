@@ -88,6 +88,8 @@ class AbstractCPT(BaseModel):
     magnetic_strength_tot: Optional[Iterable]
     magnetic_inclination: Optional[Iterable]
     magnetic_declination: Optional[Iterable]
+    temperature: Optional[Iterable]
+    predrilled_z: Optional[float]
 
     cpt_standard: Optional[str]
     quality_class: Optional[str]
@@ -130,7 +132,6 @@ class AbstractCPT(BaseModel):
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
 
-
     def __calculate_corrected_depth(self) -> np.ndarray:
         """
         Correct the penetration length with the inclination angle
@@ -164,7 +165,10 @@ class AbstractCPT(BaseModel):
         if self.depth.size > 0 and self.depth.ndim > 0:
             # no calculations needed
             return
-        if self.inclination_resultant.size != 0 and self.inclination_resultant.ndim != 0:
+        if (
+            self.inclination_resultant.size != 0
+            and self.inclination_resultant.ndim != 0
+        ):
             self.depth = self.__calculate_corrected_depth()
         else:
             self.depth = deepcopy(self.penetration_length)
@@ -177,19 +181,23 @@ class AbstractCPT(BaseModel):
         """
         if data is not None:
             if data.size != 0 and not data.ndim:
-                data[data<0] = 0
+                data[data < 0] = 0
             return data
 
     def __get_water_data(self):
 
-        pore_pressure_data = [self.pore_pressure_u1, self.pore_pressure_u2, self.pore_pressure_u3]
+        pore_pressure_data = [
+            self.pore_pressure_u1,
+            self.pore_pressure_u2,
+            self.pore_pressure_u3,
+        ]
 
         for data in pore_pressure_data:
-            if data is not None:
+            if data is not None and not (all(value is None for value in data)):
                 if data.size and data.ndim and not np.all(data == 0):
                     self.water = deepcopy(data)
                     break
-        if self.water is None:
+        if self.water is None or all(value is None for value in data):
             self.water = np.zeros(len(self.penetration_length))
 
     def pre_process_data(self):
@@ -212,8 +220,7 @@ class AbstractCPT(BaseModel):
 
         self.__get_water_data()
 
-        #todo extend pre process data
-
+        # todo extend pre process data
 
     def plot(self, directory: Path):
         # plot cpt data
