@@ -85,24 +85,31 @@ class TestGeolibPlusReading:
         )
         assert test_file.is_file()
 
-        cpt = GefCpt().read(test_file)
+        cpt = GefCpt()
+        cpt.read(test_file)
 
         test_coord = [244319.00, 587520.00]
-        test_depth = np.linspace(1, 20, 20)
-        test_nap = 0.13 - test_depth
-        test_tip = np.full(20, 1000)
-        test_friction = np.full(20, 2000)
-        test_friction_nbr = np.full(20, 5)
-        test_water = np.full(20, 3000)
+        test_penetration = np.linspace(1, 20, 20)
+        test_tip = np.full(20, 1.)
+        test_friction = np.full(20, 2.)
+        test_friction_nbr = np.full(20, 5.)
+        test_inclination = np.full(20, 4.)
+        test_pore_pressure_u1 = np.full(20, 0.)
+        test_pore_pressure_u2 = np.full(20, 3.)
+        test_pore_pressure_u3 = np.full(20, 0.)
 
         np.testing.assert_array_equal("DKP302", cpt.name)
         np.testing.assert_array_equal(test_coord, cpt.coordinates)
-        np.testing.assert_array_equal(test_depth, cpt.depth)
-        np.testing.assert_array_equal(test_nap, cpt.depth_to_reference)
+        np.testing.assert_array_equal(test_penetration, cpt.penetration_length)
         np.testing.assert_array_equal(test_tip, cpt.tip)
         np.testing.assert_array_equal(test_friction, cpt.friction)
         np.testing.assert_array_equal(test_friction_nbr, cpt.friction_nbr)
-        np.testing.assert_array_equal(test_water, cpt.water)
+        np.testing.assert_array_equal(test_inclination, cpt.inclination_resultant)
+        np.testing.assert_almost_equal(0.13, cpt.local_reference_level)
+        np.testing.assert_array_equal(test_pore_pressure_u1, cpt.pore_pressure_u1)
+        np.testing.assert_array_equal(test_pore_pressure_u2, cpt.pore_pressure_u2)
+        np.testing.assert_array_equal(test_pore_pressure_u3, cpt.pore_pressure_u3)
+
 
     # System Test for geolib_plus_read_GEF & BRO based comparing result for same file
     testdata = [
