@@ -11,6 +11,7 @@ from .plot_settings import PlotSettings
 
 class InterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
+
     @abstractmethod
     def interpret(self, data):
         raise NotImplementedError(
@@ -172,7 +173,10 @@ class AbstractCPT(BaseModel):
         """
 
         if self.depth.size == 0 or self.depth.ndim == 0:
-            if self.inclination_resultant.size != 0 and self.inclination_resultant.ndim != 0:
+            if (
+                self.inclination_resultant.size != 0
+                and self.inclination_resultant.ndim != 0
+            ):
                 self.depth = self.__calculate_corrected_depth()
             else:
                 self.depth = deepcopy(self.penetration_length)
@@ -185,12 +189,16 @@ class AbstractCPT(BaseModel):
         """
         if data is not None:
             if data.size != 0 and not data.ndim:
-                data[data<0] = 0
+                data[data < 0] = 0
             return data
 
     def __get_water_data(self):
 
-        pore_pressure_data = [self.pore_pressure_u1, self.pore_pressure_u2, self.pore_pressure_u3]
+        pore_pressure_data = [
+            self.pore_pressure_u1,
+            self.pore_pressure_u2,
+            self.pore_pressure_u3,
+        ]
 
         for data in pore_pressure_data:
             if data is not None:

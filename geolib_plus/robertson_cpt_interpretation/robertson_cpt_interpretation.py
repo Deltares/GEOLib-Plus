@@ -4,22 +4,50 @@ from shapely.geometry import Polygon
 from shapely.geometry import Point
 import numpy as np
 import more_itertools as mit
+from pathlib import Path
+from typing import Iterable, List
+from enum import IntEnum
 
 from geolib_plus.cpt_base_model import InterpretationMethod, AbstractCPT
-from geolib_plus.cpt_utils import resource_path, NetCDF, n_iter, NEN_classification, ceil_value, merge_thickness
+from geolib_plus.cpt_utils import (
+    resource_path,
+    NetCDF,
+    n_iter,
+    NEN_classification,
+    ceil_value,
+    merge_thickness,
+)
+
+
+class UnitWeightMethod(IntEnum):
+    ROBERTSON = 1
+    LENGKEEK = 2
+
+
+class OCRMethod(IntEnum):
+    ROBERTSON = 1
+    MAYNE = 2
+
+
+class ShearWaveVelocityMethod(IntEnum):
+    ROBERTSON = 1
+    MAYNE = 2
+    ANDRUS = 3
+    ZANG = 4
+    AHMED = 5
 
 
 class RobertsonCptInterpretation(InterpretationMethod):
     r"""
-        Robertson soil classification.
+    Robertson soil classification.
 
-        Classification of soils according to Robertson chart.
+    Classification of soils according to Robertson chart.
 
-        .. _element:
-        .. figure:: ./_static/robertson.png
-            :width: 350px
-            :align: center
-            :figclass: align-center
+    .. _element:
+    .. figure:: ./_static/robertson.png
+        :width: 350px
+        :align: center
+        :figclass: align-center
     """
 
     def interpret(self, data: AbstractCPT):
@@ -87,8 +115,12 @@ class RobertsonCptInterpretation(InterpretationMethod):
         # merge the layers thickness
         self.merge_thickness(minimum_layer_thickness=min_lay_thickness)
 
-    def soil_types(self, path_shapefile = r"./resources/", model_name='Robertson'):
-        r"""
+    def soil_types(
+        self,
+        path_shapefile: str = r"./resources",
+        model_name: str = "Robertson",
+    ):
+        """
         Function that read shapes from shape file and passes them as Polygons.
 
         :param path_shapefile: Path to the shapefile
@@ -97,7 +129,11 @@ class RobertsonCptInterpretation(InterpretationMethod):
         """
 
         # define the path for the shape file
-        path_shapefile = resource_path(os.path.join(os.path.join(os.path.dirname(__file__), path_shapefile), model_name))
+        path_shapefile = resource_path(
+            os.path.join(
+                os.path.join(os.path.dirname(__file__), path_shapefile), model_name
+            )
+        )
 
         # read shapefile
         sf = shapefile.Reader(path_shapefile)
@@ -106,8 +142,8 @@ class RobertsonCptInterpretation(InterpretationMethod):
             list_of_polygons.append(Polygon(polygon.points))
         self.polygons = list_of_polygons
 
-    def lithology(self, Qtn, Fr):
-        r"""
+    def lithology(self, Qtn: Iterable, Fr: Iterable):
+        """
         Identifies lithology of CPT points, following Robertson and Cabal :cite:`robertson_cabal_2014`.
 
         Parameters
@@ -115,7 +151,7 @@ class RobertsonCptInterpretation(InterpretationMethod):
         :return: lithology array, Qtn, Fr
         """
 
-        litho = [""] * len(Qtn)
+        lithology_array = [""] * len(Qtn)
         coords = np.zeros((len(Qtn), 2))
 
         # determine into which soil type the point is
@@ -132,13 +168,13 @@ class RobertsonCptInterpretation(InterpretationMethod):
                     aux.append(polygon.touches(pnt))
 
             idx = np.where(np.array(aux))[0][0]
-            litho[i] = str(idx + 1)
+            lithology_array[i] = str(idx + 1)
             coords[i] = [Fr[i], Qtn[i]]
 
-        return litho, np.array(coords)
+        return lithology_array, np.array(coords)
 
     def lithology_calc(self):
-        r"""
+        """
         Lithology calculation.
 
         :param soil_classification: shape file with soil classification
@@ -146,13 +182,17 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
         # call object
         self.soil_types()
-        litho, points = self.lithology(np.array(self.data.Qtn), np.array(self.data.Fr))
+        lithology, points = self.lithology(
+            np.array(self.data.Qtn), np.array(self.data.Fr)
+        )
 
         # assign to variables
-        self.data.lithology = litho
+        self.data.lithology = lithology
         self.data.litho_points = points
 
-    def pwp_level_calc(self, path_pwp="./resources", name='peilgebieden_jp_250m.nc'):
+    def pwp_level_calc(
+        self, path_pwp: str = "./resources", name: str = "peilgebieden_jp_250m.nc"
+    ):
         """
         Computes the estimated pwp level for the cpt coordinate
 
@@ -164,15 +204,22 @@ class RobertsonCptInterpretation(InterpretationMethod):
         """
 
         # define the path for the shape file
-        path_pwp = resource_path(os.path.join(os.path.join(os.path.dirname(__file__), path_pwp), name))
+        path_pwp = resource_path(
+            os.path.join(os.path.join(os.path.dirname(__file__), path_pwp), name)
+        )
 
         pwp = NetCDF()
         pwp.read_cdffile(path_pwp)
         pwp.query(self.data.coordinates[0], self.data.coordinates[1])
         self.data.pwp = pwp.NAP_water_level
 
-    def gamma_calc(self, method="Robertson", gamma_min=10.5, gamma_max=22):
-        r"""
+    def gamma_calc(
+        self,
+        method: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
+        gamma_min: float = 10.5,
+        gamma_max: float = 22,
+    ):
+        """
         Computes unit weight.
 
         Computes the unit weight following Robertson and Cabal :cite:`robertson_cabal_2014`.
@@ -198,11 +245,15 @@ class RobertsonCptInterpretation(InterpretationMethod):
         """
 
         # ignore divisions warnings
-        np.seterr(divide="ignore", invalid='ignore', over='print')
+        np.seterr(divide="ignore", invalid="ignore", over="print")
 
         # calculate unit weight according to Robertson & Cabal 2015
-        if method == "Robertson":
-            aux = 0.27 * np.log10(self.data.friction_nbr) + 0.36 * np.log10(np.array(self.data.qt) / self.data.Pa) + 1.236
+        if method == UnitWeightMethod.ROBERTSON:
+            aux = (
+                0.27 * np.log10(self.data.friction_nbr)
+                + 0.36 * np.log10(np.array(self.data.qt) / self.data.Pa)
+                + 1.236
+            )
             # set lower limit
             aux = ceil_value(aux, gamma_min / self.data.g)
             # set higher limit
@@ -210,10 +261,12 @@ class RobertsonCptInterpretation(InterpretationMethod):
             # assign gamma
             self.gamma = aux * self.data.g
 
-        elif method == "Lengkeek":
-            aux = 19. - 4.12 * np.log10(5000. / np.array(self.data.qt)) / np.log10(30. / self.data.friction_nbr)
+        elif method == UnitWeightMethod.LENGKEEK:
+            aux = 19.0 - 4.12 * np.log10(5000.0 / np.array(self.data.qt)) / np.log10(
+                30.0 / self.data.friction_nbr
+            )
             # if nan: aux is 19
-            aux[np.isnan(aux)] = 19.
+            aux[np.isnan(aux)] = 19.0
             # set lower limit
             aux = ceil_value(aux, gamma_min)
             # set higher limit
@@ -245,7 +298,7 @@ class RobertsonCptInterpretation(InterpretationMethod):
         self.data.fr_angle_NEN = NEN_result["fr_angle_NEN"]
 
     def rho_calc(self):
-        r"""
+        """
         Computes density of soil.
 
         The formula for density is:
@@ -255,10 +308,10 @@ class RobertsonCptInterpretation(InterpretationMethod):
             \rho = \frac{\gamma}{g}
         """
 
-        self.data.rho = self.gamma * 1000. / self.data.g
+        self.data.rho = self.gamma * 1000.0 / self.data.g
 
     def stress_calc(self):
-        r"""
+        """
         Computes total and effective stress
         """
 
@@ -266,10 +319,14 @@ class RobertsonCptInterpretation(InterpretationMethod):
         z = np.diff(np.abs((self.data.depth - self.data.depth[0])))
         z = np.append(z, z[-1])
         # total stress
-        self.data.total_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(self.gamma[:10])
+        self.data.total_stress = np.cumsum(self.gamma * z) + self.data.depth[
+            0
+        ] * np.mean(self.gamma[:10])
         # compute pwp
         # determine location of phreatic line: it cannot be above the CPT depth
-        z_aux = np.min([self.data.pwp, self.data.depth_to_reference[0] + self.data.depth[0]])
+        z_aux = np.min(
+            [self.data.pwp, self.data.depth_to_reference[0] + self.data.depth[0]]
+        )
         pwp = (z_aux - self.data.depth_to_reference) * self.data.g
         # no suction is allowed
         pwp[pwp <= 0] = 0
@@ -278,8 +335,8 @@ class RobertsonCptInterpretation(InterpretationMethod):
         # if effective stress is negative -> effective stress = 0
         self.data.effective_stress[self.data.effective_stress <= 0] = 0
 
-    def norm_calc(self, n_method=False):
-        r"""
+    def norm_calc(self, n_method: bool = False):
+        """
         normalisation of qc and friction into Qtn and Fr, following Robertson and Cabal :cite:`robertson_cabal_2014`.
 
         .. math::
@@ -302,20 +359,26 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
         # switch for the n calculation. default is iterative process
         if not n_method:
-            tol = 1.e-12
+            tolerance = 1.0e-12
             error = 1
-            max_ite = 10000
-            itr = 0
-            while error >= tol:
+            max_iterations = 10000
+            iteration = 0
+            while error >= tolerance:
                 # if did not converge
-                if itr >= max_ite:
+                if iteration >= max_iterations:
                     n = np.ones(len(self.data.tip)) * 0.5
                     break
-                n1 = n_iter(n, self.data.tip, self.data.friction_nbr, self.data.effective_stress,
-                            self.data.total_stress, self.data.Pa)
+                n1 = n_iter(
+                    n,
+                    self.data.tip,
+                    self.data.friction_nbr,
+                    self.data.effective_stress,
+                    self.data.total_stress,
+                    self.data.Pa,
+                )
                 error = np.linalg.norm(n1 - n) / np.linalg.norm(n1)
                 n = n1
-                itr += 1
+                iteration += 1
         else:
             n = np.ones(len(self.data.tip)) * 0.5
 
@@ -326,10 +389,10 @@ class RobertsonCptInterpretation(InterpretationMethod):
         F = self.data.friction / (self.data.tip - self.data.total_stress) * 100
         # Q and F cannot be negative. if negative, log10 will be infinite.
         # These values are limited by the contours of soil behaviour of Robertson
-        Q[Q <= 1.] = 1.
+        Q[Q <= 1.0] = 1.0
         F[F <= 0.1] = 0.1
-        Q[Q >= 1000.] = 1000.
-        F[F >= 10.] = 10.
+        Q[Q >= 1000.0] = 1000.0
+        F[F >= 10.0] = 10.0
         self.data.Qtn = Q
         self.data.Fr = F
         self.data.n = n
@@ -346,9 +409,14 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
         # IC: following Robertson and Cabal (2015)
         # compute IC
-        self.data.IC = ((3.47 - np.log10(self.data.Qtn)) ** 2. + (np.log10(self.data.Fr) + 1.22) ** 2.) ** 0.5
+        self.data.IC = (
+            (3.47 - np.log10(self.data.Qtn)) ** 2.0
+            + (np.log10(self.data.Fr) + 1.22) ** 2.0
+        ) ** 0.5
 
-    def vs_calc(self, method="Robertson"):
+    def vs_calc(
+        self, method: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
+    ):
         r"""
         Shear wave velocity and shear modulus. The following methods are available:
 
@@ -390,33 +458,57 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
             v_{s} = 1000 \cdot e^{-0.887 \cdot I_{c}} \cdot \left( \left(1 + 0.443 \cdot F_{r} \right) \cdot \left(\frac{\sigma'_{v}}{p_{a}} \right) \cdot \left(\frac{\gamma_{w}}{\gamma} \right) \right)^{0.5}
         """
-        if method == "Robertson":
+        if method == ShearWaveVelocityMethod.ROBERTSON:
             # vs: following Robertson and Cabal (2015)
             alpha_vs = 10 ** (0.55 * self.data.IC + 1.68)
             vs = alpha_vs * (self.data.qt - self.data.total_stress) / self.data.Pa
             vs = ceil_value(vs, 0)
             self.data.vs = vs ** 0.5
             self.data.G0 = self.data.rho * self.data.vs ** 2
-        elif method == "Mayne":
+        elif method == ShearWaveVelocityMethod.MAYNE:
             # vs: following Mayne (2006)
             vs = 118.8 * np.log10(self.data.friction) + 18.5
             self.data.vs = ceil_value(vs, 0)
             self.data.G0 = self.data.rho * self.data.vs ** 2
-        elif method == "Andrus":
+        elif method == ShearWaveVelocityMethod.ANDRUS:
             # vs: following Andrus (2007)
-            vs = 2.27 * self.data.qt ** 0.412 * self.data.IC ** 0.989 * self.data.depth ** 0.033 * 1
+            vs = (
+                2.27
+                * self.data.qt ** 0.412
+                * self.data.IC ** 0.989
+                * self.data.depth ** 0.033
+                * 1
+            )
             self.data.vs = ceil_value(vs, 0)
 
             self.data.G0 = self.data.rho * self.data.vs ** 2
-        elif method == "Zang":
+        elif method == ShearWaveVelocityMethod.ZANG:
             # vs: following Zang & Tong (2017)
-            vs = 10.915 * self.data.qt ** 0.317 * self.data.IC ** 0.210 * self.data.depth ** 0.057 * 0.92
+            vs = (
+                10.915
+                * self.data.qt ** 0.317
+                * self.data.IC ** 0.210
+                * self.data.depth ** 0.057
+                * 0.92
+            )
             self.data.vs = ceil_value(vs, 0)
 
             self.data.G0 = self.data.rho * self.data.vs ** 2
-        elif method == "Ahmed":
-            vs = 1000. * np.exp(-0.887 * self.data.IC) * (1. + 0.443 * self.data.Fr * self.data.effective_stress /
-                                                          self.data.Pa * self.data.g / self.data.gamma) ** 0.5
+        elif method == ShearWaveVelocityMethod.AHMED:
+            vs = (
+                1000.0
+                * np.exp(-0.887 * self.data.IC)
+                * (
+                    1.0
+                    + 0.443
+                    * self.data.Fr
+                    * self.data.effective_stress
+                    / self.data.Pa
+                    * self.data.g
+                    / self.data.gamma
+                )
+                ** 0.5
+            )
             self.data.vs = ceil_value(vs, 0)
             self.data.G0 = self.data.rho * self.data.vs ** 2
 
@@ -433,7 +525,15 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
         self.data.E0 = 2 * self.data.G0 * (1 + self.data.poisson)
 
-    def damp_calc(self, method="Mayne", d_min=2, Cu=2., D50=0.2, Ip=40., freq=1.):
+    def damp_calc(
+        self,
+        method: OCRMethod = OCRMethod.MAYNE,
+        d_min: float = 2,
+        Cu: float = 2.0,
+        D50: float = 0.2,
+        Ip: float = 40.0,
+        freq: float = 1.0,
+    ):
         r"""
         Damping calculation.
 
@@ -469,26 +569,42 @@ class RobertsonCptInterpretation(InterpretationMethod):
         self.data.damping = np.zeros(len(self.data.lithology)) + d_min
         OCR = np.zeros(len(self.data.lithology))
 
-        for i, lit in enumerate(self.data.lithology):
+        for i, lithology_index in enumerate(self.data.lithology):
             # if  clay
-            if lit == "3" or lit == "4" or lit == "5":
-                if method == "Mayne":
-                    OCR[i] = 0.33 * (self.data.qt[i] - self.data.total_stress[i]) / self.data.effective_stress[i]
-                elif method == "Robertson":
+            if (
+                lithology_index == "3"
+                or lithology_index == "4"
+                or lithology_index == "5"
+            ):
+                if method == OCRMethod.MAYNE:
+                    OCR[i] = (
+                        0.33
+                        * (self.data.qt[i] - self.data.total_stress[i])
+                        / self.data.effective_stress[i]
+                    )
+                elif method == OCRMethod.ROBERTSON:
                     OCR[i] = 0.25 * self.data.Qtn[i] ** 1.25
 
-                self.data.damping[i] = (0.8005 + 0.0129 * Ip * OCR[i] ** (-0.1069)) * \
-                                       (self.data.effective_stress[i] / self.data.Pa) ** (-0.2889) * \
-                                       (1 + 0.2919 * np.log(freq))
+                self.data.damping[i] = (
+                    (0.8005 + 0.0129 * Ip * OCR[i] ** (-0.1069))
+                    * (self.data.effective_stress[i] / self.data.Pa) ** (-0.2889)
+                    * (1 + 0.2919 * np.log(freq))
+                )
 
             # if peat
-            elif lit == "1" or lit == "2":
+            elif lithology_index == "1" or lithology_index == "2":
                 # same as clay: OCR=1 IP=100
-                self.data.damping[i] = 2.512 * (self.data.effective_stress[i] / self.data.Pa) ** -0.2889
+                self.data.damping[i] = (
+                    2.512 * (self.data.effective_stress[i] / self.data.Pa) ** -0.2889
+                )
             # if sand
             else:
-                self.data.damping[i] = 0.55 * Cu ** 0.1 * D50 ** -0.3 * \
-                                       (self.data.effective_stress[i] / self.data.Pa) ** -0.08
+                self.data.damping[i] = (
+                    0.55
+                    * Cu ** 0.1
+                    * D50 ** -0.3
+                    * (self.data.effective_stress[i] / self.data.Pa) ** -0.08
+                )
 
         # limit the damping (when stress is zero damping is infinite)
         self.data.damping[self.data.damping == np.inf] = 100
@@ -503,19 +619,19 @@ class RobertsonCptInterpretation(InterpretationMethod):
         # assign size to poisson
         self.data.poisson = np.zeros(len(self.data.lithology))
 
-        for i, lit in enumerate(self.data.lithology):
+        for i, lithology_index in enumerate(self.data.lithology):
             # if soft layer
-            if lit == "1" or lit == "2" or lit == "3":
+            if lithology_index in ["1", "2", "3"]:
                 self.data.poisson[i] = 0.5
-            elif lit == "4":
+            elif lithology_index == "4":
                 self.data.poisson[i] = 0.25
-            elif lit == "5" or lit == "6" or lit == "7":
+            elif lithology_index in ["5", "6", "7"]:
                 self.data.poisson[i] = 0.3
             else:
                 self.data.poisson[i] = 0.375
 
     def permeability_calc(self):
-        r""""
+        """
         Permeability calculation. Following Robertson :cite:`robertson_2010`.
 
         When  [$1.0 < I_{c} \leq 3.27$]
@@ -528,7 +644,7 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
         .. math::
             k = 10^{-4.52-1.37 I_{c}}
-       """
+        """
 
         # assign size to permeability
         self.data.permeability = np.zeros(len(self.data.lithology))  # [m/s]
@@ -540,7 +656,7 @@ class RobertsonCptInterpretation(InterpretationMethod):
                 self.data.permeability[i] = 10 ** (-4.52 - 1.37 * self.data.IC[i])
 
     def qt_calc(self):
-        r"""
+        """
         Corrected cone resistance, following Robertson and Cabal :cite:`robertson_cabal_2014`.
 
         .. math::
@@ -554,17 +670,20 @@ class RobertsonCptInterpretation(InterpretationMethod):
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
 
-    def merge_thickness(self, minimum_layer_thickness):
+    def merge_thickness(self, minimum_layer_thickness: int):
         """
 
         :param minimum_layer_thickness: Minimum layer thickness to merge
         :return:
         """
 
-        self.data.depth_merged, self.data.index_merged, self.data.lithology_merged = \
-            merge_thickness(self.data, minimum_layer_thickness)
+        (
+            self.data.depth_merged,
+            self.data.index_merged,
+            self.data.lithology_merged,
+        ) = merge_thickness(self.data, minimum_layer_thickness)
 
-    def filter(self, lithologies=[""], key="", value=0):
+    def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
         """
         Filters the values of the CPT object.
         The filter removes the index of the object for the defined **lithologies**, where the **key** is smaller than
@@ -582,15 +701,37 @@ class RobertsonCptInterpretation(InterpretationMethod):
             return
 
         # attributes to be changed
-        attributes = ["depth", "depth_to_reference", "tip", "friction", "friction_nbr", "gamma", "rho",
-                      "total_stress",
-                      "effective_stress", "qt", "Qtn", "Fr", "IC", "n", "vs", "G0", "poisson", "damping", "water",
-                      "lithology", "litho_points", "inclination_resultant"]
+        attributes = [
+            "depth",
+            "depth_to_reference",
+            "tip",
+            "friction",
+            "friction_nbr",
+            "gamma",
+            "rho",
+            "total_stress",
+            "effective_stress",
+            "qt",
+            "Qtn",
+            "Fr",
+            "IC",
+            "n",
+            "vs",
+            "G0",
+            "poisson",
+            "damping",
+            "water",
+            "lithology",
+            "litho_points",
+            "inclination_resultant",
+        ]
 
         # find indexes of the lithologies to be filtered
         idx_lito = []
         for lit in lithologies:
-            idx_lito.extend([i for i, val in enumerate(self.data.lithology) if val == lit])
+            idx_lito.extend(
+                [i for i, val in enumerate(self.data.lithology) if val == lit]
+            )
 
         # find indexes where the key attribute is smaller than the value
         idx_key = np.where(getattr(self, key) <= value)[0].tolist()
@@ -611,13 +752,14 @@ class RobertsonCptInterpretation(InterpretationMethod):
 
         # delete all attributes
         for att in attributes:
-            setattr(self, att, getattr(self, att)[idx_to_delete[-1] + 1:])
+            setattr(self, att, getattr(self, att)[idx_to_delete[-1] + 1 :])
 
         # correct depth
         self.data.depth -= self.data.depth[0]
 
     @staticmethod
-    def calculate_corrected_depth(penetration_length, inclination):
+    # TODO this function might be a duplicate
+    def calculate_corrected_depth(penetration_length: Iterable, inclination: Iterable):
         """
         Correct the penetration length with the inclination angle
 
@@ -625,8 +767,14 @@ class RobertsonCptInterpretation(InterpretationMethod):
         :param inclination: measured inclination of the cone
         :return: corrected depth
         """
-        corrected_d_depth = np.diff(penetration_length) * np.cos(np.radians(inclination[:-1]))
-        corrected_depth = np.concatenate((penetration_length[0], penetration_length[0] +
-                                          np.cumsum(corrected_d_depth)), axis=None)
+        corrected_d_depth = np.diff(penetration_length) * np.cos(
+            np.radians(inclination[:-1])
+        )
+        corrected_depth = np.concatenate(
+            (
+                penetration_length[0],
+                penetration_length[0] + np.cumsum(corrected_d_depth),
+            ),
+            axis=None,
+        )
         return corrected_depth
-
