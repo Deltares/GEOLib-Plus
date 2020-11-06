@@ -95,11 +95,10 @@ class TestGeolibPlusReading:
         )
         assert test_file.is_file()
 
-        cpt = GefCpt().read(test_file)
+        cpt = GefCpt()
+        cpt.read(test_file)
 
         test_coord = [244319.00, 587520.00]
-        test_depth = np.linspace(1, 20, 20)
-        test_nap = 0.13 - test_depth
         test_tip = np.full(20, 1000)
         test_friction = np.full(20, 2000)
         test_friction_nbr = np.full(20, 5)
@@ -107,8 +106,6 @@ class TestGeolibPlusReading:
 
         np.testing.assert_array_equal("DKP302", cpt.name)
         np.testing.assert_array_equal(test_coord, cpt.coordinates)
-        np.testing.assert_array_equal(test_depth, cpt.depth)
-        np.testing.assert_array_equal(test_nap, cpt.depth_to_reference)
         np.testing.assert_array_equal(test_tip, cpt.tip)
         np.testing.assert_array_equal(test_friction, cpt.friction)
         np.testing.assert_array_equal(test_friction_nbr, cpt.friction_nbr)
