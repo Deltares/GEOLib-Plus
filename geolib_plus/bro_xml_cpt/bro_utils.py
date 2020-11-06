@@ -138,6 +138,33 @@ class XMLBroFullData(XMLBroColumnValues):
 class XMLBroCPTReader(CptReader):
     bro_data: XMLBroFullData = XMLBroFullData()
     water_measurement_type: List = []
+    bro_dataframe_map: Dict[str, str] = {
+        "penetration_length": "penetrationLength",
+        "depth": "depth",
+        "time": "elapsedTime",
+        "tip": "coneResistance",
+        "Qtn": "correctedConeResistance",
+        "net_tip": "netConeResistance",
+        "magnetic_strength_x": "magneticFieldStrengthX",
+        "magnetic_strength_y": "magneticFieldStrengthY",
+        "magnetic_strength_z": "magneticFieldStrengthZ",
+        "magnetic_strength_tot": "magneticFieldStrengthTotal",
+        "electric_cond": "electricalConductivity",
+        "inclination_ew": "inclinationEW",
+        "inclination_ns": "inclinationNS",
+        "inclination_x": "inclinationX",
+        "inclination_y": "inclinationY",
+        "inclination_resultant": "inclinationResultant",
+        "magnetic_inclination": "magneticInclination",
+        "magnetic_declination": "magneticDeclination",
+        "friction": "localFriction",
+        "pore_ratio": "poreRatio",
+        "temperature": "temperature",
+        "pore_pressure_u1": "porePressureU1",
+        "pore_pressure_u2": "porePressureU2",
+        "pore_pressure_u3": "porePressureU3",
+        "friction_nbr": "frictionRatio",
+    }
 
     @property
     def __water_measurement_types(self):
@@ -224,7 +251,6 @@ class XMLBroCPTReader(CptReader):
                 df.sort_values(by=["penetrationLength"], inplace=True)
 
             self.bro_data.dataframe = df
-        return
 
     def all_single_data_available(self) -> bool:
         return None not in [
@@ -248,7 +274,6 @@ class XMLBroCPTReader(CptReader):
         data_usable = all([col in avail_columns for col in req_columns])
         if not (meta_usable and data_usable):
             logging.warning("CPT with id {} misses required data.".format(data.id))
-            return None
 
     @staticmethod
     def parse_xml_location(tdata: bytes):
@@ -365,49 +390,8 @@ class XMLBroCPTReader(CptReader):
         # extract values from dataframe
         if self.bro_data.dataframe is not None:
             bro_dataframe = self.bro_data.dataframe
-            result_dictionary["penetration_length"] = bro_dataframe.get(
-                "penetrationLength"
-            )
-            result_dictionary["depth"] = bro_dataframe.get("depth")
-            result_dictionary["time"] = bro_dataframe.get("elapsedTime")
-            result_dictionary["tip"] = bro_dataframe.get("coneResistance")
-            result_dictionary["Qtn"] = bro_dataframe.get("correctedConeResistance")
-            result_dictionary["net_tip"] = bro_dataframe.get("netConeResistance")
-            result_dictionary["magnetic_strength_x"] = bro_dataframe.get(
-                "magneticFieldStrengthX"
-            )
-            result_dictionary["magnetic_strength_y"] = bro_dataframe.get(
-                "magneticFieldStrengthY"
-            )
-            result_dictionary["magnetic_strength_z"] = bro_dataframe.get(
-                "magneticFieldStrengthZ"
-            )
-            result_dictionary["magnetic_strength_tot"] = bro_dataframe.get(
-                "magneticFieldStrengthTotal"
-            )
-            result_dictionary["electric_cond"] = bro_dataframe.get(
-                "electricalConductivity"
-            )
-            result_dictionary["inclination_ew"] = bro_dataframe.get("inclinationEW")
-            result_dictionary["inclination_ns"] = bro_dataframe.get("inclinationNS")
-            result_dictionary["inclination_x"] = bro_dataframe.get("inclinationX")
-            result_dictionary["inclination_y"] = bro_dataframe.get("inclinationY")
-            result_dictionary["inclination_resultant"] = bro_dataframe.get(
-                "inclinationResultant"
-            )
-            result_dictionary["magnetic_inclination"] = bro_dataframe.get(
-                "magneticInclination"
-            )
-            result_dictionary["magnetic_declination"] = bro_dataframe.get(
-                "magneticDeclination"
-            )
-            result_dictionary["friction"] = bro_dataframe.get("localFriction")
-            result_dictionary["pore_ratio"] = bro_dataframe.get("poreRatio")
-            result_dictionary["temperature"] = bro_dataframe.get("temperature")
-            result_dictionary["pore_pressure_u1"] = bro_dataframe.get("porePressureU1")
-            result_dictionary["pore_pressure_u2"] = bro_dataframe.get("porePressureU2")
-            result_dictionary["pore_pressure_u3"] = bro_dataframe.get("porePressureU3")
-            result_dictionary["friction_nbr"] = bro_dataframe.get("frictionRatio")
+            for key, value in self.bro_dataframe_map.items():
+                result_dictionary[key] = bro_dataframe.get(value, None)
         return self.transform_dict_fields_to_arrays(dictionary=result_dictionary)
 
     @staticmethod
