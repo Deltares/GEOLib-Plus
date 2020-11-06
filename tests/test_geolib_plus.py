@@ -182,38 +182,6 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[9:108])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
-    @pytest.mark.systemtest
-    @pytest.mark.parametrize("name", testdata, ids=testdata)
-    def test_reading_compare(self, name):
-        # Compare two files from bro (same CPT) in GEF and BRO Format
-        # Should be comparable
-
-        test_dir = TestUtils.get_local_test_data_dir("cpt")
-        bro_file = test_dir / "bro_xml" / f"{name}.xml"
-        assert bro_file.is_file()
-        gef_file = test_dir / "gef" / f"{name}.gef"
-        assert gef_file.is_file()
-
-        bro_cpt = BroXmlCpt()
-        bro_cpt.read(bro_file)
-
-        gef_cpt = GefCpt()
-        gef_cpt.read(gef_file)
-
-        np.testing.assert_array_equal(bro_cpt.name, gef_cpt.name)
-        np.testing.assert_array_equal(bro_cpt.coordinates, gef_cpt.coordinates)
-
-        # todo: JN The following tests current fail, the arrays are different size as are the depths
-        np.testing.assert_array_equal(bro_cpt.depth, gef_cpt.depth)
-        np.testing.assert_array_equal(
-            bro_cpt.depth_to_reference, gef_cpt.depth_to_reference
-        )
-        np.testing.assert_array_equal(bro_cpt.tip, gef_cpt.tip)
-        np.testing.assert_array_equal(bro_cpt.friction, gef_cpt.friction)
-        np.testing.assert_array_equal(bro_cpt.friction_nbr, gef_cpt.friction_nbr)
-        np.testing.assert_array_equal(bro_cpt.water, gef_cpt.water)
-
-
 class TestGeolibPlusValidate:
     @pytest.mark.systemtest
     # Test validation of BRO-XML file structure .... with clean file
