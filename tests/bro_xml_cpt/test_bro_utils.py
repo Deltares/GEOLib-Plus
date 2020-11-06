@@ -51,9 +51,11 @@ class TestBroUtil:
     @pytest.mark.unittest
     def test_xml_to_byte_string(self):
         # define input path to xml
-        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-        filename = "CPT000000003688_IMBRO_A.xml"
-        test_file = test_folder / filename
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
+        )
+        # test initial expectations
+        assert test_file.is_file()
         # run test
         model = bro.XMLBroCPTReader.xml_to_byte_string(fn=test_file)
         # test results
@@ -62,9 +64,10 @@ class TestBroUtil:
     @pytest.mark.unittest
     def test_xml_to_byte_string_wrong_path(self):
         # define input path to xml
-        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-        filename = "wrong.xml"
-        test_file = test_folder / filename
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "wrong.xml")
+        )
+        # final test
         with pytest.raises(FileNotFoundError):
             bro.XMLBroCPTReader.xml_to_byte_string(fn=test_file)
 
@@ -116,281 +119,14 @@ class TestBroUtil:
         # check results
         assert len(result_list) == 2
 
-    @pytest.mark.unittest
-    def test__get_depth_from_bro_depth_is_set(self):
-        # define the inputs
-        d = {
-            "depth": [1.5, 2.0, 2.5],
-        }
-
-        # set up the upper part of the dictionary
-        df = pd.DataFrame(data=d)
-        # initialise model
-        cpt = XMLBroCPTReader()
-        cpt.bro_data.dataframe = df
-        # run test
-        depth = cpt._XMLBroCPTReader__get_depth_from_bro()
-        # check the results. Depth is just passed in this case.
-        assert cpt
-        assert d["depth"] == list(depth)
-
-    @pytest.mark.unittest
-    def test__get_depth_from_bro_no_depth_no_inclination(self):
-        # define the inputs
-        d = {
-            "penetrationLength": [1.5, 2.0, 2.5],
-        }
-        # set up the upper part of the dictionary
-        df = pd.DataFrame(data=d)
-        # initialise model
-        cpt = XMLBroCPTReader()
-        cpt.bro_data.dataframe = df
-        # run test
-        depth = cpt._XMLBroCPTReader__get_depth_from_bro()
-        # check the results. Depth is just passed in this case.
-        assert depth.all()
-        assert d["penetrationLength"] == list(depth)
-
-    @pytest.mark.unittest
-    def test__get_depth_from_bro_no_depth(self):
-        # define the inputs
-        d = {
-            "penetrationLength": [1.5, 2.0, 2.5],
-            "inclinationResultant": [1.5, 2.0, 2.5],
-        }
-        # calculate test results
-        result = np.diff(d["penetrationLength"]) * np.cos(
-            np.radians(d["inclinationResultant"][:-1])
-        )
-        result = np.concatenate(
-            (
-                d["penetrationLength"][0],
-                d["penetrationLength"][0] + np.cumsum(result),
-            ),
-            axis=None,
-        )
-        # set up the upper part of the dictionary
-        df = pd.DataFrame(data=d)
-        # initialise model
-        cpt = XMLBroCPTReader()
-        cpt.bro_data.dataframe = df
-        # run test
-        depth = cpt._XMLBroCPTReader__get_depth_from_bro()
-        # check the results. Depth is just passed in this case.
-        assert depth.all()
-        assert list(result) == list(depth)
-
-    @pytest.mark.systemtest
-    def test__pre_drill_with_predrill(self):
-
-        # make a cpt with the pre_drill option
-        d = {
-            "penetrationLength": [1.5, 2.0, 2.5],
-            "coneResistance": [1, 2, 3],
-            "localFriction": [4, 5, 6],
-            "frictionRatio": [0.22, 0.33, 0.44],
-        }
-
-        # set up the upper part of the dictionary
-        df = pd.DataFrame(data=d)
-        cpt_data = XMLBroCPTReader()
-        cpt_data.bro_data.id = "cpt_name"
-        cpt_data.bro_data.location_x = 111
-        cpt_data.bro_data.location_y = 222
-        cpt_data.bro_data.offset_z = 0.5
-        cpt_data.bro_data.predrilled_z = 1.5
-        cpt_data.bro_data.a = 0.8
-        cpt_data.bro_data.dataframe = df
-
-        # Run the function to be checked
-        result = cpt_data._XMLBroCPTReader__parse_bro(
-            minimum_length=0.01, minimum_samples=1
-        )
-
-        # Check the equality with the pre-given lists
-        assert result["tip"].tolist() == [1000, 1000, 1000, 1000, 2000, 3000]
-        assert result["friction"].tolist() == [4000, 4000, 4000, 4000, 5000, 6000]
-        assert result["friction_nbr"].tolist() == [0.22, 0.22, 0.22, 0.22, 0.33, 0.44]
-        assert result["depth"].tolist() == [0, 0.5, 1, 1.5, 2, 2.5]
-        assert result["depth_to_reference"].tolist() == [
-            cpt_data.bro_data.offset_z - i for i in [0, 0.5, 1, 1.5, 2, 2.5]
-        ]
-        assert result["water"].tolist() == [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        assert result["coordinates"] == [
-            cpt_data.bro_data.location_x,
-            cpt_data.bro_data.location_y,
-        ]
-        assert result["name"] == "cpt_name"
-        assert result["a"][0] == 0.8
-
-    @pytest.mark.systemtest
-    def test__pre_drill_with_pore_pressure(self):
-
-        # Set the values of the cpt
-        d = {
-            "penetrationLength": [1.5, 2.0, 2.5],
-            "coneResistance": [1, 2, 3],
-            "localFriction": [4, 5, 6],
-            "frictionRatio": [0.22, 0.33, 0.44],
-            "porePressureU2": [1, 2, 3],
-        }
-        df = pd.DataFrame(data=d)
-
-        # Build the upper part of the library
-        cpt_data = XMLBroCPTReader()
-        cpt_data.bro_data.id = "cpt_name"
-        cpt_data.bro_data.location_x = 111
-        cpt_data.bro_data.location_y = 222
-        cpt_data.bro_data.offset_z = 0.5
-        cpt_data.bro_data.predrilled_z = 1.5
-        cpt_data.bro_data.a = 0.8
-        cpt_data.bro_data.dataframe = df
-
-        # define the pore pressure array before the predrilling
-        # Here 3 values as the stepping is defined that way.
-        # Define the stepping of the pore pressure
-        # Then my target values
-        # Finally multiply with 1000
-        step = 1 / len(d["penetrationLength"])
-        pore_pressure = [0, step * 1000, 2 * step * 1000, 1 * 1000, 2 * 1000, 3 * 1000]
-
-        # run the function to be checked
-        result = cpt_data._XMLBroCPTReader__parse_bro(
-            minimum_length=0.01, minimum_samples=1
-        )
-
-        # Check the equality with the pre-defined values
-        assert result["water"].tolist() == pore_pressure
-        assert result["tip"].tolist() == [1000, 1000, 1000, 1000, 2000, 3000]
-        assert result["friction"].tolist() == [4000, 4000, 4000, 4000, 5000, 6000]
-        assert result["friction_nbr"].tolist() == [0.22, 0.22, 0.22, 0.22, 0.33, 0.44]
-        assert result["depth"].tolist() == [0, 0.5, 1, 1.5, 2, 2.5]
-        assert result["depth_to_reference"].tolist() == [
-            cpt_data.bro_data.offset_z - i for i in [0, 0.5, 1, 1.5, 2, 2.5]
-        ]
-        assert result["coordinates"] == [
-            cpt_data.bro_data.location_x,
-            cpt_data.bro_data.location_y,
-        ]
-        assert result["name"] == "cpt_name"
-        assert result["a"][0] == 0.8
-
-    @pytest.mark.systemtest
-    def test__pre_drill_Raise_Exception1(self):
-
-        # Define the cpt values
-        # here the points are only two so that will return an error message
-        d = {
-            "penetrationLength": [1.5, 2.0],
-            "coneResistance": [1, 2],
-            "localFriction": [4, 5],
-            "frictionRatio": [0.22, 0.33],
-        }
-        df = pd.DataFrame(data=d)
-        # initialise model
-        cpt_data = XMLBroCPTReader()
-        cpt_data.bro_data.id = "cpt_name"
-        cpt_data.bro_data.location_x = 111
-        cpt_data.bro_data.location_y = 222
-        cpt_data.bro_data.offset_z = 0.5
-        cpt_data.bro_data.predrilled_z = 1.5
-        cpt_data.bro_data.a = 0.8
-        cpt_data.bro_data.dataframe = df
-
-        # run the fuction
-        aux = cpt_data._XMLBroCPTReader__parse_bro(minimum_length=10, minimum_samples=1)
-
-        # check if the returned message is the appropriate
-        assert "File cpt_name has a length smaller than 10" == aux
-
-    @pytest.mark.systemtest
-    def test__pre_drill_Raise_Exception2(self):
-
-        # Define the cpt values
-        # here the points are only two so that will return an error message
-        d = {
-            "penetrationLength": [1.5, 2.0],
-            "coneResistance": [1, 2],
-            "localFriction": [4, 5],
-            "frictionRatio": [0.22, 0.33],
-        }
-        df = pd.DataFrame(data=d)
-        # initialise model
-        cpt_data = XMLBroCPTReader()
-        cpt_data.bro_data.id = "cpt_name"
-        cpt_data.bro_data.location_x = 111
-        cpt_data.bro_data.location_y = 222
-        cpt_data.bro_data.offset_z = 0.5
-        cpt_data.bro_data.predrilled_z = 1.5
-        cpt_data.bro_data.a = 0.73
-        cpt_data.bro_data.dataframe = df
-
-        # run the fuction
-        aux = cpt_data._XMLBroCPTReader__parse_bro(minimum_length=1, minimum_samples=10)
-
-        # check if the returned message is the appropriate
-        assert "File cpt_name has a number of samples smaller than 10" == aux
-
-    @pytest.mark.systemtest
-    def test_read_BRO_Raise_Exception1(self):
-
-        # Define the cpt values
-        # here the points are only two so that will return an error message
-        d = {
-            "penetrationLength": [1.5, 20.0],
-            "coneResistance": [-1, 2],
-            "localFriction": [4, 5],
-            "frictionRatio": [0.22, 0.33],
-        }
-        df = pd.DataFrame(data=d)
-        # initialise model
-        cpt_data = XMLBroCPTReader()
-        cpt_data.bro_data.id = "cpt_name"
-        cpt_data.bro_data.location_x = 111
-        cpt_data.bro_data.location_y = 222
-        cpt_data.bro_data.offset_z = 0.5
-        cpt_data.bro_data.predrilled_z = 1.5
-        cpt_data.bro_data.a = 0.73
-        cpt_data.bro_data.dataframe = df
-
-        # run the fuction
-        aux = cpt_data._XMLBroCPTReader__parse_bro(minimum_length=10, minimum_samples=1)
-
-        # check if the returned message is the appropriate
-        assert "File cpt_name is corrupted" == aux
-
-    @pytest.mark.systemtest
-    def test_read_BRO_Raise_Exception2(self):
-
-        # Define the cpt values
-        # here the points are only two so that will return an error message
-        d = {
-            "penetrationLength": [1.5, 20.0],
-            "coneResistance": [1, 2],
-            "localFriction": [-4, 5],
-            "frictionRatio": [0.22, 0.33],
-        }
-        df = pd.DataFrame(data=d)
-        # initialise model
-        cpt_data = XMLBroCPTReader()
-        cpt_data.bro_data.id = "cpt_name"
-        cpt_data.bro_data.location_x = 111
-        cpt_data.bro_data.location_y = 222
-        cpt_data.bro_data.offset_z = 0.5
-        cpt_data.bro_data.predrilled_z = 1.5
-        cpt_data.bro_data.a = 0.73
-        cpt_data.bro_data.dataframe = df
-
-        # run the function
-        aux = cpt_data._XMLBroCPTReader__parse_bro(minimum_length=10, minimum_samples=1)
-
-        # check if the returned message is the appropriate
-        assert "File cpt_name is corrupted" == aux
-
     @pytest.mark.systemtest
     def test_parse_bro_xml(self):
         # open xml file as byte object
-        fn = ".\\tests\\test_files\\cpt\\bro_xml\\CPT000000065880_IMBRO_A.xml"
+        fn = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000065880_IMBRO_A.xml")
+        )
+        # test initial expectations
+        assert fn.is_file()
         with open(fn, "r") as f:
             # memory-map the file, size 0 means whole file
             xml_bytes = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)[:]
@@ -414,7 +150,16 @@ class TestBroUtil:
         # define warning expectation
         warning = "Data has the wrong size! 23 columns instead of 25"
         # open xml file as byte object
-        fn = ".\\tests\\test_files\\cpt\\bro_xml\\unit_testing_files\\test_test_parse_bro_xml_raises.xml"
+        fn = TestUtils.get_local_test_data_dir(
+            Path(
+                "cpt",
+                "bro_xml",
+                "unit_testing_files",
+                "test_test_parse_bro_xml_raises.xml",
+            )
+        )
+        # test initial expectations
+        assert fn.is_file()
         with open(fn, "r") as f:
             # memory-map the file, size 0 means whole file
             xml_bytes = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)[:]
@@ -434,7 +179,16 @@ class TestBroUtil:
     @pytest.mark.systemtest
     def test_get_all_data_from_bro(self):
         # open xml file as byte object
-        fn = ".\\tests\\test_files\\cpt\\bro_xml\\unit_testing_files\\test_get_all_data_from_bro.xml"
+        fn = TestUtils.get_local_test_data_dir(
+            Path(
+                "cpt",
+                "bro_xml",
+                "unit_testing_files",
+                "test_get_all_data_from_bro.xml",
+            )
+        )
+        # test initial expectations
+        assert fn.is_file()
         with open(fn, "r") as f:
             # memory-map the file, size 0 means whole file
             xml = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)[:]
@@ -458,116 +212,3 @@ class TestBroUtil:
         assert cpt_data.bro_data.quality_class == "klasse2"
         assert cpt_data.bro_data.result_time
         assert cpt_data.bro_data.predrilled_z == 0.01
-
-    @pytest.mark.systemtest
-    def test_check_file_contains_data_returns_message(self, caplog):
-        # xml will still be read but a warning will be logged
-        LOGGER = logging.getLogger(__name__)
-        # define logger
-        LOGGER.info("Testing now.")
-        # initialize model
-        cpt_data = XMLBroCPTReader()
-        # test initial expectations
-        assert cpt_data
-        # define inputs
-        inputs = {"penetrationLength": []}
-        cpt_data.bro_data.dataframe = pd.DataFrame(inputs)
-        cpt_data.bro_data.id = "CPT 1"
-        # run test
-        cpt_data.check_file_contains_data()
-        # check expectations
-        assert "File CPT 1 contains no data" in caplog.text
-
-    @pytest.mark.systemtest
-    def test_check_data_different_than_zero_returns_message(self, caplog):
-        # xml will still be read but a warning will be logged
-        LOGGER = logging.getLogger(__name__)
-        # define logger
-        LOGGER.info("Testing now.")
-        cpt_data = XMLBroCPTReader()
-        # test initial expectations
-        assert cpt_data
-        # define inputs
-        cpt_data.bro_data.id = "CPT 1"
-        inputs = {
-            "penetrationLength": [0, 0, 0],
-            "coneResistance": [0, 0, 0],
-            "localFriction": [0, 0, 0],
-            "frictionRatio": [0, 0, 0],
-        }
-        cpt_data.bro_data.dataframe = pd.DataFrame(inputs)
-        # run test
-        cpt_data.check_data_different_than_zero()
-        # test
-        assert "File CPT 1 contains empty data" in caplog.text
-
-    @pytest.mark.systemtest
-    def test_check_criteria_minimum_length(self, caplog):
-        # xml will still be read but a warning will be logged
-        LOGGER = logging.getLogger(__name__)
-        # define logger
-        LOGGER.info("Testing now.")
-        cpt_data = XMLBroCPTReader()
-        # test initial expectations
-        assert cpt_data
-        # define inputs
-        cpt_data.bro_data.id = "CPT 1"
-        inputs = {
-            "penetrationLength": [0, 1, 2],
-            "coneResistance": [3, 4, 5],
-            "localFriction": [6, 7, 8],
-            "frictionRatio": [9, 10, 11],
-        }
-        cpt_data.bro_data.dataframe = pd.DataFrame(inputs)
-        # run test
-        cpt_data.check_criteria_minimum_length(minimum_length=5)
-        # test
-        assert "File CPT 1 has a length smaller than 5" in caplog.text
-
-    @pytest.mark.systemtest
-    def test_check_minimum_sample_criteria(self, caplog):
-        # xml will still be read but a warning will be logged
-        LOGGER = logging.getLogger(__name__)
-        # define logger
-        LOGGER.info("Testing now.")
-        cpt_data = XMLBroCPTReader()
-        # test initial expectations
-        assert cpt_data
-        # define inputs
-        cpt_data.bro_data.id = "CPT 1"
-        inputs = {
-            "penetrationLength": [0, 0, 0],
-            "coneResistance": [0, 0, 0],
-            "localFriction": [0, 0, 0],
-            "frictionRatio": [0, 0, 0],
-        }
-        cpt_data.bro_data.dataframe = pd.DataFrame(inputs)
-        # run test
-        cpt_data.check_minimum_sample_criteria(minimum_samples=5)
-        # test
-        assert "File CPT 1 has a number of samples smaller than 5" in caplog.text
-
-    @pytest.mark.systemtest
-    def test_validate_length_and_samples_cpt(self, caplog):
-        # xml will still be read but a warning will be logged
-        LOGGER = logging.getLogger(__name__)
-        # define logger
-        LOGGER.info("Testing now.")
-        cpt_data = XMLBroCPTReader()
-        # test initial expectations
-        assert cpt_data
-        # define inputs
-        cpt_data.bro_data.id = "CPT 1"
-        inputs = {
-            "penetrationLength": [0, 0, 0],
-            "coneResistance": [0, 0, 0],
-            "localFriction": [0, 0, 0],
-            "frictionRatio": [0, 0, 0],
-        }
-        cpt_data.bro_data.dataframe = pd.DataFrame(inputs)
-        # run test
-        cpt_data.validate_length_and_samples_cpt(minimum_samples=5, minimum_length=6)
-        # test
-        assert "File CPT 1 has a number of samples smaller than 5" in caplog.text
-        assert "File CPT 1 has a length smaller than 6" in caplog.text
-        assert "File CPT 1 contains empty data" in caplog.text

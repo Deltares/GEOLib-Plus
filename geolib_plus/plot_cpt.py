@@ -4,10 +4,11 @@ import matplotlib.pylab as plt
 import sys
 import os
 import warnings
+from typing import Tuple
 
 from .plot_utils import *
 
-def get_values_which_exceed_threshold(threshold, values, y_data, show_interval):
+def get_values_which_exceed_threshold(threshold, values, y_data, show_interval) -> Tuple[np.ndarray, np.ndarray]:
     """
     Gets the values which exceed the given threshold which has to be shown, where a value is shown if the distance
     regarding the previous shown value is greater than the show interval and the value exceeds the threshold.

@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from pathlib import Path
-from typing import Optional, Iterable, List, Type
+from typing import Optional, Iterable, List
 from pydantic import BaseModel
 from copy import deepcopy
 import numpy as np
@@ -9,14 +9,12 @@ from .plot_cpt import plot_cpt_norm
 from .plot_settings import PlotSettings
 
 
-class InterpretationMethod:
+class AbstractInterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
 
-    @abstractmethod
-    def interpret(self, data):
-        raise NotImplementedError(
-            "The method should be implemented in concrete classes."
-        )
+
+class RobertsonMethod(AbstractInterpretationMethod):
+    """Scientific explanation about this method."""
 
 
 class CptReader:
@@ -39,7 +37,7 @@ class AbstractCPT(BaseModel):
     tip: Optional[Iterable]
     friction: Optional[Iterable]
     friction_nbr: Optional[Iterable]
-    a: Optional[float]
+    a: Optional[Iterable]
     name: Optional[str]
     rho: Optional[Iterable]
     total_stress: Optional[Iterable]
@@ -134,13 +132,6 @@ class AbstractCPT(BaseModel):
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
 
-    def get_interpretation_method(self, method) -> InterpretationMethod:
-        return method()
-
-    def interpret_cpt(self, method: Type[InterpretationMethod]):
-        method = self.get_interpretation_method(method)
-        method.interpret(self)
-
     def __calculate_corrected_depth(self) -> np.ndarray:
         """
         Correct the penetration length with the inclination angle
@@ -164,25 +155,26 @@ class AbstractCPT(BaseModel):
 
     def calculate_depth(self):
         """
-        If depth is present in the bro cpt and is valid, the depth is parsed from depth
-        elseif resultant inclination angle is present and valid in the bro cpt, the penetration length is corrected with
+        If depth is present in the cpt and is valid, the depth is parsed from depth
+        elseif resultant inclination angle is present and valid in the cpt, the penetration length is corrected with
         the inclination angle.
         if both depth and inclination angle are not present/valid, the depth is parsed from the penetration length.
-        :param cpt_BRO: dataframe
         :return:
         """
 
-        if self.depth.size == 0 or self.depth.ndim == 0:
-            if (
-                self.inclination_resultant.size != 0
-                and self.inclination_resultant.ndim != 0
-            ):
-                self.depth = self.__calculate_corrected_depth()
-            else:
-                self.depth = deepcopy(self.penetration_length)
+        if self.depth.size > 0 and self.depth.ndim > 0:
+            # no calculations needed
+            return
+        if (
+            self.inclination_resultant.size != 0
+            and self.inclination_resultant.ndim != 0
+        ):
+            self.depth = self.__calculate_corrected_depth()
+        else:
+            self.depth = deepcopy(self.penetration_length)
 
     @staticmethod
-    def __correct_for_negatives(data):
+    def __correct_for_negatives(data: np.ndarray) -> np.ndarray:
         """
         Values tip / friction / friction cannot be negative so they
         have to be zero.
@@ -202,13 +194,23 @@ class AbstractCPT(BaseModel):
 
         for data in pore_pressure_data:
             if data is not None:
-                if data.size and data.ndim and not np.all(data == 0):
-                    self.water = deepcopy(data)
-                    break
-        if self.water is None:
+                if not (all(value is None for value in data)):
+                    if data.size and data.ndim and not np.all(data == 0):
+                        self.water = deepcopy(data)
+                        break
+        if self.water is None or all(value is None for value in data):
             self.water = np.zeros(len(self.penetration_length))
 
     def pre_process_data(self):
+        """
+        Pre processes data which is read from a gef file or bro xml file.
+
+        Depth is calculated based on available data.
+        Relevant data is corrected for negative values.
+        Pore pressure is retrieved from available data.
+        #todo extend
+        :return:
+        """
         self.calculate_depth()
         self.depth_to_reference = self.local_reference_level - self.depth
 
@@ -218,7 +220,8 @@ class AbstractCPT(BaseModel):
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
 
         self.__get_water_data()
-        pass
+
+        # todo extend pre process data
 
     def plot(self, directory: Path):
         # plot cpt data
