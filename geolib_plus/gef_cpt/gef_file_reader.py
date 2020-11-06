@@ -131,7 +131,6 @@ class GefFileReader(CptReader):
         Opens and reads gef file. Returns dictionary containing all possible
         inputs from gef file.
         """
-        validate_gef_cpt(gef_file)
         # read gef file
         with open(gef_file, "r") as f:
             data = f.readlines()
