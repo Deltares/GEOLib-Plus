@@ -4,6 +4,8 @@ import requests
 import logging
 import numpy as np
 
+from geolib_plus.cpt_base_model import AbstractCPT
+
 
 class HTTPSResolver(etree.Resolver):
     __name__ = "HTTPSResolver"
@@ -57,12 +59,12 @@ def validate_bro_cpt(bro_xml_file):
 
 
 class ValidatePreProcessing:
-    def __check_file_contains_data(self, cpt):
+    def __check_file_contains_data(self, cpt: AbstractCPT):
         if len(cpt.penetration_length) == 0:
             logging.warning("File " + cpt.name + " contains no data")
             return
 
-    def __check_data_different_than_zero(self, cpt):
+    def __check_data_different_than_zero(self, cpt: AbstractCPT):
         keys = [
             "penetration_length",
             "tip",
@@ -70,7 +72,9 @@ class ValidatePreProcessing:
             "friction_ratio",
         ]
         for k in keys:
-            if all(getattr(cpt, k) == 0) or all(getattr(cpt, k) == None):
+            if all(np.array(getattr(cpt, k)) == 0) or all(
+                np.array(getattr(cpt, k)) == None
+            ):
                 logging.warning("File " + cpt.name + " contains empty data")
                 return
 
@@ -81,7 +85,7 @@ class ValidatePreProcessing:
             )
             return
 
-    def __check_minimum_sample_criteria(self, cpt, minimum_samples: int):
+    def __check_minimum_sample_criteria(self, cpt: AbstractCPT, minimum_samples: int):
         if len(cpt.penetration_length) < minimum_samples:
             logging.warning(
                 "File "
@@ -92,7 +96,7 @@ class ValidatePreProcessing:
             return
 
     def validate_length_and_samples_cpt(
-        self, cpt, minimum_length: int = 5, minimum_samples: int = 50
+        self, cpt: AbstractCPT, minimum_length: int = 5, minimum_samples: int = 50
     ):
         """
         Performs initial checks regarding the availability of
