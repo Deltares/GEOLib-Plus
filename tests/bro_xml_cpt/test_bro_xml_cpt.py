@@ -17,6 +17,8 @@ class TestBroXmlCpt:
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
         )
+        # test initial expectations
+        assert test_file.is_file()
         # initialise model
         cpt = bro_xml_cpt.BroXmlCpt()
         # run test
@@ -37,6 +39,8 @@ class TestBroXmlCpt:
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
         )
+        # test initial expectations
+        assert test_file.is_file()
         # initialise model
         cpt = bro_xml_cpt.BroXmlCpt()
         # run test
@@ -55,6 +59,8 @@ class TestBroXmlCpt:
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
         )
+        # test initial expectations
+        assert test_file.is_file()
         # initialise model
         cpt_read = bro_xml_cpt.BroXmlCpt()
         # run test

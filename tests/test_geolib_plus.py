@@ -173,7 +173,7 @@ class TestGeolibPlusReading:
             cpt.depth_to_reference, cpt.local_reference_level - cpt.depth
         )
         np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[9:108])
-        np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2 * 1e-3)
+        np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
     @pytest.mark.systemtest
     @pytest.mark.parametrize("name", testdata, ids=testdata)

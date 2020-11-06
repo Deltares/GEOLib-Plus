@@ -193,10 +193,11 @@ class AbstractCPT(BaseModel):
         ]
 
         for data in pore_pressure_data:
-            if data is not None and not (all(value is None for value in data)):
-                if data.size and data.ndim and not np.all(data == 0):
-                    self.water = deepcopy(data)
-                    break
+            if data is not None:
+                if not (all(value is None for value in data)):
+                    if data.size and data.ndim and not np.all(data == 0):
+                        self.water = deepcopy(data)
+                        break
         if self.water is None or all(value is None for value in data):
             self.water = np.zeros(len(self.penetration_length))
 

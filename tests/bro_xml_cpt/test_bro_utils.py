@@ -54,6 +54,8 @@ class TestBroUtil:
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
         )
+        # test initial expectations
+        assert test_file.is_file()
         # run test
         model = bro.XMLBroCPTReader.xml_to_byte_string(fn=test_file)
         # test results
@@ -65,6 +67,9 @@ class TestBroUtil:
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "wrong.xml")
         )
+        # test initial expectations
+        assert test_file.is_file()
+        # final test
         with pytest.raises(FileNotFoundError):
             bro.XMLBroCPTReader.xml_to_byte_string(fn=test_file)
 
@@ -122,6 +127,8 @@ class TestBroUtil:
         fn = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "CPT000000065880_IMBRO_A.xml")
         )
+        # test initial expectations
+        assert fn.is_file()
         with open(fn, "r") as f:
             # memory-map the file, size 0 means whole file
             xml_bytes = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)[:]
@@ -153,6 +160,8 @@ class TestBroUtil:
                 "test_test_parse_bro_xml_raises.xml",
             )
         )
+        # test initial expectations
+        assert fn.is_file()
         with open(fn, "r") as f:
             # memory-map the file, size 0 means whole file
             xml_bytes = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)[:]
@@ -180,6 +189,8 @@ class TestBroUtil:
                 "test_get_all_data_from_bro.xml",
             )
         )
+        # test initial expectations
+        assert fn.is_file()
         with open(fn, "r") as f:
             # memory-map the file, size 0 means whole file
             xml = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)[:]
