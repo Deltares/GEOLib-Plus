@@ -2,8 +2,8 @@ import pytest
 from pathlib import Path
 from geolib_plus import plot_cpt
 from tests.utils import TestUtils
-from geolib_plus.GEF_CPT import GefCpt
-from geolib_plus.BRO_XML_CPT import BroXmlCpt
+from geolib_plus.gef_cpt import GefCpt
+from geolib_plus.bro_xml_cpt import BroXmlCpt
 from geolib_plus.plot_settings import PlotSettings
 import os
 
