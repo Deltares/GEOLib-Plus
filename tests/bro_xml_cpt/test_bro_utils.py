@@ -67,8 +67,6 @@ class TestBroUtil:
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "wrong.xml")
         )
-        # test initial expectations
-        assert test_file.is_file()
         # final test
         with pytest.raises(FileNotFoundError):
             bro.XMLBroCPTReader.xml_to_byte_string(fn=test_file)
