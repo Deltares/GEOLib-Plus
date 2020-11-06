@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
-from typing import Iterable
+from typing import Iterable, List
+import math
 
 # External modules
 from .bro_utils import XMLBroCPTReader
@@ -18,7 +19,7 @@ class BroXmlCpt(AbstractCPT):
         return XMLBroCPTReader()
 
     @property
-    def __water_measurement_types(self):
+    def __water_measurement_types(self) -> List[str]:
         return [
             "pore_pressure_u1",
             "pore_pressure_u2",
@@ -99,7 +100,7 @@ class BroXmlCpt(AbstractCPT):
         return
 
     @staticmethod
-    def __update_value_with_pre_drill(
+    def update_value_with_pre_drill(
         local_depth: Iterable, values: Iterable, length_of_average_points: int
     ) -> Iterable:
         """
@@ -123,16 +124,13 @@ class BroXmlCpt(AbstractCPT):
         self.depth = np.append(0, self.depth)
         for value_name in self.__list_of_array_values:
             data = getattr(self, value_name)
-            if (
-                (data is not None)
-                and (value_name is not "depth")
-                and not (all(v is None for v in data))
-            ):
-                value_to_add = np.append(
-                    np.average(data[:length_of_average_points]),
-                    data,
-                )
-                setattr(self, value_name, value_to_add)
+            if (data is not None) and (value_name is not "depth"):
+                if not (all(v is None for v in data)):
+                    value_to_add = np.append(
+                        np.average(data[:length_of_average_points]),
+                        data,
+                    )
+                    setattr(self, value_name, value_to_add)
         return
 
     def perform_pre_drill_interpretation(self, length_of_average_points: int = 3):
@@ -148,7 +146,7 @@ class BroXmlCpt(AbstractCPT):
         :return: depth, tip resistance, friction number, friction, pore water pressure
         """
         starting_depth = 0
-        if float(self.predrilled_z) != 0.0:
+        if not (math.isclose(float(self.predrilled_z), 0.0)):
             # if there is pre-dill add the average values to the pre-dill
             # Set the discretization
             discretization = np.average(np.diff(self.depth))
@@ -158,51 +156,47 @@ class BroXmlCpt(AbstractCPT):
             )
             for value_name in self.__list_of_array_values:
                 # depth value and Nones should be skipped
-                if (
-                    (getattr(self, value_name) is not None)
-                    and not (all(v is None for v in getattr(self, value_name)))
-                    and (
-                        value_name
-                        not in [
-                            "depth",
-                            "pore_pressure_u1",
-                            "pore_pressure_u2",
-                            "pore_pressure_u3",
-                        ]
-                    )
+                if (getattr(self, value_name) is not None) and (
+                    value_name
+                    not in [
+                        "depth",
+                        "pore_pressure_u1",
+                        "pore_pressure_u2",
+                        "pore_pressure_u3",
+                    ]
                 ):
-                    setattr(
-                        self,
-                        value_name,
-                        self.__update_value_with_pre_drill(
-                            local_depth=local_depth,
-                            values=getattr(self, value_name),
-                            length_of_average_points=length_of_average_points,
-                        ),
-                    )
+                    if not (all(v is None for v in getattr(self, value_name))):
+                        setattr(
+                            self,
+                            value_name,
+                            self.update_value_with_pre_drill(
+                                local_depth=local_depth,
+                                values=getattr(self, value_name),
+                                length_of_average_points=length_of_average_points,
+                            ),
+                        )
             # if there is pore water pressure
             # Here the endpoint is False so that for the final of
             # local_pore_pressure I don't end up with the same value
             # as the first in the Pore Pressure array.
             for water_measurement_type in self.__water_measurement_types:
                 pore_pressure_type = getattr(self, water_measurement_type)
-                if pore_pressure_type is not None and not (
-                    all(v is None for v in pore_pressure_type)
-                ):
-                    local_pore_pressure = np.linspace(
-                        0,
-                        pore_pressure_type[0],
-                        len(local_depth),
-                        endpoint=False,
-                    )
-                    setattr(
-                        self,
-                        water_measurement_type,
-                        np.append(
-                            local_pore_pressure,
-                            pore_pressure_type,
-                        ),
-                    )
+                if pore_pressure_type is not None:
+                    if not (all(v is None for v in pore_pressure_type)):
+                        local_pore_pressure = np.linspace(
+                            0,
+                            pore_pressure_type[0],
+                            len(local_depth),
+                            endpoint=False,
+                        )
+                        setattr(
+                            self,
+                            water_measurement_type,
+                            np.append(
+                                local_pore_pressure,
+                                pore_pressure_type,
+                            ),
+                        )
             # Enrich the depth
             self.depth = np.append(
                 local_depth,
@@ -226,9 +220,3 @@ class BroXmlCpt(AbstractCPT):
         self.perform_pre_drill_interpretation()
 
         super().pre_process_data()
-
-        kpa_to_mpa = 1e-3
-
-        self.tip = np.array(self.tip) * kpa_to_mpa
-        self.friction = np.array(self.friction) * kpa_to_mpa
-        self.water = np.array(self.water) * kpa_to_mpa
