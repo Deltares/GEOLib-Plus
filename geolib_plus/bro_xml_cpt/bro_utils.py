@@ -353,9 +353,6 @@ class XMLBroCPTReader(CptReader):
         return None
 
     def read_file(self, filepath: Path) -> dict:
-        # validate bro xml file
-        validate_bro_cpt(filepath)
-
         # read the BRO_XML into Memory
         xml = self.xml_to_byte_string(filepath)
 
@@ -364,9 +361,6 @@ class XMLBroCPTReader(CptReader):
 
         # add the BRO_XML attributes to CPT structure
         result_dictionary = self.__parse_bro_raw_data()
-
-        # validate bro xml data
-        self.validate_length_and_samples_cpt()
 
         return result_dictionary
 
@@ -406,48 +400,3 @@ class XMLBroCPTReader(CptReader):
             if isinstance(value, pd.Series):
                 dictionary[key] = value.values
         return dictionary
-
-    def check_file_contains_data(self):
-        if len(self.bro_data.dataframe.penetrationLength) == 0:
-            logging.warning("File " + self.bro_data.id + " contains no data")
-
-    def check_data_different_than_zero(self):
-        keys = ["penetrationLength", "coneResistance", "localFriction", "frictionRatio"]
-        for k in keys:
-            if all(self.bro_data.dataframe[k] == 0):
-                logging.warning("File " + self.bro_data.id + " contains empty data")
-
-    def check_criteria_minimum_length(self, minimum_length: int):
-        if (
-            np.max(np.abs(self.bro_data.dataframe.penetrationLength.values))
-            < minimum_length
-        ):
-            logging.warning(
-                "File "
-                + self.bro_data.id
-                + " has a length smaller than "
-                + str(minimum_length)
-            )
-
-    def check_minimum_sample_criteria(self, minimum_samples: int):
-        if len(self.bro_data.dataframe.penetrationLength.values) < minimum_samples:
-            logging.warning(
-                "File "
-                + self.bro_data.id
-                + " has a number of samples smaller than "
-                + str(minimum_samples)
-            )
-
-    def validate_length_and_samples_cpt(
-        self, minimum_length: int = 5, minimum_samples: int = 50
-    ):
-        """
-        Performs initial checks regarding the availability of
-        data in the cpt. Returns a string that contains all the
-        error messages.
-        """
-
-        self.check_file_contains_data()
-        self.check_data_different_than_zero()
-        self.check_criteria_minimum_length(minimum_length)
-        self.check_minimum_sample_criteria(minimum_samples)
