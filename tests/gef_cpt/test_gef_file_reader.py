@@ -206,9 +206,9 @@ class TestReadColumnData:
         assert (
             gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
         )
-        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387000.0
+        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13.387000
         assert (
-            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999000000.0
+            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
         )
         assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == 0.0
 
@@ -247,9 +247,9 @@ class TestReadColumnData:
         gef_reader = GefFileReader()
         # set inputs
         gef_reader.property_dict["penetration_length"].multiplication_factor = 1
-        gef_reader.property_dict["friction"].multiplication_factor = 1000
-        gef_reader.property_dict["pwp_u2"].multiplication_factor = 1000
-        gef_reader.property_dict["friction_nb"].multiplication_factor = 1000
+        gef_reader.property_dict["friction"].multiplication_factor = 1
+        gef_reader.property_dict["pwp_u2"].multiplication_factor = 1
+        gef_reader.property_dict["friction_nb"].multiplication_factor = 1
 
         gef_reader.property_dict["penetration_length"].gef_column_index = 0
         gef_reader.property_dict["friction"].gef_column_index = 2
@@ -275,11 +275,11 @@ class TestReadColumnData:
         assert (
             gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
         )
-        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13387000.0
+        assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13.387
         assert (
-            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0 * 1e3
+            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
         )
-        assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == -99999.0 * 1e3
+        assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == -99999.0
 
 
 class TestRemovePointsWithError:
@@ -433,9 +433,9 @@ class TestMatchIdxWithError:
         gef_reader.property_dict["friction_nb"].gef_key = 3
 
         gef_reader.property_dict["penetration_length"].multiplication_factor = 1
-        gef_reader.property_dict["friction"].multiplication_factor = 1000
-        gef_reader.property_dict["pwp_u2"].multiplication_factor = 1000
-        gef_reader.property_dict["friction_nb"].multiplication_factor = 1000
+        gef_reader.property_dict["friction"].multiplication_factor = 1
+        gef_reader.property_dict["pwp_u2"].multiplication_factor = 1
+        gef_reader.property_dict["friction_nb"].multiplication_factor = 1
 
         gef_reader.property_dict["penetration_length"].gef_column_index = 4
         gef_reader.property_dict["friction"].gef_column_index = 2
@@ -447,8 +447,8 @@ class TestMatchIdxWithError:
         gef_reader.match_idx_with_error(error_string_list)
         # Check expectations
         assert gef_reader.property_dict["penetration_length"].error_code == -5
-        assert gef_reader.property_dict["tip"].error_code == -2 * 1e6
-        assert gef_reader.property_dict["friction"].error_code == -3 * 1000
+        assert gef_reader.property_dict["tip"].error_code == -2
+        assert gef_reader.property_dict["friction"].error_code == -3
         assert gef_reader.property_dict["friction_nb"].error_code == "string"
         assert gef_reader.property_dict["pwp_u2"].error_code == "string"
 
