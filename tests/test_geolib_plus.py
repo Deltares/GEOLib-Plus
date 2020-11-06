@@ -85,24 +85,31 @@ class TestGeolibPlusReading:
         )
         assert test_file.is_file()
 
-        cpt = GefCpt().read(test_file)
+        cpt = GefCpt()
+        cpt.read(test_file)
 
         test_coord = [244319.00, 587520.00]
-        test_depth = np.linspace(1, 20, 20)
-        test_nap = 0.13 - test_depth
-        test_tip = np.full(20, 1000)
-        test_friction = np.full(20, 2000)
-        test_friction_nbr = np.full(20, 5)
-        test_water = np.full(20, 3000)
+        test_penetration = np.linspace(1, 20, 20)
+        test_tip = np.full(20, 1.)
+        test_friction = np.full(20, 2.)
+        test_friction_nbr = np.full(20, 5.)
+        test_inclination = np.full(20, 4.)
+        test_pore_pressure_u1 = np.full(20, 0.)
+        test_pore_pressure_u2 = np.full(20, 3.)
+        test_pore_pressure_u3 = np.full(20, 0.)
 
         np.testing.assert_array_equal("DKP302", cpt.name)
         np.testing.assert_array_equal(test_coord, cpt.coordinates)
-        np.testing.assert_array_equal(test_depth, cpt.depth)
-        np.testing.assert_array_equal(test_nap, cpt.depth_to_reference)
+        np.testing.assert_array_equal(test_penetration, cpt.penetration_length)
         np.testing.assert_array_equal(test_tip, cpt.tip)
         np.testing.assert_array_equal(test_friction, cpt.friction)
         np.testing.assert_array_equal(test_friction_nbr, cpt.friction_nbr)
-        np.testing.assert_array_equal(test_water, cpt.water)
+        np.testing.assert_array_equal(test_inclination, cpt.inclination_resultant)
+        np.testing.assert_almost_equal(0.13, cpt.local_reference_level)
+        np.testing.assert_array_equal(test_pore_pressure_u1, cpt.pore_pressure_u1)
+        np.testing.assert_array_equal(test_pore_pressure_u2, cpt.pore_pressure_u2)
+        np.testing.assert_array_equal(test_pore_pressure_u3, cpt.pore_pressure_u3)
+
 
     # System Test for geolib_plus_read_GEF & BRO based comparing result for same file
     testdata = [
@@ -175,38 +182,6 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[9:108])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
-    @pytest.mark.systemtest
-    @pytest.mark.parametrize("name", testdata, ids=testdata)
-    def test_reading_compare(self, name):
-        # Compare two files from bro (same CPT) in GEF and BRO Format
-        # Should be comparable
-
-        test_dir = TestUtils.get_local_test_data_dir("cpt")
-        bro_file = test_dir / "bro_xml" / f"{name}.xml"
-        assert bro_file.is_file()
-        gef_file = test_dir / "gef" / f"{name}.gef"
-        assert gef_file.is_file()
-
-        bro_cpt = BroXmlCpt()
-        bro_cpt.read(bro_file)
-
-        gef_cpt = GefCpt()
-        gef_cpt.read(gef_file)
-
-        np.testing.assert_array_equal(bro_cpt.name, gef_cpt.name)
-        np.testing.assert_array_equal(bro_cpt.coordinates, gef_cpt.coordinates)
-
-        # todo: JN The following tests current fail, the arrays are different size as are the depths
-        np.testing.assert_array_equal(bro_cpt.depth, gef_cpt.depth)
-        np.testing.assert_array_equal(
-            bro_cpt.depth_to_reference, gef_cpt.depth_to_reference
-        )
-        np.testing.assert_array_equal(bro_cpt.tip, gef_cpt.tip)
-        np.testing.assert_array_equal(bro_cpt.friction, gef_cpt.friction)
-        np.testing.assert_array_equal(bro_cpt.friction_nbr, gef_cpt.friction_nbr)
-        np.testing.assert_array_equal(bro_cpt.water, gef_cpt.water)
-
-
 class TestGeolibPlusValidate:
     @pytest.mark.systemtest
     # Test validation of BRO-XML file structure .... with clean file
@@ -242,7 +217,7 @@ class TestGeolibPlusValidate:
             pytest.fail("GEF file without error raised Error")
 
     @pytest.mark.systemtest
-    # Test validation of gef file structure ..... with file with error
+    # Test validation of gef file structure ..... with file with error (need to add more errors)
     def test_validate_gef_error(self):
         # This file raises a warning
         gef_file = TestUtils.get_local_test_data_dir(

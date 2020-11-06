@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns13:dispatchDataResponse xmlns:swe="http://www.opengis.net/swe/2.0" xmlns:gts="http://www.isotc211.org/2005/gts" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:sampling="http://www.opengis.net/sampling/2.0" xmlns:dscpt="https://schema.broservices.nl/xsd/dscpt/1.1" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:ns13="http://www.broservices.nl/xsd/dscpt/1.1" xmlns:ns12="http://www.broservices.nl/xsd/brocommon/3.0" xmlns:brocom="https://schema.broservices.nl/xsd/brocommon/3.0" xmlns:ns14="http://www.broservices.nl/xsd/cptcommon/1.1" xmlns:om="http://www.opengis.net/om/2.0" xmlns:cptcommon="https://schema.broservices.nl/xsd/cptcommon/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gmd="http://www.isotc211.org/2005/gmd">
+    <ns12:responseType>dispatch</ns12:responseType>
+    <ns12:dispatchTime>2020-06-10T11:10:32+01:00</ns12:dispatchTime>
+    <ns13:dispatchDocument>
+        <ns13:CPT_O gml:id="BRO_0007">
+            <ns12:broId>CPT000000064413</ns12:broId>
+            <ns13:cptStandard codeSpace="urn:bro:cpt:CPTStandard">NEN5140</ns13:cptStandard>
+            <ns13:standardizedLocation>
+                <ns12:location srsName="urn:ogc:def:crs:EPSG::4258" gml:id="BRO_0001">
+                    <gml:pos>51.886201280 4.719935290</gml:pos>
+                </ns12:location>
+                <ns12:coordinateTransformation codeSpace="urn:bro:CoordinateTransformation">RDNAPTRANS2008</ns12:coordinateTransformation>
+            </ns13:standardizedLocation>
+            <ns13:deliveredLocation>
+                <ns14:location srsName="urn:ogc:def:crs:EPSG::28992" gml:id="BRO_0002">
+                    <gml:pos>109061.600 433285.600</gml:pos>
+                </ns14:location>
+                <ns14:horizontalPositioningDate>
+                    <ns12:date>2011-06-29</ns12:date>
+                </ns14:horizontalPositioningDate>
+                <ns14:horizontalPositioningMethod codeSpace="urn:bro:cpt:HorizontalPositioningMethod">onbekend</ns14:horizontalPositioningMethod>
+            </ns13:deliveredLocation>
+            <ns13:deliveredVerticalPosition>
+                <ns14:localVerticalReferencePoint codeSpace="urn:bro:cpt:LocalVerticalReferencePoint">maaiveld</ns14:localVerticalReferencePoint>
+                <ns14:offset uom="m">-1.530</ns14:offset>
+                <ns14:verticalDatum codeSpace="urn:bro:cpt:VerticalDatum">NAP</ns14:verticalDatum>
+                <ns14:verticalPositioningDate>
+                    <ns12:date>2011-06-29</ns12:date>
+                </ns14:verticalPositioningDate>
+                <ns14:verticalPositioningMethod codeSpace="urn:bro:cpt:VerticalPositioningMethod">onbekend</ns14:verticalPositioningMethod>
+            </ns13:deliveredVerticalPosition>
+            <ns13:conePenetrometerSurvey gml:id="BRO_0006">
+                <sampling:sampledFeature xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <ns14:dissipationTestPerformed>nee</ns14:dissipationTestPerformed>
+                <ns14:finalProcessingDate>
+                    <ns12:voidReason>onbekend</ns12:voidReason>
+                </ns14:finalProcessingDate>
+                <ns14:cptMethod codeSpace="urn:bro:cpt:CPTMethod">elektrisch</ns14:cptMethod>
+                <ns14:qualityClass codeSpace="urn:bro:cpt:QualityClass">klasse2</ns14:qualityClass>
+                <ns14:stopCriterion codeSpace="urn:bro:cpt:StopCriterion">einddiepte</ns14:stopCriterion>
+                <ns14:trajectory>
+                    <ns14:predrilledDepth uom="m">0.01</ns14:predrilledDepth>
+                    <ns14:finalDepth uom="m">35.010</ns14:finalDepth>
+                </ns14:trajectory>
+                <ns14:conePenetrometer>
+                    <ns14:description>Rups 12/JBN/GEF</ns14:description>
+                    <ns14:conePenetrometerType>F7.5CKEHG/B-1701-0745</ns14:conePenetrometerType>
+                    <ns14:coneSurfaceArea uom="mm2">1500</ns14:coneSurfaceArea>
+                    <ns14:coneSurfaceQuotient uom="1">0.58</ns14:coneSurfaceQuotient>
+                    <ns14:coneToFrictionSleeveDistance uom="mm">329</ns14:coneToFrictionSleeveDistance>
+                    <ns14:frictionSleeveSurfaceArea uom="mm2">19956</ns14:frictionSleeveSurfaceArea>
+                    <ns14:frictionSleeveSurfaceQuotient uom="1">1.0</ns14:frictionSleeveSurfaceQuotient>
+                    <ns14:zeroLoadMeasurement>
+                        <ns14:coneResistanceBefore uom="MPa">0.191</ns14:coneResistanceBefore>
+                        <ns14:coneResistanceAfter uom="MPa">0.200</ns14:coneResistanceAfter>
+                        <ns14:inclinationResultantBefore uom="deg">1</ns14:inclinationResultantBefore>
+                        <ns14:inclinationResultantAfter uom="deg">1</ns14:inclinationResultantAfter>
+                        <ns14:localFrictionBefore uom="MPa">0.006</ns14:localFrictionBefore>
+                        <ns14:localFrictionAfter uom="MPa">0.005</ns14:localFrictionAfter>
+                    </ns14:zeroLoadMeasurement>
+                </ns14:conePenetrometer>
+                <ns14:conePenetrationTest gml:id="BRO_0005">
+                    <om:phenomenonTime xlink:type="simple">
+                        <gml:TimeInstant gml:id="BRO_0004">
+                            <gml:timePosition>2011-06-29</gml:timePosition>
+                        </gml:TimeInstant>
+                    </om:phenomenonTime>
+                    <om:resultTime xlink:type="simple">
+                        <gml:TimeInstant gml:id="BRO_0003">
+                            <gml:timePosition>2011-06-29</gml:timePosition>
+                        </gml:TimeInstant>
+                    </om:resultTime>
+                    <om:procedure xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <om:observedProperty xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <om:featureOfInterest xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                    <ns14:cptResult>
+                        <swe:elementCount xlink:type="simple"/>
+                        <swe:elementType name="ConePenetrationTestResultRecord" xlink:type="simple" xlink:href="http://www.broservices.nl/xsd/cptcommon/1.0/cpttestresult_record.xml"/>
+                    </ns14:cptResult>
+                </ns14:conePenetrationTest>
+            </ns13:conePenetrometerSurvey>
+            <ns13:registrationHistory>
+                <ns12:objectRegistrationTime>2017-01-13T18:50:24+01:00</ns12:objectRegistrationTime>
+                <ns12:registrationStatus codeSpace="urn:bro:RegistrationStatus">voltooid</ns12:registrationStatus>
+                <ns12:registrationCompletionTime>2017-01-13T18:50:24+01:00</ns12:registrationCompletionTime>
+                <ns12:corrected>nee</ns12:corrected>
+                <ns12:underReview>nee</ns12:underReview>
+                <ns12:deregistered>nee</ns12:deregistered>
+                <ns12:reregistered>nee</ns12:reregistered>
+            </ns13:registrationHistory>
+        </ns13:CPT_O>
+    </ns13:dispatchDocument>
+</ns13:dispatchDataResponse>

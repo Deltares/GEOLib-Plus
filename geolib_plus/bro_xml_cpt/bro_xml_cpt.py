@@ -124,7 +124,7 @@ class BroXmlCpt(AbstractCPT):
         self.depth = np.append(0, self.depth)
         for value_name in self.__list_of_array_values:
             data = getattr(self, value_name)
-            if (data is not None) and (value_name is not "depth"):
+            if (data is not None) and (value_name != "depth"):
                 if not (all(v is None for v in data)):
                     value_to_add = np.append(
                         np.average(data[:length_of_average_points]),

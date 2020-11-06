@@ -1,7 +1,5 @@
-import numpy as np
 import matplotlib.pylab as plt
 
-import sys
 import os
 import warnings
 from typing import Tuple
@@ -218,6 +216,10 @@ def save_figures(figures, path, cpt):
     """
 
     import matplotlib.backends.backend_pdf
+
+    if not path.exists():
+        path.mkdir(parents=True)
+
     pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(path, cpt.name) + ".pdf")
 
     for fig in figures:
