@@ -27,6 +27,4 @@ class GefCpt(AbstractCPT):
         self.pore_pressure_u3 = self.pore_pressure_u3 * pa_to_mpa
         self.water = self.water * pa_to_mpa
 
-        #todo remove points with error
-
-
+        # todo remove points with error

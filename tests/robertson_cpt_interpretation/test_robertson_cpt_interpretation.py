@@ -30,6 +30,27 @@ class TestShapeFiles:
         np.testing.assert_array_equal(lithology_test, litho)
 
 
+class TestIntergration:
+    def test_against_bro_results(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000065880_IMBRO_A.gef")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        interpeter = RobertsonCptInterpretation()
+        # test initial expectations
+        assert cpt
+        assert interpeter
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # interpet the results
+        interpeter.interpret(data=cpt)
+
+
 class TestInterpreter:
     @pytest.mark.unittest
     def test_rho_calculation(self):
