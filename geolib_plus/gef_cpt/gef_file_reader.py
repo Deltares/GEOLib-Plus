@@ -22,8 +22,6 @@ class GefColumnProperty(GefProperty):
 
 class GefFileReader(CptReader):
     def __init__(self):
-        self.__mpa_to_pa = 1e6
-        self.__kN_to_N = 1e3
 
         self.property_dict = self.__get_default_property_dict()
         self.information_dict = self.__get_default_information_dict()
@@ -42,45 +40,25 @@ class GefFileReader(CptReader):
     def __get_default_property_dict(self) -> Dict:
         return {
             "penetration_length": GefColumnProperty(gef_key=1),
-            "tip": GefColumnProperty(gef_key=2, multiplication_factor=self.__mpa_to_pa),
-            "friction": GefColumnProperty(
-                gef_key=3, multiplication_factor=self.__mpa_to_pa
-            ),
+            "tip": GefColumnProperty(gef_key=2),
+            "friction": GefColumnProperty(gef_key=3),
             "friction_nb": GefColumnProperty(gef_key=4),
-            "pwp_u1": GefColumnProperty(
-                gef_key=5, multiplication_factor=self.__mpa_to_pa
-            ),
-            "pwp_u2": GefColumnProperty(
-                gef_key=6, multiplication_factor=self.__mpa_to_pa
-            ),
-            "pwp_u3": GefColumnProperty(
-                gef_key=7, multiplication_factor=self.__mpa_to_pa
-            ),
+            "pwp_u1": GefColumnProperty(gef_key=5),
+            "pwp_u2": GefColumnProperty(gef_key=6),
+            "pwp_u3": GefColumnProperty(gef_key=7),
             "inclination_resultant": GefColumnProperty(gef_key=8),
             "inclination_ns": GefColumnProperty(gef_key=9),
             "inclination_ew": GefColumnProperty(gef_key=10),
             "depth": GefColumnProperty(gef_key=11),
             "time": GefColumnProperty(gef_key=12),
-            "corrected_tip": GefColumnProperty(
-                gef_key=13, multiplication_factor=self.__mpa_to_pa
-            ),
-            "net_tip": GefColumnProperty(
-                gef_key=14, multiplication_factor=self.__mpa_to_pa
-            ),
+            "corrected_tip": GefColumnProperty(gef_key=13),
+            "net_tip": GefColumnProperty(gef_key=14),
             "pore_ratio": GefColumnProperty(gef_key=15),
             "tip_nbr": GefColumnProperty(gef_key=16),
-            "unit_weight": GefColumnProperty(
-                gef_key=17, multiplication_factor=self.__kN_to_N
-            ),
-            "pwp_ini": GefColumnProperty(
-                gef_key=18, multiplication_factor=self.__mpa_to_pa
-            ),
-            "total_pressure": GefColumnProperty(
-                gef_key=19, multiplication_factor=self.__mpa_to_pa
-            ),
-            "effective_pressure": GefColumnProperty(
-                gef_key=20, multiplication_factor=self.__mpa_to_pa
-            ),
+            "unit_weight": GefColumnProperty(gef_key=17),
+            "pwp_ini": GefColumnProperty(gef_key=18),
+            "total_pressure": GefColumnProperty(gef_key=19),
+            "effective_pressure": GefColumnProperty(gef_key=20),
             "inclination_x": GefColumnProperty(gef_key=21),
             "inclination_y": GefColumnProperty(gef_key=22),
             "electric_cond": GefColumnProperty(gef_key=23),
@@ -155,7 +133,6 @@ class GefFileReader(CptReader):
         Opens and reads gef file. Returns dictionary containing all possible
         inputs from gef file.
         """
-        validate_gef_cpt(gef_file)
         # read gef file
         with open(gef_file, "r") as f:
             data = f.readlines()

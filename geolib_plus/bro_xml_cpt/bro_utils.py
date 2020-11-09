@@ -1,19 +1,7 @@
 """
-BRO XML CPT database reader, indexer and parser.
+bro_utils :
 
-Enables searching of very large XML CPT database dumps.
-In order to speed up these operations, an index will
-be created by searching for `featureMember`s (CPTs) in the xml
-if it does not yet exist next to the XML file.
-
-The index is stored next to the file and stores the xml
-filesize to validate the xml database is the same. If not,
-we assume the database is new and a new index will be created
-as well. The index itself is an array with columns that store
-the x y location of the CPT and the start/end bytes in the XML file.
-
-As of January 2019, almost a 100.000 CPTs are stored in the XML
-and creating the index will take 5-10min depending on disk performance.
+Functions used in the reading of bro_xml cpts
 
 """
 
@@ -58,34 +46,6 @@ ns5 = "{http://www.opengis.net/om/2.0}"
 
 nodata = -999999
 to_epsg = "28992"
-
-
-def query_index(index, x, y, radius=1000.0):
-    """Query database for CPTs
-    within radius of x, y.
-
-    :param index: Index is a array with columns: x y begin end
-    :type index: np.array
-    :param x: X coordinate
-    :type x: float
-    :param y: Y coordinate
-    :type y: float
-    :param radius: Radius (m) to use for searching. Defaults to 1000.
-    :type radius: float
-    :return: 2d array of start/end (columns) for each location (rows).
-    :rtype: np.array
-    """
-
-    # Setup KDTree based on points
-    npindex = np.array(index)
-    tree = KDTree(npindex[:, 0:2])
-
-    # Query point and return slices
-    points = tree.query_ball_point((float(x), float(y)), float(radius))
-
-    # Return slices
-    return npindex[points, 2:4].astype(np.int64)
-
 
 class XMLBroColumnValues(BaseModel):
     penetrationLength: Union[Iterable, None] = None
@@ -273,7 +233,7 @@ class XMLBroCPTReader(CptReader):
         meta_usable = self.all_single_data_available()
         data_usable = all([col in avail_columns for col in req_columns])
         if not (meta_usable and data_usable):
-            logging.warning("CPT with id {} misses required data.".format(data.id))
+            logging.warning("CPT with id {} misses required data.".format(self.bro_data.id))
 
     @staticmethod
     def parse_xml_location(tdata: bytes):
