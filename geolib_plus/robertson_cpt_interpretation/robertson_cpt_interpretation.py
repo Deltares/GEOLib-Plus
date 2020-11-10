@@ -38,7 +38,7 @@ class ShearWaveVelocityMethod(IntEnum):
 
 
 class RobertsonCptInterpretation(AbstractInterpretationMethod):
-    r"""
+    """
     Robertson soil classification.
 
     Classification of soils according to Robertson chart.
@@ -50,18 +50,27 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         :figclass: align-center
     """
 
-    def interpret(self, data: AbstractCPT):
+    def interpret(
+        self,
+        data: AbstractCPT,
+        unitweightmethod: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
+        ocrmethod: OCRMethod = OCRMethod.ROBERTSON,
+        shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON,
+    ):
 
         self.data = data
+        MPa_to_kPa = 1000
+        self.data.tip = self.data.tip * MPa_to_kPa
+        self.data.friction = self.data.friction * MPa_to_kPa
 
-        min_lay_thickness = 0.01
+        min_layer_thickness = 0.01
         # compute qc
         self.qt_calc()
 
         # compute unit weight
         # method = 'Robertson' (Default) or 'Lengkeek'
         # gamma_min = 10.5, gamma_max = 22 Defaults
-        self.gamma_calc()
+        self.gamma_calc(method=unitweightmethod)
 
         # compute density
         self.rho_calc()
@@ -86,7 +95,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
 
         # compute shear wave velocity and shear modulus
         # method == "Robertson" (Default|"Mayne"|"Andrus"|"Zang"|"Ahmed")
-        self.vs_calc()
+        self.vs_calc(method=shearwavevelocitymethod)
 
         # compute damping
         # method = "Mayne"|"Robertson" (Default)
@@ -95,7 +104,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         # D50 = 0.2
         # Ip = 40
         # freq = 1.
-        self.damp_calc()
+        self.damp_calc(method=ocrmethod)
 
         # compute Poisson ratio
         self.poisson_calc()
@@ -113,7 +122,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         self.filter()
 
         # merge the layers thickness
-        self.merge_thickness(minimum_layer_thickness=min_lay_thickness)
+        self.merge_thickness(minimum_layer_thickness=min_layer_thickness)
+
+        return self.data
 
     def soil_types(
         self,
@@ -325,9 +336,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         # compute pwp
         # determine location of phreatic line: it cannot be above the CPT depth
         z_aux = np.min(
-            [self.data.pwp, self.data.depth_to_reference[0] + self.data.depth[0]]
+            [self.data.pwp, abs(self.data.depth_to_reference[0]) + self.data.depth[0]]
         )
-        pwp = (z_aux - self.data.depth_to_reference) * self.data.g
+        pwp = (z_aux - abs(self.data.depth_to_reference)) * self.data.g
         # no suction is allowed
         pwp[pwp <= 0] = 0
         # compute effective stress

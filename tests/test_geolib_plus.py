@@ -3,6 +3,7 @@ from geolib_plus.bro_xml_cpt import *
 from geolib_plus.gef_cpt import *
 from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
 from tests.utils import TestUtils
+from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
 
 # External
 from pathlib import Path
@@ -16,6 +17,15 @@ def test_version():
 
 
 class TestGeolibPlusReading:
+    @pytest.mark.systemtest
+    def test_robertson_interpretation_test(self):
+        gef_file = TestUtils.get_local_test_data_dir("cpt/gef/KW19-3.gef")
+        cpt = GefCpt()
+        cpt.read(gef_file)
+        cpt.pre_process_data()
+        cpt.interpret_cpt(RobertsonCptInterpretation)
+        print(cpt.lithology)
+
     # System Test for geolib_plus_read_BRO
 
     @pytest.mark.systemtest
@@ -90,13 +100,13 @@ class TestGeolibPlusReading:
 
         test_coord = [244319.00, 587520.00]
         test_penetration = np.linspace(1, 20, 20)
-        test_tip = np.full(20, 1.)
-        test_friction = np.full(20, 2.)
-        test_friction_nbr = np.full(20, 5.)
-        test_inclination = np.full(20, 4.)
-        test_pore_pressure_u1 = np.full(20, 0.)
-        test_pore_pressure_u2 = np.full(20, 3.)
-        test_pore_pressure_u3 = np.full(20, 0.)
+        test_tip = np.full(20, 1.0)
+        test_friction = np.full(20, 2.0)
+        test_friction_nbr = np.full(20, 5.0)
+        test_inclination = np.full(20, 4.0)
+        test_pore_pressure_u1 = np.full(20, 0.0)
+        test_pore_pressure_u2 = np.full(20, 3.0)
+        test_pore_pressure_u3 = np.full(20, 0.0)
 
         np.testing.assert_array_equal("DKP302", cpt.name)
         np.testing.assert_array_equal(test_coord, cpt.coordinates)
@@ -109,7 +119,6 @@ class TestGeolibPlusReading:
         np.testing.assert_array_equal(test_pore_pressure_u1, cpt.pore_pressure_u1)
         np.testing.assert_array_equal(test_pore_pressure_u2, cpt.pore_pressure_u2)
         np.testing.assert_array_equal(test_pore_pressure_u3, cpt.pore_pressure_u3)
-
 
     # System Test for geolib_plus_read_GEF & BRO based comparing result for same file
     testdata = [
@@ -181,6 +190,7 @@ class TestGeolibPlusReading:
         )
         np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[9:108])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
+
 
 class TestGeolibPlusValidate:
     @pytest.mark.systemtest

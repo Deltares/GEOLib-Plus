@@ -11,6 +11,7 @@ import numpy as np
 import pytest
 from pathlib import Path
 import csv
+import json
 
 
 class TestShapeFiles:
@@ -34,7 +35,7 @@ class TestIntergration:
     def test_against_bro_results(self):
         # open the gef file
         test_file = TestUtils.get_local_test_data_dir(
-            Path("cpt", "gef", "CPT000000065880_IMBRO_A.gef")
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
         )
         assert test_file.is_file()
         # initialise models
@@ -48,7 +49,59 @@ class TestIntergration:
         # do pre-processing
         cpt.pre_process_data()
         # interpet the results
-        interpeter.interpret(data=cpt)
+        cpt.interpret_cpt(RobertsonCptInterpretation)
+        # read already calculated data
+        benchmark_file = TestUtils.get_local_test_data_dir(
+            Path("results_CPT000000003688_IMBRO_A.gef.json")
+        )
+        assert benchmark_file.is_file()
+        with open(benchmark_file) as f:
+            benchmark_data = json.load(f)
+        print(1)
+        values_to_test = [
+            "friction_nbr",
+            "friction_nbr",
+            "qt",
+            "qt",
+            "rho",
+            "rho",
+            "tip",
+            "tip",
+            "depth",
+            "depth",
+            "depth_to_reference",
+            "friction",
+            "total_stress",
+            "effective_stress",
+            "Qtn",
+            "Fr",
+            "IC",
+            "n",
+            "vs",
+            "G0",
+            "E0",
+            "permeability",
+            "poisson",
+            "damping",
+        ]
+
+        assert benchmark_data["name"].split("_")[0] == cpt.name
+        assert benchmark_data["coordinates"] == cpt.coordinates
+        assert benchmark_data["ground_water_level"] == cpt.pwp
+        assert benchmark_data["lithology"] == cpt.lithology
+        assert np.alltrue(benchmark_data["litho_points"] == cpt.litho_points)
+        for value in ["litho_NEN", "E_NEN", "cohesion_NEN", "fr_angle_NEN"]:
+            for i in range(len(cpt.litho_NEN)):
+                assert set(getattr(cpt, value)[i].split("/")) == set(
+                    benchmark_data[value][i].split("/")
+                )
+        # GEOLIB-PLUS removed 3 depths
+        for value in values_to_test:
+            print(value)
+            test = getattr(cpt, value)
+            if value == "depth_to_reference":
+                test = abs(test)
+            assert np.allclose(benchmark_data[value], test)
 
 
 class TestInterpreter:
