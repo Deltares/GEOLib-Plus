@@ -6,6 +6,18 @@ Developer API
 Overview
 ------------------
 
-.. automodule:: geolib_plus
-    :members:
-    :undoc-members:
+.. toctree::
+   :maxdepth: 3
+   
+
+   geolib_plus
+   geolib_plus.bro_xml_cpt
+   geolib_plus.gef_cpt
+
+
+Indices and tables
+------------------
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
