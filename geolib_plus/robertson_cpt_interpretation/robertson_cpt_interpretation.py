@@ -5,7 +5,7 @@ from shapely.geometry import Point
 import numpy as np
 import more_itertools as mit
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Union
 from enum import IntEnum
 
 from geolib_plus.cpt_base_model import AbstractInterpretationMethod, AbstractCPT
@@ -128,7 +128,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
 
     def soil_types(
         self,
-        path_shapefile: str = r"./resources",
+        path_shapefile: Path = Path("resources"),
         model_name: str = "Robertson",
     ):
         """
@@ -139,15 +139,10 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         :return: list of the polygons defining the soil types
         """
 
-        # define the path for the shape file
-        path_shapefile = resource_path(
-            os.path.join(
-                os.path.join(os.path.dirname(__file__), path_shapefile), model_name
-            )
-        )
+        path_shapefile = Path(Path(__file__).parent, path_shapefile, model_name)
 
         # read shapefile
-        sf = shapefile.Reader(path_shapefile)
+        sf = shapefile.Reader(str(path_shapefile))
         list_of_polygons = []
         for polygon in list(sf.iterShapes()):
             list_of_polygons.append(Polygon(polygon.points))
@@ -202,7 +197,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         self.data.litho_points = points
 
     def pwp_level_calc(
-        self, path_pwp: str = "./resources", name: str = "peilgebieden_jp_250m.nc"
+        self,
+        path_pwp: Union[str, Path] = "resources",
+        name: str = "peilgebieden_jp_250m.nc",
     ):
         """
         Computes the estimated pwp level for the cpt coordinate
@@ -215,9 +212,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         """
 
         # define the path for the shape file
-        path_pwp = resource_path(
-            os.path.join(os.path.join(os.path.dirname(__file__), path_pwp), name)
-        )
+        path_pwp = resource_path(Path(Path(__file__).parent, path_pwp, name))
 
         pwp = NetCDF()
         pwp.read_cdffile(path_pwp)
