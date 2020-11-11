@@ -402,7 +402,7 @@ class GefFileReader(CptReader):
         Values that contain data with errors should be removed
         from the resulting dictionary
         """
-        for key in self.property_dict:
+        for key in self.property_dict.keys():
             deleted_rows = 0
             if self.property_dict[key].values_from_gef is not None:
                 temp_list = self.property_dict[key].values_from_gef.copy()

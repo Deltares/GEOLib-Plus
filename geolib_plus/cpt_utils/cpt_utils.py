@@ -12,6 +12,8 @@ from pathlib import Path
 
 from geolib_plus.cpt_base_model import AbstractCPT
 
+resource_default_path = Path(__file__).parent.parent.parent
+
 
 def n_iter(
     n: Union[Iterable, None],
@@ -56,7 +58,7 @@ def n_iter(
 
 
 def resource_path(file_name: Union[Path, str]) -> Path:
-    r""" "
+    """
     Define the relative path to the file
 
     Used to account for the compiling location of the shapefile
@@ -66,8 +68,10 @@ def resource_path(file_name: Union[Path, str]) -> Path:
     :param file_name: File name
     :return: relative path to the file
     """
-
-    return Path(Path(__file__).parent.parent.parent, file_name)
+    assert (
+        resource_default_path.is_dir()
+    ), f"Default resource path was not found at {resource_default_path}"
+    return resource_default_path / file_name
 
 
 def ceil_value(data: Iterable, value: Union[int, float]) -> Iterable:

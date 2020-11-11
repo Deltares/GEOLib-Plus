@@ -122,7 +122,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         self.filter()
 
         # merge the layers thickness
-        self.merge_thickness(minimum_layer_thickness=min_layer_thickness)
+        (
+            self.data.depth_merged,
+            self.data.index_merged,
+            self.data.lithology_merged,
+        ) = merge_thickness(cpt_data=self.data, min_layer_thick=min_layer_thickness)
 
         return self.data
 
@@ -139,7 +143,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         :return: list of the polygons defining the soil types
         """
 
-        path_shapefile = Path(Path(__file__).parent, path_shapefile, model_name)
+        path_shapefile = resource_path(
+            Path(Path(__file__).parent, path_shapefile, model_name)
+        )
 
         # read shapefile
         sf = shapefile.Reader(str(path_shapefile))
@@ -675,19 +681,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
 
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
-
-    def merge_thickness(self, minimum_layer_thickness: int):
-        """
-
-        :param minimum_layer_thickness: Minimum layer thickness to merge
-        :return:
-        """
-
-        (
-            self.data.depth_merged,
-            self.data.index_merged,
-            self.data.lithology_merged,
-        ) = merge_thickness(self.data, minimum_layer_thickness)
 
     def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
         """

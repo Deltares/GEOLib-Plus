@@ -32,6 +32,7 @@ class TestShapeFiles:
 
 
 class TestIntergration:
+    @pytest.mark.integration
     def test_against_bro_results(self):
         # open the gef file
         test_file = TestUtils.get_local_test_data_dir(
@@ -102,7 +103,7 @@ class TestIntergration:
 
 
 class TestInterpreter:
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_rho_calculation(self):
         # initialise models
         cpt = GefCpt()
@@ -123,7 +124,7 @@ class TestInterpreter:
         # self.assertEqual(exact_rho, self.cpt.rho)
         assert exact_rho.tolist() == cpt.rho.tolist()
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_gamma_calc(self):
         # initialise models
         cpt = GefCpt()
@@ -163,7 +164,7 @@ class TestInterpreter:
         interpeter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK)
         assert local_gamma2.tolist() == interpeter.gamma.tolist()
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_stress_calc(self):
         # initialise models
         cpt = GefCpt()
@@ -230,7 +231,7 @@ class TestInterpreter:
             np.around(interpeter.data.effective_stress, 1)
         )
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_norm_calc(self):
         # initialise models
         cpt = GefCpt()
@@ -304,7 +305,7 @@ class TestInterpreter:
             np.around(interpeter.data.IC, 1)
         )
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_vs_calc(self):
         # initialise model
         cpt = GefCpt()
@@ -439,7 +440,7 @@ class TestInterpreter:
         # Check if they are equal
         assert test_poisson == list(interpeter.data.poisson)
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_damp_calc_1(self):
         # initialise model
         cpt = GefCpt()
