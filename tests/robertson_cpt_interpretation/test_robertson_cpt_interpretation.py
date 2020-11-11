@@ -40,10 +40,8 @@ class TestIntergration:
         assert test_file.is_file()
         # initialise models
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
         # test initial expectations
         assert cpt
-        assert interpeter
         # read gef file
         cpt.read(filepath=test_file)
         # do pre-processing
@@ -57,7 +55,6 @@ class TestIntergration:
         assert benchmark_file.is_file()
         with open(benchmark_file) as f:
             benchmark_data = json.load(f)
-        print(1)
         values_to_test = [
             "friction_nbr",
             "friction_nbr",
@@ -95,7 +92,7 @@ class TestIntergration:
                 assert set(getattr(cpt, value)[i].split("/")) == set(
                     benchmark_data[value][i].split("/")
                 )
-        # GEOLIB-PLUS removed 3 depths
+
         for value in values_to_test:
             print(value)
             test = getattr(cpt, value)
