@@ -32,7 +32,7 @@ class TestShapeFiles:
 
 
 class TestIntergration:
-    @pytest.mark.integration
+    @pytest.mark.integrationtest
     def test_against_bro_results(self):
         # open the gef file
         test_file = TestUtils.get_local_test_data_dir(
