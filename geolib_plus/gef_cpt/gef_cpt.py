@@ -18,6 +18,4 @@ class GefCpt(AbstractCPT):
         """
         super().pre_process_data()
 
-        #todo remove points with error
-
-
+        # todo remove points with error

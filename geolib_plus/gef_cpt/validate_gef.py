@@ -14,7 +14,7 @@ class GefLib:
     """
 
     def __init__(self):
-        resources_dir = Path(__file__).parent/'resources'
+        resources_dir = Path(__file__).parent / "resources"
         if platform.uname()[0] == "Windows":
             # Load DLL into memory.
             source_lib = resources_dir.joinpath("geflib.dll")
@@ -274,14 +274,16 @@ def _validate_cpt_from_gef(filename: Path, logging: bool = True) -> int:
 
     result = lib_handle._read_gef(filename)
     if result != 1:
-        raise ValueError(f"{filename} unable to read file, critical error, no feedback provided. "
-                         f"Please check consistency of file structure")
+        raise ValueError(
+            f"{filename} unable to read file, critical error, no feedback provided. "
+            f"Please check consistency of file structure"
+        )
 
     l_err_filename = None
 
     if logging:
         # file name for err \ delete existing if necessary
-        l_err_filename = filename.with_suffix('.err')
+        l_err_filename = filename.with_suffix(".err")
         try:
             # remove file if present
             remove(l_err_filename)
