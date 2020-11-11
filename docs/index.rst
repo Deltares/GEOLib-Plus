@@ -3,7 +3,7 @@
    contain the root `toctree` directive.
 
 Welcome to GEOLib+'s documentation!
-==================================
+===================================
 
 GEOLib+ is a Python package .
 Release v\ |version|.
@@ -35,6 +35,16 @@ API
 
    dev/overview
 
+The Tutorials
+-------------
+
+This part of the documentation, which is all prose, gives some examples
+of using GEOLib+.
+
+.. toctree::
+   :maxdepth: 3
+
+   community/tutorials/tutorial_cpt
 
 Changelog
 ---------
@@ -43,3 +53,12 @@ Changelog
    :maxdepth: 3
 
    changelog
+
+references
+----------
+
+.. toctree::
+   :maxdepth: 3
+
+   references
+
