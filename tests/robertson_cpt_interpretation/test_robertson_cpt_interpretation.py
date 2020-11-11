@@ -87,7 +87,7 @@ class TestIntergration:
         assert benchmark_data["coordinates"] == cpt.coordinates
         assert benchmark_data["ground_water_level"] == cpt.pwp
         assert benchmark_data["lithology"] == cpt.lithology
-        assert np.alltrue(benchmark_data["litho_points"] == cpt.litho_points)
+        assert np.allclose(benchmark_data["litho_points"], cpt.litho_points)
         for value in ["litho_NEN", "E_NEN", "cohesion_NEN", "fr_angle_NEN"]:
             for i in range(len(cpt.litho_NEN)):
                 assert set(getattr(cpt, value)[i].split("/")) == set(
