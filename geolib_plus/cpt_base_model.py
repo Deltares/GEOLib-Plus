@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from pathlib import Path
-from typing import Optional, Iterable, List
+from typing import Optional, Iterable, List, Type
 from pydantic import BaseModel
 from copy import deepcopy
 import numpy as np
@@ -131,6 +131,13 @@ class AbstractCPT(BaseModel):
     @abstractmethod
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
+
+    def get_interpretation_method(self, method) -> AbstractInterpretationMethod:
+        return method()
+
+    def interpret_cpt(self, method: Type[AbstractInterpretationMethod]):
+        method = self.get_interpretation_method(method)
+        method.interpret(self)
 
     def __calculate_corrected_depth(self) -> np.ndarray:
         """

@@ -7,6 +7,7 @@ from typing import List, Dict, Union, Iterable
 from pathlib import Path
 from pydantic import BaseModel
 from logging import warning
+import math
 
 
 class GefProperty(BaseModel):
@@ -404,13 +405,17 @@ class GefFileReader(CptReader):
         for key in self.property_dict:
             deleted_rows = 0
             if self.property_dict[key].values_from_gef is not None:
-                for number, value in enumerate(self.property_dict[key].values_from_gef):
-                    if (
-                        self.property_dict[key].values_from_gef[number - deleted_rows]
-                        == self.property_dict[key].error_code
-                    ):
-                        self.delete_value_for_all_keys(number=number - deleted_rows)
-                        deleted_rows = deleted_rows + 1
+                temp_list = self.property_dict[key].values_from_gef.copy()
+                for number, value in enumerate(temp_list):
+                    if self.property_dict[key].values_from_gef[number - deleted_rows]:
+                        if math.isclose(
+                            self.property_dict[key].values_from_gef[
+                                number - deleted_rows
+                            ],
+                            self.property_dict[key].error_code,
+                        ):
+                            self.delete_value_for_all_keys(number=number - deleted_rows)
+                            deleted_rows = deleted_rows + 1
         return None
 
     def delete_value_for_all_keys(self, number: int) -> None:

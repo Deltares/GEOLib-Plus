@@ -1,0 +1,428 @@
+{
+    "Veen": {
+        "Niet voorbelast": {
+            "Slap": {
+                "qcdq": "0.1",
+                "E": [
+                    "0.2",
+                    "0.5"
+                ],
+                "friction_angle": [
+                    "15",
+                    "15"
+                ],
+                "Cohesie": [
+                    "1",
+                    "2.5"
+                ]
+            }
+        },
+        "Matig voorbelast": {
+            "Matig": {
+                "qcdq": "0.2",
+                "E": [
+                    "0.5",
+                    "1"
+                ],
+                "friction_angle": [
+                    "15",
+                    "15"
+                ],
+                "Cohesie": [
+                    "2.5",
+                    "5"
+                ]
+            }
+        }
+    },
+    "Leem": {
+        "Zwak zandig": {
+            "Slap": {
+                "qcdq": "1",
+                "E": [
+                    "2",
+                    "2"
+                ],
+                "friction_angle": [
+                    "27.5",
+                    "30"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Matig": {
+                "qcdq": "2",
+                "E": [
+                    "3",
+                    "3"
+                ],
+                "friction_angle": [
+                    "27.5",
+                    "32.5"
+                ],
+                "Cohesie": [
+                    "1",
+                    "1"
+                ]
+            },
+            "Vast": {
+                "qcdq": "3",
+                "E": [
+                    "5",
+                    "7"
+                ],
+                "friction_angle": [
+                    "27.5",
+                    "35"
+                ],
+                "Cohesie": [
+                    "2.5",
+                    "3.8"
+                ]
+            }
+        },
+        "Sterk zandig": {
+            "-": {
+                "qcdq": "2",
+                "E": [
+                    "3",
+                    "5"
+                ],
+                "friction_angle": [
+                    "27.5",
+                    "35"
+                ],
+                "Cohesie": [
+                    "0",
+                    "1"
+                ]
+            }
+        }
+    },
+    "Zand": {
+        "Schoon": {
+            "Los": {
+                "qcdq": "5",
+                "E": [
+                    "15",
+                    "15"
+                ],
+                "friction_angle": [
+                    "30",
+                    "30"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Matig": {
+                "qcdq": "15",
+                "E": [
+                    "45",
+                    "45"
+                ],
+                "friction_angle": [
+                    "32.5",
+                    "32.5"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Vast": {
+                "qcdq": "25",
+                "E": [
+                    "75",
+                    "110"
+                ],
+                "friction_angle": [
+                    "35",
+                    "40"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            }
+        },
+        "Zwak siltig, kleiig": {
+            "-": {
+                "qcdq": "12",
+                "E": [
+                    "35",
+                    "50"
+                ],
+                "friction_angle": [
+                    "27",
+                    "32.5"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            }
+        },
+        "Sterk siltig, kleiig": {
+            "-": {
+                "qcdq": "8",
+                "E": [
+                    "15",
+                    "30"
+                ],
+                "friction_angle": [
+                    "25",
+                    "30"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            }
+        }
+    },
+    "Klei": {
+        "Schoon": {
+            "Slap": {
+                "qcdq": "0.5",
+                "E": [
+                    "1",
+                    "1"
+                ],
+                "friction_angle": [
+                    "17.5",
+                    "17.5"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Matig": {
+                "qcdq": "1",
+                "E": [
+                    "2",
+                    "2"
+                ],
+                "friction_angle": [
+                    "17.5",
+                    "17.5"
+                ],
+                "Cohesie": [
+                    "5",
+                    "5"
+                ]
+            },
+            "Vast": {
+                "qcdq": "2",
+                "E": [
+                    "4",
+                    "10"
+                ],
+                "friction_angle": [
+                    "17.5",
+                    "25"
+                ],
+                "Cohesie": [
+                    "13",
+                    "15"
+                ]
+            }
+        },
+        "Zwak zandig": {
+            "Slap": {
+                "qcdq": "0.7",
+                "E": [
+                    "1.5",
+                    "1.5"
+                ],
+                "friction_angle": [
+                    "22.5",
+                    "22.5"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Matig": {
+                "qcdq": "1.5",
+                "E": [
+                    "3",
+                    "3"
+                ],
+                "friction_angle": [
+                    "22.5",
+                    "22.5"
+                ],
+                "Cohesie": [
+                    "5",
+                    "5"
+                ]
+            },
+            "Vast": {
+                "qcdq": "2.5",
+                "E": [
+                    "5",
+                    "10"
+                ],
+                "friction_angle": [
+                    "22.5",
+                    "27.5"
+                ],
+                "Cohesie": [
+                    "13",
+                    "15"
+                ]
+            }
+        },
+        "Organisch": {
+            "Slap": {
+                "qcdq": "0.2",
+                "E": [
+                    "0.5",
+                    "0.5"
+                ],
+                "friction_angle": [
+                    "15",
+                    "15"
+                ],
+                "Cohesie": [
+                    "0",
+                    "1"
+                ]
+            },
+            "Matig": {
+                "qcdq": "0.5",
+                "E": [
+                    "1",
+                    "2"
+                ],
+                "friction_angle": [
+                    "15",
+                    "15"
+                ],
+                "Cohesie": [
+                    "0",
+                    "1"
+                ]
+            }
+        },
+        "Sterk zandig": {
+            "-": {
+                "qcdq": "1",
+                "E": [
+                    "2",
+                    "5"
+                ],
+                "friction_angle": [
+                    "27.5",
+                    "32.5"
+                ],
+                "Cohesie": [
+                    "0",
+                    "1"
+                ]
+            }
+        }
+    },
+    "Grind": {
+        "Zwak siltig": {
+            "Los": {
+                "qcdq": "15",
+                "E": [
+                    "45",
+                    "45"
+                ],
+                "friction_angle": [
+                    "32.5",
+                    "32.5"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Matig": {
+                "qcdq": "25",
+                "E": [
+                    "75",
+                    "75"
+                ],
+                "friction_angle": [
+                    "35",
+                    "35"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Vast": {
+                "qcdq": "30",
+                "E": [
+                    "90",
+                    "105"
+                ],
+                "friction_angle": [
+                    "37.5",
+                    "40"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            }
+        },
+        "Sterk siltig": {
+            "Los": {
+                "qcdq": "10",
+                "E": [
+                    "30",
+                    "30"
+                ],
+                "friction_angle": [
+                    "30",
+                    "30"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Matig": {
+                "qcdq": "15",
+                "E": [
+                    "45",
+                    "45"
+                ],
+                "friction_angle": [
+                    "32.5",
+                    "32.5"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            },
+            "Vast": {
+                "qcdq": "25",
+                "E": [
+                    "75",
+                    "110"
+                ],
+                "friction_angle": [
+                    "35",
+                    "40"
+                ],
+                "Cohesie": [
+                    "0",
+                    "0"
+                ]
+            }
+        }
+    }
+}
