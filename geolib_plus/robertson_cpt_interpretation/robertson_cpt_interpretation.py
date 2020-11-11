@@ -7,6 +7,7 @@ import more_itertools as mit
 from pathlib import Path
 from typing import Iterable, List, Union
 from enum import IntEnum
+from pydantic import BaseModel
 
 from geolib_plus.cpt_base_model import AbstractInterpretationMethod, AbstractCPT
 from geolib_plus.cpt_utils import (
@@ -37,7 +38,7 @@ class ShearWaveVelocityMethod(IntEnum):
     AHMED = 5
 
 
-class RobertsonCptInterpretation(AbstractInterpretationMethod):
+class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     """
     Robertson soil classification.
 
@@ -50,13 +51,14 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         :figclass: align-center
     """
 
-    def interpret(
-        self,
-        data: AbstractCPT,
-        unitweightmethod: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
-        ocrmethod: OCRMethod = OCRMethod.ROBERTSON,
-        shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON,
-    ):
+    unitweightmethod: UnitWeightMethod = UnitWeightMethod.ROBERTSON
+    ocrmethod: OCRMethod = OCRMethod.ROBERTSON
+    shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
+    data: AbstractCPT = None
+    gamma: Iterable = []
+    polygons: Iterable = []
+
+    def interpret(self, data: AbstractCPT):
 
         self.data = data
         MPa_to_kPa = 1000
@@ -70,7 +72,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         # compute unit weight
         # method = 'Robertson' (Default) or 'Lengkeek'
         # gamma_min = 10.5, gamma_max = 22 Defaults
-        self.gamma_calc(method=unitweightmethod)
+        self.gamma_calc(method=self.unitweightmethod)
 
         # compute density
         self.rho_calc()
@@ -95,7 +97,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
 
         # compute shear wave velocity and shear modulus
         # method == "Robertson" (Default|"Mayne"|"Andrus"|"Zang"|"Ahmed")
-        self.vs_calc(method=shearwavevelocitymethod)
+        self.vs_calc(method=self.shearwavevelocitymethod)
 
         # compute damping
         # method = "Mayne"|"Robertson" (Default)
@@ -104,7 +106,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         # D50 = 0.2
         # Ip = 40
         # freq = 1.
-        self.damp_calc(method=ocrmethod)
+        self.damp_calc(method=self.ocrmethod)
 
         # compute Poisson ratio
         self.poisson_calc()

@@ -47,8 +47,11 @@ class TestIntergration:
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
+        # initialise interpretation model
+        robertson = RobertsonCptInterpretation
+        robertson.unitweightmethod = UnitWeightMethod.ROBERTSON
         # interpet the results
-        cpt.interpret_cpt(RobertsonCptInterpretation)
+        cpt.interpret_cpt(robertson)
         # read already calculated data
         benchmark_file = TestUtils.get_local_test_data_dir(
             Path("results_CPT000000003688_IMBRO_A.gef.json")
@@ -103,6 +106,96 @@ class TestIntergration:
 
 
 class TestInterpreter:
+    @pytest.mark.systemtest
+    def test_RobertsonCptInterpretation_1(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        # test initial expectations
+        assert cpt
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # initialise interpretation model
+        interpeter = RobertsonCptInterpretation
+        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
+        interpeter.ocrmethod = OCRMethod.MAYNE
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # interpet the results
+        cpt.interpret_cpt(interpeter)
+        assert cpt
+        assert cpt.lithology
+        assert cpt.lithology_merged
+
+    @pytest.mark.systemtest
+    def test_RobertsonCptInterpretation_2(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        # test initial expectations
+        assert cpt
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # initialise interpretation model
+        interpeter = RobertsonCptInterpretation
+        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
+        interpeter.ocrmethod = OCRMethod.ROBERTSON
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # interpet the results
+        cpt.interpret_cpt(interpeter)
+        assert cpt
+        assert cpt.lithology
+        assert cpt.lithology_merged
+
+    @pytest.mark.systemtest
+    def test_RobertsonCptInterpretation_3(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        # test initial expectations
+        assert cpt
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # initialise interpretation model
+        interpeter = RobertsonCptInterpretation
+        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
+        interpeter.ocrmethod = OCRMethod.MAYNE
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # interpet the results
+        cpt.interpret_cpt(interpeter)
+        assert cpt
+        assert cpt.lithology
+        assert cpt.lithology_merged
+
     @pytest.mark.systemtest
     def test_rho_calculation(self):
         # initialise models
