@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from pathlib import Path
-from typing import Optional, Iterable, List
+from typing import Optional, Iterable, List, Type
 from pydantic import BaseModel
 from copy import deepcopy
 import numpy as np
@@ -88,6 +88,8 @@ class AbstractCPT(BaseModel):
     magnetic_strength_tot: Optional[Iterable]
     magnetic_inclination: Optional[Iterable]
     magnetic_declination: Optional[Iterable]
+    temperature: Optional[Iterable]
+    predrilled_z: Optional[float]
 
     cpt_standard: Optional[str]
     quality_class: Optional[str]
@@ -109,7 +111,10 @@ class AbstractCPT(BaseModel):
     __water_measurement_types = None
 
     @classmethod
-    def read(cls, filepath: Path):
+    def create_from(cls, filepath: Path):
+        cls().read(filepath)
+
+    def read(self, filepath: Path):
         if not filepath:
             raise ValueError(filepath)
 
@@ -117,18 +122,22 @@ class AbstractCPT(BaseModel):
         if not filepath.is_file():
             raise FileNotFoundError(filepath)
 
-        cpt_reader = cls.get_cpt_reader()
+        cpt_reader = self.get_cpt_reader()
         cpt_data = cpt_reader.read_file(filepath)
-        cpt_model = cls()
         for cpt_key, cpt_value in cpt_data.items():
-            setattr(cpt_model, cpt_key, cpt_value)
-        return cpt_model
+            setattr(self, cpt_key, cpt_value)
 
     @classmethod
     @abstractmethod
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
 
+    def get_interpretation_method(self, method) -> AbstractInterpretationMethod:
+        return method()
+
+    def interpret_cpt(self, method: Type[AbstractInterpretationMethod]):
+        method = self.get_interpretation_method(method)
+        method.interpret(self)
 
     def __calculate_corrected_depth(self) -> np.ndarray:
         """
@@ -153,41 +162,50 @@ class AbstractCPT(BaseModel):
 
     def calculate_depth(self):
         """
-        If depth is present in the bro cpt and is valid, the depth is parsed from depth
-        elseif resultant inclination angle is present and valid in the bro cpt, the penetration length is corrected with
+        If depth is present in the cpt and is valid, the depth is parsed from depth
+        elseif resultant inclination angle is present and valid in the cpt, the penetration length is corrected with
         the inclination angle.
         if both depth and inclination angle are not present/valid, the depth is parsed from the penetration length.
-        :param cpt_BRO: dataframe
         :return:
         """
 
-        if self.depth.size == 0 or self.depth.ndim == 0:
-            if self.inclination_resultant.size != 0 and self.inclination_resultant.ndim != 0:
-                self.depth = self.__calculate_corrected_depth()
-            else:
-                self.depth = deepcopy(self.penetration_length)
+        if self.depth.size > 0 and self.depth.ndim > 0:
+            # no calculations needed
+            return
+        if (
+            self.inclination_resultant.size != 0
+            and self.inclination_resultant.ndim != 0
+        ):
+            self.depth = self.__calculate_corrected_depth()
+        else:
+            self.depth = deepcopy(self.penetration_length)
 
     @staticmethod
-    def __correct_for_negatives(data):
+    def __correct_for_negatives(data: np.ndarray) -> np.ndarray:
         """
         Values tip / friction / friction cannot be negative so they
         have to be zero.
         """
         if data is not None:
             if data.size != 0 and not data.ndim:
-                data[data<0] = 0
+                data[data < 0] = 0
             return data
 
     def __get_water_data(self):
 
-        pore_pressure_data = [self.pore_pressure_u1, self.pore_pressure_u2, self.pore_pressure_u3]
+        pore_pressure_data = [
+            self.pore_pressure_u1,
+            self.pore_pressure_u2,
+            self.pore_pressure_u3,
+        ]
 
         for data in pore_pressure_data:
             if data is not None:
-                if data.size and data.ndim and not np.all(data == 0):
-                    self.water = deepcopy(data)
-                    break
-        if self.water is None:
+                if not (all(value is None for value in data)):
+                    if data.size and data.ndim and not np.all(data == 0):
+                        self.water = deepcopy(data)
+                        break
+        if self.water is None or all(value is None for value in data):
             self.water = np.zeros(len(self.penetration_length))
 
     def __calculate_inclination_resultant(self):
@@ -199,6 +217,15 @@ class AbstractCPT(BaseModel):
 
 
     def pre_process_data(self):
+        """
+        Pre processes data which is read from a gef file or bro xml file.
+
+        Depth is calculated based on available data.
+        Relevant data is corrected for negative values.
+        Pore pressure is retrieved from available data.
+        #todo extend
+        :return:
+        """
 
         self.__calculate_inclination_resultant()
         self.calculate_depth()
@@ -211,8 +238,8 @@ class AbstractCPT(BaseModel):
 
 
         self.__get_water_data()
-        pass
 
+        # todo extend pre process data
 
     def plot(self, directory: Path):
         # plot cpt data

@@ -7,7 +7,6 @@ from geolib_plus.BRO_XML_CPT import BroXmlCpt
 from geolib_plus.plot_settings import PlotSettings
 import os
 
-
 # class TestPlotCpt:
 #     @pytest.mark.unittest
 #     def test_plot_cpt_unit_tests(self):
@@ -249,11 +248,12 @@ class TestPlotCpt():
         plot_settings.assign_default_settings()
 
         output_path = Path(TestUtils._name_output)
-        plot_cpt.plot_cpt_norm(bro_xml_cpt,output_path, plot_settings.general_settings)
+        plot_cpt.plot_cpt_norm(bro_xml_cpt, output_path, plot_settings.general_settings)
 
         output_file_name = bro_xml_cpt.name + '.pdf'
         assert Path(output_path / output_file_name).is_file()
-        # os.remove(Path(output_path / output_file_name))
+        (output_path / output_file_name).unlink()
+        output_path.rmdir()
 
     @pytest.mark.integrationtest
     def test_generate_fig_with_default_settings_from_gef(self, gef_cpt, plot_settings):
@@ -261,44 +261,35 @@ class TestPlotCpt():
         plot_settings.assign_default_settings()
 
         output_path = Path(TestUtils._name_output)
-        plot_cpt.plot_cpt_norm(gef_cpt,output_path, plot_settings.general_settings)
+        plot_cpt.plot_cpt_norm(gef_cpt, output_path, plot_settings.general_settings)
 
         output_file_name = gef_cpt.name + '.pdf'
         assert Path(output_path / output_file_name).is_file()
-        # os.remove(Path(output_path / output_file_name))
+        (output_path/output_file_name).unlink()
+        output_path.rmdir()
 
+    @pytest.fixture
+    def gef_cpt(self):
+        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/gef"))
+        filename = "CPT000000003688_IMBRO_A.gef"
+        test_file = test_folder / filename
+        cpt = GefCpt()
+        cpt.read(test_file)
+        cpt.pre_process_data()
+        return cpt
 
-@pytest.fixture
-def gef_cpt():
-    gef_file = TestUtils.get_local_test_data_dir(
-        "cpt/gef/KW19-3.gef"
-    )
-    cpt = GefCpt().read(gef_file)
-    # cpt_res = cpt
-    cpt.pre_process_data()
+    @pytest.fixture
+    def bro_xml_cpt(self):
+        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
+        filename = "CPT000000003688_IMBRO_A.xml"
+        test_file = test_folder / filename
+        cpt = BroXmlCpt()
+        cpt.read(test_file)
+        cpt.pre_process_data()
+        return cpt
 
-
-    # test_folder = Path(TestUtils.get_local_test_data_dir("cpt/gef"))
-    # filename = "CPT000000003688_IMBRO_A.gef"
-    # test_file = test_folder / filename
-    # cpt = GefCpt().read(test_file)
-    # cpt.pre_process_data()
-    return cpt
-
-@pytest.fixture
-def bro_xml_cpt():
-    test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-    filename = "CPT000000003688_IMBRO_A.xml"
-    # filename = "cpt_with_water.xml"
-    test_file = test_folder / filename
-    cpt = BroXmlCpt().read(test_file)
-    cpt.pre_process_data()
-
-    return cpt
-
-@pytest.fixture
-def plot_settings():
-    plot_settings = PlotSettings()
-    plot_settings.assign_default_settings()
-    return plot_settings
-
+    @pytest.fixture
+    def plot_settings(self):
+        plot_settings = PlotSettings()
+        plot_settings.assign_default_settings()
+        return plot_settings

@@ -10,9 +10,9 @@ import matplotlib.pylab as plt
 
 import os
 import warnings
+from typing import Tuple
 
 from geolib_plus import plot_utils as pu
-
 
 def get_values_which_exceed_threshold(threshold: List, values: np.ndarray, y_data: np.ndarray, show_interval: float) \
         -> Tuple[np.ndarray, np.ndarray]:
@@ -230,7 +230,11 @@ def save_figures(figures: List, cpt: AbstractCPT, output_folder: Path):
     """
 
     import matplotlib.backends.backend_pdf
-    pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(output_folder, cpt.name) + ".pdf")
+
+    if not output_folder.exists():
+        output_folder.mkdir(parents=True)
+
+    pdf = matplotlib.backends.backend_pdf.PdfPages(Path(output_folder/(cpt.name + ".pdf")))
 
     for fig in figures:
         pdf.savefig(fig)

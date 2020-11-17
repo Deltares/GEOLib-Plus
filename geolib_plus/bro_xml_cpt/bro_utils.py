@@ -1,19 +1,7 @@
 """
-BRO XML CPT database reader, indexer and parser.
+bro_utils :
 
-Enables searching of very large XML CPT database dumps.
-In order to speed up these operations, an index will
-be created by searching for `featureMember`s (CPTs) in the xml
-if it does not yet exist next to the XML file.
-
-The index is stored next to the file and stores the xml
-filesize to validate the xml database is the same. If not,
-we assume the database is new and a new index will be created
-as well. The index itself is an array with columns that store
-the x y location of the CPT and the start/end bytes in the XML file.
-
-As of January 2019, almost a 100.000 CPTs are stored in the XML
-and creating the index will take 5-10min depending on disk performance.
+Functions used in the reading of bro_xml cpts
 
 """
 
@@ -405,6 +393,33 @@ class XMLBroFullData(XMLBroColumnValues):
 class XMLBroCPTReader(CptReader):
     bro_data: XMLBroFullData = XMLBroFullData()
     water_measurement_type: List = []
+    bro_dataframe_map: Dict[str, str] = {
+        "penetration_length": "penetrationLength",
+        "depth": "depth",
+        "time": "elapsedTime",
+        "tip": "coneResistance",
+        "Qtn": "correctedConeResistance",
+        "net_tip": "netConeResistance",
+        "magnetic_strength_x": "magneticFieldStrengthX",
+        "magnetic_strength_y": "magneticFieldStrengthY",
+        "magnetic_strength_z": "magneticFieldStrengthZ",
+        "magnetic_strength_tot": "magneticFieldStrengthTotal",
+        "electric_cond": "electricalConductivity",
+        "inclination_ew": "inclinationEW",
+        "inclination_ns": "inclinationNS",
+        "inclination_x": "inclinationX",
+        "inclination_y": "inclinationY",
+        "inclination_resultant": "inclinationResultant",
+        "magnetic_inclination": "magneticInclination",
+        "magnetic_declination": "magneticDeclination",
+        "friction": "localFriction",
+        "pore_ratio": "poreRatio",
+        "temperature": "temperature",
+        "pore_pressure_u1": "porePressureU1",
+        "pore_pressure_u2": "porePressureU2",
+        "pore_pressure_u3": "porePressureU3",
+        "friction_nbr": "frictionRatio",
+    }
 
     @property
     def __water_measurement_types(self):
@@ -413,13 +428,6 @@ class XMLBroCPTReader(CptReader):
             "porePressureU2",
             "porePressureU3",
         ]
-
-    def parse_bro_to_cpt(self, xml_file_path: Path):
-        # read the BRO_XML into Memory
-        xml = self.xml_to_byte_string(xml_file_path)
-
-        # parse the BRO_XML to BRO CPT Dataset
-        self.parse_bro_xml(xml)
 
     @staticmethod
     def xml_to_byte_string(fn: Path) -> bytes:
@@ -449,17 +457,12 @@ class XMLBroCPTReader(CptReader):
         return avail_columns
 
     def parse_bro_xml(self, xml: bytes):
-        """Parse bro CPT xml.
-        Searches for the cpt data, but also
-        - location
-        - offset z
-        - id
-        - predrilled_z
-        TODO Replace iter by single search
-        as iter can give multiple results
+        """
+        Populates class with xml data. No interpretation of results occurs
+        at this function. This is simply reading the xml.
+        TODO Replace iter by single search as iter can give multiple results
 
         :param xml: XML bytes
-        :returns: dict -- parsed CPT data + metadata
         """
         root = etree.fromstring(xml)
 
@@ -482,10 +485,10 @@ class XMLBroCPTReader(CptReader):
             for element in cpt.iter(ns + "values"):
                 # Load string data and parse as 2d array
                 sar = StringIO(element.text.replace(";", "\n"))
-                ar = np.loadtxt(sar, delimiter=",", ndmin=2)
+                array_data = np.loadtxt(sar, delimiter=",", ndmin=2)
 
                 # Check shape of array
-                found_rows, found_columns = ar.shape
+                found_rows, found_columns = array_data.shape
                 if found_columns != len(self.bro_data.columns_string_list):
                     logging.warning(
                         "Data has the wrong size! {} columns instead of {}".format(
@@ -497,13 +500,12 @@ class XMLBroCPTReader(CptReader):
                 # Replace nodata constant with nan
                 # Create a DataFrame from array
                 # and sort by depth
-                ar[ar == nodata] = np.nan
-                df = pd.DataFrame(ar, columns=self.bro_data.columns_string_list)
+                array_data[array_data == nodata] = np.nan
+                df = pd.DataFrame(array_data, columns=self.bro_data.columns_string_list)
                 df = df[avail_columns]
                 df.sort_values(by=["penetrationLength"], inplace=True)
 
             self.bro_data.dataframe = df
-        return
 
     def all_single_data_available(self) -> bool:
         return None not in [
@@ -526,8 +528,7 @@ class XMLBroCPTReader(CptReader):
         meta_usable = self.all_single_data_available()
         data_usable = all([col in avail_columns for col in req_columns])
         if not (meta_usable and data_usable):
-            logging.warning("CPT with id {} misses required data.".format(data.id))
-            return None
+            logging.warning("CPT with id {} misses required data.".format(self.bro_data.id))
 
     @staticmethod
     def parse_xml_location(tdata: bytes):
@@ -559,7 +560,7 @@ class XMLBroCPTReader(CptReader):
         return x, y
 
     def get_all_data_from_bro(self, root: _Element) -> None:
-        """ Extract values from bro,"""
+        """ Extract values from bro. From the xml elements."""
         # BRO Id
         self.bro_data.id = self.search_values_in_root(
             root=root, search_item=ns4 + "broId"
@@ -607,347 +608,50 @@ class XMLBroCPTReader(CptReader):
         return None
 
     def read_file(self, filepath: Path) -> dict:
-        # validate bro xml file
-        validate_bro_cpt(filepath)
+        # read the BRO_XML into Memory
+        xml = self.xml_to_byte_string(filepath)
 
-        self.parse_bro_to_cpt(filepath)
+        # parse the BRO_XML to BRO CPT Dataset
+        self.parse_bro_xml(xml)
 
         # add the BRO_XML attributes to CPT structure
-        return self.__parse_bro()
+        result_dictionary = self.__parse_bro_raw_data()
 
-    def __parse_bro(
-        self,
-        minimum_length: int = 5,
-        minimum_samples: int = 50,
-        minimum_ratio: float = 0.1,
-        convert_to_kPa: bool = True,
-    ):
-        """
-        Parse the BRO information into the object structure
+        return result_dictionary
 
-        Parameters
-        ----------
-        :param cpt: BRO cpt dataset
-        :param minimum_length: (optional) minimum length that cpt files needs to have
-        :param minimum_samples: (optional) minimum samples that cpt files needs to have
-        :param minimum_ratio: (optional) minimum ratio of positive values that cpt files needs to have
-        :param convert_to_kPa: (optional) convert units to kPa
-        :return:
-        """
-        # create result dictionary
-        result_dictionary = {}
-
-        # remove NAN row from the dataframe
-        for key in self.bro_data.dataframe:
-            self.bro_data.dataframe = self.bro_data.dataframe.dropna(subset=[key])
-
-        # check if file contains data
-        if len(self.bro_data.dataframe.penetrationLength) == 0:
-            message = "File " + self.bro_data.id + " contains no data"
-            return message
-
-        # check if data is different than zero:
-        keys = ["penetrationLength", "coneResistance", "localFriction", "frictionRatio"]
-        for k in keys:
-            if all(self.bro_data.dataframe[k] == 0):
-                message = "File " + self.bro_data.id + " contains empty data"
-                return message
-
-        # parse cpt file name
-        result_dictionary["name"] = self.bro_data.id
-        # parse coordinates
-        result_dictionary["coordinates"] = [
-            self.bro_data.location_x,
-            self.bro_data.location_y,
-        ]
-
-        # parse reference datum
-        result_dictionary["vertical_datum"] = (
-            self.bro_data.vertical_datum if self.bro_data.vertical_datum else []
-        )
-
-        # parse local reference point
-        result_dictionary["local_reference"] = (
-            self.bro_data.local_reference if self.bro_data.vertical_datum else []
-        )
-
-        # parse quality class
-        result_dictionary["quality_class"] = (
-            self.bro_data.quality_class if self.bro_data.vertical_datum else []
-        )
-
-        # parse cone penetrator type
-        result_dictionary["cpt_type"] = (
-            self.bro_data.cone_penetrometer_type if self.bro_data.vertical_datum else []
-        )
-
-        # parse cpt standard
-        result_dictionary["cpt_standard"] = (
-            self.bro_data.cpt_standard if self.bro_data.vertical_datum else []
-        )
-
-        # parse result time
-        result_dictionary["result_time"] = (
-            self.bro_data.result_time if self.bro_data.vertical_datum else []
-        )
-
-        # parse measurement type of pore pressure
+    def __parse_bro_raw_data(self) -> Dict:
+        result_dictionary = {
+            "name": self.bro_data.id,
+            "coordinates": [
+                self.bro_data.location_x,
+                self.bro_data.location_y,
+            ],
+            "vertical_datum": self.bro_data.vertical_datum,
+            "local_reference": self.bro_data.local_reference,
+            "quality_class": self.bro_data.quality_class,
+            "cpt_type": self.bro_data.cone_penetrometer_type,
+            "cpt_standard": self.bro_data.cpt_standard,
+            "result_time": self.bro_data.result_time,
+            "local_reference_level": self.bro_data.offset_z,
+            "a": [self.bro_data.a],
+            "predrilled_z": self.bro_data.predrilled_z,
+        }
         result_dictionary["water_measurement_type"] = [
             water_measurement_type
             for water_measurement_type in self.__water_measurement_types
             if water_measurement_type in self.bro_data.dataframe
         ]
-        if not result_dictionary["water_measurement_type"]:
-            result_dictionary["water_measurement_type"] = "no_measurements"
-        else:
-            result_dictionary["water_measurement_type"] = result_dictionary[
-                "water_measurement_type"
-            ][0]
 
-        # check criteria of minimum length
-        if (
-            np.max(np.abs(self.bro_data.dataframe.penetrationLength.values))
-            < minimum_length
-        ):
-            message = (
-                "File "
-                + self.bro_data.id
-                + " has a length smaller than "
-                + str(minimum_length)
-            )
-            return message
+        # extract values from dataframe
+        if self.bro_data.dataframe is not None:
+            bro_dataframe = self.bro_data.dataframe
+            for key, value in self.bro_dataframe_map.items():
+                result_dictionary[key] = bro_dataframe.get(value, None)
+        return self.transform_dict_fields_to_arrays(dictionary=result_dictionary)
 
-        # check criteria of minimum samples
-        if len(self.bro_data.dataframe.penetrationLength.values) < minimum_samples:
-            message = (
-                "File "
-                + self.bro_data.id
-                + " has a number of samples smaller than "
-                + str(minimum_samples)
-            )
-            return message
-
-        # check data consistency: remove doubles depth
-        self.bro_data.dataframe = self.bro_data.dataframe.drop_duplicates(
-            subset="penetrationLength", keep="first"
-        )
-
-        # check if there is a pre_drill. if so pad the data
-        (
-            depth,
-            cone_resistance,
-            friction_ratio,
-            local_friction,
-            pore_pressure,
-        ) = self.__define_pre_drill(length_of_average_points=minimum_samples)
-
-        # parse inclination resultant
-        if "inclinationResultant" in self.bro_data.dataframe:
-            result_dictionary["inclination_resultant"] = self.bro_data.dataframe[
-                "inclinationResultant"
-            ].values
-        else:
-            result_dictionary["inclination_resultant"] = np.empty(len(depth)) * np.nan
-
-        # check quality of CPT
-        # if more than minimum_ratio CPT is corrupted: discard CPT
-        if (
-            len(cone_resistance[cone_resistance <= 0]) / len(cone_resistance)
-            > minimum_ratio
-            or len(cone_resistance[local_friction <= 0]) / len(local_friction)
-            > minimum_ratio
-        ):
-            message = "File " + self.bro_data.id + " is corrupted"
-            return message
-
-        # unit in kPa is required for correlations
-        unit_converter = 1000.0 if convert_to_kPa else 1.0
-
-        # parse depth
-        result_dictionary["depth"] = depth
-        # parse surface level
-        result_dictionary["local_reference_level"] = self.bro_data.offset_z
-        # parse NAP depth
-        result_dictionary["depth_to_reference"] = (
-            result_dictionary["local_reference_level"] - depth
-        )
-        # parse tip resistance
-        result_dictionary["tip"] = cone_resistance * unit_converter
-        result_dictionary["tip"][result_dictionary["tip"] <= 0] = 0.0
-        # parse friction
-        result_dictionary["friction"] = local_friction * unit_converter
-        result_dictionary["friction"][result_dictionary["friction"] <= 0] = 0.0
-        # parser friction number
-        result_dictionary["friction_nbr"] = friction_ratio
-        result_dictionary["friction_nbr"][result_dictionary["friction_nbr"] <= 0] = 0.0
-        # read a
-        result_dictionary["a"] = [self.bro_data.a]
-        # default water is zero
-        result_dictionary["water"] = np.zeros(len(result_dictionary["depth"]))
-        # if water exists parse water
-        if (
-            result_dictionary["water_measurement_type"]
-            in self.__water_measurement_types
-        ):
-            result_dictionary["water"] = pore_pressure * unit_converter
-
-        return result_dictionary
-
-    def __define_pre_drill(self, length_of_average_points: int = 3):
-        """
-        Checks the existence of pre-drill.
-        If predrill exists it add the average value of tip, friction and friction number to the pre-drill length.
-        The average is computed over the length_of_average_points.
-        If pore water pressure is measured, the pwp is assumed to be zero at surface level.
-        Parameters
-        ----------
-        :param cpt_BRO: BRO cpt dataset
-        :param length_of_average_points: number of samples of the CPT to be used to fill pre-drill
-        :return: depth, tip resistance, friction number, friction, pore water pressure
-        """
-        starting_depth = 0
-        pore_pressure = None
-        depth = self.__get_depth_from_bro()
-        if float(self.bro_data.predrilled_z) != 0.0:
-            # if there is pre-dill add the average values to the pre-dill
-            # Set the discretisation
-            dicretisation = np.average(np.diff(depth))
-            # find the average
-            average_cone_res = np.average(
-                self.bro_data.dataframe["coneResistance"][:length_of_average_points]
-            )
-            average_fr_ratio = np.average(
-                self.bro_data.dataframe["frictionRatio"][:length_of_average_points]
-            )
-            average_loc_fr = np.average(
-                self.bro_data.dataframe["localFriction"][:length_of_average_points]
-            )
-            # Define all in the lists
-            local_depth = np.arange(
-                starting_depth, float(self.bro_data.predrilled_z), dicretisation
-            )
-            local_cone_res = np.repeat(average_cone_res, len(local_depth))
-            local_fr_ratio = np.repeat(average_fr_ratio, len(local_depth))
-            local_loc_fr = np.repeat(average_loc_fr, len(local_depth))
-            # if there is pore water pressure
-            # Here the endpoint is False so that for the final of
-            # local_pore_pressure I don't end up with the same value
-            # as the first in the Pore Pressure array.
-            for water_measurement_type in self.__water_measurement_types:
-                if water_measurement_type in self.bro_data.dataframe:
-                    local_pore_pressure = np.linspace(
-                        0,
-                        self.bro_data.dataframe[water_measurement_type].values[0],
-                        len(local_depth),
-                        endpoint=False,
-                    )
-                    pore_pressure = np.append(
-                        local_pore_pressure,
-                        self.bro_data.dataframe[water_measurement_type].values,
-                    )
-            # Enrich the Penetration Length
-            depth = np.append(
-                local_depth, local_depth[-1] + dicretisation + depth - depth[0]
-            )
-            coneresistance = np.append(
-                local_cone_res, self.bro_data.dataframe["coneResistance"].values
-            )
-            frictionratio = np.append(
-                local_fr_ratio, self.bro_data.dataframe["frictionRatio"].values
-            )
-            localfriction = np.append(
-                local_loc_fr, self.bro_data.dataframe["localFriction"].values
-            )
-        else:
-            # No predrill existing: just parsing data
-            depth = depth - depth[0]
-            coneresistance = self.bro_data.dataframe["coneResistance"].values
-            frictionratio = self.bro_data.dataframe["frictionRatio"].values
-            localfriction = self.bro_data.dataframe["localFriction"].values
-            # if there is pore water pressure
-            for water_measurement_type in self.__water_measurement_types:
-                if water_measurement_type in self.bro_data.dataframe:
-                    pore_pressure = self.bro_data.dataframe[
-                        water_measurement_type
-                    ].values
-        # correct for missing samples in the top of the CPT
-        if depth[0] > 0:
-            # add zero
-            depth = np.append(0, depth)
-            coneresistance = np.append(
-                np.average(
-                    self.bro_data.dataframe["coneResistance"][:length_of_average_points]
-                ),
-                coneresistance,
-            )
-            frictionratio = np.append(
-                np.average(
-                    self.bro_data.dataframe["frictionRatio"][:length_of_average_points]
-                ),
-                frictionratio,
-            )
-            localfriction = np.append(
-                np.average(
-                    self.bro_data.dataframe["localFriction"][:length_of_average_points]
-                ),
-                localfriction,
-            )
-            # if there is pore water pressure
-            for water_measurement_type in self.__water_measurement_types:
-                if water_measurement_type in self.bro_data.dataframe:
-                    pore_pressure = np.append(
-                        np.average(
-                            self.bro_data.dataframe[water_measurement_type][
-                                :length_of_average_points
-                            ]
-                        ),
-                        pore_pressure,
-                    )
-        return depth, coneresistance, frictionratio, localfriction, pore_pressure
-
-    def __get_depth_from_bro(self) -> np.ndarray:
-        """
-        If depth is present in the bro cpt and is valid, the depth is parsed from depth
-        elseif resultant inclination angle is present and valid in the bro cpt, the penetration length is corrected with
-        the inclination angle.
-        if both depth and inclination angle are not present/valid, the depth is parsed from the penetration length.
-        :param cpt_BRO: dataframe
-        :return:
-        """
-        cpt_BRO = self.bro_data.dataframe
-        depth = np.array([])
-        if "depth" in cpt_BRO:
-            if bool(cpt_BRO["depth"].values.all()):
-                depth = cpt_BRO["depth"].values
-        elif "inclinationResultant" in cpt_BRO:
-            if bool(cpt_BRO["inclinationResultant"].values.all()):
-                depth = self.calculate_corrected_depth(
-                    cpt_BRO["penetrationLength"].values,
-                    cpt_BRO["inclinationResultant"].values,
-                )
-        else:
-            depth = cpt_BRO["penetrationLength"].values
-        return depth
-
-    def calculate_corrected_depth(
-        self, penetration_length: Iterable, inclination: Iterable
-    ) -> Iterable:
-        """
-        Correct the penetration length with the inclination angle
-
-
-        :param penetration_length: measured penetration length
-        :param inclination: measured inclination of the cone
-        :return: corrected depth
-        """
-        corrected_d_depth = np.diff(penetration_length) * np.cos(
-            np.radians(inclination[:-1])
-        )
-        corrected_depth = np.concatenate(
-            (
-                penetration_length[0],
-                penetration_length[0] + np.cumsum(corrected_d_depth),
-            ),
-            axis=None,
-        )
-        return corrected_depth
+    @staticmethod
+    def transform_dict_fields_to_arrays(dictionary: Dict) -> Dict:
+        for key, value in dictionary.items():
+            if isinstance(value, pd.Series):
+                dictionary[key] = value.values
+        return dictionary

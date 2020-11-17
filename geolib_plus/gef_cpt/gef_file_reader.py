@@ -7,6 +7,7 @@ from typing import List, Dict, Union, Iterable
 from pathlib import Path
 from pydantic import BaseModel
 from logging import warning
+import math
 
 
 class GefProperty(BaseModel):
@@ -22,8 +23,6 @@ class GefColumnProperty(GefProperty):
 
 class GefFileReader(CptReader):
     def __init__(self):
-        self.__mpa_to_pa = 1e6
-        self.__kN_to_N = 1e3
 
         self.property_dict = self.__get_default_property_dict()
         self.information_dict = self.__get_default_information_dict()
@@ -42,45 +41,25 @@ class GefFileReader(CptReader):
     def __get_default_property_dict(self) -> Dict:
         return {
             "penetration_length": GefColumnProperty(gef_key=1),
-            "tip": GefColumnProperty(gef_key=2, multiplication_factor=self.__mpa_to_pa),
-            "friction": GefColumnProperty(
-                gef_key=3, multiplication_factor=self.__mpa_to_pa
-            ),
+            "tip": GefColumnProperty(gef_key=2),
+            "friction": GefColumnProperty(gef_key=3),
             "friction_nb": GefColumnProperty(gef_key=4),
-            "pwp_u1": GefColumnProperty(
-                gef_key=5, multiplication_factor=self.__mpa_to_pa
-            ),
-            "pwp_u2": GefColumnProperty(
-                gef_key=6, multiplication_factor=self.__mpa_to_pa
-            ),
-            "pwp_u3": GefColumnProperty(
-                gef_key=7, multiplication_factor=self.__mpa_to_pa
-            ),
+            "pwp_u1": GefColumnProperty(gef_key=5),
+            "pwp_u2": GefColumnProperty(gef_key=6),
+            "pwp_u3": GefColumnProperty(gef_key=7),
             "inclination_resultant": GefColumnProperty(gef_key=8),
             "inclination_ns": GefColumnProperty(gef_key=9),
             "inclination_ew": GefColumnProperty(gef_key=10),
             "depth": GefColumnProperty(gef_key=11),
             "time": GefColumnProperty(gef_key=12),
-            "corrected_tip": GefColumnProperty(
-                gef_key=13, multiplication_factor=self.__mpa_to_pa
-            ),
-            "net_tip": GefColumnProperty(
-                gef_key=14, multiplication_factor=self.__mpa_to_pa
-            ),
+            "corrected_tip": GefColumnProperty(gef_key=13),
+            "net_tip": GefColumnProperty(gef_key=14),
             "pore_ratio": GefColumnProperty(gef_key=15),
             "tip_nbr": GefColumnProperty(gef_key=16),
-            "unit_weight": GefColumnProperty(
-                gef_key=17, multiplication_factor=self.__kN_to_N
-            ),
-            "pwp_ini": GefColumnProperty(
-                gef_key=18, multiplication_factor=self.__mpa_to_pa
-            ),
-            "total_pressure": GefColumnProperty(
-                gef_key=19, multiplication_factor=self.__mpa_to_pa
-            ),
-            "effective_pressure": GefColumnProperty(
-                gef_key=20, multiplication_factor=self.__mpa_to_pa
-            ),
+            "unit_weight": GefColumnProperty(gef_key=17),
+            "pwp_ini": GefColumnProperty(gef_key=18),
+            "total_pressure": GefColumnProperty(gef_key=19),
+            "effective_pressure": GefColumnProperty(gef_key=20),
             "inclination_x": GefColumnProperty(gef_key=21),
             "inclination_y": GefColumnProperty(gef_key=22),
             "electric_cond": GefColumnProperty(gef_key=23),
@@ -153,7 +132,6 @@ class GefFileReader(CptReader):
         Opens and reads gef file. Returns dictionary containing all possible
         inputs from gef file.
         """
-        validate_gef_cpt(gef_file)
         # read gef file
         with open(gef_file, "r") as f:
             data = f.readlines()
@@ -176,13 +154,13 @@ class GefFileReader(CptReader):
         result_time = self.read_date_cpt(data)
 
         # get values for information dict
-        for key_name in self.information_dict:
+        for key_name in self.information_dict.keys():
             self.information_dict[
                 key_name
             ].values_from_gef = self.read_information_for_gef_data(key_name, data)
 
         # search index depth
-        for key_name in self.property_dict:
+        for key_name in self.property_dict.keys():
             gef_column_index = self.read_column_index_for_gef_data(
                 self.property_dict[key_name].gef_key, data
             )
@@ -343,11 +321,11 @@ class GefFileReader(CptReader):
         as reference for the errors.
         """
         result = None
-        for i, val in enumerate(data):
-            if val.startswith(r"#COLUMNINFO=") and int(val.split(",")[-1]) == int(
+        for value in data:
+            if value.startswith(r"#COLUMNINFO=") and int(value.split(",")[-1]) == int(
                 key_cpt
             ):
-                result = int(val.split(",")[0].split("=")[-1]) - 1
+                result = int(value.split(",")[0].split("=")[-1]) - 1
         return result
 
     def read_date_cpt(self, data: List[str]) -> str:
@@ -359,13 +337,13 @@ class GefFileReader(CptReader):
         code_file_date = r"#FILEDATE= "
         code_start_date = r"#STARTDATE= "
         result_date = None
-        for val in data:
-            if val.startswith(code_file_date) and result_date is None:
-                result_date = val.split(code_file_date)[-1]
-            if val.startswith(code_start_date):
-                result_date = val.split(code_start_date)[-1]
+        for value in data:
+            if value.startswith(code_file_date) and result_date is None:
+                result_date = value.split(code_file_date)[-1]
+            if value.startswith(code_start_date):
+                result_date = value.split(code_start_date)[-1]
                 return result_date.replace("\n", "")
-            if val.startswith(r"#EOH="):
+            if value.startswith(r"#EOH="):
                 return result_date.replace("\n", "")
 
     def read_information_for_gef_data(self, key_name: str, data: List[str]) -> str:
@@ -376,12 +354,12 @@ class GefFileReader(CptReader):
             self.information_dict[key_name].gef_key
         )
 
-        for val in data:
-            if val.startswith(code_string):
-                information = val.split(code_string)[-1]
+        for value in data:
+            if value.startswith(code_string):
+                information = value.split(code_string)[-1]
                 information = information.replace("\n", "")
                 return information.replace(", ", "", 1)
-            if val.startswith(r"#EOH="):
+            if value.startswith(r"#EOH="):
                 return ""
         return ""
 
@@ -398,7 +376,7 @@ class GefFileReader(CptReader):
         """
         # Check if errors if not empty
         if bool(idx_errors):
-            for key in self.property_dict:
+            for key in self.property_dict.keys():
                 if self.property_dict[key].gef_column_index is not None:
                     gef_property = self.property_dict[key]
                     try:
@@ -424,16 +402,20 @@ class GefFileReader(CptReader):
         Values that contain data with errors should be removed
         from the resulting dictionary
         """
-        for key in self.property_dict:
+        for key in self.property_dict.keys():
             deleted_rows = 0
             if self.property_dict[key].values_from_gef is not None:
-                for number, value in enumerate(self.property_dict[key].values_from_gef):
-                    if (
-                        self.property_dict[key].values_from_gef[number - deleted_rows]
-                        == self.property_dict[key].error_code
-                    ):
-                        self.delete_value_for_all_keys(number=number - deleted_rows)
-                        deleted_rows = deleted_rows + 1
+                temp_list = self.property_dict[key].values_from_gef.copy()
+                for number, value in enumerate(temp_list):
+                    if self.property_dict[key].values_from_gef[number - deleted_rows]:
+                        if math.isclose(
+                            self.property_dict[key].values_from_gef[
+                                number - deleted_rows
+                            ],
+                            self.property_dict[key].error_code,
+                        ):
+                            self.delete_value_for_all_keys(number=number - deleted_rows)
+                            deleted_rows = deleted_rows + 1
         return None
 
     def delete_value_for_all_keys(self, number: int) -> None:
@@ -441,7 +423,7 @@ class GefFileReader(CptReader):
         Deletes index of all lists contained in the dictionary.
         """
         try:
-            for key in self.property_dict:
+            for key in self.property_dict.keys():
                 if isinstance(self.property_dict[key].values_from_gef, list):
                     del self.property_dict[key].values_from_gef[number]
                 elif isinstance(self.property_dict[key].values_from_gef, np.ndarray):
@@ -459,7 +441,7 @@ class GefFileReader(CptReader):
         Read column data from the gef file table.
         """
         pore_pressure_types = ["pwp_u1", "pwp_u2", "pwp_u3"]
-        for key in self.property_dict:
+        for key in self.property_dict.keys():
             if key in pore_pressure_types and not (
                 self.property_dict[key].gef_column_index
             ):
@@ -490,11 +472,11 @@ class GefFileReader(CptReader):
         """
         if not correct_for_negatives:
             return
-        for key in correct_for_negatives:
-            if self.property_dict[key].gef_column_index is not None:
-                self.property_dict[key].values_from_gef = np.array(
-                    self.property_dict[key].values_from_gef
+        for key_name in correct_for_negatives:
+            if self.property_dict[key_name].gef_column_index is not None:
+                self.property_dict[key_name].values_from_gef = np.array(
+                    self.property_dict[key_name].values_from_gef
                 )
-                self.property_dict[key].values_from_gef[
-                    self.property_dict[key].values_from_gef < 0
+                self.property_dict[key_name].values_from_gef[
+                    self.property_dict[key_name].values_from_gef < 0
                 ] = 0

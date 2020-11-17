@@ -36,10 +36,10 @@ class TestGefCpt:
         assert cpt.time is not []
         assert cpt.coordinates == [130880.66, 497632.94]
 
-        assert cpt.local_reference == ", maaiveld, vast horizontaal vlak"
-        assert cpt.cpt_standard == ", ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
-        assert cpt.quality_class == ", ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
-        assert cpt.cpt_type == ", CP15-CF75PB1SN2/1701-1524, conus type/serienummer"
+        assert cpt.local_reference == "maaiveld, vast horizontaal vlak"
+        assert cpt.cpt_standard == "ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
+        assert cpt.quality_class == "ISO 22476-1 Toepassingsklasse 2, gevolgde norm"
+        assert cpt.cpt_type == "CP15-CF75PB1SN2/1701-1524, conus type/serienummer"
         assert cpt.result_time == "2017,07,03"
 
     @pytest.mark.integrationtest
@@ -56,7 +56,8 @@ class TestGefCpt:
         self, gef_file: Path, expectation
     ):
         with expectation:
-            GefCpt().read(gef_file)
+            generated_output = GefCpt()
+            generated_output.read(gef_file)
 
     @pytest.mark.integrationtest
     def test_gef_cpt_given_valid_arguments_throws_nothing(self):
@@ -69,7 +70,8 @@ class TestGefCpt:
         assert test_file.is_file()
 
         # 3. Run test
-        generated_output = GefCpt().read(test_file)
+        generated_output = GefCpt()
+        generated_output.read(test_file)
 
         # 4. Verify final expectations
         assert generated_output
