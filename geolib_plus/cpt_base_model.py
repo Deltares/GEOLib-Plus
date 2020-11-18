@@ -169,13 +169,10 @@ class AbstractCPT(BaseModel):
         :return:
         """
 
-        if self.depth.size > 0 and self.depth.ndim > 0:
+        if self.depth is not None:
             # no calculations needed
             return
-        if (
-            self.inclination_resultant.size != 0
-            and self.inclination_resultant.ndim != 0
-        ):
+        if self.inclination_resultant is not None:
             self.depth = self.__calculate_corrected_depth()
         else:
             self.depth = deepcopy(self.penetration_length)
