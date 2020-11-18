@@ -96,7 +96,7 @@ class TestIntergration:
                 assert set(getattr(cpt, value)[i].split("/")) == set(
                     benchmark_data[value][i].split("/")
                 )
-        # GEOLIB-PLUS removed 3 depths
+
         for value in values_to_test:
             print(value)
             test = getattr(cpt, value)

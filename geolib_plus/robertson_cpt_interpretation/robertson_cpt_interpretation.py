@@ -39,13 +39,13 @@ class ShearWaveVelocityMethod(IntEnum):
 
 
 class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
-    """
+    r"""
     Robertson soil classification.
 
     Classification of soils according to Robertson chart.
 
     .. _element:
-    .. figure:: ./_static/robertson.png
+    .. figure:: ./../../_static/robertson.png
         :width: 350px
         :align: center
         :figclass: align-center
@@ -137,7 +137,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         path_shapefile: Path = Path("resources"),
         model_name: str = "Robertson",
     ):
-        """
+        r"""
         Function that read shapes from shape file and passes them as Polygons.
 
         :param path_shapefile: Path to the shapefile
@@ -157,7 +157,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.polygons = list_of_polygons
 
     def lithology(self, Qtn: Iterable, Fr: Iterable):
-        """
+        r"""
         Identifies lithology of CPT points, following Robertson and Cabal :cite:`robertson_cabal_2014`.
 
         Parameters
@@ -188,7 +188,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         return lithology_array, np.array(coords)
 
     def lithology_calc(self):
-        """
+        r"""
         Lithology calculation.
 
         :param soil_classification: shape file with soil classification
@@ -209,7 +209,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         path_pwp: Union[str, Path] = "resources",
         name: str = "peilgebieden_jp_250m.nc",
     ):
-        """
+        r"""
         Computes the estimated pwp level for the cpt coordinate
 
         Parameters
@@ -233,7 +233,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         gamma_min: float = 10.5,
         gamma_max: float = 22,
     ):
-        """
+        r"""
         Computes unit weight.
 
         Computes the unit weight following Robertson and Cabal :cite:`robertson_cabal_2014`.
@@ -312,7 +312,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.fr_angle_NEN = NEN_result["fr_angle_NEN"]
 
     def rho_calc(self):
-        """
+        r"""
         Computes density of soil.
 
         The formula for density is:
@@ -325,7 +325,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.rho = self.gamma * 1000.0 / self.data.g
 
     def stress_calc(self):
-        """
+        r"""
         Computes total and effective stress
         """
 
@@ -350,7 +350,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.effective_stress[self.data.effective_stress <= 0] = 0
 
     def norm_calc(self, n_method: bool = False):
-        """
+        r"""
         normalisation of qc and friction into Qtn and Fr, following Robertson and Cabal :cite:`robertson_cabal_2014`.
 
         .. math::
@@ -645,7 +645,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 self.data.poisson[i] = 0.375
 
     def permeability_calc(self):
-        """
+        r"""
         Permeability calculation. Following Robertson :cite:`robertson_2010`.
 
         When  [$1.0 < I_{c} \leq 3.27$]
@@ -670,7 +670,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 self.data.permeability[i] = 10 ** (-4.52 - 1.37 * self.data.IC[i])
 
     def qt_calc(self):
-        """
+        r"""
         Corrected cone resistance, following Robertson and Cabal :cite:`robertson_cabal_2014`.
 
         .. math::
@@ -685,7 +685,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.qt[self.data.qt <= 0] = 0
 
     def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
-        """
+        r"""
         Filters the values of the CPT object.
         The filter removes the index of the object for the defined **lithologies**, where the **key** is smaller than
          the **value**
@@ -761,7 +761,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     @staticmethod
     # TODO this function might be a duplicate
     def calculate_corrected_depth(penetration_length: Iterable, inclination: Iterable):
-        """
+        r"""
         Correct the penetration length with the inclination angle
 
         :param penetration_length: measured penetration length
