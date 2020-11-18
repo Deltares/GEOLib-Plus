@@ -18,6 +18,36 @@ def test_version():
 
 class TestGeolibPlusReading:
     @pytest.mark.systemtest
+    def test_that_values_gef_and_cpt_are_of_the_same_type(self):
+        # Read cpts
+        # open the gef file
+        test_file_gef = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+        )
+        assert test_file_gef.is_file()
+        # open the bro file
+        test_file_bro = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
+        )
+        assert test_file_bro.is_file()
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # test initial expectations
+        assert cpt_gef
+        assert cpt_bro_xml
+        # read gef file
+        cpt_gef.read(filepath=test_file_gef)
+        # read bro file
+        cpt_bro_xml.read(filepath=test_file_bro)
+
+        cpt_bro_xml = dict(cpt_bro_xml)
+        cpt_gef = dict(cpt_gef)
+        for key, value in cpt_bro_xml.items():
+            if key not in ["predrilled_z", "water_measurement_type"]:
+                assert type(cpt_bro_xml.get(key, None)) == type(cpt_gef.get(key, None))
+
+    @pytest.mark.systemtest
     def test_robertson_interpretation_test(self):
         gef_file = TestUtils.get_local_test_data_dir("cpt/gef/KW19-3.gef")
         cpt = GefCpt()
@@ -104,9 +134,9 @@ class TestGeolibPlusReading:
         test_friction = np.full(20, 2.0)
         test_friction_nbr = np.full(20, 5.0)
         test_inclination = np.full(20, 4.0)
-        test_pore_pressure_u1 = np.full(20, 0.0)
+        test_pore_pressure_u1 = None
         test_pore_pressure_u2 = np.full(20, 3.0)
-        test_pore_pressure_u3 = np.full(20, 0.0)
+        test_pore_pressure_u3 = None
 
         np.testing.assert_array_equal("DKP302", cpt.name)
         np.testing.assert_array_equal(test_coord, cpt.coordinates)
@@ -116,9 +146,9 @@ class TestGeolibPlusReading:
         np.testing.assert_array_equal(test_friction_nbr, cpt.friction_nbr)
         np.testing.assert_array_equal(test_inclination, cpt.inclination_resultant)
         np.testing.assert_almost_equal(0.13, cpt.local_reference_level)
-        np.testing.assert_array_equal(test_pore_pressure_u1, cpt.pore_pressure_u1)
+        assert test_pore_pressure_u1 == cpt.pore_pressure_u1
         np.testing.assert_array_equal(test_pore_pressure_u2, cpt.pore_pressure_u2)
-        np.testing.assert_array_equal(test_pore_pressure_u3, cpt.pore_pressure_u3)
+        assert test_pore_pressure_u3 == cpt.pore_pressure_u3
 
     # System Test for geolib_plus_read_GEF & BRO based comparing result for same file
     testdata = [
@@ -143,7 +173,7 @@ class TestGeolibPlusReading:
         cpt.read(test_file)
 
         # check cpt before preprocess
-        assert cpt.depth.ndim == 0
+        assert cpt.depth is None
         assert cpt.depth_to_reference is None
         assert cpt.water is None
 

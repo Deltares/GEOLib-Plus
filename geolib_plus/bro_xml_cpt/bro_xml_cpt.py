@@ -56,6 +56,7 @@ class BroXmlCpt(AbstractCPT):
             "pore_pressure_u2",
             "pore_pressure_u3",
             "IC",
+            "water",
         ]
 
     def drop_nan_values(self):
@@ -73,7 +74,10 @@ class BroXmlCpt(AbstractCPT):
         update_dict = pd.DataFrame(update_dict).dropna().to_dict("list")
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(self, value, np.array(update_dict.get(value)))
+            update_with_value = update_dict.get(value, None)
+            # None values should be skipped
+            if update_with_value is not None:
+                setattr(self, value, np.array(update_with_value))
         return
 
     def drop_duplicate_depth_values(self):
@@ -96,7 +100,10 @@ class BroXmlCpt(AbstractCPT):
         )
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(self, value, np.array(update_dict.get(value)))
+            update_with_value = update_dict.get(value, None)
+            # None values should be skipped
+            if update_with_value is not None:
+                setattr(self, value, np.array(update_with_value))
         return
 
     @staticmethod
