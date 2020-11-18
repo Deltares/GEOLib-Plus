@@ -54,7 +54,6 @@ class TestPlotCpt():
         assert pytest.approx(ylims[0][0]) == -3.0
         assert pytest.approx(ylims[0][1]) == -103.0
 
-
     def test_get_ylims_smaller_than_data(self, cpt_with_water):
         """
        Assert length graph is smaller than the cpt data
@@ -103,7 +102,6 @@ class TestPlotCpt():
         assert pytest.approx(ylims[1][0]) == -11.0
         assert pytest.approx(ylims[1][1]) == -21.0
 
-
     def test_get_ylims_absolute_top_level(self, cpt_with_water):
         """
         Assert length graph is smaller than the cpt data and top of first graph is an absolute given value
@@ -130,14 +128,6 @@ class TestPlotCpt():
         assert pytest.approx(ylims[1][1]) == -20.0
         assert pytest.approx(ylims[2][0]) == -20.0
         assert pytest.approx(ylims[2][1]) == -30.0
-
-        # self.assertAlmostEqual(ylims[0][0], 0.0)
-        # self.assertAlmostEqual(ylims[0][1], -10.0)
-        # self.assertAlmostEqual(ylims[1][0], -10.0)
-        # self.assertAlmostEqual(ylims[1][1], -20.0)
-        # self.assertAlmostEqual(ylims[2][0], -20.0)
-        # self.assertAlmostEqual(ylims[2][1], -30.0)
-
 
     def test_trim_cpt_data_within_thresholds(self, cpt_with_water):
         """
@@ -189,7 +179,6 @@ class TestPlotCpt():
 
     @pytest.mark.integrationtest
     def test_generate_fig_with_inverse_friction_nbr(self, bro_xml_cpt, plot_settings):
-        plot_settings.assign_default_settings()
         plot_settings.set_inversed_friction_number_in_plot()
 
         output_path = Path(TestUtils._name_output)
@@ -197,11 +186,10 @@ class TestPlotCpt():
 
         output_file_name = bro_xml_cpt.name + '.pdf'
         assert Path(output_path / output_file_name).is_file()
-        # os.remove(os.path.join(self.cpt.output_folder, self.cpt.name + '.pdf'))
+        (output_path / output_file_name).unlink()
 
     @pytest.mark.integrationtest
     def test_generate_fig_with_default_settings_from_xml(self, bro_xml_cpt, plot_settings):
-        plot_settings.assign_default_settings()
 
         output_path = Path(TestUtils._name_output)
         plot_cpt.plot_cpt_norm(bro_xml_cpt, output_path, plot_settings.general_settings)
@@ -209,6 +197,52 @@ class TestPlotCpt():
         output_file_name = bro_xml_cpt.name + '.pdf'
         assert Path(output_path / output_file_name).is_file()
         (output_path / output_file_name).unlink()
+
+    @pytest.mark.integrationtest
+    def test_generate_fig_without_inclination(self, cpt, plot_settings):
+
+        cpt.inclination_resultant = None
+        output_path = Path(TestUtils._name_output)
+        plot_cpt.plot_cpt_norm(cpt, output_path, plot_settings.general_settings)
+
+        output_file_name = cpt.name + '.pdf'
+        assert Path(output_path / output_file_name).is_file()
+        (output_path / output_file_name).unlink()
+
+
+    @pytest.mark.integrationtest
+    def test_generate_fig_with_default_settings(self, cpt, plot_settings):
+        plot_settings.assign_default_settings()
+
+        output_path = Path(TestUtils._name_output)
+        plot_cpt.plot_cpt_norm(cpt, output_path, plot_settings.general_settings)
+
+        output_file_name = cpt.name + '.pdf'
+        assert Path(output_path / output_file_name).is_file()
+        (output_path / output_file_name).unlink()
+
+
+    @pytest.mark.workinprogress
+    def test_run_multiple_plots(self, plot_settings):
+        from os import listdir
+        from os.path import isfile, join
+        # cpt_folder = r"D:\software_development\geolib-plus\tests\test_files\cpt\bro_xml\XML-viewer-Foutmelding not valid\XML-viewer-Foutmelding not valid"
+        cpt_folder = r"D:\software_development\geolib-plus\tests\test_files\cpt\bro_xml\tmp\tmp"
+
+        # D:\software_development\geolib - plus\tests\test_files\cpt\bro_xml
+        cpt_names = [f for f in listdir(cpt_folder) if isfile(join(cpt_folder, f)) and f.endswith('.xml')]
+
+        # cpt = BroXmlCpt()
+        # cpt.read(test_file)
+        # cpt.pre_process_data()
+        cpts= []
+        for cpt_name in cpt_names:
+            cpt = BroXmlCpt()
+            cpt.read(Path(join(cpt_folder, cpt_name)))
+            cpt.pre_process_data()
+            plot_cpt.plot_cpt_norm(cpt, Path(cpt_folder), plot_settings.general_settings)
+            cpts.append(cpt)
+
 
     @pytest.mark.integrationtest
     def test_generate_fig_with_default_settings_from_gef(self, gef_cpt, plot_settings):
@@ -242,22 +276,20 @@ class TestPlotCpt():
         cpt.pre_process_data()
         return cpt
 
-    @pytest.fixture
-    def gef_cpt_with_water(self):
-        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/gef"))
-        filename = "cpt_with_water.gef"
-        test_file = test_folder / filename
-        cpt = GefCpt()
-        cpt.read(test_file)
-        cpt.pre_process_data()
-        return cpt
 
-    @pytest.fixture()
-    def bro_xml_cpt_with_water(self):
-        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
-        filename = "cpt_with_water.xml"
+    @pytest.fixture(scope="session", params=[BroXmlCpt(), GefCpt()])
+    def cpt(self, request):
+        if isinstance(request.param, BroXmlCpt):
+            test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
+            filename = "CPT000000003688_IMBRO_A.xml"
+        elif isinstance(request.param, GefCpt):
+            test_folder = Path(TestUtils.get_local_test_data_dir("cpt/gef"))
+            filename = "CPT000000003688_IMBRO_A.gef"
+        else:
+            return None
+
+        cpt = request.param
         test_file = test_folder / filename
-        cpt = BroXmlCpt()
         cpt.read(test_file)
         cpt.pre_process_data()
         return cpt

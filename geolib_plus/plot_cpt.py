@@ -127,14 +127,18 @@ def trim_cpt_data_on_vertical_limits(cpt: AbstractCPT, y_lim: List, settings: Di
     depth_in_range_idxs = np.where((y_lim[1] < cpt.depth_to_reference) & (cpt.depth_to_reference < y_lim[0]))
     data_within_lim = data[depth_in_range_idxs].tolist()
     depth_in_range = cpt.depth_to_reference[depth_in_range_idxs].tolist()
-    inclination_in_range = cpt.inclination_resultant[depth_in_range_idxs].tolist()
+    if isinstance(cpt.inclination_resultant,np.ndarray):
+        inclination_in_range = cpt.inclination_resultant[depth_in_range_idxs].tolist()
+    else:
+        inclination_in_range = None
 
     # If multiple plots are required to show the data, add last value of previous plot to current plot
     if cpt.depth_to_reference[0] > y_lim[0]:
         previous_idx = max(i for i in range(len(cpt.depth_to_reference)) if cpt.depth_to_reference[i] - y_lim[0] > 0)
         data_within_lim.insert(0, data[previous_idx])
         depth_in_range.insert(0, cpt.depth_to_reference[previous_idx])
-        inclination_in_range.insert(0, cpt.inclination_resultant[previous_idx])
+        if inclination_in_range is not None:
+            inclination_in_range.insert(0, cpt.inclination_resultant[previous_idx])
 
     data_within_lim = np.array(data_within_lim)
     depth_in_range = np.array(depth_in_range)
@@ -189,6 +193,9 @@ def define_inclination_ticks_and_labels(cpt: AbstractCPT, depth: np.ndarray,
     :param settings:
     :return:
     """
+    if all(inclination == np.array([None])):
+        return np.array([]), []
+
     tick_distance_from_ceil_meter = cpt.local_reference_level - np.ceil(cpt.local_reference_level)
     tick_distance_inclination = settings["vertical_settings"]["inclination_tick_distance"]
 
@@ -205,8 +212,9 @@ def define_inclination_ticks_and_labels(cpt: AbstractCPT, depth: np.ndarray,
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
+        # inclination[:] = np.nan
         tick_labels_inclination = np.array([np.nanmean(inclination[(depth > tick_locations_inclination[idx + 1]) &
-                                                                   (depth < tick_locations_inclination[idx])])
+                                                                   (depth < tick_locations_inclination[idx])].tolist())
                                             for idx in range(0, len(tick_locations_inclination) - 1)])
 
     tick_labels_inclination = np.insert(tick_labels_inclination, 0, inclination[0])
