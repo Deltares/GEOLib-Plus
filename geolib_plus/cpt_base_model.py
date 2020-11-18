@@ -37,7 +37,7 @@ class AbstractCPT(BaseModel):
     tip: Optional[Iterable]
     friction: Optional[Iterable]
     friction_nbr: Optional[Iterable]
-    a: Optional[Iterable]
+    a: Optional[float]
     name: Optional[str]
     rho: Optional[Iterable]
     total_stress: Optional[Iterable]
@@ -60,12 +60,12 @@ class AbstractCPT(BaseModel):
     pore_pressure_u3: Optional[Iterable]
 
     water: Optional[Iterable]
-    lithology = []
-    litho_points = []
+    lithology: Optional[Iterable]
+    litho_points: Optional[Iterable]
 
-    lithology_merged = []
-    depth_merged = []
-    index_merged = []
+    lithology_merged: Optional[Iterable]
+    depth_merged: Optional[Iterable]
+    index_merged: Optional[Iterable]
     vertical_datum: Optional[str]
     local_reference: Optional[str]
     inclination_x: Optional[Iterable]
@@ -76,7 +76,7 @@ class AbstractCPT(BaseModel):
     time: Optional[Iterable]
     net_tip: Optional[Iterable]
     pore_ratio: Optional[Iterable]
-    tip_nbr = []
+    tip_nbr: Optional[Iterable]
     unit_weight_measured: Optional[Iterable]
     pwp_ini: Optional[Iterable]
     total_pressure_measured: Optional[Iterable]
@@ -98,10 +98,10 @@ class AbstractCPT(BaseModel):
     water_measurement_type: Optional[str]
 
     # NEN results
-    litho_NEN = []
-    E_NEN = []
-    cohesion_NEN = []
-    fr_angle_NEN = []
+    litho_NEN: Optional[Iterable]
+    E_NEN: Optional[Iterable]
+    cohesion_NEN: Optional[Iterable]
+    fr_angle_NEN: Optional[Iterable]
 
     # fixed values
     g: float = 9.81
@@ -169,13 +169,10 @@ class AbstractCPT(BaseModel):
         :return:
         """
 
-        if self.depth.size > 0 and self.depth.ndim > 0:
+        if self.depth is not None:
             # no calculations needed
             return
-        if (
-            self.inclination_resultant.size != 0
-            and self.inclination_resultant.ndim != 0
-        ):
+        if self.inclination_resultant is not None:
             self.depth = self.__calculate_corrected_depth()
         else:
             self.depth = deepcopy(self.penetration_length)
@@ -201,11 +198,10 @@ class AbstractCPT(BaseModel):
 
         for data in pore_pressure_data:
             if data is not None:
-                if not (all(value is None for value in data)):
-                    if data.size and data.ndim and not np.all(data == 0):
-                        self.water = deepcopy(data)
-                        break
-        if self.water is None or all(value is None for value in data):
+                if data.size and data.ndim and not np.all(data == 0):
+                    self.water = deepcopy(data)
+                    break
+        if self.water is None:
             self.water = np.zeros(len(self.penetration_length))
 
     def pre_process_data(self):

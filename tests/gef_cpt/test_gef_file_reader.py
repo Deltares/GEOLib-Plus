@@ -54,7 +54,8 @@ class TestGetLineIndexFromDataStartsWith:
 
     @pytest.mark.unittest
     @pytest.mark.parametrize(
-        "code_string, data, expectation", test_cases_raise_exception,
+        "code_string, data, expectation",
+        test_cases_raise_exception,
     )
     def test_when_data_starts_given_test_case_then_raises_exception(
         self, code_string: str, data: List[str], expectation
@@ -62,7 +63,9 @@ class TestGetLineIndexFromDataStartsWith:
         with expectation:
             GefFileReader.get_line_index_from_data_starts_with(code_string, data)
 
-    def test_when_data_starts_given_valid_arguments_then_returns_expected_line(self,):
+    def test_when_data_starts_given_valid_arguments_then_returns_expected_line(
+        self,
+    ):
         # 1. Define test data
         code_string = "beta"
         data = ["24 42 beta", "42 24 alpha", "alpha 42 24", "beta 24 42"]
@@ -137,7 +140,8 @@ class TestGetLineFromDataEndsWith:
 
     @pytest.mark.unittest
     @pytest.mark.parametrize(
-        "code_string, data, expectation", test_cases_raise_exception,
+        "code_string, data, expectation",
+        test_cases_raise_exception,
     )
     def test_when_data_ends_given_test_case_arguments_then_raises_exception(
         self, code_string: str, data: List[str], expectation
@@ -207,10 +211,8 @@ class TestReadColumnData:
             gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
         )
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13.387000
-        assert (
-            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
-        )
-        assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == 0.0
+        assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
+        assert gef_reader.property_dict["pwp_u2"].values_from_gef is None
 
     @pytest.mark.systemtest
     def test_read_column_data_error_raised(self):
@@ -276,9 +278,7 @@ class TestReadColumnData:
             gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
         )
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13.387
-        assert (
-            gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
-        )
+        assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
         assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == -99999.0
 
 
@@ -480,7 +480,7 @@ class TestReadGef:
     def test_read_gef_1(self):
         # todo move calculation of depth_to_reference outside reader
         gef_file = TestUtils.get_local_test_data_dir(
-                   "cpt/gef/unit_testing/unit_testing.gef"
+            "cpt/gef/unit_testing/unit_testing.gef"
         )
 
         # initialise the model
