@@ -309,11 +309,14 @@ class GefFileReader(CptReader):
 
     def get_as_np_array(self, values_from_gef: Iterable):
         """
-        Converts iterable to np array
+        Converts iterable to np array if the values are not None
         :param values_from_gef:
-        :return:
+        :return: numpy array
         """
-        return np.array(values_from_gef)
+        if values_from_gef is not None:
+            return np.array(values_from_gef)
+        else:
+            return None
 
     def read_column_index_for_gef_data(self, key_cpt: int, data: List[str]):
         """In the gef file '#COLUMNINFO=id , name , column_number' format is used.
@@ -440,29 +443,18 @@ class GefFileReader(CptReader):
         """
         Read column data from the gef file table.
         """
-        pore_pressure_types = ["pwp_u1", "pwp_u2", "pwp_u3"]
         for key in self.property_dict.keys():
-            if key in pore_pressure_types and not (
-                self.property_dict[key].gef_column_index
-            ):
-                # Pore pressures are not inputted
-                self.property_dict[key].values_from_gef = np.zeros(
-                    len(self.property_dict["penetration_length"].values_from_gef)
-                )
+            if self.property_dict[key].gef_column_index is not None:
+                self.property_dict[key].values_from_gef = [
+                    float(data[i].split(";")[self.property_dict[key].gef_column_index])
+                    * self.property_dict[key].multiplication_factor
+                    for i in range(idx_EOH + 1, len(data))
+                ]
             else:
-                if self.property_dict[key].gef_column_index is not None:
-                    self.property_dict[key].values_from_gef = [
-                        float(
-                            data[i].split(";")[self.property_dict[key].gef_column_index]
-                        )
-                        * self.property_dict[key].multiplication_factor
-                        for i in range(idx_EOH + 1, len(data))
-                    ]
+                if key in ["penetration_length", "tip"]:
+                    raise Exception(f"CPT key: {key} not part of GEF file")
                 else:
-                    if key in ["penetration_length", "tip"]:
-                        raise Exception(f"CPT key: {key} not part of GEF file")
-                    else:
-                        warning(f"Key {key} is not defined in the gef file.")
+                    warning(f"Key {key} is not defined in the gef file.")
         return None
 
     def correct_negatives_and_zeros(self, correct_for_negatives: List[str]):

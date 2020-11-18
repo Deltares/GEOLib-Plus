@@ -104,7 +104,7 @@ class XMLBroCPTReader(CptReader):
         "depth": "depth",
         "time": "elapsedTime",
         "tip": "coneResistance",
-        "Qtn": "correctedConeResistance",
+        "qt": "correctedConeResistance",
         "net_tip": "netConeResistance",
         "magnetic_strength_x": "magneticFieldStrengthX",
         "magnetic_strength_y": "magneticFieldStrengthY",
