@@ -34,6 +34,8 @@ extensions = [
     "sphinx.ext.coverage",
     "sphinx.ext.napoleon",
     "rst2pdf.pdfbuilder",
+    "sphinxcontrib.bibtex",
+    "sphinx.ext.imgmath",
     "releases",
 ]
 
