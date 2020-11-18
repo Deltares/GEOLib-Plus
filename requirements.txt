@@ -58,3 +58,4 @@ toml==0.10.2
 tqdm==4.51.0
 urllib3==1.25.11
 zipp==3.4.0
+sphinxcontrib.bibtex
