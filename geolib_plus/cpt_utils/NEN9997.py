@@ -5,24 +5,52 @@ NEN 9997 soil classification
 import os
 import json
 import numpy as np
+from pathlib import Path
+from typing import List, Dict, Union
+from pydantic import BaseModel
 
 # import packages
 from .cpt_utils import resource_path
 
 
-class NEN_classification:
-    r"""
+class NEN_classification(BaseModel):
+    """
     NEN 9997 soil classification.
 
     """
 
-    def __init__(self):
-        # initialise variables
-        self.soil_types_list = []
-        return
+    soil_types_list: List = []
+    map_dict: Dict[int, List[List[Union[str, List[str]]]]] = {
+        1: [
+            ["Veen", "Leem"],
+            [
+                ["Niet voorbelast", "Matig voorbelast"],
+                ["Zwak zandig", "Sterk zandig"],
+            ],
+        ],
+        2: [["Klei"], [["Organisch"]]],
+        3: [["Klei"], [["Schoon", "Zwak zandig"]]],
+        4: [["Zand", "Klei"], [["Sterk siltig, kleiig"], ["Sterk zandig"]]],
+        5: [["Zand"], [["Zwak siltig, kleiig"]]],
+        6: [["Zand"], [["Schoon"]]],
+        7: [["Grind"], [["Zwak siltig"]]],
+        8: [["Grind"], [["Sterk siltig"]]],
+        9: [["Grind"], [["Zwak siltig"]]],
+    }
 
-    def soil_types(self, path_shapefile=r"./resources/", model_name="NEN9997.json"):
-        r"""
+    def define_lithology_list(
+        self, lithology: List
+    ) -> List[List[Union[str, List[str]]]]:
+        return [
+            self.map_dict[int(lit)]
+            for lit in lithology
+            if int(lit) in self.map_dict.keys()
+        ]
+
+    def soil_types(
+        self, path_shapefile: Path = Path("resources"), model_name: str = "NEN9997.json"
+    ) -> None:
+        """
         Function that reads the NEN json file.
 
         :param path_shapefile: Path to the classification files
@@ -31,11 +59,7 @@ class NEN_classification:
         """
 
         # define the path for the shape file
-        path_shapefile = resource_path(
-            os.path.join(
-                os.path.join(os.path.dirname(__file__), path_shapefile), model_name
-            )
-        )
+        path_shapefile = Path(Path(__file__).parent, path_shapefile, model_name)
 
         # read shapefile
         with open(path_shapefile, "r") as f:
@@ -43,8 +67,8 @@ class NEN_classification:
 
         return
 
-    def information(self, qcdq, lithology):
-        r"""
+    def information(self, qcdq: float, lithology: List) -> Dict:
+        """
         Identifies the properties from the NEN9997-1, given the soil lithology and the value of the
         tip resistance (corrected for the effective stress)
 
@@ -56,36 +80,7 @@ class NEN_classification:
         """
 
         # redifine the lithology into NEN labels
-        new_lit = []
-        for lit in lithology:
-            if int(lit) == 1:
-                new_lit.append(
-                    [
-                        ["Veen", "Leem"],
-                        [
-                            ["Niet voorbelast", "Matig voorbelast"],
-                            ["Zwak zandig", "Sterk zandig"],
-                        ],
-                    ]
-                )
-            elif int(lit) == 2:
-                new_lit.append([["Klei"], [["Organisch"]]])
-            elif int(lit) == 3:
-                new_lit.append([["Klei"], [["Schoon", "Zwak zandig"]]])
-            elif int(lit) == 4:
-                new_lit.append(
-                    [["Zand", "Klei"], [["Sterk siltig, kleiig"], ["Sterk zandig"]]]
-                )
-            elif int(lit) == 5:
-                new_lit.append([["Zand"], [["Zwak siltig, kleiig"]]])
-            elif int(lit) == 6:
-                new_lit.append([["Zand"], [["Schoon"]]])
-            elif int(lit) == 7:
-                new_lit.append([["Grind"], [["Zwak siltig"]]])
-            elif int(lit) == 8:
-                new_lit.append([["Grind"], [["Sterk siltig"]]])
-            elif int(lit) == 9:
-                new_lit.append([["Grind"], [["Zwak siltig"]]])
+        new_lit = self.define_lithology_list(lithology=lithology)
 
         # results
         result = {"litho_NEN": [], "E_NEN": [], "cohesion_NEN": [], "fr_angle_NEN": []}

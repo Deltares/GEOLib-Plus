@@ -5,8 +5,9 @@ from shapely.geometry import Point
 import numpy as np
 import more_itertools as mit
 from pathlib import Path
-from typing import Iterable, List
+from typing import Iterable, List, Union
 from enum import IntEnum
+from pydantic import BaseModel
 
 from geolib_plus.cpt_base_model import AbstractInterpretationMethod, AbstractCPT
 from geolib_plus.cpt_utils import (
@@ -37,7 +38,7 @@ class ShearWaveVelocityMethod(IntEnum):
     AHMED = 5
 
 
-class RobertsonCptInterpretation(AbstractInterpretationMethod):
+class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     r"""
     Robertson soil classification.
 
@@ -50,13 +51,14 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         :figclass: align-center
     """
 
-    def interpret(
-        self,
-        data: AbstractCPT,
-        unitweightmethod: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
-        ocrmethod: OCRMethod = OCRMethod.ROBERTSON,
-        shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON,
-    ):
+    unitweightmethod: UnitWeightMethod = UnitWeightMethod.ROBERTSON
+    ocrmethod: OCRMethod = OCRMethod.ROBERTSON
+    shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
+    data: AbstractCPT = None
+    gamma: Iterable = []
+    polygons: Iterable = []
+
+    def interpret(self, data: AbstractCPT):
 
         self.data = data
         MPa_to_kPa = 1000
@@ -70,7 +72,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         # compute unit weight
         # method = 'Robertson' (Default) or 'Lengkeek'
         # gamma_min = 10.5, gamma_max = 22 Defaults
-        self.gamma_calc(method=unitweightmethod)
+        self.gamma_calc(method=self.unitweightmethod)
 
         # compute density
         self.rho_calc()
@@ -95,7 +97,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
 
         # compute shear wave velocity and shear modulus
         # method == "Robertson" (Default|"Mayne"|"Andrus"|"Zang"|"Ahmed")
-        self.vs_calc(method=shearwavevelocitymethod)
+        self.vs_calc(method=self.shearwavevelocitymethod)
 
         # compute damping
         # method = "Mayne"|"Robertson" (Default)
@@ -104,7 +106,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         # D50 = 0.2
         # Ip = 40
         # freq = 1.
-        self.damp_calc(method=ocrmethod)
+        self.damp_calc(method=self.ocrmethod)
 
         # compute Poisson ratio
         self.poisson_calc()
@@ -122,13 +124,17 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         self.filter()
 
         # merge the layers thickness
-        self.merge_thickness(minimum_layer_thickness=min_layer_thickness)
+        (
+            self.data.depth_merged,
+            self.data.index_merged,
+            self.data.lithology_merged,
+        ) = merge_thickness(cpt_data=self.data, min_layer_thick=min_layer_thickness)
 
         return self.data
 
     def soil_types(
         self,
-        path_shapefile: str = r"./resources",
+        path_shapefile: Path = Path("resources"),
         model_name: str = "Robertson",
     ):
         r"""
@@ -139,15 +145,12 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         :return: list of the polygons defining the soil types
         """
 
-        # define the path for the shape file
         path_shapefile = resource_path(
-            os.path.join(
-                os.path.join(os.path.dirname(__file__), path_shapefile), model_name
-            )
+            Path(Path(__file__).parent, path_shapefile, model_name)
         )
 
         # read shapefile
-        sf = shapefile.Reader(path_shapefile)
+        sf = shapefile.Reader(str(path_shapefile))
         list_of_polygons = []
         for polygon in list(sf.iterShapes()):
             list_of_polygons.append(Polygon(polygon.points))
@@ -202,7 +205,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         self.data.litho_points = points
 
     def pwp_level_calc(
-        self, path_pwp: str = "./resources", name: str = "peilgebieden_jp_250m.nc"
+        self,
+        path_pwp: Union[str, Path] = "resources",
+        name: str = "peilgebieden_jp_250m.nc",
     ):
         r"""
         Computes the estimated pwp level for the cpt coordinate
@@ -215,9 +220,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
         """
 
         # define the path for the shape file
-        path_pwp = resource_path(
-            os.path.join(os.path.join(os.path.dirname(__file__), path_pwp), name)
-        )
+        path_pwp = resource_path(Path(Path(__file__).parent, path_pwp, name))
 
         pwp = NetCDF()
         pwp.read_cdffile(path_pwp)
@@ -680,19 +683,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod):
 
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
-
-    def merge_thickness(self, minimum_layer_thickness: int):
-        r"""
-
-        :param minimum_layer_thickness: Minimum layer thickness to merge
-        :return:
-        """
-
-        (
-            self.data.depth_merged,
-            self.data.index_merged,
-            self.data.lithology_merged,
-        ) = merge_thickness(self.data, minimum_layer_thickness)
 
     def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
         r"""

@@ -32,6 +32,7 @@ class TestShapeFiles:
 
 
 class TestIntergration:
+    @pytest.mark.integrationtest
     def test_against_bro_results(self):
         # open the gef file
         test_file = TestUtils.get_local_test_data_dir(
@@ -46,8 +47,11 @@ class TestIntergration:
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
+        # initialise interpretation model
+        robertson = RobertsonCptInterpretation
+        robertson.unitweightmethod = UnitWeightMethod.ROBERTSON
         # interpet the results
-        cpt.interpret_cpt(RobertsonCptInterpretation)
+        cpt.interpret_cpt(robertson)
         # read already calculated data
         benchmark_file = TestUtils.get_local_test_data_dir(
             Path("results_CPT000000003688_IMBRO_A.gef.json")
@@ -86,7 +90,7 @@ class TestIntergration:
         assert benchmark_data["coordinates"] == cpt.coordinates
         assert benchmark_data["ground_water_level"] == cpt.pwp
         assert benchmark_data["lithology"] == cpt.lithology
-        assert np.alltrue(benchmark_data["litho_points"] == cpt.litho_points)
+        assert np.allclose(benchmark_data["litho_points"], cpt.litho_points)
         for value in ["litho_NEN", "E_NEN", "cohesion_NEN", "fr_angle_NEN"]:
             for i in range(len(cpt.litho_NEN)):
                 assert set(getattr(cpt, value)[i].split("/")) == set(
@@ -102,7 +106,97 @@ class TestIntergration:
 
 
 class TestInterpreter:
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
+    def test_RobertsonCptInterpretation_1(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        # test initial expectations
+        assert cpt
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # initialise interpretation model
+        interpeter = RobertsonCptInterpretation
+        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
+        interpeter.ocrmethod = OCRMethod.MAYNE
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # interpet the results
+        cpt.interpret_cpt(interpeter)
+        assert cpt
+        assert cpt.lithology
+        assert cpt.lithology_merged
+
+    @pytest.mark.systemtest
+    def test_RobertsonCptInterpretation_2(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        # test initial expectations
+        assert cpt
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # initialise interpretation model
+        interpeter = RobertsonCptInterpretation
+        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
+        interpeter.ocrmethod = OCRMethod.ROBERTSON
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # interpet the results
+        cpt.interpret_cpt(interpeter)
+        assert cpt
+        assert cpt.lithology
+        assert cpt.lithology_merged
+
+    @pytest.mark.systemtest
+    def test_RobertsonCptInterpretation_3(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        # test initial expectations
+        assert cpt
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # initialise interpretation model
+        interpeter = RobertsonCptInterpretation
+        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
+        interpeter.ocrmethod = OCRMethod.MAYNE
+        # read gef file
+        cpt.read(filepath=test_file)
+        # do pre-processing
+        cpt.pre_process_data()
+        # interpet the results
+        cpt.interpret_cpt(interpeter)
+        assert cpt
+        assert cpt.lithology
+        assert cpt.lithology_merged
+
+    @pytest.mark.systemtest
     def test_rho_calculation(self):
         # initialise models
         cpt = GefCpt()
@@ -123,7 +217,7 @@ class TestInterpreter:
         # self.assertEqual(exact_rho, self.cpt.rho)
         assert exact_rho.tolist() == cpt.rho.tolist()
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_gamma_calc(self):
         # initialise models
         cpt = GefCpt()
@@ -163,7 +257,7 @@ class TestInterpreter:
         interpeter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK)
         assert local_gamma2.tolist() == interpeter.gamma.tolist()
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_stress_calc(self):
         # initialise models
         cpt = GefCpt()
@@ -230,7 +324,7 @@ class TestInterpreter:
             np.around(interpeter.data.effective_stress, 1)
         )
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_norm_calc(self):
         # initialise models
         cpt = GefCpt()
@@ -304,7 +398,7 @@ class TestInterpreter:
             np.around(interpeter.data.IC, 1)
         )
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_vs_calc(self):
         # initialise model
         cpt = GefCpt()
@@ -439,7 +533,7 @@ class TestInterpreter:
         # Check if they are equal
         assert test_poisson == list(interpeter.data.poisson)
 
-    @pytest.mark.unittest
+    @pytest.mark.systemtest
     def test_damp_calc_1(self):
         # initialise model
         cpt = GefCpt()
