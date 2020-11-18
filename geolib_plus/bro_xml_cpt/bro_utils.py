@@ -47,6 +47,7 @@ ns5 = "{http://www.opengis.net/om/2.0}"
 nodata = -999999
 to_epsg = "28992"
 
+
 class XMLBroColumnValues(BaseModel):
     penetrationLength: Union[Iterable, None] = None
     depth: Union[Iterable, None] = None
@@ -233,7 +234,9 @@ class XMLBroCPTReader(CptReader):
         meta_usable = self.all_single_data_available()
         data_usable = all([col in avail_columns for col in req_columns])
         if not (meta_usable and data_usable):
-            logging.warning("CPT with id {} misses required data.".format(self.bro_data.id))
+            logging.warning(
+                "CPT with id {} misses required data.".format(self.bro_data.id)
+            )
 
     @staticmethod
     def parse_xml_location(tdata: bytes):
@@ -338,7 +341,7 @@ class XMLBroCPTReader(CptReader):
             "cpt_standard": self.bro_data.cpt_standard,
             "result_time": self.bro_data.result_time,
             "local_reference_level": self.bro_data.offset_z,
-            "a": [self.bro_data.a],
+            "a": self.bro_data.a,
             "predrilled_z": self.bro_data.predrilled_z,
         }
         result_dictionary["water_measurement_type"] = [
