@@ -206,12 +206,12 @@ class AbstractCPT(BaseModel):
             self.water = np.zeros(len(self.penetration_length))
 
     def __calculate_inclination_resultant(self):
-        #todo if inclionation resultant is not available, calculate from inclination_x and inclination_y,
-        # or from inclination_ns and inclination_ew if available. If not available set to Nan
 
-        if self.inclination_resultant.size == 0 or self.inclination_resultant.ndim == 0:
-            self.inclination_resultant = np.empty(len(self.penetration_length)) * np.nan
-
+        if self.inclination_resultant is None:
+            if isinstance(self.inclination_x, np.ndarray) and isinstance(self.inclination_y, np.ndarray):
+                self.inclination_resultant = np.sqrt(np.square(self.inclination_x) + np.square(self.inclination_y))
+            elif isinstance(self.inclination_ns, np.ndarray) and isinstance(self.inclination_ew, np.ndarray):
+                self.inclination_resultant = np.sqrt(np.square(self.inclination_ns) + np.square(self.inclination_ew))
 
     def pre_process_data(self):
         """
