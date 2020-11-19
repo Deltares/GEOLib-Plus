@@ -98,10 +98,10 @@ changes. However, the user can also define their own water level file. This can 
 .. code-block:: python
 
     interpreter.user_defined_water_level = False
-    interpeter.path_to_water_level_file = Path(
+    interpreter.path_to_water_level_file = Path(
             "D:\geolib-plus", "tests", "test_files"
         )
-    interpeter.name_water_level_file = "peilgebieden_jp_250m.nc"
+    interpreter.name_water_level_file = "peilgebieden_jp_250m.nc"
 
 Finally, the interpretation can be performed for both the xml and the cpt files.
 

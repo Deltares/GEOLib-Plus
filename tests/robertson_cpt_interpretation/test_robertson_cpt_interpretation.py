@@ -123,16 +123,16 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpeter = RobertsonCptInterpretation
-        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
-        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
-        interpeter.ocrmethod = OCRMethod.MAYNE
+        interpreter = RobertsonCptInterpretation
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
+        interpreter.ocrmethod = OCRMethod.MAYNE
         # read gef file
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
         # interpet the results
-        cpt.interpret_cpt(interpeter)
+        cpt.interpret_cpt(interpreter)
         assert cpt
         assert cpt.lithology
         assert cpt.lithology_merged
@@ -153,16 +153,16 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpeter = RobertsonCptInterpretation
-        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
-        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
-        interpeter.ocrmethod = OCRMethod.ROBERTSON
+        interpreter = RobertsonCptInterpretation
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
+        interpreter.ocrmethod = OCRMethod.ROBERTSON
         # read gef file
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
         # interpet the results
-        cpt.interpret_cpt(interpeter)
+        cpt.interpret_cpt(interpreter)
         assert cpt
         assert cpt.lithology
         assert cpt.lithology_merged
@@ -183,16 +183,16 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpeter = RobertsonCptInterpretation
-        interpeter.unitweightmethod = UnitWeightMethod.LENGKEEK
-        interpeter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
-        interpeter.ocrmethod = OCRMethod.MAYNE
+        interpreter = RobertsonCptInterpretation
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
+        interpreter.ocrmethod = OCRMethod.MAYNE
         # read gef file
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
         # interpet the results
-        cpt.interpret_cpt(interpeter)
+        cpt.interpret_cpt(interpreter)
         assert cpt
         assert cpt.lithology
         assert cpt.lithology_merged
@@ -201,16 +201,16 @@ class TestInterpreter:
     def test_rho_calculation(self):
         # initialise models
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
+        interpreter = RobertsonCptInterpretation()
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # define inputs
-        interpeter.gamma = np.ones(10)
+        interpreter.gamma = np.ones(10)
         cpt.g = 10.0
-        interpeter.data = cpt
+        interpreter.data = cpt
         # run test
-        interpeter.rho_calc()
+        interpreter.rho_calc()
 
         # exact solution = gamma / g
         exact_rho = np.ones(10) * 1000 / 10
@@ -222,18 +222,18 @@ class TestInterpreter:
     def test_gamma_calc(self):
         # initialise models
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Set all the values
         gamma_limit = 22
-        interpeter.data.friction_nbr = np.ones(10)
-        interpeter.data.qt = np.ones(10)
-        interpeter.data.Pa = 100
-        interpeter.data.depth_to_reference = range(10)
-        interpeter.data.name = "UNIT_TEST"
+        interpreter.data.friction_nbr = np.ones(10)
+        interpreter.data.qt = np.ones(10)
+        interpreter.data.Pa = 100
+        interpreter.data.depth_to_reference = range(10)
+        interpreter.data.name = "UNIT_TEST"
 
         # Calculate analytically the solution
         np.seterr(divide="ignore")
@@ -245,31 +245,31 @@ class TestInterpreter:
         local_gamma1 = aux * 9.81
 
         # call the function to be checked
-        interpeter.gamma_calc()
+        interpreter.gamma_calc()
 
         # Check if they are equal
-        assert local_gamma1.tolist() == interpeter.gamma.tolist()
+        assert local_gamma1.tolist() == interpreter.gamma.tolist()
 
         # Exact solution Lengkeek
         local_gamma2 = 19 - 4.12 * (
-            (np.log10(5000 / interpeter.data.qt))
-            / (np.log10(30 / interpeter.data.friction_nbr))
+            (np.log10(5000 / interpreter.data.qt))
+            / (np.log10(30 / interpreter.data.friction_nbr))
         )
-        interpeter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK)
-        assert local_gamma2.tolist() == interpeter.gamma.tolist()
+        interpreter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK)
+        assert local_gamma2.tolist() == interpreter.gamma.tolist()
 
     @pytest.mark.systemtest
     def test_stress_calc(self):
         # initialise models
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Defining the inputs of the function
-        interpeter.data.depth = np.arange(0, 2, 0.1)
-        interpeter.gamma = [
+        interpreter.data.depth = np.arange(0, 2, 0.1)
+        interpreter.gamma = [
             20,
             20,
             20,
@@ -291,10 +291,10 @@ class TestInterpreter:
             15,
             15,
         ]
-        interpeter.data.depth_to_reference = np.zeros(20)
-        interpeter.data.pwp = 0
+        interpreter.data.depth_to_reference = np.zeros(20)
+        interpreter.data.pwp = 0
         # run test
-        interpeter.stress_calc()
+        interpreter.stress_calc()
 
         # The target list with the desired output
         effective_stress_test = [
@@ -322,18 +322,18 @@ class TestInterpreter:
 
         # checking equality with the output
         assert effective_stress_test == list(
-            np.around(interpeter.data.effective_stress, 1)
+            np.around(interpreter.data.effective_stress, 1)
         )
 
     @pytest.mark.systemtest
     def test_norm_calc(self):
         # initialise models
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Empty list that will be filled by reading the csv file
         test_Qtn, total_stress, effective_stress, Pa, tip, friction = (
             [],
@@ -367,213 +367,213 @@ class TestInterpreter:
                 line_count += 1
 
         # Allocate them to the cpt
-        interpeter.data.total_stress = np.array(total_stress)
-        interpeter.data.effective_stress = np.array(effective_stress)
-        interpeter.data.Pa = np.array(Pa)
-        interpeter.data.tip = np.array(tip)
-        interpeter.data.friction = np.array(friction)
-        interpeter.data.friction_nbr = np.array(friction)
-        interpeter.norm_calc(n_method=True)
+        interpreter.data.total_stress = np.array(total_stress)
+        interpreter.data.effective_stress = np.array(effective_stress)
+        interpreter.data.Pa = np.array(Pa)
+        interpreter.data.tip = np.array(tip)
+        interpreter.data.friction = np.array(friction)
+        interpreter.data.friction_nbr = np.array(friction)
+        interpreter.norm_calc(n_method=True)
 
         # Test the equality of the arrays
-        assert test_Qtn == interpeter.data.Qtn.tolist()
-        assert test_Fr == interpeter.data.Fr.tolist()
+        assert test_Qtn == interpreter.data.Qtn.tolist()
+        assert test_Fr == interpreter.data.Fr.tolist()
 
     @pytest.mark.unittest
     def test_IC_calc(self):
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Set the inputs of the values
         test_IC = [3.697093]
-        interpeter.data.Qtn = [1]
-        interpeter.data.Fr = [1]
+        interpreter.data.Qtn = [1]
+        interpreter.data.Fr = [1]
         # run test
-        interpeter.IC_calc()
+        interpreter.IC_calc()
 
         # Check if they are equal with the target value test_IC
         assert list(np.around(np.array(test_IC), 1)) == list(
-            np.around(interpeter.data.IC, 1)
+            np.around(interpreter.data.IC, 1)
         )
 
     @pytest.mark.systemtest
     def test_vs_calc(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Define all the inputs
-        interpeter.data.IC = np.array([1])
-        interpeter.data.Qtn = np.array([1])
-        interpeter.data.rho = np.array([1])
-        interpeter.data.total_stress = np.array([1])
-        interpeter.data.effective_stress = np.array([1])
-        interpeter.data.tip = np.array([2])
-        interpeter.data.qt = np.array([2])
-        interpeter.data.friction = np.array([0.5])
-        interpeter.data.Pa = 100
-        interpeter.gamma = np.array([10])
-        interpeter.data.vs = np.array([1])
-        interpeter.data.depth = np.array([1])
-        interpeter.data.depth_to_reference = np.array([1])
-        interpeter.data.Fr = np.array([1])
-        interpeter.data.name = "UNIT_TESTING"
+        interpreter.data.IC = np.array([1])
+        interpreter.data.Qtn = np.array([1])
+        interpreter.data.rho = np.array([1])
+        interpreter.data.total_stress = np.array([1])
+        interpreter.data.effective_stress = np.array([1])
+        interpreter.data.tip = np.array([2])
+        interpreter.data.qt = np.array([2])
+        interpreter.data.friction = np.array([0.5])
+        interpreter.data.Pa = 100
+        interpreter.gamma = np.array([10])
+        interpreter.data.vs = np.array([1])
+        interpreter.data.depth = np.array([1])
+        interpreter.data.depth_to_reference = np.array([1])
+        interpreter.data.Fr = np.array([1])
+        interpreter.data.name = "UNIT_TESTING"
 
         # Check the results for Robertson
         # Calculate analytically
-        test_alpha_vs = 10 ** (0.55 * interpeter.data.IC + 1.68)
+        test_alpha_vs = 10 ** (0.55 * interpreter.data.IC + 1.68)
         test_vs = (
-            test_alpha_vs * (interpeter.data.tip - interpeter.data.total_stress) / 100
+            test_alpha_vs * (interpreter.data.tip - interpreter.data.total_stress) / 100
         ) ** 0.5
-        test_GO = interpeter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs ** 2
 
         # Call function
-        interpeter.vs_calc(method=ShearWaveVelocityMethod.ROBERTSON)
+        interpreter.vs_calc(method=ShearWaveVelocityMethod.ROBERTSON)
 
         # Check their equality
-        assert list(test_vs) == list(interpeter.data.vs)
-        assert list(test_GO) == list(interpeter.data.G0)
+        assert list(test_vs) == list(interpreter.data.vs)
+        assert list(test_GO) == list(interpreter.data.G0)
 
         # Check the results for  Mayne
         # Calculate analytically
-        test_vs = 118.8 * np.log10(interpeter.data.friction) + 18.5
-        test_GO = interpeter.data.rho * test_vs ** 2
+        test_vs = 118.8 * np.log10(interpreter.data.friction) + 18.5
+        test_GO = interpreter.data.rho * test_vs ** 2
 
         # Call function
-        interpeter.vs_calc(method=ShearWaveVelocityMethod.MAYNE)
+        interpreter.vs_calc(method=ShearWaveVelocityMethod.MAYNE)
 
         # Check their equality
-        assert test_vs[0] == interpeter.data.vs[0]
-        assert list(test_GO) == list(interpeter.data.G0)
+        assert test_vs[0] == interpreter.data.vs[0]
+        assert list(test_GO) == list(interpreter.data.G0)
 
         # Check the results for Andrus
         # Calculate analytically
         test_vs = (
             2.27
-            * interpeter.data.qt ** 0.412
-            * interpeter.data.IC ** 0.989
-            * interpeter.data.depth ** 0.033
+            * interpreter.data.qt ** 0.412
+            * interpreter.data.IC ** 0.989
+            * interpreter.data.depth ** 0.033
             * 1
         )
-        test_GO = interpeter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs ** 2
 
         # Call function
-        interpeter.vs_calc(method=ShearWaveVelocityMethod.ANDRUS)
+        interpreter.vs_calc(method=ShearWaveVelocityMethod.ANDRUS)
 
         # Check their equality
-        assert test_vs[0] == interpeter.data.vs[0]
-        assert list(test_GO) == list(interpeter.data.G0)
+        assert test_vs[0] == interpreter.data.vs[0]
+        assert list(test_GO) == list(interpreter.data.G0)
 
         # Check the results for Zhang
         # Calculate analytically
         test_vs = (
             10.915
-            * interpeter.data.tip ** 0.317
-            * interpeter.data.IC ** 0.21
-            * interpeter.data.depth ** 0.057
+            * interpreter.data.tip ** 0.317
+            * interpreter.data.IC ** 0.21
+            * interpreter.data.depth ** 0.057
             * 0.92
         )
-        test_GO = interpeter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs ** 2
 
         # Call function
-        interpeter.vs_calc(method=ShearWaveVelocityMethod.ZANG)
+        interpreter.vs_calc(method=ShearWaveVelocityMethod.ZANG)
 
         # Check their equality
-        assert test_vs[0] == interpeter.data.vs[0]
-        assert list(test_GO) == list(interpeter.data.G0)
+        assert test_vs[0] == interpreter.data.vs[0]
+        assert list(test_GO) == list(interpreter.data.G0)
 
         # Check the results for Ahmed
         # Calculate analytically
         test_vs = (
             1000
-            * np.e ** (-0.887 * interpeter.data.IC)
+            * np.e ** (-0.887 * interpreter.data.IC)
             * (
                 1
                 + 0.443
-                * interpeter.data.Fr
-                * interpeter.data.effective_stress
+                * interpreter.data.Fr
+                * interpreter.data.effective_stress
                 / 100
                 * 9.81
-                / interpeter.gamma
+                / interpreter.gamma
             )
             ** 0.5
         )
-        test_GO = interpeter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs ** 2
 
         # Call the function
-        interpeter.vs_calc(method=ShearWaveVelocityMethod.AHMED)
+        interpreter.vs_calc(method=ShearWaveVelocityMethod.AHMED)
 
         # Check their equality
-        assert test_vs[0] == interpeter.data.vs[0]
-        assert list(test_GO) == list(interpeter.data.G0)
+        assert test_vs[0] == interpreter.data.vs[0]
+        assert list(test_GO) == list(interpreter.data.G0)
 
     @pytest.mark.unittest
     def test_poisson_calc(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Set the inputs
-        interpeter.data.lithology = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+        interpreter.data.lithology = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
         # Set the target outputs
         test_poisson = [0.5, 0.5, 0.5, 0.25, 0.3, 0.3, 0.3, 0.375, 0.375]
 
         # Call the function
-        interpeter.poisson_calc()
+        interpreter.poisson_calc()
 
         # Check if they are equal
-        assert test_poisson == list(interpeter.data.poisson)
+        assert test_poisson == list(interpreter.data.poisson)
 
     @pytest.mark.systemtest
     def test_damp_calc_1(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # all soil sensitive : damping = minimum value
-        interpeter.data.lithology = ["1", "1", "1"]
-        interpeter.data.effective_stress = np.ones(len(interpeter.data.lithology))
-        interpeter.data.total_stress = np.ones(len(interpeter.data.lithology)) + 1
-        interpeter.data.qt = np.ones(len(interpeter.data.lithology)) * 10
+        interpreter.data.lithology = ["1", "1", "1"]
+        interpreter.data.effective_stress = np.ones(len(interpreter.data.lithology))
+        interpreter.data.total_stress = np.ones(len(interpreter.data.lithology)) + 1
+        interpreter.data.qt = np.ones(len(interpreter.data.lithology)) * 10
 
         # Define the target array
-        test_damping = 2.512 * (interpeter.data.effective_stress / 100) ** -0.2889
+        test_damping = 2.512 * (interpreter.data.effective_stress / 100) ** -0.2889
         test_damping /= 100
 
         # Running the function
-        interpeter.damp_calc()
+        interpreter.damp_calc()
 
         # Testing if the lists are equals
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
     @pytest.mark.unittest
     def test_damp_calc_2(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Defining the inputs
         # all soil very stiff : damping = minimum value
-        interpeter.data.lithology = ["8", "8", "8"]
-        interpeter.data.effective_stress = np.ones(len(interpeter.data.lithology))
-        interpeter.data.total_stress = np.ones(len(interpeter.data.lithology)) + 1
-        interpeter.data.qt = np.ones(len(interpeter.data.lithology)) * 10
+        interpreter.data.lithology = ["8", "8", "8"]
+        interpreter.data.effective_stress = np.ones(len(interpreter.data.lithology))
+        interpreter.data.total_stress = np.ones(len(interpreter.data.lithology)) + 1
+        interpreter.data.qt = np.ones(len(interpreter.data.lithology)) * 10
 
         # The target output
         Cu = 2
@@ -582,31 +582,31 @@ class TestInterpreter:
             0.55
             * Cu ** 0.1
             * D50 ** -0.3
-            * (interpeter.data.effective_stress / 100) ** -0.08
+            * (interpreter.data.effective_stress / 100) ** -0.08
         )
         test_damping /= 100
 
         # Run the function to be tested
-        interpeter.damp_calc(Cu=Cu, D50=D50)
+        interpreter.damp_calc(Cu=Cu, D50=D50)
 
         # Testing if the lists are equals
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
     @pytest.mark.unittest
     def test_damp_calc_3(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # all soil grained : damping = minimum value
         # Setting for testing
-        interpeter.data.lithology = ["9", "9", "9"]
-        interpeter.data.effective_stress = np.ones(len(interpeter.data.lithology))
-        interpeter.data.total_stress = np.ones(len(interpeter.data.lithology)) + 1
-        interpeter.data.qt = np.ones(len(interpeter.data.lithology)) * 10
+        interpreter.data.lithology = ["9", "9", "9"]
+        interpreter.data.effective_stress = np.ones(len(interpreter.data.lithology))
+        interpreter.data.total_stress = np.ones(len(interpreter.data.lithology)) + 1
+        interpreter.data.qt = np.ones(len(interpreter.data.lithology)) * 10
 
         # Define the output
         test_damping = np.array([2, 2, 2]) / 100
@@ -617,31 +617,31 @@ class TestInterpreter:
             0.55
             * Cu ** 0.1
             * D50 ** -0.3
-            * (interpeter.data.effective_stress / 100) ** -0.08
+            * (interpreter.data.effective_stress / 100) ** -0.08
         )
         test_damping /= 100
 
         # Run the function to be tested
-        interpeter.damp_calc(Cu=Cu, D50=D50)
+        interpreter.damp_calc(Cu=Cu, D50=D50)
 
         # Testing if the list are equal
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
     @pytest.mark.unittest
     def test_damp_calc_4(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Define the inputs
         # all soil sand
-        interpeter.data.lithology = ["8", "6", "9", "7"]
-        interpeter.data.effective_stress = np.ones(len(interpeter.data.lithology))
-        interpeter.data.total_stress = np.ones(len(interpeter.data.lithology)) + 1
-        interpeter.data.qt = np.ones(len(interpeter.data.lithology)) * 10
+        interpreter.data.lithology = ["8", "6", "9", "7"]
+        interpreter.data.effective_stress = np.ones(len(interpreter.data.lithology))
+        interpreter.data.total_stress = np.ones(len(interpreter.data.lithology)) + 1
+        interpreter.data.qt = np.ones(len(interpreter.data.lithology)) * 10
 
         # Calculate analytically for the type Meng
         Cu = 3
@@ -650,32 +650,32 @@ class TestInterpreter:
             0.55
             * Cu ** 0.1
             * D50 ** -0.3
-            * (interpeter.data.effective_stress / 100) ** -0.08
+            * (interpreter.data.effective_stress / 100) ** -0.08
         )
         test_damping /= 100
 
         # Run the function to be tested
-        interpeter.damp_calc(Cu=Cu, D50=D50)
+        interpreter.damp_calc(Cu=Cu, D50=D50)
 
         # Testing if the list are equal
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
     @pytest.mark.unittest
     def test_damp_calc_5(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Define the inputs
         # all soil sand
-        interpeter.data.lithology = ["3", "4", "3", "4"]
-        interpeter.data.qt = np.ones(len(interpeter.data.lithology)) * 10
-        interpeter.data.Qtn = np.ones(len(interpeter.data.lithology)) * 2
-        interpeter.data.effective_stress = np.ones(len(interpeter.data.lithology))
-        interpeter.data.total_stress = np.ones(len(interpeter.data.lithology)) + 1
+        interpreter.data.lithology = ["3", "4", "3", "4"]
+        interpreter.data.qt = np.ones(len(interpreter.data.lithology)) * 10
+        interpreter.data.Qtn = np.ones(len(interpreter.data.lithology)) * 2
+        interpreter.data.effective_stress = np.ones(len(interpreter.data.lithology))
+        interpreter.data.total_stress = np.ones(len(interpreter.data.lithology)) + 1
 
         # Calculate analyticaly damping Darendeli - OCR according to Mayne
         Cu = 3
@@ -683,296 +683,296 @@ class TestInterpreter:
         PI = 40
         OCR = (
             0.33
-            * (interpeter.data.qt - interpeter.data.total_stress)
-            / interpeter.data.effective_stress
+            * (interpreter.data.qt - interpreter.data.total_stress)
+            / interpreter.data.effective_stress
         )
         freq = 1
         test_damping = (
-            (interpeter.data.effective_stress / 100) ** (-0.2889)
+            (interpreter.data.effective_stress / 100) ** (-0.2889)
             * (0.8005 + 0.0129 * PI * OCR ** (-0.1069))
             * (1 + 0.2919 * np.log(freq))
         )
         test_damping /= 100
 
         # Call the function to be tested
-        interpeter.damp_calc(Cu=Cu, D50=D50, Ip=PI, method=OCRMethod.MAYNE)
+        interpreter.damp_calc(Cu=Cu, D50=D50, Ip=PI, method=OCRMethod.MAYNE)
 
         # Test the damping Darendeli - OCR according to Mayne
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
         # Calculated analyticaly damping Darendeli - OCR according to robertson
-        OCR = 0.25 * (interpeter.data.Qtn) ** 1.25
+        OCR = 0.25 * (interpreter.data.Qtn) ** 1.25
         test_damping = (
-            (interpeter.data.effective_stress / 100) ** (-0.2889)
+            (interpreter.data.effective_stress / 100) ** (-0.2889)
             * (0.8005 + 0.0129 * PI * OCR ** (-0.1069))
             * (1 + 0.2919 * np.log(freq))
         )
         test_damping /= 100
 
-        interpeter.damp_calc(Cu=Cu, D50=D50, Ip=PI, method=OCRMethod.ROBERTSON)
+        interpreter.damp_calc(Cu=Cu, D50=D50, Ip=PI, method=OCRMethod.ROBERTSON)
 
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
     @pytest.mark.unittest
     def test_damp_calc_6(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Set the inputs
         # all soil sand
-        interpeter.data.lithology = ["2", "2", "2", "2"]
-        interpeter.data.effective_stress = np.ones(len(interpeter.data.lithology))
-        interpeter.data.Pa = 1
+        interpreter.data.lithology = ["2", "2", "2", "2"]
+        interpreter.data.effective_stress = np.ones(len(interpreter.data.lithology))
+        interpreter.data.Pa = 1
 
         # Calculate analyticaly
-        test_damping = (2.512 / 100) * np.ones(len(interpeter.data.lithology))
+        test_damping = (2.512 / 100) * np.ones(len(interpreter.data.lithology))
 
         # Call the function to be tested
-        interpeter.damp_calc()
+        interpreter.damp_calc()
 
         # Check if they are equal
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
     @pytest.mark.unittest
     def test_damp_calc_7(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # stress is zero so damping is infinite
-        interpeter.data.lithology = ["1", "1", "1"]
-        interpeter.data.effective_stress = np.zeros(len(interpeter.data.lithology))
-        interpeter.data.total_stress = np.zeros(len(interpeter.data.lithology)) + 1
-        interpeter.data.qt = np.ones(len(interpeter.data.lithology)) * 10
+        interpreter.data.lithology = ["1", "1", "1"]
+        interpreter.data.effective_stress = np.zeros(len(interpreter.data.lithology))
+        interpreter.data.total_stress = np.zeros(len(interpreter.data.lithology)) + 1
+        interpreter.data.qt = np.ones(len(interpreter.data.lithology)) * 10
 
         # Define the target array
         test_damping = [1, 1, 1]
 
         # Running the function
-        interpeter.damp_calc()
+        interpreter.damp_calc()
 
         # Testing if the lists are equals
-        assert list(test_damping) == list(interpeter.data.damping)
+        assert list(test_damping) == list(interpreter.data.damping)
 
     @pytest.mark.unittest
     def test_permeability_calc(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Set the inputs
         # Ic below tipping point; at tipping point; above tipping point
-        interpeter.data.lithology = ["7", "3", "2"]
-        interpeter.data.IC = np.array([1, 3.27, 4])
+        interpreter.data.lithology = ["7", "3", "2"]
+        interpreter.data.IC = np.array([1, 3.27, 4])
 
         # The target list with the desired output
         test_permeability = np.array([0.008165824, 1.02612e-09, 6.19441e-12])
 
         # Call the function to be tested
-        interpeter.permeability_calc()
+        interpreter.permeability_calc()
 
         # Check if the values are almost equal
         for i in range(len(test_permeability)):
-            assert abs(test_permeability[i] - interpeter.data.permeability[i]) < 0.001
+            assert abs(test_permeability[i] - interpreter.data.permeability[i]) < 0.001
 
     @pytest.mark.unittest
     def test_qt_calc(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Define the inputs
-        interpeter.data.tip = np.array([1])
-        interpeter.data.water = np.array([1])
-        interpeter.data.a = np.array([1])
+        interpreter.data.tip = np.array([1])
+        interpreter.data.water = np.array([1])
+        interpreter.data.a = np.array([1])
 
         # Define the target
         test_qt = np.array([1])
 
         # Call the function to be tested
-        interpeter.qt_calc()
+        interpreter.qt_calc()
 
         # Check if the are equal
-        assert list(test_qt) == list(interpeter.data.qt)
+        assert list(test_qt) == list(interpreter.data.qt)
 
     @pytest.mark.unittest
     def test_Young_calc_first_case(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # test 1
-        interpeter.data.G0 = np.ones(10) * 20.0
-        interpeter.data.poisson = 0.10
-        interpeter.young_calc()
+        interpreter.data.G0 = np.ones(10) * 20.0
+        interpreter.data.poisson = 0.10
+        interpreter.young_calc()
 
         # exact solution
-        exact_E = 2 * interpeter.data.G0 * (1 + interpeter.data.poisson)
+        exact_E = 2 * interpreter.data.G0 * (1 + interpreter.data.poisson)
 
-        assert list(exact_E) == list(interpeter.data.E0)
+        assert list(exact_E) == list(interpreter.data.E0)
 
     @pytest.mark.unittest
     def test_Young_calc_second_case(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # test 2
-        interpeter.data.G0 = 5
-        interpeter.data.poisson = 0.20
-        interpeter.young_calc()
+        interpreter.data.G0 = 5
+        interpreter.data.poisson = 0.20
+        interpreter.young_calc()
 
         # exact solution
-        exact_E = 2 * interpeter.data.G0 * (1 + interpeter.data.poisson)
+        exact_E = 2 * interpreter.data.G0 * (1 + interpreter.data.poisson)
 
-        # self.assertEqual(exact_rho, interpeter.data.rho)
-        assert exact_E == interpeter.data.E0
+        # self.assertEqual(exact_rho, interpreter.data.rho)
+        assert exact_E == interpreter.data.E0
 
     @pytest.mark.unittest
     def test_lithology_calc(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # Define the input
-        interpeter.data.tip = np.array([1])
-        interpeter.data.friction_nbr = np.array([1])
-        interpeter.data.friction = np.array([1])
-        interpeter.data.effective_stress = np.array([2])
-        interpeter.data.total_stress = np.array([2])
-        interpeter.data.Qtn = np.array([1])
-        interpeter.data.Fr = np.array([1])
-        interpeter.data.Pa = 100
+        interpreter.data.tip = np.array([1])
+        interpreter.data.friction_nbr = np.array([1])
+        interpreter.data.friction = np.array([1])
+        interpreter.data.effective_stress = np.array([2])
+        interpreter.data.total_stress = np.array([2])
+        interpreter.data.Qtn = np.array([1])
+        interpreter.data.Fr = np.array([1])
+        interpreter.data.Pa = 100
         lithology_test = ["1"]
 
         # Call the function to be tested
-        interpeter.lithology_calc()
+        interpreter.lithology_calc()
 
         # Check if results are equal
-        assert list(interpeter.data.lithology) == list(lithology_test)
+        assert list(interpreter.data.lithology) == list(lithology_test)
 
     @pytest.mark.systemtest
     def test_pwp_level_calc(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # define inputs
-        interpeter.data.coordinates = [91931.0, 438294.0]
+        interpreter.data.coordinates = [91931.0, 438294.0]
         # call test functions
-        interpeter.pwp_level_calc()
+        interpreter.pwp_level_calc()
         # test results
-        assert math.isclose(-2.4, interpeter.data.pwp, rel_tol=0.001)
+        assert math.isclose(-2.4, interpreter.data.pwp, rel_tol=0.001)
 
     @pytest.mark.systemtest
     def test_pwp_level_calc_wrong_path(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # define inputs
-        interpeter.data.coordinates = [91931.0, 438294.0]
-        interpeter.name_water_level_file = "oh_no_wrong_file.nc"
+        interpreter.data.coordinates = [91931.0, 438294.0]
+        interpreter.name_water_level_file = "oh_no_wrong_file.nc"
         with pytest.raises(FileNotFoundError):
             # call test functions
-            interpeter.pwp_level_calc()
+            interpreter.pwp_level_calc()
 
     @pytest.mark.systemtest
     def test_pwp_level_calc_wrong_suffix(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # define inputs
-        interpeter.data.coordinates = [91931.0, 438294.0]
-        interpeter.path_to_water_level_file = Path("cpt", "gef")
-        interpeter.name_water_level_file = "CPT000000003688_IMBRO_A.gef"
+        interpreter.data.coordinates = [91931.0, 438294.0]
+        interpreter.path_to_water_level_file = Path("cpt", "gef")
+        interpreter.name_water_level_file = "CPT000000003688_IMBRO_A.gef"
         with pytest.raises(TypeError):
             # call test functions
-            interpeter.pwp_level_calc()
+            interpreter.pwp_level_calc()
 
     @pytest.mark.systemtest
     def test_pwp_level_calc_point_to_other_file(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # define inputs
-        interpeter.data.coordinates = [91931.0, 438294.0]
-        interpeter.path_to_water_level_file = Path(
+        interpreter.data.coordinates = [91931.0, 438294.0]
+        interpreter.path_to_water_level_file = Path(
             Path(__file__).parent.parent, "test_files"
         )
-        interpeter.name_water_level_file = "peilgebieden_jp_250m.nc"
+        interpreter.name_water_level_file = "peilgebieden_jp_250m.nc"
         # call test functions
-        interpeter.pwp_level_calc()
+        interpreter.pwp_level_calc()
         # test results
-        assert math.isclose(-2.4, interpeter.data.pwp, rel_tol=0.001)
+        assert math.isclose(-2.4, interpreter.data.pwp, rel_tol=0.001)
 
     @pytest.mark.systemtest
     def test_pwp_level_calc_user_already_inputted_pwp(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # define inputs
-        interpeter.data.coordinates = [91931.0, 438294.0]
-        interpeter.data.pwp = -3
-        interpeter.user_defined_water_level = True
+        interpreter.data.coordinates = [91931.0, 438294.0]
+        interpreter.data.pwp = -3
+        interpreter.user_defined_water_level = True
         # call test functions
-        interpeter.pwp_level_calc()
+        interpreter.pwp_level_calc()
         # test results
-        assert math.isclose(-3, interpeter.data.pwp)
+        assert math.isclose(-3, interpreter.data.pwp)
 
     @pytest.mark.systemtest
     def test_pwp_level_calc_user_already_inputted_pwp_error(self):
         # initialise model
         cpt = GefCpt()
-        interpeter = RobertsonCptInterpretation()
-        interpeter.data = cpt
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
         # test initial expectations
         assert cpt
-        assert interpeter
+        assert interpreter
         # define inputs
-        interpeter.data.coordinates = [91931.0, 438294.0]
-        interpeter.data.pwp = None
-        interpeter.user_defined_water_level = True
+        interpreter.data.coordinates = [91931.0, 438294.0]
+        interpreter.data.pwp = None
+        interpreter.user_defined_water_level = True
         # call test functions
         with pytest.raises(ValueError):
-            interpeter.pwp_level_calc()
+            interpreter.pwp_level_calc()
