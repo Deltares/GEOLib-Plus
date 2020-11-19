@@ -4,7 +4,7 @@ Robertson cpt interpretation model
 Robertson interpretation
 ------------------------
 
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.RobertsonCptInterpretation
+.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,15 +12,15 @@ Robertson interpretation
 
 Support classes
 ---------------
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.UnitWeightMethod
+.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod
    :members:
    :undoc-members:
    :show-inheritance:
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.OCRMethod
+.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod
    :members:
    :undoc-members:
    :show-inheritance:
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.ShearWaveVelocityMethod
+.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod
    :members:
    :undoc-members:
    :show-inheritance:
