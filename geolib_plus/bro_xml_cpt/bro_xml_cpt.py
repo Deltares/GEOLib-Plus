@@ -225,7 +225,7 @@ class BroXmlCpt(AbstractCPT):
         self.drop_nan_values()
         self.drop_duplicate_depth_values()
 
-        # super().pre_process_data( has to be executed before pre drill interpretation and after drop of data
+        # super().pre_process_data() has to be executed before pre drill interpretation and after drop of data
         super().pre_process_data()
         self.perform_pre_drill_interpretation()
 
