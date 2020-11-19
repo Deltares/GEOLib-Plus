@@ -18,7 +18,6 @@ from zipfile import ZipFile
 from lxml import etree
 import numpy as np
 from scipy.spatial import cKDTree as KDTree
-from tqdm import tqdm
 import pandas as pd
 import pyproj
 from lxml.etree import _Element
@@ -35,9 +34,9 @@ PandasDataFrame = TypeVar("pandas.core.frame.DataFrame")
 # Constants for XML parsing
 searchstring = b"<gml:featureMember>"
 footer = b"</gml:FeatureCollection>"
-
-columns = ["penetrationLength", "depth", "elapsedTime", "coneResistance", "correctedConeResistance", "netConeResistance", "magneticFieldStrengthX", "magneticFieldStrengthY", "magneticFieldStrengthZ", "magneticFieldStrengthTotal", "electricalConductivity",
-           "inclinationEW", "inclinationNS", "inclinationX", "inclinationY", "inclinationResultant", "magneticInclination", "magneticDeclination", "localFriction", "poreRatio", "temperature", "porePressureU1", "porePressureU2", "porePressureU3", "frictionRatio"]
+#
+# columns = ["penetrationLength", "depth", "elapsedTime", "coneResistance", "correctedConeResistance", "netConeResistance", "magneticFieldStrengthX", "magneticFieldStrengthY", "magneticFieldStrengthZ", "magneticFieldStrengthTotal", "electricalConductivity",
+#            "inclinationEW", "inclinationNS", "inclinationX", "inclinationY", "inclinationResultant", "magneticInclination", "magneticDeclination", "localFriction", "poreRatio", "temperature", "porePressureU1", "porePressureU2", "porePressureU3", "frictionRatio"]
 req_columns = ["penetrationLength", "coneResistance", "localFriction", "frictionRatio"]
 
 
