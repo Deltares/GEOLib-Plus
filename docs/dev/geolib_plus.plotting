@@ -1,0 +1,27 @@
+Cpt plotting
+==================================
+
+Plot cpt
+------------------------
+
+.. autoclass:: geolib_plus.plot_cpt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Plot settings
+------------------------
+
+.. autoclass:: geolib_plus.plot_settings.PlotSettings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Plot utilities
+------------------------
+
+.. autoclass:: geolib_plus.plot_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
