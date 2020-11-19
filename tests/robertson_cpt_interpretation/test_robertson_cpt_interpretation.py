@@ -12,6 +12,7 @@ import pytest
 from pathlib import Path
 import csv
 import json
+import math
 
 
 class TestShapeFiles:
@@ -871,3 +872,107 @@ class TestInterpreter:
 
         # Check if results are equal
         assert list(interpeter.data.lithology) == list(lithology_test)
+
+    @pytest.mark.systemtest
+    def test_pwp_level_calc(self):
+        # initialise model
+        cpt = GefCpt()
+        interpeter = RobertsonCptInterpretation()
+        interpeter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpeter
+        # define inputs
+        interpeter.data.coordinates = [91931.0, 438294.0]
+        # call test functions
+        interpeter.pwp_level_calc()
+        # test results
+        assert math.isclose(-2.4, interpeter.data.pwp, rel_tol=0.001)
+
+    @pytest.mark.systemtest
+    def test_pwp_level_calc_wrong_path(self):
+        # initialise model
+        cpt = GefCpt()
+        interpeter = RobertsonCptInterpretation()
+        interpeter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpeter
+        # define inputs
+        interpeter.data.coordinates = [91931.0, 438294.0]
+        interpeter.name_water_level_file = "oh_no_wrong_file.nc"
+        with pytest.raises(FileNotFoundError):
+            # call test functions
+            interpeter.pwp_level_calc()
+
+    @pytest.mark.systemtest
+    def test_pwp_level_calc_wrong_suffix(self):
+        # initialise model
+        cpt = GefCpt()
+        interpeter = RobertsonCptInterpretation()
+        interpeter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpeter
+        # define inputs
+        interpeter.data.coordinates = [91931.0, 438294.0]
+        interpeter.path_to_water_level_file = Path("cpt", "gef")
+        interpeter.name_water_level_file = "CPT000000003688_IMBRO_A.gef"
+        with pytest.raises(TypeError):
+            # call test functions
+            interpeter.pwp_level_calc()
+
+    @pytest.mark.systemtest
+    def test_pwp_level_calc_point_to_other_file(self):
+        # initialise model
+        cpt = GefCpt()
+        interpeter = RobertsonCptInterpretation()
+        interpeter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpeter
+        # define inputs
+        interpeter.data.coordinates = [91931.0, 438294.0]
+        interpeter.path_to_water_level_file = Path(
+            "D:\geolib-plus", "tests", "test_files"
+        )
+        interpeter.name_water_level_file = "peilgebieden_jp_250m.nc"
+        # call test functions
+        interpeter.pwp_level_calc()
+        # test results
+        assert math.isclose(-2.4, interpeter.data.pwp, rel_tol=0.001)
+
+    @pytest.mark.systemtest
+    def test_pwp_level_calc_user_already_inputted_pwp(self):
+        # initialise model
+        cpt = GefCpt()
+        interpeter = RobertsonCptInterpretation()
+        interpeter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpeter
+        # define inputs
+        interpeter.data.coordinates = [91931.0, 438294.0]
+        interpeter.data.pwp = -3
+        interpeter.user_defined_water_level = True
+        # call test functions
+        interpeter.pwp_level_calc()
+        # test results
+        assert math.isclose(-3, interpeter.data.pwp)
+
+    @pytest.mark.systemtest
+    def test_pwp_level_calc_user_already_inputted_pwp_error(self):
+        # initialise model
+        cpt = GefCpt()
+        interpeter = RobertsonCptInterpretation()
+        interpeter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpeter
+        # define inputs
+        interpeter.data.coordinates = [91931.0, 438294.0]
+        interpeter.data.pwp = None
+        interpeter.user_defined_water_level = True
+        # call test functions
+        with pytest.raises(ValueError):
+            interpeter.pwp_level_calc()
