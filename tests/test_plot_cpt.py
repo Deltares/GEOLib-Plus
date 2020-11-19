@@ -239,29 +239,6 @@ class TestPlotCpt():
         assert Path(output_path / output_file_name).is_file()
         (output_path / output_file_name).unlink()
 
-
-    @pytest.mark.workinprogress
-    def test_run_multiple_plots(self, plot_settings):
-        from os import listdir
-        from os.path import isfile, join
-        # cpt_folder = r"D:\software_development\geolib-plus\tests\test_files\cpt\bro_xml\XML-viewer-Foutmelding not valid\XML-viewer-Foutmelding not valid"
-        cpt_folder = r"D:\software_development\geolib-plus\tests\test_files\cpt\bro_xml\tmp\tmp"
-
-        # D:\software_development\geolib - plus\tests\test_files\cpt\bro_xml
-        cpt_names = [f for f in listdir(cpt_folder) if isfile(join(cpt_folder, f)) and f.endswith('.xml')]
-
-        # cpt = BroXmlCpt()
-        # cpt.read(test_file)
-        # cpt.pre_process_data()
-        cpts= []
-        for cpt_name in cpt_names:
-            cpt = BroXmlCpt()
-            cpt.read(Path(join(cpt_folder, cpt_name)))
-            cpt.pre_process_data()
-            plot_cpt.plot_cpt_norm(cpt, Path(cpt_folder), plot_settings.general_settings)
-            cpts.append(cpt)
-
-
     @pytest.fixture(scope="session", params=[BroXmlCpt(), GefCpt()])
     def cpt(self, request):
         """
