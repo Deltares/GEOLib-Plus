@@ -12,6 +12,7 @@ from tests.utils import TestUtils
 
 class TestPlotCpt():
 
+    @pytest.mark.unittest
     def test_get_ylims_greater_than_data(self, cpt_with_water):
         """
         Assert positive buffer at top and length graph larger than the cpt data
@@ -33,6 +34,7 @@ class TestPlotCpt():
         assert pytest.approx(ylims[0][0]) == -1.0
         assert pytest.approx(ylims[0][1]) == -101.0
 
+    @pytest.mark.unittest
     def test_get_ylims_negative_buffer_at_top(self, cpt_with_water):
         """
        Assert assert negative buffer at top and length graph larger than the cpt data
@@ -54,6 +56,7 @@ class TestPlotCpt():
         assert pytest.approx(ylims[0][0]) == -3.0
         assert pytest.approx(ylims[0][1]) == -103.0
 
+    @pytest.mark.unittest
     def test_get_ylims_smaller_than_data(self, cpt_with_water):
         """
        Assert length graph is smaller than the cpt data
@@ -78,6 +81,7 @@ class TestPlotCpt():
         assert pytest.approx(ylims[1][0]) == -12.0
         assert pytest.approx(ylims[1][1]) == -22.0
 
+    @pytest.mark.unittest
     def test_get_ylims_repeated_distance(self, cpt_with_water):
         """
         Assert length graph is smaller than the cpt data and last meter of previous graph is repeated
@@ -102,6 +106,7 @@ class TestPlotCpt():
         assert pytest.approx(ylims[1][0]) == -11.0
         assert pytest.approx(ylims[1][1]) == -21.0
 
+    @pytest.mark.unittest
     def test_get_ylims_absolute_top_level(self, cpt_with_water):
         """
         Assert length graph is smaller than the cpt data and top of first graph is an absolute given value
