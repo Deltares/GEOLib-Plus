@@ -178,18 +178,33 @@ class TestPlotCpt():
 
 
     @pytest.mark.integrationtest
-    def test_generate_fig_with_inverse_friction_nbr(self, bro_xml_cpt, plot_settings):
+    def test_generate_fig_with_inverse_friction_nbr(self, cpt, plot_settings):
+        """
+        Test plotting of an inversed friction nbr for a BroXmlCpt and a GefCpt
+
+        :param cpt: BroXmlCpt or GefCpt
+        :param plot_settings:  Settings for the plot
+        :return:
+        """
+
         plot_settings.set_inversed_friction_number_in_plot()
 
         output_path = Path(TestUtils._name_output)
-        plot_cpt.plot_cpt_norm(bro_xml_cpt, output_path, plot_settings.general_settings)
+        plot_cpt.plot_cpt_norm(cpt, output_path, plot_settings.general_settings)
 
-        output_file_name = bro_xml_cpt.name + '.pdf'
+        output_file_name = cpt.name + '.pdf'
         assert Path(output_path / output_file_name).is_file()
         (output_path / output_file_name).unlink()
 
     @pytest.mark.integrationtest
     def test_generate_fig_without_inclination(self, cpt, plot_settings):
+        """
+        Test plotting of a BroXmlCpt and a GefCpt without available inclination angle
+
+        :param cpt: BroXmlCpt or GefCpt
+        :param plot_settings:  Settings for the plot
+        :return:
+        """
 
         cpt.inclination_resultant = None
         output_path = Path(TestUtils._name_output)
@@ -202,6 +217,14 @@ class TestPlotCpt():
 
     @pytest.mark.integrationtest
     def test_generate_fig_with_default_settings(self, cpt, plot_settings):
+        """
+        Test plotting of a BroXmlCpt and a GefCpt with default settings
+
+        :param cpt: BroXmlCpt or GefCpt
+        :param plot_settings:  Settings for the plot
+        :return:
+        """
+
         plot_settings.assign_default_settings()
 
         output_path = Path(TestUtils._name_output)
@@ -236,6 +259,11 @@ class TestPlotCpt():
 
     @pytest.fixture(scope="session", params=[BroXmlCpt(), GefCpt()])
     def cpt(self, request):
+        """
+        Fills de cpt data class with data from a xml file and a gef file.
+        :param request:
+        :return:
+        """
         if isinstance(request.param, BroXmlCpt):
             test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
             filename = "CPT000000003688_IMBRO_A.xml"
@@ -253,6 +281,11 @@ class TestPlotCpt():
 
     @pytest.fixture(scope="session", params=[BroXmlCpt(), GefCpt()])
     def cpt_with_water(self, request):
+        """
+        Fills de cpt data class with data from a xml file and a gef file. The data includes water pressure.
+        :param request:
+        :return:
+        """
         if isinstance(request.param, BroXmlCpt):
             test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
             filename = "cpt_with_water.xml"
@@ -269,6 +302,10 @@ class TestPlotCpt():
 
     @pytest.fixture
     def plot_settings(self):
+        """
+        Sets default plot settings.
+        :return:
+        """
         plot_settings = PlotSettings()
         plot_settings.assign_default_settings()
         return plot_settings
