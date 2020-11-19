@@ -57,7 +57,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     data: AbstractCPT = None
     gamma: Iterable = []
     polygons: Iterable = []
-    path_to_water_level_file: Union[str, Path] = "resources"
+    path_to_water_level_file: Union[str, Path] = Path(
+        Path(__file__).parent, "resources"
+    )
     name_water_level_file: str = "peilgebieden_jp_250m.nc"
     user_defined_water_level: bool = False
 
@@ -219,7 +221,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         if not (self.user_defined_water_level):
             # define the path for the shape file
             path_pwp = Path(
-                Path(__file__).parent,
                 self.path_to_water_level_file,
                 self.name_water_level_file,
             )

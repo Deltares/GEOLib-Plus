@@ -934,7 +934,7 @@ class TestInterpreter:
         # define inputs
         interpeter.data.coordinates = [91931.0, 438294.0]
         interpeter.path_to_water_level_file = Path(
-            "D:\geolib-plus", "tests", "test_files"
+            Path(__file__).parent.parent, "test_files"
         )
         interpeter.name_water_level_file = "peilgebieden_jp_250m.nc"
         # call test functions
