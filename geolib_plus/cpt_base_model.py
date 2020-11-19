@@ -149,7 +149,7 @@ class AbstractCPT(BaseModel):
         :return: corrected depth
         """
         corrected_d_depth = np.diff(self.penetration_length) * np.cos(
-            np.radians(np.nan_to_num(self.inclination_resultant[:-1]))
+            np.radians(np.nan_to_num(self.inclination_resultant[:-1], nan=0.0))
         )
         corrected_depth = np.concatenate(
             (

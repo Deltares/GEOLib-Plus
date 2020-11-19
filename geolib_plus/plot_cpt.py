@@ -12,7 +12,7 @@ import os
 import warnings
 from typing import Tuple
 
-from geolib_plus import plot_utils as pu
+from geolib_plus import plot_utils
 
 def get_values_which_exceed_threshold(threshold: List, values: np.ndarray, y_data: np.ndarray, show_interval: float) \
         -> Tuple[np.ndarray, np.ndarray]:
@@ -276,11 +276,11 @@ def generate_plot(cpt: AbstractCPT, settings: Dict, ylim: List, ylims: List, plo
             ax.plot(trimmed_data, depths, color=graph["graph_color"], linestyle=graph["line_style"])
 
             # set x axis
-            ax = pu.set_x_axis(ax, graph, settings, ylim, )
+            ax = plot_utils.set_x_axis(ax, graph, settings, ylim, )
 
             # set text boxes at values which exceed the threshold
 
-            pu.set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data,
+            plot_utils.set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data,
                                       graph["threshold"] * graph["unit_converter"], graph["position_label"])
 
             axes.append(ax)
@@ -290,23 +290,23 @@ def generate_plot(cpt: AbstractCPT, settings: Dict, ylim: List, ylims: List, plo
     # set the y axis
     tick_locations_inclination, tick_labels_inclination = define_inclination_ticks_and_labels(
         cpt, depths, inclination, ylim, settings)
-    pu.set_y_axis(axes[0], ylim, settings, cpt, tick_locations_inclination, tick_labels_inclination)
+    plot_utils.set_y_axis(axes[0], ylim, settings, cpt, tick_locations_inclination, tick_labels_inclination)
 
     # set surface line
-    pu.set_local_reference_line(cpt, axes[0], axes[0].get_xlim(), settings["language"])
+    plot_utils.set_local_reference_line(cpt, axes[0], axes[0].get_xlim(), settings["language"])
 
     # create custom grid
-    pu.create_custom_grid(axes[0], axes[0].get_xlim(), ylim, settings["grid"])
+    plot_utils.create_custom_grid(axes[0], axes[0].get_xlim(), ylim, settings["grid"])
 
     # set size in inches
-    pu.set_figure_size(fig, ylim)
+    plot_utils.set_figure_size(fig, ylim)
 
     scale = 0.8
 
     fig.subplots_adjust(top=scale, left=1 - scale)
 
     # add information_box
-    pu.create_information_box(axes[0], scale, cpt, plot_nr, ylims)
+    plot_utils.create_information_box(axes[0], scale, cpt, plot_nr, ylims)
 
     return fig
 
