@@ -212,7 +212,6 @@ def define_inclination_ticks_and_labels(cpt: AbstractCPT, depth: np.ndarray,
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
-        # inclination[:] = np.nan
         tick_labels_inclination = np.array([np.nanmean(inclination[(depth > tick_locations_inclination[idx + 1]) &
                                                                    (depth < tick_locations_inclination[idx])].tolist())
                                             for idx in range(0, len(tick_locations_inclination) - 1)])
