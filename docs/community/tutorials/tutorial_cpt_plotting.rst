@@ -28,9 +28,9 @@ Below an example is given on how the data of the cpt can be plotted.
 
 A figure of a typical cpt plot is shown below:
 
+.. image:: ../../_static/example_plot.png
+    :align: center
 
-@@@ figure @@@@
-    
 2. The cpt is plotted with default settings. If you wish to alter the default plotting settings. The user can alter the
 plot_settings attribute in :class:`~geolib_plus.cpt_base_model.AbstractCPT` class. For a complete documentation on the plot settings, see:
 :class:`~geolib_plus.plot_settings.PlotSettings`. Below an example is given on how the colour of the cone resistance is altered:
@@ -38,7 +38,20 @@ plot_settings attribute in :class:`~geolib_plus.cpt_base_model.AbstractCPT` clas
 .. code-block:: python
 
     cpt.plot_settings.plot_qc_settings["graph_color"] = "blue"
+    cpt.plot(output_path)
 
+3. It might be desired to plot the inversed friction number instead of the regular friction number. This can give more
+insight in the lower values of the data. Below it is shown how the inversed friction angle can be presented.
 
+.. code-block:: python
+
+    cpt.plot_settings.set_inversed_friction_number_in_plot()
+    cpt.plot(output_path)
+
+This option can be reversed with the following function:
+
+.. code-block:: python
+
+    cpt.plot_settings.set_friction_number_in_plot()
 
 
