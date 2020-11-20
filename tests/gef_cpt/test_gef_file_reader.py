@@ -576,10 +576,10 @@ class TestReadGef:
         test_coord = [244319.00, 587520.00]
         test_depth = np.linspace(2, 20, 19)
         test_NAP = -1 * test_depth + 0.13
-        test_tip = np.full(19, 1e6)
-        test_friction = np.full(19, 2e6)
+        test_tip = np.full(19, 1)
+        test_friction = np.full(19, 2)
         test_friction_nbr = np.full(19, 5)
-        test_water = np.full(19, 3e6)
+        test_water = np.full(19, 3)
 
         # test expectations
         assert "DKP302" == cpt["name"]

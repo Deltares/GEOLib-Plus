@@ -267,14 +267,15 @@ class AbstractCPT(BaseModel):
         # new values are appended to the result
         return np.append(local_values, values)
 
-    def __correct_missing_samples_top_CPT(self, length_of_average_points: int, depth: np.ndarray):
+    def __correct_missing_samples_top_CPT(self, length_of_average_points: int):
         """
         All values except from the value of depth should be updated. This function
         inserts in the beginning of the arrays, the average value of the property
         for length length_of_average_points.
         """
         # add zero
-        depth = np.append(0, depth)
+        self.depth = np.append(0, self.depth)
+        self.penetration_length = np.append(0, self.penetration_length)
         for value_name in self.__list_of_array_values:
             data = getattr(self, value_name)
             if (data is not None) and (value_name != "depth") and (value_name != "penetration_length"):
@@ -284,7 +285,7 @@ class AbstractCPT(BaseModel):
                         data,
                     )
                     setattr(self, value_name, value_to_add)
-        return depth
+        return
 
 
     def perform_pre_drill_interpretation(self, length_of_average_points: int = 3):
@@ -304,7 +305,7 @@ class AbstractCPT(BaseModel):
         if not (math.isclose(float(self.undefined_depth), 0.0)):
             # if there is pre-dill add the average values to the pre-dill
             # Set the discretization
-            discretization = np.average(np.diff(self.depth))
+            discretization = np.average(np.diff(self.penetration_length))
             # Define local data
             local_depth = np.arange(
                 starting_depth, float(self.undefined_depth), discretization
@@ -365,10 +366,7 @@ class AbstractCPT(BaseModel):
             )
         # correct for missing samples in the top of the CPT
         if self.depth[0] -1e-9 > 0:
-            self.depth = self.__correct_missing_samples_top_CPT(length_of_average_points, self.depth)
-        if self.penetration_length[0] -1e-9 > 0:
-            self.penetration_length = self.__correct_missing_samples_top_CPT(length_of_average_points,
-                                                                             self.penetration_length)
+            self.__correct_missing_samples_top_CPT(length_of_average_points)
         return
 
 
