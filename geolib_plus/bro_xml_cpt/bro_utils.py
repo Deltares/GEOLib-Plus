@@ -299,7 +299,12 @@ class XMLBroCPTReader(CptReader):
         # cpt time of result
         for cpt in root.iter(ns + "conePenetrationTest"):
             for loc in cpt.iter(ns5 + "resultTime"):
-                self.bro_data.result_time = loc.text
+                if loc.text.strip() == '':
+                    for loc2 in loc.iter(ns3 + 'timePosition'):
+                        self.bro_data.result_time = loc2.text
+                else:
+                    self.bro_data.result_time = loc.text
+
         # Pre drilled depth
         z = self.search_values_in_root(root=root, search_item=ns + "predrilledDepth")
         # if predrill does not exist it is zero

@@ -210,5 +210,5 @@ class TestBroUtil:
         assert cpt_data.bro_data.local_reference == "maaiveld"
         assert cpt_data.bro_data.vertical_datum == "NAP"
         assert cpt_data.bro_data.quality_class == "klasse2"
-        assert cpt_data.bro_data.result_time
+        assert cpt_data.bro_data.result_time == '2011-06-29'
         assert cpt_data.bro_data.predrilled_z == 0.01

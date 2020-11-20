@@ -11,6 +11,31 @@ from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
 
 
 class TestBroXmlCpt:
+
+    @pytest.mark.systemtest
+    @pytest.mark.workinprogress
+    def test_that_read_and_preprocess_can_be_run_twice(self):
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = BroXmlCpt()
+        # test initial expectations
+        assert cpt
+        # read xml file
+        cpt.read(filepath=test_file)
+        # do pre-processing for the first time
+        cpt.pre_process_data()
+        # read xml file second time
+        cpt.read(filepath=test_file)
+        # do pre-processing for the second time
+        cpt.pre_process_data()
+        # check final expectations
+        assert cpt
+
+
     @pytest.mark.systemtest
     def test_that_preprocess_can_be_run_twice(self):
         # open the gef file

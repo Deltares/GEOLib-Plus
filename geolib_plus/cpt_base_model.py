@@ -149,7 +149,7 @@ class AbstractCPT(BaseModel):
         :return: corrected depth
         """
         corrected_d_depth = np.diff(self.penetration_length) * np.cos(
-            np.radians(self.inclination_resultant[:-1])
+            np.radians(np.nan_to_num(self.inclination_resultant[:-1], nan=0.0))
         )
         corrected_depth = np.concatenate(
             (
@@ -204,6 +204,14 @@ class AbstractCPT(BaseModel):
         if self.water is None:
             self.water = np.zeros(len(self.penetration_length))
 
+    def __calculate_inclination_resultant(self):
+
+        if self.inclination_resultant is None:
+            if isinstance(self.inclination_x, np.ndarray) and isinstance(self.inclination_y, np.ndarray):
+                self.inclination_resultant = np.sqrt(np.square(self.inclination_x) + np.square(self.inclination_y))
+            elif isinstance(self.inclination_ns, np.ndarray) and isinstance(self.inclination_ew, np.ndarray):
+                self.inclination_resultant = np.sqrt(np.square(self.inclination_ns) + np.square(self.inclination_ew))
+
     def pre_process_data(self):
         """
         Pre processes data which is read from a gef file or bro xml file.
@@ -214,6 +222,8 @@ class AbstractCPT(BaseModel):
         #todo extend
         :return:
         """
+
+        self.__calculate_inclination_resultant()
         self.calculate_depth()
         self.depth_to_reference = self.local_reference_level - self.depth
 
@@ -221,6 +231,7 @@ class AbstractCPT(BaseModel):
         self.tip = self.__correct_for_negatives(self.tip)
         self.friction = self.__correct_for_negatives(self.friction)
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
+
 
         self.__get_water_data()
 

@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 class GefCpt(AbstractCPT):
+
     @classmethod
     def get_cpt_reader(cls) -> CptReader:
         return GefFileReader()

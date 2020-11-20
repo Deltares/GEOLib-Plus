@@ -218,12 +218,17 @@ class BroXmlCpt(AbstractCPT):
         """
         Pre processes data which is read from bro xml files.
 
-        Units are converted to MPa.
         #todo extend
         :return:
         """
+
         self.drop_nan_values()
         self.drop_duplicate_depth_values()
+
+        # super().pre_process_data() has to be executed before pre drill interpretation and after drop of data
+        super().pre_process_data()
         self.perform_pre_drill_interpretation()
 
-        super().pre_process_data()
+
+
+

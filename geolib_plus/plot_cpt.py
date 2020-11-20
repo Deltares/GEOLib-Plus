@@ -1,20 +1,29 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Dict, List, Tuple
+if TYPE_CHECKING:
+    from geolib_plus.cpt_base_model import AbstractCPT
+
+from pathlib import Path
+import numpy as np
 import matplotlib.pylab as plt
 
 import os
 import warnings
 from typing import Tuple
 
-from .plot_utils import *
+from geolib_plus import plot_utils
 
-def get_values_which_exceed_threshold(threshold, values, y_data, show_interval) -> Tuple[np.ndarray, np.ndarray]:
+def get_values_which_exceed_threshold(threshold: List, values: np.ndarray, y_data: np.ndarray, show_interval: float) \
+        -> Tuple[np.ndarray, np.ndarray]:
     """
     Gets the values which exceed the given threshold which has to be shown, where a value is shown if the distance
     regarding the previous shown value is greater than the show interval and the value exceeds the threshold.
 
-    :param threshold:
-    :param values:
-    :param y_data:
-    :param show_interval:
+    :param threshold:               Threshold values of plotted data
+    :param values:                  Plotted data
+    :param y_data:                  Depth data
+    :param show_interval:           Min distance between shown values
     :return shown_values:           Values past threshold which are shown in text boxes
     :return y_coord_shown_value:    Vertical coordinates of the shown_values
     """
@@ -34,7 +43,7 @@ def get_values_which_exceed_threshold(threshold, values, y_data, show_interval) 
     return np.array(shown_values), np.array(y_coord_shown_value)
 
 
-def trim_values_at_exceeding_threshold(threshold, values):
+def trim_values_at_exceeding_threshold(threshold: List, values: np.ndarray) -> np.ndarray:
     """
     Trims a graph on threshold values when the threshold is exceeded.
 
@@ -42,10 +51,11 @@ def trim_values_at_exceeding_threshold(threshold, values):
     :param values:
     :return trimmed values:
     """
+
     return np.clip(values, threshold[0], threshold[1])
 
 
-def get_y_lims(cpt, settings):
+def get_y_lims(cpt: AbstractCPT, settings: Dict) -> List:
     """
     Gets all the vertical plot limits of the cpt. If the length of the cpt exceeds the vertical limit of the plot, a new
     plot is generated. The top of the new plot is the bottom of the previous plot plus the repeated distance
@@ -89,7 +99,8 @@ def get_y_lims(cpt, settings):
     return y_lims
 
 
-def trim_cpt_data_on_vertical_limits(cpt, y_lim, settings):
+def trim_cpt_data_on_vertical_limits(cpt: AbstractCPT, y_lim: List, settings: Dict) \
+        -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Trims the cpt data on the vertical limits.
 
@@ -116,14 +127,18 @@ def trim_cpt_data_on_vertical_limits(cpt, y_lim, settings):
     depth_in_range_idxs = np.where((y_lim[1] < cpt.depth_to_reference) & (cpt.depth_to_reference < y_lim[0]))
     data_within_lim = data[depth_in_range_idxs].tolist()
     depth_in_range = cpt.depth_to_reference[depth_in_range_idxs].tolist()
-    inclination_in_range = cpt.inclination_resultant[depth_in_range_idxs].tolist()
+    if isinstance(cpt.inclination_resultant,np.ndarray):
+        inclination_in_range = cpt.inclination_resultant[depth_in_range_idxs].tolist()
+    else:
+        inclination_in_range = None
 
     # If multiple plots are required to show the data, add last value of previous plot to current plot
     if cpt.depth_to_reference[0] > y_lim[0]:
         previous_idx = max(i for i in range(len(cpt.depth_to_reference)) if cpt.depth_to_reference[i] - y_lim[0] > 0)
         data_within_lim.insert(0, data[previous_idx])
         depth_in_range.insert(0, cpt.depth_to_reference[previous_idx])
-        inclination_in_range.insert(0, cpt.inclination_resultant[previous_idx])
+        if inclination_in_range is not None:
+            inclination_in_range.insert(0, cpt.inclination_resultant[previous_idx])
 
     data_within_lim = np.array(data_within_lim)
     depth_in_range = np.array(depth_in_range)
@@ -132,7 +147,8 @@ def trim_cpt_data_on_vertical_limits(cpt, y_lim, settings):
     return depth_in_range, inclination_in_range, data_within_lim
 
 
-def trim_cpt_data(settings, vertical_settings, cpt, y_lim):
+def trim_cpt_data(settings: Dict, vertical_settings: Dict, cpt: AbstractCPT, y_lim: List) \
+        -> Tuple[np.ndarray,np.ndarray,np.ndarray,np.ndarray,np.ndarray]:
     """
     Trims the requested cpt data (qc ,friction, friction nbr, water) at threshold values and vertical limits.
 
@@ -163,7 +179,8 @@ def trim_cpt_data(settings, vertical_settings, cpt, y_lim):
     return trimmed_values, shown_values, y_coord_shown_value, depth_in_range, inclination_in_range
 
 
-def define_inclination_ticks_and_labels(cpt, depth, inclination, ylim, settings):
+def define_inclination_ticks_and_labels(cpt: AbstractCPT, depth: np.ndarray,
+                                        inclination: np.ndarray, ylim: List, settings: Dict) -> Tuple[np.ndarray, List]:
     """
     Defines the location and the labels of the ticks referring to the inclination angle with respect to the depth of the
     cpt. The first tick is at the reference level, the following ticks are spaced exactly 1 meter apart. The tick label
@@ -176,6 +193,9 @@ def define_inclination_ticks_and_labels(cpt, depth, inclination, ylim, settings)
     :param settings:
     :return:
     """
+    if all(inclination == np.array([None])):
+        return np.array([]), []
+
     tick_distance_from_ceil_meter = cpt.local_reference_level - np.ceil(cpt.local_reference_level)
     tick_distance_inclination = settings["vertical_settings"]["inclination_tick_distance"]
 
@@ -188,12 +208,12 @@ def define_inclination_ticks_and_labels(cpt, depth, inclination, ylim, settings)
                                                ylim[1] + tick_distance_from_ceil_meter,
                                                -tick_distance_inclination)
     if tick_locations_inclination.size == 0:
-        return [], []
+        return np.array([]), []
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
         tick_labels_inclination = np.array([np.nanmean(inclination[(depth > tick_locations_inclination[idx + 1]) &
-                                                                   (depth < tick_locations_inclination[idx])])
+                                                                   (depth < tick_locations_inclination[idx])].tolist())
                                             for idx in range(0, len(tick_locations_inclination) - 1)])
 
     tick_labels_inclination = np.insert(tick_labels_inclination, 0, inclination[0])
@@ -205,22 +225,23 @@ def define_inclination_ticks_and_labels(cpt, depth, inclination, ylim, settings)
     return tick_locations_inclination, tick_labels_inclination
 
 
-def save_figures(figures, path, cpt):
+def save_figures(figures: List, cpt: AbstractCPT, output_folder: Path):
     """
     Saves all plots of current cpt in one pdf file
 
-    :param figures: list fo plot figures
-    :param path: path to plot files
+    :param fig: current figure
+    :param ylims: all vertical limits of current cpt
     :param cpt: cpt data
+    :param plot_nr: number of the plot
     :return:
     """
 
     import matplotlib.backends.backend_pdf
 
-    if not path.exists():
-        path.mkdir(parents=True)
+    if not output_folder.exists():
+        output_folder.mkdir(parents=True)
 
-    pdf = matplotlib.backends.backend_pdf.PdfPages(os.path.join(path, cpt.name) + ".pdf")
+    pdf = matplotlib.backends.backend_pdf.PdfPages(Path(output_folder/(cpt.name + ".pdf")))
 
     for fig in figures:
         pdf.savefig(fig)
@@ -229,7 +250,7 @@ def save_figures(figures, path, cpt):
     pdf.close()
 
 
-def generate_plot(cpt, settings, ylim, ylims, plot_nr):
+def generate_plot(cpt: AbstractCPT, settings: Dict, ylim: List, ylims: List, plot_nr: int) -> plt.Figure:
     """
     Plots cpt data within vertical limits
 
@@ -255,11 +276,13 @@ def generate_plot(cpt, settings, ylim, ylims, plot_nr):
             ax.plot(trimmed_data, depths, color=graph["graph_color"], linestyle=graph["line_style"])
 
             # set x axis
-            ax = set_x_axis(ax, graph, settings, ylim, )
+            ax = plot_utils.set_x_axis(ax, graph, settings, ylim, )
 
             # set text boxes at values which exceed the threshold
-            set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data,
-                                      np.array(graph["threshold"]) * graph["unit_converter"], graph["position_label"])
+
+            plot_utils.set_textbox_at_thresholds(ax, ylim, max_data, found_depths_data,
+                                      graph["threshold"] * graph["unit_converter"], graph["position_label"])
+
             axes.append(ax)
 
     axes[0].xaxis.tick_top()  # todo improve this, as this assumes a fixed order of the added data
@@ -267,33 +290,38 @@ def generate_plot(cpt, settings, ylim, ylims, plot_nr):
     # set the y axis
     tick_locations_inclination, tick_labels_inclination = define_inclination_ticks_and_labels(
         cpt, depths, inclination, ylim, settings)
-    set_y_axis(axes[0], ylim, settings, cpt, tick_locations_inclination, tick_labels_inclination)
+    plot_utils.set_y_axis(axes[0], ylim, settings, cpt, tick_locations_inclination, tick_labels_inclination)
 
     # set surface line
-    set_local_reference_line(cpt, axes[0], axes[0].get_xlim(), settings["language"])
+    plot_utils.set_local_reference_line(cpt, axes[0], axes[0].get_xlim(), settings["language"])
 
     # create custom grid
-    create_custom_grid(axes[0], axes[0].get_xlim(), ylim, settings["grid"])
+    plot_utils.create_custom_grid(axes[0], axes[0].get_xlim(), ylim, settings["grid"])
 
     # set size in inches
-    set_figure_size(fig, ylim)
+    plot_utils.set_figure_size(fig, ylim)
 
     scale = 0.8
 
     fig.subplots_adjust(top=scale, left=1 - scale)
-    create_information_box(axes[0], scale, cpt, plot_nr, ylims)
+
+    # add information_box
+    plot_utils.create_information_box(axes[0], scale, cpt, plot_nr, ylims)
+
     return fig
 
 
-def plot_cpt_norm(cpt, path, settings):
+
+
+def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
     """
     Plots and saves all data in the current cpt according to the norm written in NEN @@@
 
     :param cpt: cpt data
-    :param path: path to save plots
     :param settings: general settings
     :return:
     """
+
     # Get vertical limits of the plotted data
     ylims = get_y_lims(cpt, settings)
 
@@ -302,7 +330,7 @@ def plot_cpt_norm(cpt, path, settings):
     for plot_nr, ylim in enumerate(ylims):
         figures.append(generate_plot(cpt, settings, ylim, ylims, plot_nr))
 
-    save_figures(figures, path, cpt)
+    save_figures(figures, cpt, output_folder)
 
 
 

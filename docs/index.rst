@@ -44,7 +44,9 @@ of using GEOLib+.
 .. toctree::
    :maxdepth: 3
 
-   community/tutorials/tutorial_cpt
+   community/tutorials/tutorial_setup_cpt
+   community/tutorials/tutorial_cpt_interpretation
+   community/tutorials/tutorial_cpt_plotting
 
 Changelog
 ---------
