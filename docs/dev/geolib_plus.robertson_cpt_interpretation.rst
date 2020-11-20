@@ -1,27 +1,13 @@
-Robertson cpt interpretation model
-==================================
+geolib\_plus.robertson\_cpt\_interpretation package
+===================================================
 
-Robertson interpretation
-------------------------
+Submodules
+----------
 
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation
+geolib\_plus.robertson\_cpt\_interpretation module
+--------------------------------------------------
+
+.. automodule:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation
    :members:
    :undoc-members:
    :show-inheritance:
-
-
-Support classes
----------------
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. autoclass:: geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod
-   :members:
-   :undoc-members:
-   :show-inheritance:
-

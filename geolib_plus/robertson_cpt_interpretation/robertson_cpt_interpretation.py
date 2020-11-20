@@ -57,6 +57,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     data: AbstractCPT = None
     gamma: Iterable = []
     polygons: Iterable = []
+    path_to_water_level_file: Union[str, Path] = Path(
+        Path(__file__).parent, "resources"
+    )
+    name_water_level_file: str = "peilgebieden_jp_250m.nc"
+    user_defined_water_level: bool = False
 
     def interpret(self, data: AbstractCPT):
 
@@ -204,28 +209,41 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.lithology = lithology
         self.data.litho_points = points
 
-    def pwp_level_calc(
-        self,
-        path_pwp: Union[str, Path] = "resources",
-        name: str = "peilgebieden_jp_250m.nc",
-    ):
+    def pwp_level_calc(self):
         r"""
-        Computes the estimated pwp level for the cpt coordinate
+        Computes the estimated pwp level for the cpt coordinate.
+        If the user has not defined a pwp in the cpt class.
 
-        Parameters
-        ----------
-        :param path_pwp: (optional) path for the location of the netCDF file with expected water levels
-        :param name: (optional) name of the netCDF file with expected water levels
-        :return:
         """
 
-        # define the path for the shape file
-        path_pwp = resource_path(Path(Path(__file__).parent, path_pwp, name))
+        # If pwp is not None then the pore pressure should
+        # be defined
+        if not (self.user_defined_water_level):
+            # define the path for the shape file
+            path_pwp = Path(
+                self.path_to_water_level_file,
+                self.name_water_level_file,
+            )
 
-        pwp = NetCDF()
-        pwp.read_cdffile(path_pwp)
-        pwp.query(self.data.coordinates[0], self.data.coordinates[1])
-        self.data.pwp = pwp.NAP_water_level
+            # check if the file is nc file
+            if not (self.name_water_level_file.split(".")[-1] == "nc"):
+                raise TypeError("File should be NetCDF format : %s" % path_pwp)
+
+            # check if file exists
+            if not (path_pwp.is_file()):
+                raise FileNotFoundError("File does not exist: %s" % path_pwp)
+
+            # open file
+            pwp = NetCDF()
+            pwp.read_cdffile(path_pwp)
+            pwp.query(self.data.coordinates[0], self.data.coordinates[1])
+            self.data.pwp = pwp.NAP_water_level
+        else:
+            # check that there is a water level value defined
+            if self.data.pwp is None:
+                raise ValueError(
+                    "Value of water level was not defined. Please input water level (pwp) or set user_defined_water_level to False"
+                )
 
     def gamma_calc(
         self,
