@@ -218,7 +218,7 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(
             cpt.depth_to_reference, cpt.local_reference_level - cpt.depth
         )
-        np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[9:108])
+        np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[0:99])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
 

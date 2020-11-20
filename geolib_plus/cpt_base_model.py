@@ -267,24 +267,24 @@ class AbstractCPT(BaseModel):
         # new values are appended to the result
         return np.append(local_values, values)
 
-    def __correct_missing_samples_top_CPT(self, length_of_average_points: int):
+    def __correct_missing_samples_top_CPT(self, length_of_average_points: int, depth: np.ndarray):
         """
         All values except from the value of depth should be updated. This function
         inserts in the beginning of the arrays, the average value of the property
         for length length_of_average_points.
         """
         # add zero
-        self.depth = np.append(0, self.depth)
+        depth = np.append(0, depth)
         for value_name in self.__list_of_array_values:
             data = getattr(self, value_name)
-            if (data is not None) and (value_name != "depth"):
+            if (data is not None) and (value_name != "depth") and (value_name != "penetration_length"):
                 if not (all(v is None for v in data)):
                     value_to_add = np.append(
                         np.average(data[:length_of_average_points]),
                         data,
                     )
                     setattr(self, value_name, value_to_add)
-        return
+        return depth
 
 
     def perform_pre_drill_interpretation(self, length_of_average_points: int = 3):
@@ -314,10 +314,12 @@ class AbstractCPT(BaseModel):
                 if (getattr(self, value_name) is not None) and (
                     value_name
                     not in [
+                        "penetration_length",
                         "depth",
                         "pore_pressure_u1",
                         "pore_pressure_u2",
                         "pore_pressure_u3",
+                        "water",
                     ]
                 ):
                     if not (all(v is None for v in getattr(self, value_name))):
@@ -357,9 +359,16 @@ class AbstractCPT(BaseModel):
                 local_depth,
                 local_depth[-1] + discretization + self.depth - self.depth[0],
             )
+            self.penetration_length = np.append(
+                local_depth,
+                local_depth[-1] + discretization + self.penetration_length - self.penetration_length[0],
+            )
         # correct for missing samples in the top of the CPT
         if self.depth[0] -1e-9 > 0:
-            self.__correct_missing_samples_top_CPT(length_of_average_points)
+            self.depth = self.__correct_missing_samples_top_CPT(length_of_average_points, self.depth)
+        if self.penetration_length[0] -1e-9 > 0:
+            self.penetration_length = self.__correct_missing_samples_top_CPT(length_of_average_points,
+                                                                             self.penetration_length)
         return
 
 
