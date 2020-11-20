@@ -124,6 +124,14 @@ class GefFileReader(CptReader):
 
         return next((line for line in data if line.endswith(code_string)), None)
 
+    @staticmethod
+    def get_pre_drill_depth(penetration_length: List) -> float:
+        """
+        Gets the pre-drill depth from the penetration length
+        """
+        penetration_length = np.array(penetration_length)
+        return min(penetration_length[penetration_length > 0])
+
     def read_file(self, filepath: Path) -> dict:
         return self.read_gef(gef_file=filepath)
 
@@ -193,6 +201,9 @@ class GefFileReader(CptReader):
         # read data & correct depth to NAP
         self.read_column_data(data, idx_EOH)
 
+        # get pre drill depth from penetration length data
+        predrilled_z = self.get_pre_drill_depth(self.property_dict["penetration_length"].values_from_gef)
+
         # remove the points with error: value == -9999
         self.remove_points_with_error()
         # if tip / friction / friction number are negative -> zero
@@ -214,17 +225,13 @@ class GefFileReader(CptReader):
             )
         )
 
-        # todo move calculation z_NAP outside reader
-        # z_NAP = [
-        #     NAP - i for j, i in enumerate(self.property_dict["depth"].values_from_gef)
-        # ]
 
         return dict(
             name=self.name,
-            penetration_length=self.get_as_np_array(
-                self.property_dict["penetration_length"].values_from_gef
-            ),
+            penetration_length=self.get_as_np_array(self.property_dict["penetration_length"].values_from_gef),
             depth=self.get_as_np_array(self.property_dict["depth"].values_from_gef),
+            predrilled_z=predrilled_z,
+            undefined_depth=self.property_dict["penetration_length"].values_from_gef[0],
             tip=self.get_as_np_array(self.property_dict["tip"].values_from_gef),
             friction=self.get_as_np_array(
                 self.property_dict["friction"].values_from_gef
