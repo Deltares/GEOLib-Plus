@@ -27,6 +27,8 @@ class PlotSettings:
         self.__plot_sizes = ['a4', "unlimited"]
         self.__top_types = ['relative', 'absolute']
 
+        self.assign_default_settings()
+
     @property
     def languages(self):
         return self.__languages
