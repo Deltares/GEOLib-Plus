@@ -24,7 +24,7 @@ Below an example is given on how the data of the cpt can be plotted.
     from pathlib import Path
 
     output_path = Path(".")
-    cpt.plot(self, output_path)
+    cpt.plot(output_path)
 
 A figure of a typical cpt plot is shown below:
 
