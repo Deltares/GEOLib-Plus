@@ -4,7 +4,6 @@ from pathlib import Path
 
 
 class GefCpt(AbstractCPT):
-
     @classmethod
     def get_cpt_reader(cls) -> CptReader:
         return GefFileReader()
@@ -20,3 +19,10 @@ class GefCpt(AbstractCPT):
         super().pre_process_data()
 
         # todo remove points with error
+
+    def check_for_error_points(self):
+        """
+        Before interpretation or plotting no error points
+        should be in data. If they are an error should be raised.
+        """
+        # TODO After Nuttall's branch is merged

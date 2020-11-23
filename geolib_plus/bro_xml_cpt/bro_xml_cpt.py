@@ -59,6 +59,23 @@ class BroXmlCpt(AbstractCPT):
             "water",
         ]
 
+    def check_for_error_points(self):
+        """
+        Before interpretation or plotting no error points
+        should be in data. If they are an error should be raised.
+        """
+        for value in self.__list_of_array_values:
+            # ignore None values
+            if getattr(self, value) is not None:
+                # check if there are nans
+                if np.isnan(getattr(self, value)).any():
+                    raise ValueError(
+                        " Property {} should not include nans.\
+                             To remove nans run pre_process method.".format(
+                            value
+                        )
+                    )
+
     def drop_nan_values(self):
         """
         Updates fields by removing depths that contain nan values.
@@ -119,8 +136,3 @@ class BroXmlCpt(AbstractCPT):
 
         self.undefined_depth = self.penetration_length[0]
         super().pre_process_data()
-
-
-
-
-

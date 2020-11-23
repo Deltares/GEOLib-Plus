@@ -64,6 +64,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     user_defined_water_level: bool = False
 
     def interpret(self, data: AbstractCPT):
+        # validate that interpretation can be run
+        data.check_that_there_are_no_nans_in_data()
+        data.are_data_available_interpretation()
+        data.does_depth_have_duplicate_lines()
+        data.check_if_lists_have_the_same_size()
 
         self.data = data
         MPa_to_kPa = 1000
