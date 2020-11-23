@@ -162,26 +162,6 @@ class TestGetLineFromDataEndsWith:
         assert result == expected_result
 
 
-class TestCorrectNegativesAndZeros:
-    @pytest.mark.unittest
-    def test_given_valid_input_then_returns_expected_correction(self):
-        # initialise model
-        gef_reader = GefFileReader()
-        # define keys that cannot be zero
-        list_non_zero = ["depth"]
-        gef_reader.property_dict["depth"].gef_column_index = 1
-        gef_reader.property_dict["tip"].gef_column_index = 2
-        gef_reader.property_dict["depth"].values_from_gef = [-1, -2, -9]
-        gef_reader.property_dict["tip"].values_from_gef = [-1, -2, -9]
-        # run the test
-        gef_reader.correct_negatives_and_zeros(correct_for_negatives=list_non_zero)
-        # check the output
-        assert (
-            gef_reader.property_dict["depth"].values_from_gef == np.array([0, 0, 0])
-        ).all()
-        assert gef_reader.property_dict["tip"].values_from_gef == [-1, -2, -9]
-
-
 class TestReadColumnData:
     @pytest.mark.systemtest
     def test_read_column_data_no_pore_pressure(self):
@@ -501,13 +481,17 @@ class TestReadGef:
 
         # define tests
         test_coord = [244319.00, 587520.00]
-        test_depth = np.linspace(2, 20, 19)
+        test_depth = np.linspace(1, 20, 20)
+        test_depth[0] = -9999
         test_NAP = -1 * test_depth + 0.13
-        test_tip = np.full(19, 1)
-        test_friction = np.full(19, 2)
-        test_friction_nbr = np.full(19, 5)
-        test_water = np.full(19, 3)
-
+        test_tip = np.full(20, 1)
+        test_tip[0] = -9999
+        test_friction = np.full(20, 2)
+        test_friction[0] = -9999
+        test_friction_nbr = np.full(20, 5)
+        test_friction_nbr[0] = -9999
+        test_water = np.full(20, 3)
+        test_water[0] = -9999
         # test expectations
         assert "DKP302" == cpt["name"]
         assert test_coord == cpt["coordinates"]

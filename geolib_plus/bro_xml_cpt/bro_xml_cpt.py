@@ -61,7 +61,7 @@ class BroXmlCpt(AbstractCPT):
 
     def remove_points_with_error(self):
         """
-        Updates fields by removing depths that contain values with nan values. i.e. incomplete data
+        Updates fields by removing depths that contain nan values.
         This means that all the properties in __list_of_array_values will be updated.
         """
         # transform to dataframe
@@ -74,7 +74,10 @@ class BroXmlCpt(AbstractCPT):
         update_dict = pd.DataFrame(update_dict).dropna().to_dict("list")
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(self, value, np.array(update_dict.get(value)))
+            update_with_value = update_dict.get(value, None)
+            # None values should be skipped
+            if update_with_value is not None:
+                setattr(self, value, np.array(update_with_value))
         return
 
     def has_points_with_error(self) -> bool:
@@ -85,7 +88,6 @@ class BroXmlCpt(AbstractCPT):
         """
         for key in self.__list_of_array_values:
             current_attribute = getattr(self, key)
-            print(current_attribute)
             if current_attribute is not None and np.isnan(np.array(current_attribute)).any():
                 return True
         return False
@@ -105,12 +107,15 @@ class BroXmlCpt(AbstractCPT):
         # perform action
         update_dict = (
             pd.DataFrame(update_dict)
-                .drop_duplicates(subset="penetration_length", keep="first")
-                .to_dict("list")
+            .drop_duplicates(subset="penetration_length", keep="first")
+            .to_dict("list")
         )
         # update changed values in cpt
         for value in self.__list_of_array_values:
-            setattr(self, value, np.array(update_dict.get(value)))
+            update_with_value = update_dict.get(value, None)
+            # None values should be skipped
+            if update_with_value is not None:
+                setattr(self, value, np.array(update_with_value))
         return
 
     def has_duplicated_depth_values(self) -> bool:
@@ -120,17 +125,7 @@ class BroXmlCpt(AbstractCPT):
         """
         return len(np.unique(self.penetration_length)) != len(self.penetration_length)
 
-    def pre_process_data(self):
-        """
-        Standard pre processes data which is read from bro xml files.
-        #todo extend
-        :return:
-        """
 
-        self.remove_points_with_error()
-        self.drop_duplicate_depth_values()
-        self.perform_pre_drill_interpretation()
-        super().pre_process_data()
 
 
 

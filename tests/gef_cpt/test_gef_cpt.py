@@ -18,11 +18,11 @@ class TestGefCpt:
         cpt.read(test_file)
         # check that all values are initialized
         assert cpt
-        assert max(cpt.penetration_length) == 25.52
-        assert min(cpt.penetration_length) == 1.7
+        assert max(cpt.penetration_length) == 25.61
+        assert min(cpt.penetration_length) == 1.62
 
-        assert max(cpt.depth) == 25.42
-        assert min(cpt.depth) == 1.7
+        assert max(cpt.depth) == 25.52
+        assert min(cpt.depth) == 1.62
 
         # todo move depth_to_reference outside of cpt reader
         # assert min(cpt.depth_to_reference) == cpt.local_reference_level - max(cpt.depth)

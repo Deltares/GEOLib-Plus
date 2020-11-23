@@ -254,7 +254,6 @@ class GefFileReader(CptReader):
             penetration_length=self.get_as_np_array(self.property_dict["penetration_length"].values_from_gef),
             depth=self.get_as_np_array(self.property_dict["depth"].values_from_gef),
             predrilled_z=predrilled_z,
-            undefined_depth=self.property_dict["penetration_length"].values_from_gef[0],
             tip=self.get_as_np_array(self.property_dict["tip"].values_from_gef),
             friction=self.get_as_np_array(
                 self.property_dict["friction"].values_from_gef
@@ -449,19 +448,3 @@ class GefFileReader(CptReader):
                 else:
                     warning(f"Key {key} is not defined in the gef file.")
         return None
-
-    def correct_negatives_and_zeros(self, correct_for_negatives: List[str]):
-        """
-        Values tip / friction / friction cannot be negative so they
-        have to be zero.
-        """
-        if not correct_for_negatives:
-            return
-        for key_name in correct_for_negatives:
-            if self.property_dict[key_name].gef_column_index is not None:
-                self.property_dict[key_name].values_from_gef = np.array(
-                    self.property_dict[key_name].values_from_gef
-                )
-                self.property_dict[key_name].values_from_gef[
-                    self.property_dict[key_name].values_from_gef < 0
-                ] = 0

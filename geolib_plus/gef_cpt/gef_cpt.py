@@ -24,10 +24,9 @@ class GefCpt(AbstractCPT):
             # ignore None values
             current_attribute = getattr(self, key)
             # also check length
-            if current_attribute.size in [0, 1]:
+            if current_attribute is None:
                 continue
-
-            if current_attribute is not None:
+            else:
                 altered_keys.append(key)
                 keys = list(update_dict.keys())
                 if len(keys) != 0 and current_attribute.size != len(
@@ -77,9 +76,9 @@ class GefCpt(AbstractCPT):
             # ignore None values
             current_attribute = getattr(self, key)
             # also check length
-            if current_attribute.size == 0 or current_attribute.size == 1:
+            if current_attribute is None:
                 continue
-            if current_attribute is not None:
+            else:
                 altered_keys.append(key)
                 keys = list(update_dict.keys())
                 if len(keys) != 0 and len(current_attribute) != len(
@@ -108,13 +107,3 @@ class GefCpt(AbstractCPT):
         """
         return len(unique(self.penetration_length)) != len(self.penetration_length)
 
-    def pre_process_data(self):
-        """
-        Standard pre processes data which is read from cpt files.
-        #todo extend
-        :return:
-        """
-
-        self.remove_points_with_error()
-        self.drop_duplicate_depth_values()
-        super().pre_process_data()
