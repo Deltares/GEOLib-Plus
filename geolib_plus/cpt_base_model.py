@@ -14,17 +14,12 @@ class AbstractInterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
 
 
-class RobertsonMethod(AbstractInterpretationMethod):
-    """Scientific explanation about this method."""
-
-
 class CptReader:
     @abstractmethod
     def read_file(self, filepath: Path) -> dict:
         raise NotImplementedError(
             "The method should be implemented in concrete classes."
         )
-
 
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
@@ -167,6 +162,30 @@ class AbstractCPT(BaseModel):
         for cpt_key, cpt_value in cpt_data.items():
             setattr(self, cpt_key, cpt_value)
 
+    @abstractmethod
+    def remove_points_with_error(self):
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
+
+    @abstractmethod
+    def has_points_with_error(self) -> bool:
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
+
+    @abstractmethod
+    def drop_duplicate_depth_values(self):
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
+
+    @abstractmethod
+    def has_duplicated_depth_values(self) -> bool:
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
+
     @classmethod
     @abstractmethod
     def get_cpt_reader(cls) -> CptReader:
@@ -287,7 +306,6 @@ class AbstractCPT(BaseModel):
                     setattr(self, value_name, value_to_add)
         return
 
-
     def perform_pre_drill_interpretation(self, length_of_average_points: int = 3):
         """
         Is performed only if pre-drill exists. Assumes that depth is already defined.
@@ -369,10 +387,9 @@ class AbstractCPT(BaseModel):
             self.__correct_missing_samples_top_CPT(length_of_average_points)
         return
 
-
     def pre_process_data(self):
         """
-        Pre processes data which is read from a gef file or bro xml file.
+        Standard pre-processes data which is read from a gef file or bro xml file.
 
         Depth is calculated based on available data.
         Relevant data is corrected for negative values.
@@ -392,8 +409,6 @@ class AbstractCPT(BaseModel):
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
 
         self.__get_water_data()
-
-        # todo extend pre process data
 
     def plot(self, directory: Path):
         # plot cpt data
