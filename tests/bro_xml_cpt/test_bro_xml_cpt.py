@@ -135,9 +135,10 @@ class TestBroXmlCpt:
         cpt_data.name = "cpt_name"
         cpt_data.coordinates = [111, 222]
         cpt_data.local_reference_level = 0.5
-        cpt_data.predrilled_z = 1.5
+        cpt_data.undefined_depth = 1.5
         cpt_data.a = 0.8
         cpt_data.depth = [1.5, 2.0, 2.5]
+        cpt_data.penetration_length = [1.5, 2.0, 2.5]
         cpt_data.tip = [1, 2, 3]
         cpt_data.friction = [4, 5, 6]
         cpt_data.friction_nbr = [0.22, 0.33, 0.44]
@@ -150,6 +151,7 @@ class TestBroXmlCpt:
         assert cpt_data.friction.tolist() == [4, 4, 4, 4, 5, 6]
         assert cpt_data.friction_nbr.tolist() == [0.22, 0.22, 0.22, 0.22, 0.33, 0.44]
         assert cpt_data.depth.tolist() == [0, 0.5, 1, 1.5, 2, 2.5]
+        assert cpt_data.penetration_length.tolist() == [0, 0.5, 1, 1.5, 2, 2.5]
         assert cpt_data.coordinates == [111, 222]
         assert cpt_data.name == "cpt_name"
         assert cpt_data.a == 0.8
@@ -162,9 +164,10 @@ class TestBroXmlCpt:
         cpt_data.name = "cpt_name"
         cpt_data.coordinates = [111, 222]
         cpt_data.local_reference_level = 0.5
-        cpt_data.predrilled_z = 1.5
+        cpt_data.undefined_depth = 1.5
         cpt_data.a = 0.8
         cpt_data.depth = [1.5, 2.0, 2.5]
+        cpt_data.penetration_length = [1.5, 2.0, 2.5]
         cpt_data.tip = [1, 2, 3]
         cpt_data.friction = [4, 5, 6]
         cpt_data.friction_nbr = [0.22, 0.33, 0.44]
@@ -186,6 +189,7 @@ class TestBroXmlCpt:
         assert cpt_data.friction.tolist() == [4, 4, 4, 4, 5, 6]
         assert cpt_data.friction_nbr.tolist() == [0.22, 0.22, 0.22, 0.22, 0.33, 0.44]
         assert cpt_data.depth.tolist() == [0, 0.5, 1, 1.5, 2, 2.5]
+        assert cpt_data.penetration_length.tolist() == [0, 0.5, 1, 1.5, 2, 2.5]
         assert cpt_data.coordinates == [111, 222]
         assert cpt_data.name == "cpt_name"
         assert cpt_data.a == 0.8
@@ -198,9 +202,10 @@ class TestBroXmlCpt:
         cpt_data.name = "cpt_name"
         cpt_data.coordinates = [111, 222]
         cpt_data.local_reference_level = 0.5
-        cpt_data.predrilled_z = 0
+        cpt_data.undefined_depth = 0
         cpt_data.a = 0.8
         cpt_data.depth = [1.5, 2.0, 2.5]
+        cpt_data.penetration_length = [1.5, 2.0, 2.5]
         cpt_data.tip = [1, 2, 3]
         cpt_data.friction = [4, 5, 6]
         cpt_data.friction_nbr = [0.22, 0.33, 0.44]
@@ -213,9 +218,10 @@ class TestBroXmlCpt:
         assert cpt_data.name == "cpt_name"
         assert cpt_data.coordinates == [111, 222]
         assert cpt_data.local_reference_level == 0.5
-        assert cpt_data.predrilled_z == 0
+        assert cpt_data.undefined_depth == 0
         assert cpt_data.a == 0.8
         assert cpt_data.depth.tolist() == [0.0, 1.5, 2.0, 2.5]
+        assert cpt_data.penetration_length.tolist() == [0.0, 1.5, 2.0, 2.5]
         assert cpt_data.tip.tolist() == [1, 1, 2, 3]
         assert cpt_data.friction.tolist() == [4, 4, 5, 6]
         assert cpt_data.friction_nbr.tolist() == [0.22, 0.22, 0.33, 0.44]

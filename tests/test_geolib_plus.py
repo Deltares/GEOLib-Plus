@@ -44,7 +44,7 @@ class TestGeolibPlusReading:
         cpt_bro_xml = dict(cpt_bro_xml)
         cpt_gef = dict(cpt_gef)
         for key, value in cpt_bro_xml.items():
-            if key not in ["predrilled_z", "water_measurement_type"]:
+            if key not in ["predrilled_z", "undefined_depth", "water_measurement_type"]:
                 assert type(cpt_bro_xml.get(key, None)) == type(cpt_gef.get(key, None))
 
     @pytest.mark.systemtest
@@ -187,7 +187,7 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(
             cpt.depth_to_reference, cpt.local_reference_level - cpt.depth
         )
-        np.testing.assert_array_almost_equal(cpt.depth[1:], expected_depth)
+        np.testing.assert_array_almost_equal(cpt.depth[2:], expected_depth)
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
     def test_pre_process_bro_data(self):
@@ -218,7 +218,7 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(
             cpt.depth_to_reference, cpt.local_reference_level - cpt.depth
         )
-        np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[9:108])
+        np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[0:99])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
 

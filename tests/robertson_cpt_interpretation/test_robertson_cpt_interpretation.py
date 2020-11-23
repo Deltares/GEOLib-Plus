@@ -5,6 +5,7 @@ from geolib_plus.robertson_cpt_interpretation import (
     ShearWaveVelocityMethod,
 )
 from geolib_plus.gef_cpt import GefCpt
+from geolib_plus.bro_xml_cpt import BroXmlCpt
 
 from tests.utils import TestUtils
 import numpy as np
@@ -36,30 +37,34 @@ class TestIntergration:
     @pytest.mark.integrationtest
     def test_against_bro_results(self):
         # open the gef file
-        test_file = TestUtils.get_local_test_data_dir(
+        gef_test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
         )
-        assert test_file.is_file()
+        # open the bro-xml file
+        bro_test_file = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
+        )
+        assert gef_test_file.is_file()
+        assert bro_test_file.is_file()
         # initialise models
-        cpt = GefCpt()
+        gef_cpt = GefCpt()
+        bro_cpt = BroXmlCpt()
         # test initial expectations
-        assert cpt
+        assert gef_cpt
+        assert bro_cpt
         # read gef file
-        cpt.read(filepath=test_file)
+        gef_cpt.read(filepath=gef_test_file)
+        bro_cpt.read(filepath=bro_test_file)
         # do pre-processing
-        cpt.pre_process_data()
+        gef_cpt.pre_process_data()
+        bro_cpt.pre_process_data()
         # initialise interpretation model
         robertson = RobertsonCptInterpretation
         robertson.unitweightmethod = UnitWeightMethod.ROBERTSON
         # interpet the results
-        cpt.interpret_cpt(robertson)
-        # read already calculated data
-        benchmark_file = TestUtils.get_local_test_data_dir(
-            Path("results_CPT000000003688_IMBRO_A.gef.json")
-        )
-        assert benchmark_file.is_file()
-        with open(benchmark_file) as f:
-            benchmark_data = json.load(f)
+        gef_cpt.interpret_cpt(robertson)
+        bro_cpt.interpret_cpt(robertson)
+
         values_to_test = [
             "friction_nbr",
             "friction_nbr",
@@ -87,23 +92,20 @@ class TestIntergration:
             "damping",
         ]
 
-        assert benchmark_data["name"].split("_")[0] == cpt.name
-        assert benchmark_data["coordinates"] == cpt.coordinates
-        assert benchmark_data["ground_water_level"] == cpt.pwp
-        assert benchmark_data["lithology"] == cpt.lithology
-        assert np.allclose(benchmark_data["litho_points"], cpt.litho_points)
+        assert bro_cpt.name == gef_cpt.name
+        assert bro_cpt.coordinates == gef_cpt.coordinates
+        assert bro_cpt.pwp == gef_cpt.pwp
+        assert bro_cpt.lithology == gef_cpt.lithology
+        assert np.allclose(bro_cpt.litho_points, gef_cpt.litho_points)
         for value in ["litho_NEN", "E_NEN", "cohesion_NEN", "fr_angle_NEN"]:
-            for i in range(len(cpt.litho_NEN)):
-                assert set(getattr(cpt, value)[i].split("/")) == set(
-                    benchmark_data[value][i].split("/")
-                )
+            for i in range(len(gef_cpt.litho_NEN)):
+                assert set(getattr(bro_cpt, value)[i].split("/")) == set(getattr(gef_cpt, value)[i].split("/"))
 
         for value in values_to_test:
             print(value)
-            test = getattr(cpt, value)
-            if value == "depth_to_reference":
-                test = abs(test)
-            assert np.allclose(benchmark_data[value], test)
+            test = getattr(gef_cpt, value)
+            expected_data = getattr(bro_cpt, value)
+            assert np.allclose(expected_data, test)
 
 
 class TestInterpreter:
