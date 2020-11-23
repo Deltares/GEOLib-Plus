@@ -430,6 +430,12 @@ def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
     :return:
     """
 
+    # validate that plotting can be run
+    cpt.check_that_there_are_no_nans_in_data()
+    cpt.are_data_available_plotting()
+    cpt.does_depth_have_duplicate_lines()
+    cpt.check_if_lists_have_the_same_size()
+
     # Get vertical limits of the plotted data
     ylims = get_y_lims(cpt, settings)
 

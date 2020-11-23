@@ -180,9 +180,9 @@ class TestGeolibPlusReading:
         cpt_gef.tip = np.array([1, 2, 3, 4, 5])
         cpt_gef.friction = np.array([1, 2, 3, 4, 5, 6])
 
-        cpt_bro_xml.pwp = np.array([1, 2, 3, 4, 5])
-        cpt_bro_xml.depth = np.array([1, 2, 3, 5])
+        cpt_bro_xml.depth = np.array([1, 2, 3, 5, 6, 7])
         cpt_bro_xml.depth_to_reference = np.array([1, 2, 3, 5])
+        cpt_bro_xml.tip = np.array([1, 2, 3, 4, 5])
 
         # run tests
         with pytest.raises(ValueError) as excinfo:
@@ -193,7 +193,7 @@ class TestGeolibPlusReading:
             )
         with pytest.raises(ValueError) as excinfo:
             cpt_bro_xml.check_if_lists_have_the_same_size()
-            assert "pwp does not have the same size as the other properties" in str(
+            assert "depth does not have the same size as the other properties" in str(
                 excinfo.value
             )
 

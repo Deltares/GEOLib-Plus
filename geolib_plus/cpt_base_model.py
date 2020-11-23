@@ -207,8 +207,7 @@ class AbstractCPT(BaseModel):
                 same_size.append(len(value))
                 if not (len(list(dict.fromkeys(same_size))) == 1):
                     raise ValueError(
-                        "Property {} does not have the\
-                         same size as the other properties".format(
+                        "Property {} does not have the same size as the other properties".format(
                             list_to_check
                         )
                     )
