@@ -65,9 +65,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
     def interpret(self, data: AbstractCPT):
         # validate that interpretation can be run
-        data.check_that_there_are_no_nans_in_data()
+        data.has_points_with_error()
         data.are_data_available_interpretation()
-        data.does_depth_have_duplicate_lines()
+        data.has_duplicated_depth_values()
         data.check_if_lists_have_the_same_size()
 
         self.data = data

@@ -431,9 +431,9 @@ def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
     """
 
     # validate that plotting can be run
-    cpt.check_that_there_are_no_nans_in_data()
+    cpt.has_points_with_error()
     cpt.are_data_available_plotting()
-    cpt.does_depth_have_duplicate_lines()
+    cpt.has_duplicated_depth_values()
     cpt.check_if_lists_have_the_same_size()
 
     # Get vertical limits of the plotted data

@@ -59,24 +59,7 @@ class BroXmlCpt(AbstractCPT):
             "water",
         ]
 
-    def check_for_error_points(self):
-        """
-        Before interpretation or plotting no error points
-        should be in data. If they are an error should be raised.
-        """
-        for value in self.__list_of_array_values:
-            # ignore None values
-            if getattr(self, value) is not None:
-                # check if there are nans
-                if np.isnan(getattr(self, value)).any():
-                    raise ValueError(
-                        " Property {} should not include nans.\
-                             To remove nans run pre_process method.".format(
-                            value
-                        )
-                    )
-
-    def drop_nan_values(self):
+    def remove_points_with_error(self):
         """
         Updates fields by removing depths that contain nan values.
         This means that all the properties in __list_of_array_values will be updated.
@@ -96,6 +79,25 @@ class BroXmlCpt(AbstractCPT):
             if update_with_value is not None:
                 setattr(self, value, np.array(update_with_value))
         return
+
+    def has_points_with_error(self) -> bool:
+        """
+        A routine which checks whether the data is free of points with error.
+
+        :return: If the gef cpt data is free of error flags
+        """
+        for key in self.__list_of_array_values:
+            current_attribute = getattr(self, key)
+            if (
+                current_attribute is not None
+                and np.isnan(np.array(current_attribute)).any()
+            ):
+                raise ValueError(
+                    " Property {} should not include nans.\
+                     To remove nans run pre_process method.".format(
+                        key
+                    )
+                )
 
     def drop_duplicate_depth_values(self):
         """
@@ -122,17 +124,3 @@ class BroXmlCpt(AbstractCPT):
             if update_with_value is not None:
                 setattr(self, value, np.array(update_with_value))
         return
-
-    def pre_process_data(self):
-        """
-        Pre processes data which is read from bro xml files.
-
-        #todo extend
-        :return:
-        """
-
-        self.drop_nan_values()
-        self.drop_duplicate_depth_values()
-
-        self.undefined_depth = self.penetration_length[0]
-        super().pre_process_data()

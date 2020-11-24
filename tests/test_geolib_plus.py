@@ -48,7 +48,7 @@ class TestGeolibPlusReading:
                 assert type(cpt_bro_xml.get(key, None)) == type(cpt_gef.get(key, None))
 
     @pytest.mark.systemtest
-    def test_check_for_error_points(self):
+    def test_has_points_with_error(self):
         # initialise models
         cpt_gef = GefCpt()
         cpt_bro_xml = BroXmlCpt()
@@ -60,6 +60,8 @@ class TestGeolibPlusReading:
         cpt_gef.pwp = None
         cpt_gef.depth = np.array([1, 2, 3, 4, 5])
         cpt_gef.depth_to_reference = np.array([1, 2, 3, 4, 5])
+        # set up error code for tip
+        cpt_gef.error_codes = {"tip": -9999.99}
 
         cpt_bro_xml.tip = np.array([1, 2, np.nan, 4, 5])
         cpt_bro_xml.friction = np.array([1, 2, 3, 4, 5])
@@ -71,11 +73,11 @@ class TestGeolibPlusReading:
 
         # run tests
         with pytest.raises(ValueError) as excinfo:
-            cpt_bro_xml.check_for_error_points()
+            cpt_bro_xml.has_points_with_error()
             assert "tip" in str(excinfo.value)
-        # with pytest.raises(ValueError) as excinfo:
-        #    cpt_gef.check_for_error_points()
-        #    assert "tip" in str(excinfo.value)
+        with pytest.raises(ValueError) as excinfo:
+            cpt_gef.has_points_with_error()
+            assert "tip" in str(excinfo.value)
 
     @pytest.mark.systemtest
     def test_are_data_available_interpretation_no_values_missing(self):
@@ -136,36 +138,36 @@ class TestGeolibPlusReading:
             assert "depth_to_reference" in str(excinfo.value)
 
     @pytest.mark.systemtest
-    def test_does_depth_have_duplicate_lines_duplicate(self):
+    def test_has_duplicated_depth_values_duplicate(self):
         # initialise models
         cpt_gef = GefCpt()
         cpt_bro_xml = BroXmlCpt()
         # fill in data
-        cpt_gef.depth = np.array([1, 2, 3, 4, 5, 3])
+        cpt_gef.penetration_length = np.array([1, 2, 3, 4, 5, 3])
 
-        cpt_bro_xml.depth = np.array([1, 2, 3.1, 3.1, 4, 5])
+        cpt_bro_xml.penetration_length = np.array([1, 2, 3.1, 3.1, 4, 5])
 
         # run tests
         with pytest.raises(ValueError) as excinfo:
-            cpt_gef.does_depth_have_duplicate_lines()
+            cpt_gef.has_duplicated_depth_values()
             assert "Value depth contains duplicates" in str(excinfo.value)
         with pytest.raises(ValueError) as excinfo:
-            cpt_bro_xml.does_depth_have_duplicate_lines()
+            cpt_bro_xml.has_duplicated_depth_values()
             assert "Value depth contains duplicates" in str(excinfo.value)
 
     @pytest.mark.systemtest
-    def test_does_depth_have_duplicate_lines_no_duplicate(self):
+    def test_has_duplicated_depth_values_no_duplicate(self):
         # initialise models
         cpt_gef = GefCpt()
         cpt_bro_xml = BroXmlCpt()
         # fill in data
-        cpt_gef.depth = np.array([1, 2, 3, 4, 5])
+        cpt_gef.penetration_length = np.array([1, 2, 3, 4, 5])
 
-        cpt_bro_xml.depth = np.array([1, 2, 3.1, 4, 5])
+        cpt_bro_xml.penetration_length = np.array([1, 2, 3.1, 4, 5])
 
         # run tests
-        cpt_gef.does_depth_have_duplicate_lines()
-        cpt_gef.does_depth_have_duplicate_lines()
+        cpt_gef.has_duplicated_depth_values()
+        cpt_bro_xml.has_duplicated_depth_values()
         # test
         assert cpt_gef
         assert cpt_bro_xml
@@ -204,8 +206,6 @@ class TestGeolibPlusReading:
         cpt.pre_process_data()
         cpt.interpret_cpt(RobertsonCptInterpretation)
         print(cpt.lithology)
-
-    # System Test for geolib_plus_read_BRO
 
     @pytest.mark.systemtest
     def test_reading_bro(self):

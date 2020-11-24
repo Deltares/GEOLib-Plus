@@ -71,6 +71,21 @@ class GefFileReader(CptReader):
             "magnetic_declination": GefColumnProperty(gef_key=36),
         }
 
+    @property
+    def __error_code_keys_map(self) -> Dict[str, str]:
+        return {
+            "pwp_u1": "pore_pressure_u1",
+            "pwp_u2": "pore_pressure_u2",
+            "pwp_u3": "pore_pressure_u3",
+            "friction_nb": "friction_nbr",
+            "corrected_tip": "qt",
+            "unit_weight": "unit_weight_measured",
+            "total_pressure": "total_pressure_measured",
+            "effective_pressure": "effective_pressure_measured",
+            "cpt_standard": "quality_class",
+        }
+
+
     @staticmethod
     def get_line_index_from_data_starts_with(code_string: str, data: List[str]) -> int:
         """Given a list of strings it returns the position of the first one which starts by the code string given.
@@ -131,6 +146,20 @@ class GefFileReader(CptReader):
         """
         penetration_length = np.array(penetration_length)
         return min(penetration_length[penetration_length > 0])
+
+    def map_error_codes_to_external_property_names(self) -> Dict:
+        """
+        Matches error keys of GefFileReader dictionary to AbstractCPT class.
+        That are used later in pre-processing.
+        """
+        error_codes = {}
+        for key in self.property_dict.keys():
+            if key in self.__error_code_keys_map.keys():
+                new_key = self.__error_code_keys_map.get(key, None)
+                error_codes[new_key] = self.property_dict[key].error_code
+            else:
+                error_codes[key] = self.property_dict[key].error_code
+        return error_codes
 
     def read_file(self, filepath: Path) -> dict:
         return self.read_gef(gef_file=filepath)
@@ -198,19 +227,13 @@ class GefFileReader(CptReader):
         # remove empty lines
         data = list(filter(None, data))
 
-        # read data & correct depth to NAP
+        # read data
         self.read_column_data(data, idx_EOH)
 
         # get pre drill depth from penetration length data
         predrilled_z = self.get_pre_drill_depth(
             self.property_dict["penetration_length"].values_from_gef
         )
-
-        # remove the points with error: value == -9999
-        self.remove_points_with_error()
-        # if tip / friction / friction number are negative -> zero
-        correct_for_negatives = ["tip", "friction", "friction_nb"]
-        self.correct_negatives_and_zeros(correct_for_negatives)
 
         idx_name = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#TESTID=", data=data
@@ -234,7 +257,6 @@ class GefFileReader(CptReader):
             ),
             depth=self.get_as_np_array(self.property_dict["depth"].values_from_gef),
             predrilled_z=predrilled_z,
-            undefined_depth=self.property_dict["penetration_length"].values_from_gef[0],
             tip=self.get_as_np_array(self.property_dict["tip"].values_from_gef),
             friction=self.get_as_np_array(
                 self.property_dict["friction"].values_from_gef
@@ -315,6 +337,7 @@ class GefFileReader(CptReader):
             quality_class=self.information_dict["cpt_standard"].values_from_gef,
             cpt_type=self.information_dict["cpt_type"].values_from_gef,
             result_time=result_time,
+            error_codes=self.map_error_codes_to_external_property_names(),
         )
 
     def get_as_np_array(self, values_from_gef: Iterable):
@@ -410,44 +433,6 @@ class GefFileReader(CptReader):
                         warning(f"Key {key} is not defined in the gef file.")
         return None
 
-    def remove_points_with_error(self) -> None:
-        """
-        Values that contain data with errors should be removed
-        from the resulting dictionary
-        """
-        for key in self.property_dict.keys():
-            deleted_rows = 0
-            if self.property_dict[key].values_from_gef is not None:
-                temp_list = self.property_dict[key].values_from_gef.copy()
-                for number, value in enumerate(temp_list):
-                    if self.property_dict[key].values_from_gef[number - deleted_rows]:
-                        if math.isclose(
-                            self.property_dict[key].values_from_gef[
-                                number - deleted_rows
-                            ],
-                            self.property_dict[key].error_code,
-                        ):
-                            self.delete_value_for_all_keys(number=number - deleted_rows)
-                            deleted_rows = deleted_rows + 1
-        return None
-
-    def delete_value_for_all_keys(self, number: int) -> None:
-        """
-        Deletes index of all lists contained in the dictionary.
-        """
-        try:
-            for key in self.property_dict.keys():
-                if isinstance(self.property_dict[key].values_from_gef, list):
-                    del self.property_dict[key].values_from_gef[number]
-                elif isinstance(self.property_dict[key].values_from_gef, np.ndarray):
-                    temp_list = self.property_dict[key].values_from_gef.tolist()
-                    del temp_list[number]
-                    self.property_dict[key].values_from_gef = np.array(temp_list)
-        except IndexError:
-            raise Exception(
-                f"Index <{number}> excides the length of list of key '{key}'"
-            )
-        return None
 
     def read_column_data(self, data: List[str], idx_EOH: int) -> None:
         """
@@ -466,19 +451,3 @@ class GefFileReader(CptReader):
                 else:
                     warning(f"Key {key} is not defined in the gef file.")
         return None
-
-    def correct_negatives_and_zeros(self, correct_for_negatives: List[str]):
-        """
-        Values tip / friction / friction cannot be negative so they
-        have to be zero.
-        """
-        if not correct_for_negatives:
-            return
-        for key_name in correct_for_negatives:
-            if self.property_dict[key_name].gef_column_index is not None:
-                self.property_dict[key_name].values_from_gef = np.array(
-                    self.property_dict[key_name].values_from_gef
-                )
-                self.property_dict[key_name].values_from_gef[
-                    self.property_dict[key_name].values_from_gef < 0
-                ] = 0

@@ -18,11 +18,11 @@ class TestGefCpt:
         cpt.read(test_file)
         # check that all values are initialized
         assert cpt
-        assert max(cpt.penetration_length) == 25.52
-        assert min(cpt.penetration_length) == 1.7
+        assert max(cpt.penetration_length) == 25.61
+        assert min(cpt.penetration_length) == 1.62
 
-        assert max(cpt.depth) == 25.42
-        assert min(cpt.depth) == 1.7
+        assert max(cpt.depth) == 25.52
+        assert min(cpt.depth) == 1.62
 
         # todo move depth_to_reference outside of cpt reader
         # assert min(cpt.depth_to_reference) == cpt.local_reference_level - max(cpt.depth)
@@ -75,3 +75,121 @@ class TestGefCpt:
 
         # 4. Verify final expectations
         assert generated_output
+
+
+class TestCheckDataForError:
+    @pytest.mark.unittest
+    def test_has_points_with_error_with_error(self):
+        gef_cpt = GefCpt()
+
+        # set inputs
+        gef_cpt.depth = np.linspace(-1, 12, 6)
+        gef_cpt.friction = np.array([-5, -2, -999, -999, -3, -4])
+        gef_cpt.pore_pressure_u2 = np.full(6, 1000)
+        gef_cpt.friction_nbr = np.full(6, 5)
+        gef_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        gef_cpt.error_codes["depth"] = -1
+        gef_cpt.error_codes["friction"] = -999
+        gef_cpt.error_codes["pore_pressure_u2"] = -1
+        gef_cpt.error_codes["friction_nbr"] = -1
+
+        with pytest.raises(ValueError) as excinfo:
+            gef_cpt.has_points_with_error()
+            assert "friction" in str(excinfo.value)
+
+    @pytest.mark.unittest
+    def test_has_points_with_error_without_error(self):
+        gef_cpt = GefCpt()
+
+        # set inputs
+        gef_cpt.depth = np.linspace(-1, 12, 6)
+        gef_cpt.friction = np.array([-5, -2, -9, -9, -3, -4])
+        gef_cpt.pore_pressure_u2 = np.full(6, 1000)
+        gef_cpt.friction_nbr = np.full(6, 5)
+        gef_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        gef_cpt.error_codes["depth"] = -99
+        gef_cpt.error_codes["friction"] = -999
+        gef_cpt.error_codes["pore_pressure_u2"] = -99
+        gef_cpt.error_codes["friction_nbr"] = -99
+
+        gef_cpt.has_points_with_error()
+        assert gef_cpt
+
+    @pytest.mark.unittest
+    def test_has_duplicated_depth_values_without_duplication(self):
+        gef_cpt = GefCpt()
+        # set inputs
+        gef_cpt.depth = np.linspace(-1, 12, 6)
+        gef_cpt.friction = np.array([-5, -2, -9, -9, -3, -4])
+        gef_cpt.pore_pressure_u2 = np.full(6, 1000)
+        gef_cpt.friction_nbr = np.full(6, 5)
+        gef_cpt.penetration_length = np.linspace(-1, 12, 6)
+        assert not gef_cpt.has_duplicated_depth_values()
+
+    @pytest.mark.unittest
+    def test_has_duplicated_depth_values_with_duplication(self):
+        gef_cpt = GefCpt()
+        # set inputs
+        gef_cpt.depth = np.linspace(-1, 12, 6)
+        gef_cpt.friction = np.array([-5, -2, -9, -9, -3, -4])
+        gef_cpt.pore_pressure_u2 = np.full(6, 1000)
+        gef_cpt.friction_nbr = np.full(6, 5)
+        gef_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        # create duplications
+        gef_cpt.penetration_length[0] = gef_cpt.penetration_length[1]
+        gef_cpt.penetration_length[-1] = gef_cpt.penetration_length[-2]
+
+        assert gef_cpt.has_duplicated_depth_values()
+
+
+class TestRemovePointsWithError:
+    @pytest.mark.unittest
+    def test_remove_points_with_error(self):
+        # initialise model
+        gef_cpt = GefCpt()
+
+        # set inputs
+        gef_cpt.depth = np.linspace(-1, 12, 6)
+        gef_cpt.friction = np.array([-5, -2, -999, -999, -3, -4])
+        gef_cpt.pore_pressure_u2 = np.full(6, 1000)
+        gef_cpt.friction_nbr = np.full(6, 5)
+        gef_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        gef_cpt.error_codes["depth"] = -1
+        gef_cpt.error_codes["friction"] = -999
+        gef_cpt.error_codes["pore_pressure_u2"] = -1
+        gef_cpt.error_codes["friction_nbr"] = -1
+
+        # initialise the model
+        gef_cpt.remove_points_with_error()
+        assert (gef_cpt.friction == np.array([-2, -3, -4])).all()
+        assert (gef_cpt.depth == np.array([1.6, 9.4, 12.0])).all()
+        assert (gef_cpt.friction_nbr == np.full(3, 5)).all()
+        assert (gef_cpt.pore_pressure_u2 == np.full(3, 1000)).all()
+
+    @pytest.mark.unittest
+    def test_remove_points_with_error_raises(self):
+        # value pwp size is minimized to raise error
+        # initialise model
+        gef_cpt = GefCpt()
+        # set inputs
+        gef_cpt.depth = np.linspace(2, 20, 6)
+        gef_cpt.friction = np.array([-1, -2, -3, -4, -999, -999])
+        gef_cpt.pore_pressure_u2 = np.full(5, 1000)
+        gef_cpt.friction_nbr = np.full(6, 5)
+
+        gef_cpt.error_codes["depth"] = -1
+        gef_cpt.error_codes["friction"] = -999
+        gef_cpt.error_codes["pore_pressure_u2"] = -1
+        gef_cpt.error_codes["friction_nbr"] = -1
+
+        # Run test
+        with pytest.raises(Exception) as excinfo:
+            gef_cpt.remove_points_with_error()
+        assert (
+            "The data 'pore_pressure_u2' (length = 5) is not of the assumed data length = 6"
+            == str(excinfo.value)
+        )
