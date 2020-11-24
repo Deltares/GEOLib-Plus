@@ -140,6 +140,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             self.data.lithology_merged,
         ) = merge_thickness(cpt_data=self.data, min_layer_thick=min_layer_thickness)
 
+        self.data.tip = self.data.tip / MPa_to_kPa
+        self.data.friction = self.data.friction / MPa_to_kPa
         return self.data
 
     def soil_types(

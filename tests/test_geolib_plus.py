@@ -113,10 +113,9 @@ class TestGeolibPlusReading:
         cpt_bro_xml = BroXmlCpt()
         # fill in data
         cpt_gef.tip = np.array([1, 2, 3, 4, 5])
-        cpt_gef.friction = np.array([1, 2, 3, 4, 5])
+        cpt_gef.friction = None
         cpt_gef.water = np.array([1, 2, 3, 4, 5])
         cpt_gef.friction_nbr = np.array([1, 2, 3, 4, 5])
-        cpt_gef.pwp = None
         cpt_gef.depth = np.array([1, 2, 3, 4, 5])
         cpt_gef.depth_to_reference = np.array([1, 2, 3, 4, 5])
 
@@ -131,7 +130,7 @@ class TestGeolibPlusReading:
         # run tests
         with pytest.raises(ValueError) as excinfo:
             cpt_gef.are_data_available_interpretation()
-            assert "pwp" in str(excinfo.value)
+            assert "friction" in str(excinfo.value)
         with pytest.raises(ValueError) as excinfo:
             cpt_bro_xml.are_data_available_interpretation()
             assert "depth_to_reference" in str(excinfo.value)
