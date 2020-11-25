@@ -316,12 +316,9 @@ def generate_plot(cpt: AbstractCPT, settings: Dict, ylim: List, ylims: List, plo
 
     return fig
 
-
-
-
 def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
     """
-    Plots and saves all data in the current cpt according to the norm written in NEN @@@
+    Plots and saves all data in the current cpt according to the norm written in NEN 22476-1
 
     :param cpt: cpt data
     :param settings: general settings
