@@ -59,7 +59,7 @@ class BroXmlCpt(AbstractCPT):
             "water",
         ]
 
-    def drop_nan_values(self):
+    def remove_points_with_error(self):
         """
         Updates fields by removing depths that contain nan values.
         This means that all the properties in __list_of_array_values will be updated.
@@ -79,6 +79,18 @@ class BroXmlCpt(AbstractCPT):
             if update_with_value is not None:
                 setattr(self, value, np.array(update_with_value))
         return
+
+    def has_points_with_error(self) -> bool:
+        """
+        A routine which checks whether the data is free of points with error.
+
+        :return: If the gef cpt data is free of error flags
+        """
+        for key in self.__list_of_array_values:
+            current_attribute = getattr(self, key)
+            if current_attribute is not None and np.isnan(np.array(current_attribute)).any():
+                return True
+        return False
 
     def drop_duplicate_depth_values(self):
         """
@@ -106,19 +118,14 @@ class BroXmlCpt(AbstractCPT):
                 setattr(self, value, np.array(update_with_value))
         return
 
-    def pre_process_data(self):
+    def has_duplicated_depth_values(self) -> bool:
         """
-        Pre processes data which is read from bro xml files.
-
-        #todo extend
-        :return:
+        Check to see if there are any duplicate depth positions in the data
+        :return True if has duplicate depths points based on penetration length
         """
+        return len(np.unique(self.penetration_length)) != len(self.penetration_length)
 
-        self.drop_nan_values()
-        self.drop_duplicate_depth_values()
 
-        self.undefined_depth = self.penetration_length[0]
-        super().pre_process_data()
 
 
 
