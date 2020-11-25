@@ -142,7 +142,9 @@ class TestCheckDataForError:
         gef_cpt.penetration_length[0] = gef_cpt.penetration_length[1]
         gef_cpt.penetration_length[-1] = gef_cpt.penetration_length[-2]
 
-        assert gef_cpt.has_duplicated_depth_values()
+        with pytest.raises(ValueError) as excinfo:
+            gef_cpt.has_duplicated_depth_values()
+            assert "depth" in excinfo.value
 
 
 class TestRemovePointsWithError:

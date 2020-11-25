@@ -480,6 +480,7 @@ class AbstractCPT(BaseModel):
         """
 
         self.remove_points_with_error()
+
         self.drop_duplicate_depth_values()
 
         self.__calculate_inclination_resultant()

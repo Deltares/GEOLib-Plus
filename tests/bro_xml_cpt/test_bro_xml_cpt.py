@@ -14,6 +14,7 @@ class TestBroXmlCpt:
     @pytest.mark.systemtest
     @pytest.mark.workinprogress
     def test_that_read_and_preprocess_can_be_run_twice(self):
+        # TODO fixed with issue GEOLIBPLUS-29
         # open the gef file
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")

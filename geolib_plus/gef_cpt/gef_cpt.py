@@ -3,6 +3,7 @@ from .gef_file_reader import GefFileReader
 
 from pandas import DataFrame
 from numpy import array, unique
+import numpy
 
 
 class GefCpt(AbstractCPT):
@@ -44,6 +45,8 @@ class GefCpt(AbstractCPT):
         for key in self.error_codes.keys():
             if key in altered_keys:
                 update_dict = update_dict[update_dict[key] != self.error_codes[key]]
+                # update error key to a consistend value for interpretation
+                self.error_codes[key] = numpy.nan
 
         update_dict.to_dict("list")
 
@@ -59,13 +62,14 @@ class GefCpt(AbstractCPT):
         """
         for key in self.error_codes.keys():
             current_attribute = getattr(self, key)
-            if self.error_codes[key] in current_attribute:
-                raise ValueError(
-                    " Property {} should not include nans.\
-                     To remove nans run pre_process method.".format(
-                        key
+            if current_attribute is not None:
+                if self.error_codes[key] in current_attribute:
+                    raise ValueError(
+                        " Property {} should not include nans.\
+                         To remove nans run pre_process method.".format(
+                            key
+                        )
                     )
-                )
 
     def drop_duplicate_depth_values(self):
         """
