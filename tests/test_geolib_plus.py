@@ -47,6 +47,7 @@ class TestGeolibPlusReading:
             if key not in ["predrilled_z", "undefined_depth", "water_measurement_type"]:
                 assert type(cpt_bro_xml.get(key, None)) == type(cpt_gef.get(key, None))
 
+
     @pytest.mark.systemtest
     def test_robertson_interpretation_test(self):
         gef_file = TestUtils.get_local_test_data_dir("cpt/gef/KW19-3.gef")

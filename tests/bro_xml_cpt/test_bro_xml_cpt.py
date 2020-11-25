@@ -82,8 +82,118 @@ class TestBroXmlCpt:
         assert min(cpt.depth) == 0
         assert max(cpt.depth) == 24.56
 
+    @pytest.mark.unittest
+    def test_remove_points_with_error_from_file(self):
+        bro_cpt = BroXmlCpt()
+
+        # set inputs
+        bro_cpt.depth = np.linspace(-1, 12, 6)
+        bro_cpt.friction = np.array([-5, -2, np.nan, np.nan, -3, -4])
+        bro_cpt.pore_pressure_u2 = np.full(6, 1000)
+        bro_cpt.friction_nbr = np.full(6, 5)
+        bro_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        bro_cpt.remove_points_with_error()
+
+        assert (bro_cpt.depth.size == 4)
+        assert (bro_cpt.depth == [-1, 1.6, 9.4, 12.]).all()
+
+        assert (bro_cpt.friction.size == 4)
+        assert (bro_cpt.friction == [-5, -2, -3, -4]).all()
+
+        assert (bro_cpt.friction_nbr.size == 4)
+        assert (bro_cpt.friction_nbr == np.full(4, 5)).all()
+
+        assert (bro_cpt.penetration_length.size == 4)
+        assert (bro_cpt.penetration_length == [-1, 1.6, 9.4, 12.]).all()
+
+        assert (bro_cpt.pore_pressure_u2.size == 4)
+        assert (bro_cpt.pore_pressure_u2 == np.full(4, 1000)).all()
+
+    @pytest.mark.unittest
+    def test_has_points_with_error_with_error(self):
+        bro_cpt = BroXmlCpt()
+
+        # set inputs
+        bro_cpt.depth = np.linspace(-1, 12, 6)
+        bro_cpt.friction = np.array([-5, -2, np.nan, np.nan, -3, -4])
+        bro_cpt.pore_pressure_u2 = np.full(6, 1000)
+        bro_cpt.friction_nbr = np.full(6, 5)
+        bro_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        assert (bro_cpt.has_points_with_error())
+
+    @pytest.mark.unittest
+    def test_has_points_with_error_without_error(self):
+        bro_cpt = BroXmlCpt()
+
+        # set inputs
+        bro_cpt.depth = np.linspace(-1, 12, 6)
+        bro_cpt.friction = np.array([-5, -2, -9, -9, -3, -4])
+        bro_cpt.pore_pressure_u2 = np.full(6, 1000)
+        bro_cpt.friction_nbr = np.full(6, 5)
+        bro_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        assert (not bro_cpt.has_points_with_error())
+
+    @pytest.mark.unittest
+    def test_drop_duplicate_depth_values(self):
+        bro_cpt = BroXmlCpt()
+
+        # set inputs
+        bro_cpt.depth = np.linspace(-1, 12, 6)
+        bro_cpt.friction = np.array([-5, -2, -9, -9, -3, -4])
+        bro_cpt.pore_pressure_u2 = np.full(6, 1000)
+        bro_cpt.friction_nbr = np.full(6, 5)
+        bro_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        # add duplicate penetration lengths \ depths
+        bro_cpt.depth[0] = bro_cpt.depth[1]
+        bro_cpt.penetration_length[0] = bro_cpt.penetration_length[1]
+
+        bro_cpt.drop_duplicate_depth_values()
+
+        assert (bro_cpt.depth.size == 5)
+        assert (bro_cpt.friction.size == 5)
+        assert (bro_cpt.pore_pressure_u2.size == 5)
+        assert (bro_cpt.friction_nbr.size == 5)
+        assert (bro_cpt.penetration_length.size == 5)
+
+        assert (bro_cpt.depth == np.linspace(-1, 12, 6)[1:]).all()
+        assert (bro_cpt.friction == np.array([-5, -9, -9, -3, -4])).all()
+        assert (bro_cpt.pore_pressure_u2 == np.full(5, 1000)).all()
+        assert (bro_cpt.friction_nbr == np.full(5, 5)).all()
+        assert (bro_cpt.penetration_length == np.linspace(-1, 12, 6)[1:]).all()
+
+    @pytest.mark.unittest
+    def test_has_duplicated_depth_values_without_duplication(self):
+        bro_cpt = BroXmlCpt()
+        # set inputs
+        bro_cpt.depth = np.linspace(-1, 12, 6)
+        bro_cpt.friction = np.array([-5, -2, -9, -9, -3, -4])
+        bro_cpt.pore_pressure_u2 = np.full(6, 1000)
+        bro_cpt.friction_nbr = np.full(6, 5)
+        bro_cpt.penetration_length = np.linspace(-1, 12, 6)
+        assert (not bro_cpt.has_duplicated_depth_values())
+
+    @pytest.mark.unittest
+    def test_has_duplicated_depth_values_with_duplication(self):
+        bro_cpt = BroXmlCpt()
+        # set inputs
+        bro_cpt.depth = np.linspace(-1, 12, 6)
+        bro_cpt.friction = np.array([-5, -2, -9, -9, -3, -4])
+        bro_cpt.pore_pressure_u2 = np.full(6, 1000)
+        bro_cpt.friction_nbr = np.full(6, 5)
+        bro_cpt.penetration_length = np.linspace(-1, 12, 6)
+
+        # create duplications
+        bro_cpt.penetration_length[0] = bro_cpt.penetration_length[1]
+        bro_cpt.penetration_length[-1] = bro_cpt.penetration_length[-2]
+
+        assert (bro_cpt.has_duplicated_depth_values())
+
     @pytest.mark.systemtest
-    def test_read_drop_nans(self):
+    def test_remove_points_with_error_from_file(self):
         # simple test for reading xml file from bro
         # define input path to xml
         test_file = TestUtils.get_local_test_data_dir(
@@ -95,7 +205,7 @@ class TestBroXmlCpt:
         cpt = bro_xml_cpt.BroXmlCpt()
         # run test
         cpt.read(test_file)
-        cpt.drop_nan_values()
+        cpt.remove_points_with_error()
         # check expectations
         assert cpt
         assert cpt.name == "CPT000000003688"
@@ -103,7 +213,7 @@ class TestBroXmlCpt:
         assert len(cpt.friction_nbr) == 1215
 
     @pytest.mark.systemtest
-    def test_drop_duplicate_depth_values(self):
+    def test_drop_duplicate_depth_values_from_file(self):
         # simple test for reading xml file from bro
         # define input path to xml
         test_file = TestUtils.get_local_test_data_dir(

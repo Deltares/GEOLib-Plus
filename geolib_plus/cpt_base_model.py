@@ -14,17 +14,12 @@ class AbstractInterpretationMethod:
     """Base Interpretation method for analyzing CPTs."""
 
 
-class RobertsonMethod(AbstractInterpretationMethod):
-    """Scientific explanation about this method."""
-
-
 class CptReader:
     @abstractmethod
     def read_file(self, filepath: Path) -> dict:
         raise NotImplementedError(
             "The method should be implemented in concrete classes."
         )
-
 
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
@@ -155,6 +150,8 @@ class AbstractCPT(BaseModel):
         cls().read(filepath)
 
     def read(self, filepath: Path):
+
+
         if not filepath:
             raise ValueError(filepath)
 
@@ -166,6 +163,30 @@ class AbstractCPT(BaseModel):
         cpt_data = cpt_reader.read_file(filepath)
         for cpt_key, cpt_value in cpt_data.items():
             setattr(self, cpt_key, cpt_value)
+
+    @abstractmethod
+    def remove_points_with_error(self):
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
+
+    @abstractmethod
+    def has_points_with_error(self) -> bool:
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
+
+    @abstractmethod
+    def drop_duplicate_depth_values(self):
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
+
+    @abstractmethod
+    def has_duplicated_depth_values(self) -> bool:
+        raise NotImplementedError(
+            "The method should be implemented in concrete classes."
+        )
 
     @classmethod
     @abstractmethod
@@ -230,6 +251,8 @@ class AbstractCPT(BaseModel):
 
     def __get_water_data(self):
 
+        self.water = None
+
         pore_pressure_data = [
             self.pore_pressure_u1,
             self.pore_pressure_u2,
@@ -241,6 +264,7 @@ class AbstractCPT(BaseModel):
                 if data.size and data.ndim and not np.all(data == 0):
                     self.water = deepcopy(data)
                     break
+
         if self.water is None:
             self.water = np.zeros(len(self.penetration_length))
 
@@ -287,7 +311,6 @@ class AbstractCPT(BaseModel):
                     setattr(self, value_name, value_to_add)
         return
 
-
     def perform_pre_drill_interpretation(self, length_of_average_points: int = 3):
         """
         Is performed only if pre-drill exists. Assumes that depth is already defined.
@@ -302,8 +325,12 @@ class AbstractCPT(BaseModel):
         """
         starting_depth = 0
 
+        # if the depth of unknown data is not set then assume it is the first sample of penetration length
+        if self.undefined_depth is None:
+            self.undefined_depth = self.penetration_length[0]
+
         if not (math.isclose(float(self.undefined_depth), 0.0)):
-            # if there is pre-dill add the average values to the pre-dill
+            # if there is pre-drill add the average values to the pre-drill
             # Set the discretization
             discretization = np.average(np.diff(self.penetration_length))
             # Define local data
@@ -369,10 +396,9 @@ class AbstractCPT(BaseModel):
             self.__correct_missing_samples_top_CPT(length_of_average_points)
         return
 
-
     def pre_process_data(self):
         """
-        Pre processes data which is read from a gef file or bro xml file.
+        Standard pre-processes data which is read from a gef file or bro xml file.
 
         Depth is calculated based on available data.
         Relevant data is corrected for negative values.
@@ -381,19 +407,22 @@ class AbstractCPT(BaseModel):
         :return:
         """
 
+        self.remove_points_with_error()
+        self.drop_duplicate_depth_values()
+
         self.__calculate_inclination_resultant()
         self.calculate_depth()
         self.perform_pre_drill_interpretation()
 
         self.depth_to_reference = self.local_reference_level - self.depth
+
         # correct tip friction and friction number for negative values
         self.tip = self.__correct_for_negatives(self.tip)
         self.friction = self.__correct_for_negatives(self.friction)
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
 
-        self.__get_water_data()
 
-        # todo extend pre process data
+        self.__get_water_data()
 
     def plot(self, directory: Path):
         # plot cpt data
