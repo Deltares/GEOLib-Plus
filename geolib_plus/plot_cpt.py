@@ -338,6 +338,8 @@ def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
 
     save_figures(figures, cpt, output_folder)
 
+    plt.close('all')
+
 
 
 

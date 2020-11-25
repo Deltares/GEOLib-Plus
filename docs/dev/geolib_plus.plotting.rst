@@ -9,6 +9,9 @@ geolib\_plus.plot\_cpt module
    :undoc-members:
    :show-inheritance:
 
+
+
+
 geolib\_plus.plot\_settings module
 ----------------------------------
 
@@ -59,9 +62,6 @@ Below a code snippet is presented on how to change cone resistance settings
     # Sets the style of the line
     plot_settings.plot_qc_settings["line_style"] = "--"
 
-    # Sets the location of the label, in this case top right
-    plot_settings.plot_qc_settings["position_label"] = plot_settings.label_positions[1]
-
     # Sets the scale of the shown graph. This value represents how much of the respective unit (in this case MPa) is shown
     # per 2 grid cells.
     plot_settings.plot_qc_settings["scale_unit"] = 3
@@ -73,6 +73,38 @@ Below a code snippet is presented on how to change cone resistance settings
     # Sets the ticks at the x-axis. In this case, from 0 to 30 (not including 30) with a step size of 5
     plot_settings.plot_qc_settings["ticks"] = np.arange(0, 30, 5).tolist()
 
+Besides the horizontal data settings, also the vertical settings related to the depth can be altered. Below a code
+snipped is shown on how to alter the vertical settings:
+
+.. code-block:: python
+
+    from geolib_plus.plot_settings import PlotSettings
+    plot_settings = PlotSettings()
+
+    # sets the type of the top level, top_types[0] for relative top level, top_types[1] for absolute top level
+    plot_settings.vertical_settings["top_type"] = plot_settings.top_types[1]
+
+    # Absolute value in meter, of the top of the first graph. This value is used if top type is absolute.
+    plot_settings.vertical_settings["absolute_top_level"] =  5
+
+    # Rounded down value of the distance in meter above surface level. This value is used if top type is relative.
+    plot_settings.vertical_settings["buffer_at_top"] =  1.5
+
+    # Vertical length of the graph in meter
+    plot_settings.vertical_settings["length_graph"] =  1.5
+
+    # The distance in meter which is repeated from one graph to the subsequent graph (in case the data exceeds the bottom
+    # of the graph).
+    plot_settings.vertical_settings["repeated_distance"] =  1.5
+
+    # Distance in meter of the depth ticks
+    plot_settings.vertical_settings["depth_tick_distance"] =  1.5
+
+    # Distance in meter of the inclination ticks if present
+    plot_settings.vertical_settings["inclination_tick_distance"] =  1.5
+
+    # Minimal distance in meter between textboxes which show values which exceed the data threshold.
+    plot_settings.vertical_settings["spacing_shown_cut_off_value"] =  1.5
 
 Lastly the grid can be altered. It is possible to alter the line distances, the line colours and the line widths. Below
 a code snippet is shown which shows how to alter the grid settings. Note that the grid by default refers to the axis

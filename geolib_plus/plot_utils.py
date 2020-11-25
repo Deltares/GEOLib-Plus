@@ -240,7 +240,7 @@ def set_y_axis(ax, ylim, settings, cpt, tick_locations_inclination, tick_labels_
 
     y_label_depth = settings["vertical_settings"]["y_label_depth"][settings["language"]] + cpt.vertical_datum
     y_label_inclination = settings["vertical_settings"]["y_label_inclination"][settings["language"]]
-    tick_distance_depth = settings["vertical_settings"]["inclination_tick_distance"]
+    tick_distance_depth = settings["vertical_settings"]["depth_tick_distance"]
     ticks_depth = np.arange(ylim[1], ylim[0], tick_distance_depth)
 
     # tick_locations_inclination, tick_labels_inclination = define_inclination_ticks_and_labels(
@@ -290,12 +290,26 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     """
     from datetime import date
 
+    # Sets text
+    if cpt.plot_settings.general_settings["language"] == "Nederlands":
+        cpt_type_txt = "Conustype: "
+        norm_txt = "Norm: "
+        class_txt = "Klasse: "
+        page_txt = "Page: "
+        date_measurement_txt = "Datum meting: "
+        date_plot_txt = "Datum plot: "
+    else:
+        cpt_type_txt = "Cone type: "
+        norm_txt = "Norm: "
+        class_txt = "class: "
+        page_txt = "Page: "
+        date_measurement_txt = "Date result: "
+        date_plot_txt = "Date plot: "
+
     y_min = ylims[plot_nr][1]
     y_max = ylims[plot_nr][0]
 
-    y_tick_size = (y_max - y_min) / ax.yaxis.major.formatter.axis.major.locator.locs.size
-
-    height_box = 3.5 * y_tick_size * scale  # [m]
+    height_box = 3.5 * scale  # [m]
     distance_from_plot = -1
 
     xmin = ax.dataLim.x0
@@ -340,32 +354,33 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     __add_text_in_rectangle(ax, "Bro id: " + cpt.name, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(norm_box)
-    __add_text_in_rectangle(ax, "Norm: " + cpt.cpt_standard, ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, norm_txt + cpt.cpt_standard, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(cpt_type_box)
-    __add_text_in_rectangle(ax, "Conustype: " + cpt.cpt_type, ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, cpt_type_txt + cpt.cpt_type, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(cpt_class_box)
-    __add_text_in_rectangle(ax, "Klasse: " + cpt.quality_class, ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, class_txt + cpt.quality_class, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(coordinate_box)
     __add_text_in_rectangle(ax, "x = " + "{:.1f}".format(cpt.coordinates[0]), ax.patches[-1], 2 / 3, hor_spacing)
     __add_text_in_rectangle(ax, "y = " + "{:.1f}".format(cpt.coordinates[1]), ax.patches[-1], 1 / 3, hor_spacing)
 
     ax.add_patch(page_box)
-    __add_text_in_rectangle(ax, "Blad: " + str(plot_nr + 1) + "/" + str(len(ylims)), ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, page_txt + str(plot_nr + 1) + "/" + str(len(ylims)), ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(cpt_date_box)
-    __add_text_in_rectangle(ax, "Datum meting: " + cpt.result_time, ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, date_measurement_txt + cpt.result_time, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(plot_data_box)
-    __add_text_in_rectangle(ax, "Datum plot: " + str(date.today()), ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, date_plot_txt + str(date.today()), ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(empty_box)
 
 
 def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
     """
+    Sets textboxes with meta data
 
     :param ax: current axis
     :param scale: scale of the plot on the paper
@@ -375,6 +390,20 @@ def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
     :return:
     """
     from datetime import date
+
+    # Sets text
+    if cpt.plot_settings.general_settings["language"] == "Nederlands":
+        cpt_type_txt = "Conustype: "
+        norm_and_class_txt = "Norm en klasse: "
+        page_txt = "Page: "
+        date_measurement_txt = "Datum meting: "
+        date_plot_txt = "Datum plot: "
+    else:
+        cpt_type_txt = "Cone type: "
+        norm_and_class_txt = "Norm and class: "
+        page_txt = "Page: "
+        date_measurement_txt = "Date result: "
+        date_plot_txt = "Date plot: "
 
     y_min = ylims[plot_nr][1]
     y_max = ylims[plot_nr][0]
@@ -423,23 +452,23 @@ def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
     __add_text_in_rectangle(ax, "Gef id: " + cpt.name, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(cpt_type_box)
-    __add_text_in_rectangle(ax, "Conustype: " + cpt.cpt_type, ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, cpt_type_txt + cpt.cpt_type, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(cpt_class_box)
-    __add_text_in_rectangle(ax, "Norm en klasse: " + cpt.quality_class, ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, norm_and_class_txt + cpt.quality_class, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(coordinate_box)
     __add_text_in_rectangle(ax, "x = " + "{:.1f}".format(cpt.coordinates[0]), ax.patches[-1], 2 / 3, hor_spacing)
     __add_text_in_rectangle(ax, "y = " + "{:.1f}".format(cpt.coordinates[1]), ax.patches[-1], 1 / 3, hor_spacing)
 
     ax.add_patch(page_box)
-    __add_text_in_rectangle(ax, "Blad: " + str(plot_nr + 1) + "/" + str(len(ylims)), ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, page_txt + str(plot_nr + 1) + "/" + str(len(ylims)), ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(cpt_date_box)
-    __add_text_in_rectangle(ax, "Datum meting: " + cpt.result_time, ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, date_measurement_txt + cpt.result_time, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(plot_data_box)
-    __add_text_in_rectangle(ax, "Datum plot: " + str(date.today()), ax.patches[-1], 1 / 2, hor_spacing)
+    __add_text_in_rectangle(ax, date_plot_txt + str(date.today()), ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(empty_box)
 
