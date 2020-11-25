@@ -170,6 +170,8 @@ class TestPlotCpt():
 
         # set up cpt
         cpt.depth_to_reference = np.linspace(0, -10, 11)
+        cpt.undefined_depth = 0
+        cpt.local_reference_level = 0
         cpt.tip = np.sin(cpt.depth_to_reference * 1/4 * np.pi)
         cpt.inclination_resultant = np.zeros(11)
 
@@ -288,6 +290,4 @@ class TestPlotCpt():
         Sets default plot settings.
         :return:
         """
-        plot_settings = PlotSettings()
-        plot_settings.assign_default_settings()
-        return plot_settings
+        return PlotSettings()

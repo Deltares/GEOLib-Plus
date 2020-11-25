@@ -1,16 +1,17 @@
 import numpy as np
+from typing import Dict, Optional
 
 
 class PlotSettings:
     def __init__(self):
-        self.plot_qc_settings = {}
-        self.plot_friction_settings = {}
-        self.plot_friction_nbr_settings = {}
-        self.plot_inv_friction_nbr_settings = {}
-        self.plot_water_settings = {}
-        self.general_settings = {}
-        self.grid = {}
-        self.vertical_settings = {}
+        self.plot_qc_settings: Optional[Dict] = {}  # Settings for cone resistance graph
+        self.plot_friction_settings: Optional[Dict] = {}  # Settings for friction resistance graph
+        self.plot_friction_nbr_settings: Optional[Dict] = {}  # Settings for friction number graph
+        self.plot_inv_friction_nbr_settings: Optional[Dict] = {}  # Settings for inversed friction number graph
+        self.plot_water_settings: Optional[Dict] = {}  # Settings for pore pressure graph
+        self.general_settings: Optional[Dict] = {}  # All settings
+        self.grid: Optional[Dict] = {}  # Settings for grid in plot
+        self.vertical_settings: Optional[Dict] = {}  # Settings for the vertical axis in the graph
 
         # private variables are assigned for settings which can be altered with a limit set of options
         self.__languages = ["Nederlands", "English"]
@@ -31,6 +32,11 @@ class PlotSettings:
 
     @property
     def languages(self):
+        """
+        Language of the plot, options are:
+            0 = 'Nederlands',
+            1 = 'English'
+        """
         return self.__languages
 
     @property
@@ -47,14 +53,32 @@ class PlotSettings:
 
     @property
     def label_positions(self):
+        """
+        Position of the label in the plot, options are:
+            0 = 'top_left',
+            1 = 'top_right',
+            2 = 'bottom_left',
+            3 = 'bottom_right',
+            4 = 'bottom_middle',
+        """
         return self.__label_positions
 
     @property
     def plot_sizes(self):
+        """
+        Size of the plot, options are:
+            0 = 'a4';
+            1 = 'unlimited';
+        """
         return self.__plot_sizes
 
     @property
     def top_types(self):
+        """
+        Type of the top level of the plot, options are:
+            0 = 'relative' : the top of the plot is relative to the surface level;
+            1 = 'absolute' : the top of the plot is an absolute value;
+        """
         return self.__top_types
 
     def assign_default_settings(self):
