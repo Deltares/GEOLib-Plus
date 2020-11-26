@@ -21,6 +21,7 @@ class CptReader:
             "The method should be implemented in concrete classes."
         )
 
+
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
 
@@ -101,8 +102,8 @@ class AbstractCPT(BaseModel):
     fr_angle_NEN: Optional[Iterable]
 
     # fixed values
-    g: float = 9.81 # gravitational constant [m/s2]
-    Pa: float = 100.0 # atmospheric pressure [kPa]
+    g: float = 9.81  # gravitational constant [m/s2]
+    Pa: float = 100.0  # atmospheric pressure [kPa]
 
     @property
     def __water_measurement_types(self) -> List[str]:
@@ -145,12 +146,65 @@ class AbstractCPT(BaseModel):
             "water",
         ]
 
+    def check_if_attribute(self, list_to_be_checked: List, method: str):
+        for value in list_to_be_checked:
+            if getattr(self, value) is None:
+                raise ValueError(
+                    "Value {} should be defined before running the \
+                        {}. Make sure that pre_process \
+                            method was run.".format(
+                        value, method
+                    )
+                )
+
+    def are_data_available_interpretation(self):
+        list_to_be_checked = [
+            "tip",
+            "friction",
+            "water",
+            "Pa",
+            "g",
+            "friction_nbr",
+            "depth",
+            "depth_to_reference",
+        ]
+        self.check_if_attribute(
+            list_to_be_checked=list_to_be_checked, method="interpretation"
+        )
+
+    def are_data_available_plotting(self):
+        list_to_be_checked = [
+            "undefined_depth",
+            "local_reference_level",
+            "depth_to_reference",
+            "tip",
+            "friction",
+            "friction_nbr",
+            "water",
+            "name",
+        ]
+        self.check_if_attribute(
+            list_to_be_checked=list_to_be_checked, method="plotting"
+        )
+
+    def check_if_lists_have_the_same_size(self):
+        same_size = []
+        for list_to_check in self.__list_of_array_values:
+            value = getattr(self, list_to_check)
+            if value is not None:
+                same_size.append(len(value))
+                if not (len(list(dict.fromkeys(same_size))) == 1):
+                    raise ValueError(
+                        "Property {} does not have the same size as the other properties".format(
+                            list_to_check
+                        )
+                    )
+
     @classmethod
     def create_from(cls, filepath: Path):
         cls().read(filepath)
 
     def read(self, filepath: Path):
-
 
         if not filepath:
             raise ValueError(filepath)
@@ -182,11 +236,15 @@ class AbstractCPT(BaseModel):
             "The method should be implemented in concrete classes."
         )
 
-    @abstractmethod
-    def has_duplicated_depth_values(self) -> bool:
-        raise NotImplementedError(
-            "The method should be implemented in concrete classes."
-        )
+    def has_duplicated_depth_values(self):
+        """
+        Check to see if there are any duplicate depth positions in the data
+        :return True if has duplicate depths points based on penetration length
+        """
+        if len(np.unique(self.penetration_length)) != len(self.penetration_length):
+            raise ValueError(
+                "Value depth contains duplicates. To resolve this run the pre_process method."
+            )
 
     @classmethod
     @abstractmethod
@@ -271,10 +329,18 @@ class AbstractCPT(BaseModel):
     def __calculate_inclination_resultant(self):
 
         if self.inclination_resultant is None:
-            if isinstance(self.inclination_x, np.ndarray) and isinstance(self.inclination_y, np.ndarray):
-                self.inclination_resultant = np.sqrt(np.square(self.inclination_x) + np.square(self.inclination_y))
-            elif isinstance(self.inclination_ns, np.ndarray) and isinstance(self.inclination_ew, np.ndarray):
-                self.inclination_resultant = np.sqrt(np.square(self.inclination_ns) + np.square(self.inclination_ew))
+            if isinstance(self.inclination_x, np.ndarray) and isinstance(
+                self.inclination_y, np.ndarray
+            ):
+                self.inclination_resultant = np.sqrt(
+                    np.square(self.inclination_x) + np.square(self.inclination_y)
+                )
+            elif isinstance(self.inclination_ns, np.ndarray) and isinstance(
+                self.inclination_ew, np.ndarray
+            ):
+                self.inclination_resultant = np.sqrt(
+                    np.square(self.inclination_ns) + np.square(self.inclination_ew)
+                )
 
     @staticmethod
     def update_value_with_pre_drill(
@@ -302,7 +368,11 @@ class AbstractCPT(BaseModel):
         self.penetration_length = np.append(0, self.penetration_length)
         for value_name in self.__list_of_array_values:
             data = getattr(self, value_name)
-            if (data is not None) and (value_name != "depth") and (value_name != "penetration_length"):
+            if (
+                (data is not None)
+                and (value_name != "depth")
+                and (value_name != "penetration_length")
+            ):
                 if not (all(v is None for v in data)):
                     value_to_add = np.append(
                         np.average(data[:length_of_average_points]),
@@ -389,10 +459,13 @@ class AbstractCPT(BaseModel):
             )
             self.penetration_length = np.append(
                 local_depth,
-                local_depth[-1] + discretization + self.penetration_length - self.penetration_length[0],
+                local_depth[-1]
+                + discretization
+                + self.penetration_length
+                - self.penetration_length[0],
             )
         # correct for missing samples in the top of the CPT
-        if self.depth[0] -1e-9 > 0:
+        if self.depth[0] - 1e-9 > 0:
             self.__correct_missing_samples_top_CPT(length_of_average_points)
         return
 
@@ -408,6 +481,7 @@ class AbstractCPT(BaseModel):
         """
 
         self.remove_points_with_error()
+
         self.drop_duplicate_depth_values()
 
         self.__calculate_inclination_resultant()
@@ -420,7 +494,6 @@ class AbstractCPT(BaseModel):
         self.tip = self.__correct_for_negatives(self.tip)
         self.friction = self.__correct_for_negatives(self.friction)
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
-
 
         self.__get_water_data()
 

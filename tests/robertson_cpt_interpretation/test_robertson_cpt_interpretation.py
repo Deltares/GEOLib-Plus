@@ -99,7 +99,9 @@ class TestIntergration:
         assert np.allclose(bro_cpt.litho_points, gef_cpt.litho_points)
         for value in ["litho_NEN", "E_NEN", "cohesion_NEN", "fr_angle_NEN"]:
             for i in range(len(gef_cpt.litho_NEN)):
-                assert set(getattr(bro_cpt, value)[i].split("/")) == set(getattr(gef_cpt, value)[i].split("/"))
+                assert set(getattr(bro_cpt, value)[i].split("/")) == set(
+                    getattr(gef_cpt, value)[i].split("/")
+                )
 
         for value in values_to_test:
             print(value)

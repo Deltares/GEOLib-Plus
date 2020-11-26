@@ -3,6 +3,7 @@ from .gef_file_reader import GefFileReader
 
 from pandas import DataFrame
 from numpy import array, unique
+import numpy
 
 
 class GefCpt(AbstractCPT):
@@ -30,7 +31,7 @@ class GefCpt(AbstractCPT):
                 altered_keys.append(key)
                 keys = list(update_dict.keys())
                 if len(keys) != 0 and current_attribute.size != len(
-                        update_dict[keys[0]]
+                    update_dict[keys[0]]
                 ):
                     raise ValueError(
                         f"The data '{key}' (length = {current_attribute.size}) "
@@ -44,6 +45,8 @@ class GefCpt(AbstractCPT):
         for key in self.error_codes.keys():
             if key in altered_keys:
                 update_dict = update_dict[update_dict[key] != self.error_codes[key]]
+                # update error key to a consistend value for interpretation
+                self.error_codes[key] = numpy.nan
 
         update_dict.to_dict("list")
 
@@ -59,9 +62,14 @@ class GefCpt(AbstractCPT):
         """
         for key in self.error_codes.keys():
             current_attribute = getattr(self, key)
-            if self.error_codes[key] in current_attribute:
-                return True
-        return False
+            if current_attribute is not None:
+                if self.error_codes[key] in current_attribute:
+                    raise ValueError(
+                        " Property {} should not include nans.\
+                         To remove nans run pre_process method.".format(
+                            key
+                        )
+                    )
 
     def drop_duplicate_depth_values(self):
         """
@@ -82,7 +90,7 @@ class GefCpt(AbstractCPT):
                 altered_keys.append(key)
                 keys = list(update_dict.keys())
                 if len(keys) != 0 and len(current_attribute) != len(
-                        update_dict[keys[0]]
+                    update_dict[keys[0]]
                 ):
                     raise ValueError(
                         f"The data '{key}' is not of the assumed data length = {len(update_dict[keys[0]])}"
@@ -99,11 +107,3 @@ class GefCpt(AbstractCPT):
         # update changed values in cpt
         for value in altered_keys:
             setattr(self, value, array(update_dict.get(value)))
-
-    def has_duplicated_depth_values(self) -> bool:
-        """
-        Check to see if there are any duplicate depth positions in the data
-        :return True if has duplicate depths points based on penetration length
-        """
-        return len(unique(self.penetration_length)) != len(self.penetration_length)
-

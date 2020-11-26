@@ -76,6 +76,7 @@ class TestGefCpt:
         # 4. Verify final expectations
         assert generated_output
 
+
 class TestCheckDataForError:
     @pytest.mark.unittest
     def test_has_points_with_error_with_error(self):
@@ -93,7 +94,9 @@ class TestCheckDataForError:
         gef_cpt.error_codes["pore_pressure_u2"] = -1
         gef_cpt.error_codes["friction_nbr"] = -1
 
-        assert(gef_cpt.has_points_with_error())
+        with pytest.raises(ValueError) as excinfo:
+            gef_cpt.has_points_with_error()
+            assert "friction" in str(excinfo.value)
 
     @pytest.mark.unittest
     def test_has_points_with_error_without_error(self):
@@ -111,7 +114,8 @@ class TestCheckDataForError:
         gef_cpt.error_codes["pore_pressure_u2"] = -99
         gef_cpt.error_codes["friction_nbr"] = -99
 
-        assert (not gef_cpt.has_points_with_error())
+        gef_cpt.has_points_with_error()
+        assert gef_cpt
 
     @pytest.mark.unittest
     def test_has_duplicated_depth_values_without_duplication(self):
@@ -122,7 +126,7 @@ class TestCheckDataForError:
         gef_cpt.pore_pressure_u2 = np.full(6, 1000)
         gef_cpt.friction_nbr = np.full(6, 5)
         gef_cpt.penetration_length = np.linspace(-1, 12, 6)
-        assert (not gef_cpt.has_duplicated_depth_values())
+        assert not gef_cpt.has_duplicated_depth_values()
 
     @pytest.mark.unittest
     def test_has_duplicated_depth_values_with_duplication(self):
@@ -134,11 +138,14 @@ class TestCheckDataForError:
         gef_cpt.friction_nbr = np.full(6, 5)
         gef_cpt.penetration_length = np.linspace(-1, 12, 6)
 
-        #create duplications
+        # create duplications
         gef_cpt.penetration_length[0] = gef_cpt.penetration_length[1]
         gef_cpt.penetration_length[-1] = gef_cpt.penetration_length[-2]
 
-        assert(gef_cpt.has_duplicated_depth_values())
+        with pytest.raises(ValueError) as excinfo:
+            gef_cpt.has_duplicated_depth_values()
+            assert "depth" in excinfo.value
+
 
 class TestRemovePointsWithError:
     @pytest.mark.unittest

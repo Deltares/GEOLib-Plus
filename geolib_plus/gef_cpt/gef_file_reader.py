@@ -231,7 +231,9 @@ class GefFileReader(CptReader):
         self.read_column_data(data, idx_EOH)
 
         # get pre drill depth from penetration length data
-        predrilled_z = self.get_pre_drill_depth(self.property_dict["penetration_length"].values_from_gef)
+        predrilled_z = self.get_pre_drill_depth(
+            self.property_dict["penetration_length"].values_from_gef
+        )
 
         idx_name = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#TESTID=", data=data
@@ -248,10 +250,11 @@ class GefFileReader(CptReader):
             )
         )
 
-
         return dict(
             name=self.name,
-            penetration_length=self.get_as_np_array(self.property_dict["penetration_length"].values_from_gef),
+            penetration_length=self.get_as_np_array(
+                self.property_dict["penetration_length"].values_from_gef
+            ),
             depth=self.get_as_np_array(self.property_dict["depth"].values_from_gef),
             predrilled_z=predrilled_z,
             tip=self.get_as_np_array(self.property_dict["tip"].values_from_gef),
