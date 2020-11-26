@@ -174,6 +174,7 @@ class AbstractCPT(BaseModel):
 
     def are_data_available_plotting(self):
         list_to_be_checked = [
+            "undefined_depth",
             "local_reference_level",
             "depth_to_reference",
             "tip",
