@@ -47,6 +47,156 @@ class TestGeolibPlusReading:
             if key not in ["predrilled_z", "undefined_depth", "water_measurement_type"]:
                 assert type(cpt_bro_xml.get(key, None)) == type(cpt_gef.get(key, None))
 
+    @pytest.mark.systemtest
+    def test_has_points_with_error(self):
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # fill in data
+        cpt_gef.tip = np.array([1, 2, -9999.99, 4, 5])
+        cpt_gef.friction = np.array([1, 2, 3, 4, 5])
+        cpt_gef.water = np.array([1, 2, 3, 4, 5])
+        cpt_gef.friction_nbr = np.array([1, 2, 3, 4, 5])
+        cpt_gef.pwp = None
+        cpt_gef.depth = np.array([1, 2, 3, 4, 5])
+        cpt_gef.depth_to_reference = np.array([1, 2, 3, 4, 5])
+        # set up error code for tip
+        cpt_gef.error_codes = {"tip": -9999.99}
+
+        cpt_bro_xml.tip = np.array([1, 2, np.nan, 4, 5])
+        cpt_bro_xml.friction = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.water = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.friction_nbr = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.pwp = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.depth = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.depth_to_reference = None
+
+        # run tests
+        with pytest.raises(ValueError) as excinfo:
+            cpt_bro_xml.has_points_with_error()
+            assert "tip" in str(excinfo.value)
+        with pytest.raises(ValueError) as excinfo:
+            cpt_gef.has_points_with_error()
+            assert "tip" in str(excinfo.value)
+
+    @pytest.mark.systemtest
+    def test_are_data_available_interpretation_no_values_missing(self):
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # fill in data
+        cpt_gef.tip = np.array([1, 2, 3, 4, 5])
+        cpt_gef.friction = np.array([1, 2, 3, 4, 5])
+        cpt_gef.water = np.array([1, 2, 3, 4, 5])
+        cpt_gef.friction_nbr = np.array([1, 2, 3, 4, 5])
+        cpt_gef.pwp = np.array([1, 2, 3, 4, 5])
+        cpt_gef.depth = np.array([1, 2, 3, 4, 5])
+        cpt_gef.depth_to_reference = np.array([1, 2, 3, 4, 5])
+
+        cpt_bro_xml.tip = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.friction = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.water = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.friction_nbr = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.pwp = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.depth = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.depth_to_reference = np.array([1, 2, 3, 4, 5])
+
+        # run tests
+        cpt_gef.are_data_available_interpretation()
+        cpt_bro_xml.are_data_available_interpretation()
+        # test
+        assert cpt_gef
+        assert cpt_bro_xml
+
+    @pytest.mark.systemtest
+    def test_are_data_available_interpretation_values_missing(self):
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # fill in data
+        cpt_gef.tip = np.array([1, 2, 3, 4, 5])
+        cpt_gef.friction = None
+        cpt_gef.water = np.array([1, 2, 3, 4, 5])
+        cpt_gef.friction_nbr = np.array([1, 2, 3, 4, 5])
+        cpt_gef.depth = np.array([1, 2, 3, 4, 5])
+        cpt_gef.depth_to_reference = np.array([1, 2, 3, 4, 5])
+
+        cpt_bro_xml.tip = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.friction = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.water = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.friction_nbr = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.pwp = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.depth = np.array([1, 2, 3, 4, 5])
+        cpt_bro_xml.depth_to_reference = None
+
+        # run tests
+        with pytest.raises(ValueError) as excinfo:
+            cpt_gef.are_data_available_interpretation()
+            assert "friction" in str(excinfo.value)
+        with pytest.raises(ValueError) as excinfo:
+            cpt_bro_xml.are_data_available_interpretation()
+            assert "depth_to_reference" in str(excinfo.value)
+
+    @pytest.mark.systemtest
+    def test_has_duplicated_depth_values_duplicate(self):
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # fill in data
+        cpt_gef.penetration_length = np.array([1, 2, 3, 4, 5, 3])
+
+        cpt_bro_xml.penetration_length = np.array([1, 2, 3.1, 3.1, 4, 5])
+
+        # run tests
+        with pytest.raises(ValueError) as excinfo:
+            cpt_gef.has_duplicated_depth_values()
+            assert "Value depth contains duplicates" in str(excinfo.value)
+        with pytest.raises(ValueError) as excinfo:
+            cpt_bro_xml.has_duplicated_depth_values()
+            assert "Value depth contains duplicates" in str(excinfo.value)
+
+    @pytest.mark.systemtest
+    def test_has_duplicated_depth_values_no_duplicate(self):
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # fill in data
+        cpt_gef.penetration_length = np.array([1, 2, 3, 4, 5])
+
+        cpt_bro_xml.penetration_length = np.array([1, 2, 3.1, 4, 5])
+
+        # run tests
+        cpt_gef.has_duplicated_depth_values()
+        cpt_bro_xml.has_duplicated_depth_values()
+        # test
+        assert cpt_gef
+        assert cpt_bro_xml
+
+    @pytest.mark.systemtest
+    def test_check_if_lists_have_the_same_size(self):
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # fill in data
+        cpt_gef.tip = np.array([1, 2, 3, 4, 5])
+        cpt_gef.friction = np.array([1, 2, 3, 4, 5, 6])
+
+        cpt_bro_xml.depth = np.array([1, 2, 3, 5, 6, 7])
+        cpt_bro_xml.depth_to_reference = np.array([1, 2, 3, 5])
+        cpt_bro_xml.tip = np.array([1, 2, 3, 4, 5])
+
+        # run tests
+        with pytest.raises(ValueError) as excinfo:
+            cpt_gef.check_if_lists_have_the_same_size()
+            assert (
+                "friction does not have the same size as the other properties"
+                in str(excinfo.value)
+            )
+        with pytest.raises(ValueError) as excinfo:
+            cpt_bro_xml.check_if_lists_have_the_same_size()
+            assert "depth does not have the same size as the other properties" in str(
+                excinfo.value
+            )
 
     @pytest.mark.systemtest
     def test_robertson_interpretation_test(self):
@@ -56,8 +206,6 @@ class TestGeolibPlusReading:
         cpt.pre_process_data()
         cpt.interpret_cpt(RobertsonCptInterpretation)
         print(cpt.lithology)
-
-    # System Test for geolib_plus_read_BRO
 
     @pytest.mark.systemtest
     def test_reading_bro(self):

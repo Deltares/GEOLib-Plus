@@ -88,9 +88,16 @@ class BroXmlCpt(AbstractCPT):
         """
         for key in self.__list_of_array_values:
             current_attribute = getattr(self, key)
-            if current_attribute is not None and np.isnan(np.array(current_attribute)).any():
-                return True
-        return False
+            if (
+                current_attribute is not None
+                and np.isnan(np.array(current_attribute)).any()
+            ):
+                raise ValueError(
+                    " Property {} should not include nans.\
+                     To remove nans run pre_process method.".format(
+                        key
+                    )
+                )
 
     def drop_duplicate_depth_values(self):
         """
@@ -117,17 +124,3 @@ class BroXmlCpt(AbstractCPT):
             if update_with_value is not None:
                 setattr(self, value, np.array(update_with_value))
         return
-
-    def has_duplicated_depth_values(self) -> bool:
-        """
-        Check to see if there are any duplicate depth positions in the data
-        :return True if has duplicate depths points based on penetration length
-        """
-        return len(np.unique(self.penetration_length)) != len(self.penetration_length)
-
-
-
-
-
-
-
