@@ -146,6 +146,9 @@ class TestPlotCpt():
 
         vertical_settings = {"spacing_shown_cut_off_value": 1}
 
+        # get actual undefined_depth, required because the scope of the test fixture is class
+        undef_depth = cpt_with_water.undefined_depth
+
         # do not take into account predrill
         cpt_with_water.undefined_depth = 0
 
@@ -158,6 +161,9 @@ class TestPlotCpt():
         for idx, data in enumerate(depth_in_range):
             assert data == cpt_with_water.depth_to_reference[idx]
             assert trimmed_values[idx] == cpt_with_water.tip[idx]
+
+        # Set undefined depth again
+        cpt_with_water.undefined_depth = undef_depth
 
     @pytest.mark.unittest
     def test_trim_cpt_data_within_thresholds_with_predrill(self, cpt_with_water):
@@ -276,7 +282,7 @@ class TestPlotCpt():
         assert Path(output_path / output_file_name).is_file()
         (output_path / output_file_name).unlink()
 
-    @pytest.fixture(scope="session", params=[BroXmlCpt(), GefCpt()])
+    @pytest.fixture(scope="class", params=[BroXmlCpt(), GefCpt()])
     def cpt(self, request):
         """
         Fills de cpt data class with data from a xml file and a gef file.
@@ -298,7 +304,7 @@ class TestPlotCpt():
         cpt.pre_process_data()
         return cpt
 
-    @pytest.fixture(scope="session", params=[BroXmlCpt(), GefCpt()])
+    @pytest.fixture(scope="class", params=[BroXmlCpt(), GefCpt()])
     def cpt_with_water(self, request):
         """
         Fills de cpt data class with data from a xml file and a gef file. The data includes water pressure.
