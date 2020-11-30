@@ -134,6 +134,7 @@ class TestPlotCpt():
         assert pytest.approx(ylims[2][0]) == -20.0
         assert pytest.approx(ylims[2][1]) == -30.0
 
+    @pytest.mark.unittest
     def test_trim_cpt_data_within_thresholds(self, cpt_with_water):
         """
         Test trim cpt within tresholds without predrill depth
@@ -158,6 +159,7 @@ class TestPlotCpt():
             assert data == cpt_with_water.depth_to_reference[idx]
             assert trimmed_values[idx] == cpt_with_water.tip[idx]
 
+    @pytest.mark.unittest
     def test_trim_cpt_data_within_thresholds_with_predrill(self, cpt_with_water):
         """
         Test trim cpt within thresholds with predrill depth
@@ -187,6 +189,7 @@ class TestPlotCpt():
             assert data == expected_result_depth[idx]
             assert trimmed_values[idx] == expected_result_tip[idx]
 
+    @pytest.mark.unittest
     def test_trim_cpt_data_partly_outside_thresholds(self):
         """
         Test trimmed cpt data where the original data falls partly outside the thresholds
