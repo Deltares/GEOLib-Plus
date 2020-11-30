@@ -24,7 +24,6 @@ class CptReader:
 
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
-
     #  variables
     penetration_length: Optional[Iterable]
     depth: Optional[Iterable]
@@ -100,6 +99,9 @@ class AbstractCPT(BaseModel):
     E_NEN: Optional[Iterable]
     cohesion_NEN: Optional[Iterable]
     fr_angle_NEN: Optional[Iterable]
+
+    # plot settings
+    plot_settings: PlotSettings = PlotSettings()
 
     # fixed values
     g: float = 9.81  # gravitational constant [m/s2]
@@ -250,6 +252,9 @@ class AbstractCPT(BaseModel):
     @abstractmethod
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
+
+    class Config:
+        arbitrary_types_allowed = True
 
     def get_interpretation_method(self, method) -> AbstractInterpretationMethod:
         return method()
@@ -500,9 +505,7 @@ class AbstractCPT(BaseModel):
     def plot(self, directory: Path):
         # plot cpt data
         try:
-            plot_setting = PlotSettings()
-            plot_setting.assign_default_settings()
-            plot_cpt_norm(self, directory, plot_setting.general_settings)
+            plot_cpt_norm(self, directory, self.plot_settings.general_settings)
 
         except (ValueError, IndexError):
             print("Cpt data and/or settings are not valid")

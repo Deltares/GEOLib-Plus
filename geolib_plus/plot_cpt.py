@@ -150,28 +150,28 @@ def trim_cpt_data_on_vertical_limits(
     if settings["data_key"] == "water":
         data = cpt.water
 
+    # Prevent plotting estimated predrill and invalid data
+    valid_depth = cpt.depth_to_reference[cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth]
+    valid_data = data[cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth]
+
     # Get the data which falls within the vertical limits of the plot
-    depth_in_range_idxs = np.where(
-        (y_lim[1] < cpt.depth_to_reference) & (cpt.depth_to_reference < y_lim[0])
-    )
-    data_within_lim = data[depth_in_range_idxs].tolist()
-    depth_in_range = cpt.depth_to_reference[depth_in_range_idxs].tolist()
-    if isinstance(cpt.inclination_resultant, np.ndarray):
-        inclination_in_range = cpt.inclination_resultant[depth_in_range_idxs].tolist()
+    depth_in_range_idxs = np.where((y_lim[1] < valid_depth) & (valid_depth < y_lim[0]))
+    data_within_lim = valid_data[depth_in_range_idxs].tolist()
+    depth_in_range = valid_depth[depth_in_range_idxs].tolist()
+    if isinstance(cpt.inclination_resultant,np.ndarray):
+        valid_inclination = cpt.inclination_resultant[
+            cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth]
+        inclination_in_range = valid_inclination[depth_in_range_idxs].tolist()
     else:
         inclination_in_range = None
 
     # If multiple plots are required to show the data, add last value of previous plot to current plot
     if cpt.depth_to_reference[0] > y_lim[0]:
-        previous_idx = max(
-            i
-            for i in range(len(cpt.depth_to_reference))
-            if cpt.depth_to_reference[i] - y_lim[0] > 0
-        )
-        data_within_lim.insert(0, data[previous_idx])
-        depth_in_range.insert(0, cpt.depth_to_reference[previous_idx])
+        previous_idx = max(i for i in range(len(valid_depth)) if valid_depth[i] - y_lim[0] > 0)
+        data_within_lim.insert(0, valid_data[previous_idx])
+        depth_in_range.insert(0, valid_depth[previous_idx])
         if inclination_in_range is not None:
-            inclination_in_range.insert(0, cpt.inclination_resultant[previous_idx])
+            inclination_in_range.insert(0, valid_inclination[previous_idx])
 
     data_within_lim = np.array(data_within_lim)
     depth_in_range = np.array(depth_in_range)
@@ -322,7 +322,7 @@ def save_figures(figures: List, cpt: AbstractCPT, output_folder: Path):
     )
 
     for fig in figures:
-        pdf.savefig(fig)
+        pdf.savefig(fig,bbox_inches='tight')
         plt.close(fig)
 
     pdf.close()
@@ -423,7 +423,7 @@ def generate_plot(
 
 def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
     """
-    Plots and saves all data in the current cpt according to the norm written in NEN @@@
+    Plots and saves all data in the current cpt according to the norm written in NEN 22476-1
 
     :param cpt: cpt data
     :param settings: general settings
@@ -445,3 +445,7 @@ def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
         figures.append(generate_plot(cpt, settings, ylim, ylims, plot_nr))
 
     save_figures(figures, cpt, output_folder)
+
+    plt.close('all')
+
+

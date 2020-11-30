@@ -21,30 +21,6 @@ geolib\_plus.cpt\_base\_model module
    :undoc-members:
    :show-inheritance:
 
-geolib\_plus.plot\_cpt module
------------------------------
-
-.. automodule:: geolib_plus.plot_cpt
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-geolib\_plus.plot\_settings module
-----------------------------------
-
-.. automodule:: geolib_plus.plot_settings
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-geolib\_plus.plot\_utils module
--------------------------------
-
-.. automodule:: geolib_plus.plot_utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
