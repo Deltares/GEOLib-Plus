@@ -134,9 +134,10 @@ class TestPlotCpt():
         assert pytest.approx(ylims[2][0]) == -20.0
         assert pytest.approx(ylims[2][1]) == -30.0
 
+    @pytest.mark.unittest
     def test_trim_cpt_data_within_thresholds(self, cpt_with_water):
         """
-        Test time cpt
+        Test trim cpt within tresholds without predrill depth
         :return:
         """
         settings = {'data_key': 'qc',
@@ -144,6 +145,9 @@ class TestPlotCpt():
                     'unit_converter': 1}
 
         vertical_settings = {"spacing_shown_cut_off_value": 1}
+
+        # do not take into account predrill
+        cpt_with_water.undefined_depth = 0
 
         # assert all data is within threshold
         trimmed_values, shown_values, y_coord_shown_value, depth_in_range, inclination_in_range = \
@@ -155,6 +159,37 @@ class TestPlotCpt():
             assert data == cpt_with_water.depth_to_reference[idx]
             assert trimmed_values[idx] == cpt_with_water.tip[idx]
 
+    @pytest.mark.unittest
+    def test_trim_cpt_data_within_thresholds_with_predrill(self, cpt_with_water):
+        """
+        Test trim cpt within thresholds with predrill depth
+        :return:
+        """
+        settings = {'data_key': 'qc',
+                    'threshold': [0, 32],
+                    'unit_converter': 1}
+
+        vertical_settings = {"spacing_shown_cut_off_value": 1}
+
+        # set expected result
+        expected_result_depth = cpt_with_water.depth_to_reference[
+            cpt_with_water.depth_to_reference < cpt_with_water.local_reference_level - cpt_with_water.undefined_depth]
+
+        expected_result_tip = cpt_with_water.tip[
+            cpt_with_water.depth_to_reference < cpt_with_water.local_reference_level - cpt_with_water.undefined_depth]
+
+        # assert all data is within threshold
+        trimmed_values, shown_values, y_coord_shown_value, depth_in_range, inclination_in_range = \
+            plot_cpt.trim_cpt_data(settings, vertical_settings, cpt_with_water, [-1, -101])
+
+        assert shown_values.size == 0
+        assert y_coord_shown_value.size == 0
+        for idx, data in enumerate(depth_in_range):
+
+            assert data == expected_result_depth[idx]
+            assert trimmed_values[idx] == expected_result_tip[idx]
+
+    @pytest.mark.unittest
     def test_trim_cpt_data_partly_outside_thresholds(self):
         """
         Test trimmed cpt data where the original data falls partly outside the thresholds
