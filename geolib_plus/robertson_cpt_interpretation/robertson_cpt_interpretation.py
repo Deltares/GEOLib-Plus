@@ -64,6 +64,12 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     user_defined_water_level: bool = False
 
     def interpret(self, data: AbstractCPT):
+        """
+        Function that interprets the cpt inputs.
+        Lithology for each layer is determined according to
+        the robertson's method. Note that the pre_process method
+        should be run before the interpret method.
+        """
         # validate that interpretation can be run
         data.has_points_with_error()
         data.are_data_available_interpretation()
