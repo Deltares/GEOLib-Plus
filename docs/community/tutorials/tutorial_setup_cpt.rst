@@ -1,7 +1,7 @@
 .. tutorialcpt:
 
 Tutorial setup Cpt class interpretation using GEOLIB+
-=========================================
+=====================================================
 
 By following the next steps the user can read, process and interpret a cpt file. The formats that can be read by GEOLIB+ are the gef and bro xml files.
 The gef format is formulated as in :cite:`CUR2006`. The bro xml  is formulated in :cite:`bro_2017`.
@@ -39,7 +39,6 @@ As it is of type Iterable you can print out the first element.
     print(cpt_gef.penetration_length[0])
     print(cpt_xml.penetration_length[0])
 
-HERE WE SHOULD ADD THE CLEANING OF THE DATA.
 
 4. Until step 3 only the raw data are part of the class. With GEOLIB+ the user can also run the pre-processing methods. These methods are required before plotting and 
 interpretation the results. Both the gef and the bro xml cpt classes can call the pre_process_data method. However, these are two different methods.

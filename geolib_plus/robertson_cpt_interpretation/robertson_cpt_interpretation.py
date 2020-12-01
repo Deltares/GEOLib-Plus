@@ -45,7 +45,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     Classification of soils according to Robertson chart.
 
     .. _element:
-    .. figure:: ./../../_static/robertson.png
+    .. figure:: ./../_static/robertson.png
         :width: 350px
         :align: center
         :figclass: align-center
@@ -677,7 +677,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
     def permeability_calc(self):
         r"""
-        Permeability calculation. Following Robertson :cite:`robertson_2010`.
+        Permeability calculation. Following Robertson :cite:`robertson_cabal_2014`.
 
         When  [$1.0 < I_{c} \leq 3.27$]
 
@@ -719,7 +719,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         r"""
         Filters the values of the CPT object.
         The filter removes the index of the object for the defined **lithologies**, where the **key** is smaller than
-         the **value**
+        the **value**
         The filter only removes the first consecutive samples.
 
         :param lithologies: list of lithologies to be filtered
