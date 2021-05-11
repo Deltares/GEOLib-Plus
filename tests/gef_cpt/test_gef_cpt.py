@@ -3,22 +3,6 @@ import numpy as np
 from geolib_plus.gef_cpt import GefCpt
 from pathlib import Path
 from tests.utils import TestUtils
-import geolib
-
-
-class TestGefCptGeolibPlusToGeolib:
-    @pytest.mark.integrationtest
-    def test_make_geolib_profile(self):
-        # define test gef
-        test_file_gef = Path(TestUtils.get_local_test_data_dir("cpt/gef"), "KW19-3.gef")
-        # initialize geolib plus
-        cpt_gef = GefCpt()
-        # check initial expectation
-        assert cpt_gef
-        # read the cpt for each type of file
-        cpt_gef.read(test_file_gef)
-        # check initial expectations
-        assert cpt_gef
 
 
 class TestGefCpt:
