@@ -30,16 +30,16 @@ class DFoundationsConnector:
         # soils should also be generated so they can later be inputted in the D-Foundations model
         soils = DFoundationsConnector.__to_d_foundations_soils(soil_layers)
 
-        dfoundations_profile = dfoundations_profile(
+        profile = dfoundations_profile(
             name=cpt.name,
             location=Point(x=cpt.coordinates[0], y=cpt.coordinates[1]),
             cpt=dfoundations_cpt,
             phreatic_level=DFoundationsConnector.__get_phreatic_level(cpt),
             pile_tip_level=DFoundationsConnector.__get_pile_tip_level(cpt),
-            layers=[dict(layer) for layer in soil_layers],
+            layers=[layer for layer in soil_layers],
             excavation=dfoundations_excavation(excavation_level=0),
         )
-        return (dfoundations_profile, soils)
+        return (profile, soils)
 
     @staticmethod
     def __if_not_none_add_to_dict(
@@ -138,7 +138,7 @@ class DFoundationsConnector:
         """
         soils = []
         for layer in soil_layers:
-            local_soil = Soil(name=layer.material, soil_type_nl=SoilType.SAND)
+            local_soil = Soil(name=layer["material"], soil_type_nl=SoilType.SAND)
             local_soil.mohr_coulomb_parameters.cohesion.mean = 0
             local_soil.mohr_coulomb_parameters.friction_angle.mean = 0
             local_soil.undrained_parameters.undrained_shear_strength = 0

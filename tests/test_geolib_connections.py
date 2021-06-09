@@ -6,6 +6,8 @@ from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
 from pathlib import Path
 from tests.utils import TestUtils
 
+import geolib
+
 
 class TestLayers:
     @pytest.mark.unittest
@@ -17,7 +19,7 @@ class TestLayers:
         # check that tip property is not initialized in the cpt
         assert cpt_gef.tip is None
         with pytest.raises(ValueError) as excinfo:
-            DFoundationsConnector.__get_pile_tip_level(cpt_gef)
+            DFoundationsConnector()._DFoundationsConnector__get_pile_tip_level(cpt_gef)
         assert "Tip is not defined in the cpt." in str(excinfo.value)
 
     @pytest.mark.unittest
@@ -38,7 +40,12 @@ class TestLayers:
         # check initial expectation
         assert cpt_gef
         assert (
-            abs(-13.9646 - DFoundationsConnector.__get_pile_tip_level(cpt_gef))
+            abs(
+                -13.9646
+                - DFoundationsConnector()._DFoundationsConnector__get_pile_tip_level(
+                    cpt_gef
+                )
+            )
             < 0.000051
         )
 
@@ -60,7 +67,13 @@ class TestLayers:
         # check initial expectation
         assert cpt_gef
         assert (
-            abs(-2.6 - DFoundationsConnector.__get_phreatic_level(cpt_gef)) < 0.000051
+            abs(
+                -2.6
+                - DFoundationsConnector()._DFoundationsConnector__get_phreatic_level(
+                    cpt_gef
+                )
+            )
+            < 0.000051
         )
 
     @pytest.mark.unittest
@@ -85,7 +98,9 @@ class TestLayers:
             abs(
                 cpt_gef.depth_to_reference[0]
                 - 0.5
-                - DFoundationsConnector.__get_phreatic_level(cpt_gef)
+                - DFoundationsConnector()._DFoundationsConnector__get_phreatic_level(
+                    cpt_gef
+                )
             )
             < 0.000051
         )
@@ -99,14 +114,18 @@ class TestLayers:
         name_not_to_be_added = "name_not_to_be_added"
         dictionary = {}
         # run test that should fail
-        dictionary = DFoundationsConnector.__if_not_none_add_to_dict(
-            dictionary, not_to_be_added, name_not_to_be_added
+        dictionary = (
+            DFoundationsConnector()._DFoundationsConnector__if_not_none_add_to_dict(
+                dictionary, not_to_be_added, name_not_to_be_added
+            )
         )
         assert dictionary == {}
         assert not (dictionary.get(name_not_to_be_added, False))
         # run test that should not fail
-        dictionary = DFoundationsConnector.__if_not_none_add_to_dict(
-            dictionary, list_to_be_added, name_to_be_added
+        dictionary = (
+            DFoundationsConnector()._DFoundationsConnector__if_not_none_add_to_dict(
+                dictionary, list_to_be_added, name_to_be_added
+            )
         )
         assert not (dictionary == {})
         assert dictionary.get(name_to_be_added, False) == list_to_be_added
@@ -129,7 +148,9 @@ class TestLayers:
         interpreter = RobertsonCptInterpretation
         cpt_gef.interpret_cpt(interpreter)
 
-        cpt_dfoundations = DFoundationsConnector.__define_cpt_inputs(cpt_gef)
+        cpt_dfoundations = (
+            DFoundationsConnector()._DFoundationsConnector__define_cpt_inputs(cpt_gef)
+        )
 
         assert cpt_dfoundations.cptname == "CPT000000029380"
 
@@ -148,7 +169,9 @@ class TestLayers:
         # pre-process cpt data
         cpt_gef.pre_process_data()
         with pytest.raises(ValueError) as excinfo:
-            DFoundationsConnector.__to_layers_for_d_foundations(cpt_gef)
+            DFoundationsConnector()._DFoundationsConnector__to_layers_for_d_foundations(
+                cpt_gef
+            )
         assert (
             "Field 'depth_merged' was not defined in the inputted cpt. Interpretation of the cpt must be performed. "
             in str(excinfo.value)
@@ -173,7 +196,11 @@ class TestLayers:
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectations
         assert cpt_gef.name == "CPT000000029380"
-        soil_layers = DFoundationsConnector.__to_layers_for_d_foundations(cpt_gef)
+        soil_layers = (
+            DFoundationsConnector()._DFoundationsConnector__to_layers_for_d_foundations(
+                cpt_gef
+            )
+        )
         assert len(soil_layers) == 44
 
 
@@ -198,16 +225,18 @@ class TestGefCptGeolibPlusToGeolib:
         # check initial expectations
         assert cpt_gef.name == "CPT000000029380"
         # run test
-        profile = DFoundationsConnector.create_profile_for_d_foundations(cpt_gef)
+        profile, soils = DFoundationsConnector.create_profile_for_d_foundations(cpt_gef)
         assert profile
+        assert soils
 
         # initialize geolib model
-        test_file_gef = Path(
-            TestUtils.get_local_test_data_dir("input_files_geolib"), "bm1-1a.foi"
+        test_dfoundations = Path(
+            TestUtils.get_local_test_data_dir("input_files_geolib"), "bm1-1b.foi"
         )
+        assert test_dfoundations.is_file()
         dfoundations_model = geolib.models.DFoundationsModel()
         # parse
-        dfoundations_model.parse(test_file_gef)
+        dfoundations_model.parse(test_dfoundations)
         # assert initial expectations
         assert dfoundations_model
 
@@ -249,10 +278,10 @@ class TestGefCptGeolibPlusToGeolib:
         dfoundations_model.add_pile_if_unique(pile, location)
 
         # add soils from cpt
-        for soil in profile.soils:
+        for soil in soils:
             dfoundations_model.add_soil(soil)
         # add profile to the dfoundations model
-        test_name = dfoundations_model.add_profile(profile.profile)
+        test_name = dfoundations_model.add_profile(profile)
 
         # test expectations
         assert test_name == "CPT000000029380"
