@@ -1,13 +1,10 @@
 import pytest
-import math
 from geolib_plus.gef_cpt import GefCpt
+from geolib_plus.geolib_connections import DFoundationsConnector
+from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
+
 from pathlib import Path
 from tests.utils import TestUtils
-from geolib_plus.layers import SoilProfile
-
-import geolib
-from geolib.models.dfoundations import piles
-from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
 
 
 class TestLayers:
@@ -19,9 +16,8 @@ class TestLayers:
         assert cpt_gef
         # check that tip property is not initialized in the cpt
         assert cpt_gef.tip is None
-        soil_profile = SoilProfile()
         with pytest.raises(ValueError) as excinfo:
-            soil_profile.get_pile_tip_level(cpt_gef)
+            DFoundationsConnector.__get_pile_tip_level(cpt_gef)
         assert "Tip is not defined in the cpt." in str(excinfo.value)
 
     @pytest.mark.unittest
@@ -41,8 +37,10 @@ class TestLayers:
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectation
         assert cpt_gef
-        soil_profile = SoilProfile()
-        assert abs(-13.9646 - soil_profile.get_pile_tip_level(cpt_gef)) < 0.000051
+        assert (
+            abs(-13.9646 - DFoundationsConnector.__get_pile_tip_level(cpt_gef))
+            < 0.000051
+        )
 
     @pytest.mark.unittest
     def test_get_phreatic_level(self):
@@ -61,8 +59,9 @@ class TestLayers:
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectation
         assert cpt_gef
-        soil_profile = SoilProfile()
-        assert abs(-2.6 - soil_profile.get_phreatic_level(cpt_gef)) < 0.000051
+        assert (
+            abs(-2.6 - DFoundationsConnector.__get_phreatic_level(cpt_gef)) < 0.000051
+        )
 
     @pytest.mark.unittest
     def test_get_phreatic_level_no_water_defined(self):
@@ -82,12 +81,11 @@ class TestLayers:
         cpt_gef.water = None
         # check initial expectation
         assert cpt_gef
-        soil_profile = SoilProfile()
         assert (
             abs(
                 cpt_gef.depth_to_reference[0]
                 - 0.5
-                - soil_profile.get_phreatic_level(cpt_gef)
+                - DFoundationsConnector.__get_phreatic_level(cpt_gef)
             )
             < 0.000051
         )
@@ -101,13 +99,13 @@ class TestLayers:
         name_not_to_be_added = "name_not_to_be_added"
         dictionary = {}
         # run test that should fail
-        dictionary = SoilProfile.if_not_none_add_to_dict(
+        dictionary = DFoundationsConnector.__if_not_none_add_to_dict(
             dictionary, not_to_be_added, name_not_to_be_added
         )
         assert dictionary == {}
         assert not (dictionary.get(name_not_to_be_added, False))
         # run test that should not fail
-        dictionary = SoilProfile.if_not_none_add_to_dict(
+        dictionary = DFoundationsConnector.__if_not_none_add_to_dict(
             dictionary, list_to_be_added, name_to_be_added
         )
         assert not (dictionary == {})
@@ -131,10 +129,9 @@ class TestLayers:
         interpreter = RobertsonCptInterpretation
         cpt_gef.interpret_cpt(interpreter)
 
-        soil_profile = SoilProfile()
-        soil_profile.define_cpt_inputs(cpt_gef)
+        cpt_dfoundations = DFoundationsConnector.__define_cpt_inputs(cpt_gef)
 
-        assert soil_profile.cpt.cptname == "CPT000000029380"
+        assert cpt_dfoundations.cptname == "CPT000000029380"
 
     @pytest.mark.integrationtest
     def test_to_layers_for_d_foundations_error(self):
@@ -150,9 +147,8 @@ class TestLayers:
         cpt_gef.read(test_file_gef)
         # pre-process cpt data
         cpt_gef.pre_process_data()
-        soil_profile = SoilProfile()
         with pytest.raises(ValueError) as excinfo:
-            soil_profile.to_layers_for_d_foundations(cpt_gef)
+            DFoundationsConnector.__to_layers_for_d_foundations(cpt_gef)
         assert (
             "Field 'depth_merged' was not defined in the inputted cpt. Interpretation of the cpt must be performed. "
             in str(excinfo.value)
@@ -177,9 +173,8 @@ class TestLayers:
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectations
         assert cpt_gef.name == "CPT000000029380"
-        soil_profile = SoilProfile()
-        soil_profile.to_layers_for_d_foundations(cpt_gef)
-        assert len(soil_profile.soil_layers) == 44
+        soil_layers = DFoundationsConnector.__to_layers_for_d_foundations(cpt_gef)
+        assert len(soil_layers) == 44
 
 
 class TestGefCptGeolibPlusToGeolib:
@@ -203,7 +198,7 @@ class TestGefCptGeolibPlusToGeolib:
         # check initial expectations
         assert cpt_gef.name == "CPT000000029380"
         # run test
-        profile = SoilProfile.create_profile_for_d_foundations(cpt_gef)
+        profile = DFoundationsConnector.create_profile_for_d_foundations(cpt_gef)
         assert profile
 
         # initialize geolib model
