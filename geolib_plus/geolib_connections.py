@@ -1,13 +1,18 @@
-from typing import Iterable, List, Dict, Union, Tuple
+from typing import Iterable, List, Dict, Union, Tuple, Any
 import math
 
 from geolib_plus import AbstractCPT
+from importlib import import_module
 
-from geolib.models.dfoundations.profiles import CPT as dfoundations_cpt
-from geolib.models.dfoundations.profiles import Profile as dfoundations_profile
-from geolib.models.dfoundations.profiles import Excavation as dfoundations_excavation
-from geolib.geometry import Point
-from geolib.soils import Soil, SoilType
+
+def validate_that_geolib_is_installed():
+    try:
+        import geolib
+    except ModuleNotFoundError:
+        # Error handling
+        raise ModuleNotFoundError(
+            "To run function create_profile_for_d_foundations geolib module should be installed."
+        )
 
 
 class DFoundationsConnector:
@@ -18,11 +23,18 @@ class DFoundationsConnector:
     @staticmethod
     def create_profile_for_d_foundations(
         cpt: AbstractCPT,
-    ) -> Tuple[dfoundations_profile, List[Soil]]:
+    ) -> Tuple[Any, List[Any]]:
         """
         Function used to transform class into a Profile that can be inputted
         in D-Foundations through GEOLIB.
         """
+        validate_that_geolib_is_installed()
+        from geolib.models.dfoundations.profiles import (
+            Excavation as dfoundations_excavation,
+        )
+        from geolib.models.dfoundations.profiles import Profile as dfoundations_profile
+        from geolib.geometry import Point
+
         dfoundations_cpt = DFoundationsConnector.__define_cpt_inputs(cpt)
 
         # create layers for the dfoundations profile
@@ -50,10 +62,12 @@ class DFoundationsConnector:
         return dictionary
 
     @staticmethod
-    def __define_cpt_inputs(cpt: AbstractCPT) -> dfoundations_cpt:
+    def __define_cpt_inputs(cpt: AbstractCPT) -> Any:
         """
         Function that creates a D-Foundations CPT from a GEOLIB+ CPT.
         """
+        from geolib.models.dfoundations.profiles import CPT as dfoundations_cpt
+
         # check that at least depth and tip is available
         if cpt.depth is None:
             raise ValueError("Depth is not defined in the cpt.")
@@ -136,6 +150,8 @@ class DFoundationsConnector:
         Creates a list of all the soils. Each layer of the profile has a different soil defined. However, the values are set to default.
         The user can specify those for each layer before inputting them into D-Foundations.
         """
+        from geolib.soils import Soil, SoilType
+
         soils = []
         for layer in soil_layers:
             local_soil = Soil(name=layer["material"], soil_type_nl=SoilType.SAND)
