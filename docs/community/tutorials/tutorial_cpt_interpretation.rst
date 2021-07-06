@@ -13,12 +13,12 @@ After the cpt is set up by following the steps described in:
 The user can interpret a cpt by following the next step:
 
 1. The interpretation method  :func:`~geolib_plus.cpt_base_model.AbstractCPT.interpret` can be called. This function is the same for the gef and xml bro data.
-The user can use the default method of interpretation by using the :class:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation` class. The user can also 
+The user can use the default method of interpretation by using the :class:`~geolib_plus.robertson_cpt_interpretation.RobertsonCptInterpretation` class. The user can also 
 create a custom interpretation model.
 In this case the interpret can be initialized and the property unitweightmethod, shearwavevelocitymethod and ocrmethod can be modified or set to defaults.
-The unitweightmethod can be defined from the IntEnum class :class:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod`.
-The shearwavevelocitymethod can be defined from the IntEnum class :class:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod`.
-The ocrmethod can be defined from the IntEnum class :class:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod`.
+The unitweightmethod can be defined from the IntEnum class :class:`~geolib_plus.robertson_cpt_interpretation.UnitWeightMethod`.
+The shearwavevelocitymethod can be defined from the IntEnum class :class:`~geolib_plus.robertson_cpt_interpretation.OCRMethod`.
+The ocrmethod can be defined from the IntEnum class :class:`~geolib_plus.robertson_cpt_interpretation.ShearWaveVelocityMethod`.
 
 .. code-block:: python
 
@@ -32,7 +32,8 @@ The ocrmethod can be defined from the IntEnum class :class:`~geolib_plus.roberts
     interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
     interpreter.ocrmethod = OCRMethod.MAYNE    
 
-With the GEOLIB+ interpreter the water level has to be defined to calculate the pore pressures. The water level is defined in method :func:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.pwp_level_calc`.
+With the GEOLIB+ interpreter the water level has to be defined to calculate the pore pressures. 
+The water level is defined in method :func:`~geolib_plus.robertson_cpt_interpretation.RobertsonCptInterpretation.pwp_level_calc`.
 There are two options when it comes to defining the water level.
 
 The water level can be user defined. To do that the user need to set the property to True user_defined_water_level.
