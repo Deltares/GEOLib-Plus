@@ -54,7 +54,7 @@ class TestBroXmlCpt:
         cpt.pre_process_data()
         # check if interpretation can be performed
         # initialise interpretation model
-        robertson = RobertsonCptInterpretation
+        robertson = RobertsonCptInterpretation()
         # interpet the results
         cpt.interpret_cpt(robertson)
         assert cpt

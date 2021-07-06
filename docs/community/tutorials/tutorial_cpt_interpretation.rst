@@ -27,7 +27,7 @@ The ocrmethod can be defined from the IntEnum class :class:`~geolib_plus.roberts
     from geolib_plus.robertson_cpt_interpretation import OCRMethod
     from geolib_plus.robertson_cpt_interpretation import ShearWaveVelocityMethod
     # do pre-processing
-    interpreter = RobertsonCptInterpretation
+    interpreter = RobertsonCptInterpretation()
     interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
     interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
     interpreter.ocrmethod = OCRMethod.MAYNE    

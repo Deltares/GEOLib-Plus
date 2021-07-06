@@ -59,7 +59,7 @@ class TestIntergration:
         gef_cpt.pre_process_data()
         bro_cpt.pre_process_data()
         # initialise interpretation model
-        robertson = RobertsonCptInterpretation
+        robertson = RobertsonCptInterpretation()
         robertson.unitweightmethod = UnitWeightMethod.ROBERTSON
         # interpet the results
         gef_cpt.interpret_cpt(robertson)
@@ -127,7 +127,7 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
         interpreter.ocrmethod = OCRMethod.MAYNE
@@ -157,7 +157,7 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
         interpreter.ocrmethod = OCRMethod.ROBERTSON
@@ -187,7 +187,7 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
         interpreter.ocrmethod = OCRMethod.MAYNE
