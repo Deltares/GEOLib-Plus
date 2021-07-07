@@ -4,7 +4,7 @@ Tutorial  Custom Cpt interpretation using GEOLIB+
 =================================================
 
 Following this tutorial the user can learn how to create a custom interpretation class using GEOLIB+.
-Because the :class:`~geolib_plus.robertson_cpt_interpretation.RobertsonCptInterpretation` class 
+Because the :class:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation` class 
 might not have specific functionalities desired by the user.
 
 In the following example, a custom cpt interpretation method is created called "qc only rule". In this example, the
