@@ -256,11 +256,7 @@ class AbstractCPT(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    def get_interpretation_method(self, method) -> AbstractInterpretationMethod:
-        return method()
-
-    def interpret_cpt(self, method: Type[AbstractInterpretationMethod]):
-        method = self.get_interpretation_method(method)
+    def interpret_cpt(self, method: AbstractInterpretationMethod):
         method.interpret(self)
 
     def __calculate_corrected_depth(self) -> np.ndarray:
