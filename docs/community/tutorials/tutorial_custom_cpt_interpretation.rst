@@ -119,10 +119,10 @@ the :class:`~geolib_plus.cpt_base_model.AbstractCPT` class.
             """
             # import cpt
             self.cpt_data = cpt
-            # Perform unit transformations
-            self.cpt_data.tip = self.cpt_data.tip * 100
-            MPa_to_kPa = 1000
-            self.cpt_data.friction = self.cpt_data.friction * MPa_to_kPa
+            # Perform unit tranformations
+            self.cpt_data.friction = self.cpt_data.friction * 100
+            self.cpt_data.friction[self.cpt_data.friction > 10] = 10
+
             # read soil classification from shapefile
             self.soil_types()
             # calculate lithology
@@ -152,7 +152,7 @@ the :class:`~geolib_plus.cpt_base_model.AbstractCPT` class.
 
         def point_intersects_one_polygon(self, point):
             for soil_name, polygon in self.soil_types_for_classification.items():
-                if polygon.contains(point):
+                if point.intersects(polygon):
                     return soil_name
             return None
 
@@ -180,6 +180,7 @@ the :class:`~geolib_plus.cpt_base_model.AbstractCPT` class.
                 self.soil_types_for_classification[polygon.record.name] = geometry.Polygon(
                     polygon.shape.points
                 )
+
 
 
 After defining the custom class the user can use it in the following way.
