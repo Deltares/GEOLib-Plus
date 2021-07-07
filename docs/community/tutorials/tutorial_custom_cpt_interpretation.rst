@@ -5,18 +5,30 @@ Tutorial  Custom Cpt interpretation using GEOLIB+
 
 Following this tutorial the user can learn how to create a custom interpretation class using GEOLIB+.
 Because the :class:`~geolib_plus.robertson_cpt_interpretation.RobertsonCptInterpretation` class 
-might not have specific functionality desired by the user. 
-The new class must fullfil the two following requirements for the user:
- 
+might not have specific functionalities desired by the user.
+
+In the following example, a custom cpt interpretation method is created called "qc only rule". In this example, the
+classification of the soil depends solely on the cpt cone resistance. In this example, the user wants to fulfill the
+following two requirements:
+
  * The class must be able to classify the soil into "clay", "peat" and "sand" based on a provided shapefile.
  * The class must be able to determine the unit weight of the soil based on the soil classification.
+
+In the following figure, a visual representation
+of the new interpretation model is presented after plotting it.
+
+.. image:: ../../_static/qc_only_rule.png
+  :width: 400
 
 As a first step the user creates a shapefile that represents the qc-only classification method.
 The user can do this by using the following python code:
 
 .. code-block:: python
 
+        from pathlib import Path
         from shapely import geometry
+        import shapefile
+
         # define points
         A = geometry.Point(0, 0.1)
         B = geometry.Point(10, 0.1)
@@ -27,13 +39,13 @@ The user can do this by using the following python code:
         G = geometry.Point(0, 1000)
         H = geometry.Point(10, 1000)
         # define polygons
-        poligon_sand = geometry.Polygon([[p.x, p.y] for p in [G, H, F, E]])
-        poligon_clay = geometry.Polygon([[p.x, p.y] for p in [E, F, D, C]])
-        poligon_peat = geometry.Polygon([[p.x, p.y] for p in [C, D, B, A]])
+        polygon_sand = geometry.Polygon([[p.x, p.y] for p in [G, H, F, E]])
+        polygon_clay = geometry.Polygon([[p.x, p.y] for p in [E, F, D, C]])
+        polygon_peat = geometry.Polygon([[p.x, p.y] for p in [C, D, B, A]])
         shapefile_polygon = {
-            "sand": poligon_sand,
-            "clay": poligon_clay,
-            "peat": poligon_peat,
+            "sand": polygon_sand,
+            "clay": polygon_clay,
+            "peat": polygon_peat,
         }
         # write shapefile
         shapefile_location = Path("qc_only_rule")
@@ -46,12 +58,13 @@ The user can do this by using the following python code:
             w.record(key)
         w.close()
 
-The user can also check that the shapefile contains the correct geometry by plotting it.
+The user can also check if the shapefile contains the correct geometry by plotting it.
 
 .. code-block:: python
 
+    import matplotlib.pyplot as plt
+
     # Plot Shape file
-    import shapefile
     sf = shapefile.Reader(Path('qc_only_rule'))
     print('number of shapes imported:', len(sf.shapes()))
     plt.figure()
@@ -59,17 +72,10 @@ The user can also check that the shapefile contains the correct geometry by plot
         x_lon, y_lat = zip(*shape.shape.points)
         plt.fill(x_lon, y_lat, label=shape.record.name)
     plt.xlabel("Friction ratio (Fr) [%]")
-    plt.ylabel("CPT resistance (qc) [MPa]")
+    plt.ylabel("Cone resistance (qc) [MPa]")
     plt.yscale('log')
     plt.legend()
     plt.show()
-
-In the following example, a custom cpt interpretation method is created called "qc only rule". In this example, the
-classification of the soil depends solely on the cpt cone resistance. In the following figure, a visual representation
-of the new interpretation model is presented after plotting it.
-
-.. image:: ../../_static/qc_only_rule.png
-  :width: 400
 
 Then the user should make their own custom interpretation class which should inherit for the :class:`~geolib_plus.cpt_base_model.AbstractInterpretationMethod`.
 In the following example the class created is named **CustomCptInterpretation**, this class inherits from both 
@@ -87,7 +93,7 @@ The function **interpret** is the one that should always be defined by the user 
 the :class:`~geolib_plus.cpt_base_model.AbstractCPT` class.
 
 
-.. note::  To find out more about the concept of inheretence in python see <https://docs.python.org/3/tutorial/classes.html> and <https://www.w3schools.com/python/python_inheritance.asp> .
+.. note::  To find out more about the concept of inheritance in python see <https://docs.python.org/3/tutorial/classes.html> and <https://www.w3schools.com/python/python_inheritance.asp> .
 
 
 .. code-block:: python
@@ -113,7 +119,7 @@ the :class:`~geolib_plus.cpt_base_model.AbstractCPT` class.
             """
             # import cpt
             self.cpt_data = cpt
-            # Perform unit tranformations
+            # Perform unit transformations
             self.cpt_data.tip = self.cpt_data.tip * 100
             MPa_to_kPa = 1000
             self.cpt_data.friction = self.cpt_data.friction * MPa_to_kPa
