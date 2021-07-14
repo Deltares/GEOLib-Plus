@@ -370,6 +370,28 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[0:99])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
+    def test_pre_process_bro_data_without_friction_nbr(self):
+        """
+        Tests pre process of bro data in case no friction number is present
+        """
+        test_file = TestUtils.get_local_test_data_dir(
+            "cpt/bro_xml/CPT000000064413_IMBRO_A.xml"
+        )
+        assert test_file.is_file()
+
+        cpt = BroXmlCpt()
+        cpt.read(test_file)
+
+        # manually remove friction number
+        cpt.friction_nbr = None
+
+        # process data
+        cpt.pre_process_data()
+
+        expected_friction_nbr = cpt.friction / cpt.tip * 100
+
+        np.testing.assert_array_almost_equal(expected_friction_nbr, cpt.friction_nbr)
+
     @pytest.mark.integrationtest
     def test_calculate_friction_nbr_if_not_available(self):
         """
