@@ -370,6 +370,53 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[0:99])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
+    @pytest.mark.integrationtest
+    def test_calculate_friction_nbr_if_not_available(self):
+        """
+        Test calculate friction number if not available
+        """
+        test_file = TestUtils.get_local_test_data_dir(
+            "cpt/gef/unit_testing/Exception_NoFrictionNumber.gef"
+        )
+        assert test_file.is_file()
+
+        # read data
+        cpt = GefCpt()
+        cpt.read(test_file)
+
+        # calculate friction number
+        cpt.calculate_friction_nbr_if_not_available()
+
+        # set expected friction number
+        expected_friction_number = np.ones(20) * 200
+
+        # assert friction number
+        np.testing.assert_array_almost_equal(expected_friction_number, cpt.friction_nbr)
+
+    @pytest.mark.integrationtest
+    def test_calculate_friction_nbr_if_not_available_friction_is_available(self):
+        """
+        Test calculate friction number if not available. In this test, the friction number is available,
+        so nothing should change.
+        """
+        test_file = TestUtils.get_local_test_data_dir(
+            "cpt/gef/unit_testing/unit_testing.gef"
+        )
+        assert test_file.is_file()
+
+        # read data
+        cpt = GefCpt()
+        cpt.read(test_file)
+
+        # calculate friction number
+        cpt.calculate_friction_nbr_if_not_available()
+
+        # set expected friction number
+        expected_friction_number = np.ones(20) * 5
+
+        # assert friction number
+        np.testing.assert_array_almost_equal(expected_friction_number, cpt.friction_nbr)
+
 
 class TestGeolibPlusValidate:
     @pytest.mark.systemtest
