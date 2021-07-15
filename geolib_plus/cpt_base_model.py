@@ -50,6 +50,7 @@ class AbstractCPT(BaseModel):
     permeability: Optional[Iterable]
     poisson: Optional[Iterable]
     damping: Optional[Iterable]
+    relative_density: Optional[Iterable]
 
     pore_pressure_u1: Optional[Iterable]
     pore_pressure_u2: Optional[Iterable]

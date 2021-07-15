@@ -3,6 +3,7 @@ from geolib_plus.robertson_cpt_interpretation import (
     UnitWeightMethod,
     OCRMethod,
     ShearWaveVelocityMethod,
+    RelativeDensityMethod
 )
 from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.bro_xml_cpt import BroXmlCpt
@@ -876,6 +877,33 @@ class TestInterpreter:
 
         # Check if results are equal
         assert list(interpreter.data.lithology) == list(lithology_test)
+
+    def test_relative_density_calc(self):
+        # initialise model
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        method = RelativeDensityMethod.BALDI
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+
+
+        # Define the input
+        interpreter.data.tip = np.array([1,1,1,1])
+        interpreter.data.qt = np.array([1, 1, 1, 1])
+        interpreter.data.friction_nbr = np.array([1,1,1,1])
+        interpreter.data.friction = np.array([1,1,1,1])
+        interpreter.data.effective_stress = np.array([2, 2, 2, 2])
+        interpreter.data.total_stress = np.array([2, 2, 2, 2])
+        interpreter.data.Qtn = np.array([1,1,1,1])
+        interpreter.data.Fr = np.array([1,1,1,1])
+        interpreter.data.Pa = 100
+        interpreter.data.lithology = np.array(["1","2","6","7"])
+
+        interpreter.relative_density_calc(method)
+        # Call the function to be tested
+        interpreter.lithology_calc()
 
     @pytest.mark.systemtest
     def test_pwp_level_calc(self):
