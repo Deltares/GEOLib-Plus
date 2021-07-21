@@ -139,9 +139,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         # compute permeability
         self.permeability_calc()
 
-        # compute relative density
-        self.relative_density_calc()
-
         # filter values
         # lithologies = [""]
         # key = ""
