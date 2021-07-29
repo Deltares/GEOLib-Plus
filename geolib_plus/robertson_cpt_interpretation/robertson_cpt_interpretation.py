@@ -755,10 +755,14 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         """
 
+        self.data.relative_density = np.ones(len(self.data.qt)) * np.nan
         if method == RelativeDensityMethod.BALDI:
             # calculate normalised cpt resistance, corrected for overburden pressure
             Q_cn = (self.data.qt / self.data.Pa) / (self.data.effective_stress / self.data.Pa) ** 0.5
-            self.data.relative_density = 1 / c_2 * np.log(Q_cn / c_0)
+
+            # calculate rd if Q_cn > c_0
+            mask = Q_cn > c_0
+            self.data.relative_density[mask] = (1 / c_2 * np.log(Q_cn / c_0))[mask]
 
         elif method == RelativeDensityMethod.KULHAWY:
             # calculate normalised cpt resistance, corrected for overburden pressure

@@ -878,32 +878,88 @@ class TestInterpreter:
         # Check if results are equal
         assert list(interpreter.data.lithology) == list(lithology_test)
 
-    def test_relative_density_calc(self):
+    @pytest.fixture
+    def set_up_relative_density_test(self):
         # initialise model
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
-        method = RelativeDensityMethod.BALDI
+
         interpreter.data = cpt
         # test initial expectations
         assert cpt
         assert interpreter
 
-
         # Define the input
-        interpreter.data.tip = np.array([1,1,1,1])
-        interpreter.data.qt = np.array([1, 1, 1, 1])
-        interpreter.data.friction_nbr = np.array([1,1,1,1])
-        interpreter.data.friction = np.array([1,1,1,1])
-        interpreter.data.effective_stress = np.array([2, 2, 2, 2])
+        interpreter.data.tip = np.array([1, 1, 1, 1])
+        interpreter.data.qt = np.array([20000, 20000, 20000, 20000])
+        interpreter.data.friction_nbr = np.array([1, 1, 1, 1])
+        interpreter.data.friction = np.array([1, 1, 1, 1])
+        interpreter.data.effective_stress = np.array([10000, 10000, 10000, 10000])
         interpreter.data.total_stress = np.array([2, 2, 2, 2])
-        interpreter.data.Qtn = np.array([1,1,1,1])
-        interpreter.data.Fr = np.array([1,1,1,1])
+        interpreter.data.Qtn = np.array([1, 1, 1, 1])
+        interpreter.data.Fr = np.array([1, 1, 1, 1])
         interpreter.data.Pa = 100
-        interpreter.data.lithology = np.array(["1","2","6","7"])
+        interpreter.data.lithology = np.array(["1", "2", "6", "7"])
 
+        return interpreter
+
+    @pytest.mark.unittest
+    def test_relative_density_calc_baldi(self,set_up_relative_density_test ):
+
+        # define method
+        method = RelativeDensityMethod.BALDI
+
+        # get test data
+        interpreter = set_up_relative_density_test
+
+        # calculate relative density
         interpreter.relative_density_calc(method)
-        # Call the function to be tested
-        interpreter.lithology_calc()
+
+        # get expected value
+        expected_rd_value = 1 / 2.41 * np.log(20/ 15.7)
+        expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
+
+        # assert
+        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+
+    @pytest.mark.unittest
+    def test_relative_density_calc_kulhawy(self, set_up_relative_density_test):
+
+        # define method
+        method = RelativeDensityMethod.KULHAWY
+
+        # get test data
+        interpreter = set_up_relative_density_test
+
+        # calculate relative density
+        interpreter.relative_density_calc(method)
+
+        # get expected value
+        expected_rd_value = np.sqrt(20/(305*1*1**0.18*(1.2+0.05*np.log10(10))))
+        expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
+
+        # assert
+        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+
+    @pytest.mark.unittest
+    def test_relative_density_calc_kulhawy_simple(self, set_up_relative_density_test):
+
+        # define method
+        method = RelativeDensityMethod.KULHAWY_SIMPLE
+
+        # get test data
+        interpreter = set_up_relative_density_test
+        interpreter.data.Qtn = np.ones(4) * 20
+
+        # calculate relative density
+        interpreter.relative_density_calc(method)
+
+        # get expected value
+        expected_rd_value = np.sqrt(20/350)
+        expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
+
+        # assert
+        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
 
     @pytest.mark.systemtest
     def test_pwp_level_calc(self):
