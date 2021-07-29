@@ -715,6 +715,28 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
 
+    def norm_cone_resistance_clean_sand_calc(self):
+
+        K_c = np.ones(len(self.data.IC))*np.nan
+        self.data.Qtncs = np.ones(len(self.data.IC))*np.nan
+
+        K_c[self.data.IC <= 1.64] = 1.0
+
+        mask = (1.64 < self.data.IC) * (self.data.IC <= 2.5)
+        K_c[mask] = 5.58 * self.data.IC[mask] ** 3 - 0.403 * self.data.IC[mask] ** 4 - 21.63 * self.data.IC[mask] ** 2 + \
+                    33.65 * self.data.IC[mask] - 17.88
+
+        mask = (1.64 < self.data.IC)* (self.data.IC <= 2.36) * (self.data.Fr < 0.5)
+        K_c[mask] = 1.0
+
+        mask = (2.5 < self.data.IC) * (self.data.IC < 2.7)
+        K_c[mask] = (6e-7) * self.data.IC**16.76
+
+        self.data.Qtncs = K_c * self.data.Qtn
+
+    def state_parameter_calc(self):
+        pass
+
     def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
         r"""
         Filters the values of the CPT object.
