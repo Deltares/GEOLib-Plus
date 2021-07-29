@@ -729,8 +729,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         calculates the relative density for all the non cohesive soils along the whole cpt, i.e. RD is calculated when
         the lithology index is either 6, 7, 8 or 9.
 
-        The relative density can be computed according to Baldi :cite: `baldi_1986` or
-        Kulhawy and Mayne :cite: `kulhawy_mayne_1990`. Furthermore Kulhawy method can be simplified for most young,
+        The relative density can be computed according to Baldi :cite: `baldi_1989` or
+        Kulhawy and Mayne :cite: `kulhawy_1990`. Furthermore Kulhawy method can be simplified for most young,
         uncemented-based sands.
 
         .. math::
