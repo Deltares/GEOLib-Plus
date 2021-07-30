@@ -902,6 +902,27 @@ class TestInterpreter:
         # Check if results are equal
         np.testing.assert_array_almost_equal(interpreter.data.Qtncs, expected_Qtncs)
 
+    @pytest.mark.unittest
+    def test_state_parameter_calc(self):
+        # initialise model
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # Define the input
+        interpreter.data.Qtncs = np.array([10, 100, np.nan, -10])
+
+        # Call the function to be tested
+        interpreter.state_parameter_calc()
+
+        # set expected array
+        expected_psi = np.array([0.23, -0.1, np.nan, np.nan ])
+
+        # Check if results are equal
+        np.testing.assert_array_almost_equal(interpreter.data.psi, expected_psi)
+
     @pytest.mark.systemtest
     def test_pwp_level_calc(self):
         # initialise model
