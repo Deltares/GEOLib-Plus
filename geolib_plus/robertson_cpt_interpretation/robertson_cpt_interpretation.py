@@ -758,7 +758,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         # calculate K_c for when (1.64 < IC <= 2.5)
         mask = (1.64 < self.data.IC) * (self.data.IC <= 2.5)
         K_c[mask] = 5.581 * self.data.IC[mask] ** 3 - 0.403 * self.data.IC[mask] ** 4 - 21.63 * self.data.IC[mask] ** 2 + \
-                    33.65 * self.data.IC[mask] - 17.88
+                    33.75 * self.data.IC[mask] - 17.88
 
         # calculate K_c for when (1.64 < IC <= 2.36) and Fr < 0.5
         mask = (1.64 < self.data.IC)* (self.data.IC <= 2.36) * (self.data.Fr < 0.5)
@@ -766,7 +766,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         # calculate K_c for when (2.5< IC <= 2.7)
         mask = (2.5 < self.data.IC) * (self.data.IC < 2.7)
-        K_c[mask] = (6e-7) * self.data.IC**16.76
+        K_c[mask] = (6e-7) * self.data.IC[mask]**16.76
 
         # calculate Qtncs
         self.data.Qtncs = K_c * self.data.Qtn
