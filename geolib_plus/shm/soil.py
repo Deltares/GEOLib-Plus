@@ -42,6 +42,7 @@ class StochasticParameter(SoilBaseModel):
     high_characteristic_value: Optional[float] = None
     low_design_value: Optional[float] = None
     high_design_value: Optional[float] = None
+    limits: Optional[List] = None
 
 
 class Soil(SoilBaseModel):
@@ -50,6 +51,7 @@ class Soil(SoilBaseModel):
     """
 
     name: Optional[str]
+    unsaturated_weight: Optional[Union[float, StochasticParameter]] = StochasticParameter()
     saturated_weight: Optional[Union[float, StochasticParameter]] = StochasticParameter()
     shear_strength_ratio: Optional[
         Union[float, StochasticParameter]
