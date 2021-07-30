@@ -133,6 +133,12 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         # compute permeability
         self.permeability_calc()
 
+        # compute clean sand equivalent normalised cone resistance
+        self.norm_cone_resistance_clean_sand_calc()
+
+        # compute state parameter
+        self.state_parameter_calc()
+
         # filter values
         # lithologies = [""]
         # key = ""
