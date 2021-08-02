@@ -120,7 +120,11 @@ table1 = {"Veen": {
                     "shear_strength_ratio":{"mean": 0.30,
                                             "limits": [0.20, 0.50],
                                             "standard_deviation": 0.03,
-                                            "low_characteristic_value": 0.20}},
+                                            "low_characteristic_value": 0.20},
+                  "friction_angle": {"mean": 32,
+                                     "standard_deviation": 32 * 0.07,
+                                     "low_characteristic_value": 29.9}
+                  },
         "siltig": {"saturated_weight":{"mean":18.5,
                                         "limits":[16,21]},
                     "unsaturated_weight": {"mean":18.5,
@@ -128,7 +132,11 @@ table1 = {"Veen": {
                     "shear_strength_ratio":{"mean": 0.30,
                                             "limits": [0.20, 0.50],
                                             "standard_deviation": 0.03,
-                                            "low_characteristic_value": 0.20}},
+                                            "low_characteristic_value": 0.20},
+                   "friction_angle": {"mean": 32,
+                                      "standard_deviation": 32 * 0.07,
+                                      "low_characteristic_value": 29.9}
+                   },
         "Echteld_ondiep": {"POP": {"mean": 27,
                                    "limits": [5, 65],
                                    "low_characteristic_value": 15}},
@@ -152,15 +160,27 @@ table1 = {"Veen": {
         "matig_gesorteerd":{"saturated_weight":{"mean":19.5,
                                         "limits":[18,21]},
                     "unsaturated_weight": {"mean":17,
-                                        "limits":[16,18]}},
+                                        "limits":[16,18]},
+                            "friction_angle": {"mean": 34,
+                                               "standard_deviation": 34*0.05,
+                                               "low_characteristic_value": 32.4}
+                            },
         "goed_gesorteerd":{"saturated_weight":{"mean":19.5,
                                         "limits":[18,21]},
                     "unsaturated_weight": {"mean":17,
-                                        "limits":[16,18]}},
+                                        "limits":[16,18]},
+                           "friction_angle": {"mean": 30,
+                                              "standard_deviation": 30 * 0.05,
+                                              "low_characteristic_value": 28.6}
+                           },
         "met_kleilaagjes":{"saturated_weight":{"mean":19.5,
                                         "limits":[18,21]},
                     "unsaturated_weight": {"mean":17,
-                                        "limits":[16,18]}},
+                                        "limits":[16,18]},
+                           "friction_angle": {"mean": 32,
+                                              "standard_deviation": 32 * 0.07,
+                                              "low_characteristic_value": 29.9}
+                           },
     },
     "Loss":{
         "base":{"saturated_weight":{"mean":18.5,
@@ -170,7 +190,11 @@ table1 = {"Veen": {
                     "shear_strength_ratio":{"mean": 0.35,
                                             "limits": [0.20, 0.50],
                                             "standard_deviation": 0.04,
-                                            "low_characteristic_value": 0.20}}
+                                            "low_characteristic_value": 0.20},
+                "friction_angle": {"mean": 32,
+                                   "standard_deviation": 32 * 0.07,
+                                   "low_characteristic_value": 29.9}
+                }
     },
     "Keileem": {
         "base": {"saturated_weight":{"mean": 21,
@@ -179,7 +203,11 @@ table1 = {"Veen": {
                                         "limits": [19,23]},
                     "shear_strength_ratio":{"limits": [0.1, 1],
                                             "standard_deviation": 0.03,
-                                            "low_characteristic_value": 0.10}}
+                                            "low_characteristic_value": 0.10},
+                 "friction_angle": {"mean": 32,
+                                    "standard_deviation": 32 * 0.07,
+                                    "low_characteristic_value": 29.9}
+                 }
     },
     "Dijksmateriaal": {
         "base": {"saturated_weight":{"mean": 17.5,
@@ -190,9 +218,12 @@ table1 = {"Veen": {
                                             "limits": [0.20, 0.50],
                                             "standard_deviation": 0.06,
                                             "low_characteristic_value": 0.20},
-                 "POP": {"mean": 30,
-                         "limits": [0, 150],
-                         "low_characteristic_value": 7}
+                     "POP": {"mean": 30,
+                             "limits": [0, 150],
+                             "low_characteristic_value": 7},
+                    "friction_angle": {"mean": 32,
+                                              "standard_deviation": 32 * 0.1,
+                                              "low_characteristic_value": 29.0}
                  }
     },
 }
