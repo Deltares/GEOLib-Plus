@@ -66,5 +66,24 @@ class Soil(SoilBaseModel):
     friction_angle: Optional[Union[float, StochasticParameter]] = StochasticParameter()
     pop_layer: Optional[Union[float, StochasticParameter]] = StochasticParameter()
 
+    @staticmethod
+    def transfer_soil_dict_to_class(soil_dict, soil):
+        """
+        Transfers items from  dictionary to soil class if the item is not None
+        Args:
+            soil_dict: soil dictionary
+            soil: geolib_plus soil class soil in model
 
+        Returns:
 
+        """
+        if isinstance(soil_dict,dict):
+            for key, value in dict(
+                    soil_dict
+            ).items():  # override default values with those of the soil
+                if key in dict(soil).keys() and value is not None:
+                    if isinstance(value, dict):
+                        setattr(soil, key, Soil.transfer_soil_dict_to_class(value, getattr(soil, key)))
+                    else:
+                        setattr(soil, key, value)
+            return soil

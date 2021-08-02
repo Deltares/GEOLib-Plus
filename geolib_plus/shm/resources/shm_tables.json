@@ -24,7 +24,7 @@
         "standard_deviation": 0.04,
         "low_characteristic_value": 0.28
       },
-      "POP": {
+      "pop_layer": {
         "mean": 11,
         "limits": [
           0,
@@ -57,7 +57,7 @@
         "standard_deviation": 0.03,
         "low_characteristic_value": 0.29
       },
-      "POP": {
+      "pop_layer": {
         "mean": 25,
         "limits": [
           10,
@@ -165,7 +165,7 @@
         "standard_deviation": 0.04,
         "low_characteristic_value": 0.28
       },
-      "POP": {
+      "pop_layer": {
         "mean": 11,
         "limits": [
           0,
@@ -198,7 +198,7 @@
         "standard_deviation": 0.03,
         "low_characteristic_value": 0.3
       },
-      "POP": {
+      "pop_layer": {
         "mean": 25,
         "limits": [
           10,
@@ -260,7 +260,7 @@
         "standard_deviation": 0.03,
         "low_characteristic_value": 0.22
       },
-      "POP": {
+      "pop_layer": {
         "mean": 22,
         "limits": [
           0,
@@ -380,7 +380,7 @@
       }
     },
     "Echteld_ondiep": {
-      "POP": {
+      "pop_layer": {
         "mean": 27,
         "limits": [
           5,
@@ -390,7 +390,7 @@
       }
     },
     "Echteld_diep": {
-      "POP": {
+      "pop_layer": {
         "mean": 24,
         "limits": [
           0,
@@ -400,7 +400,7 @@
       }
     },
     "Naaldwijk_ondiep": {
-      "POP": {
+      "pop_layer": {
         "mean": 25,
         "limits": [
           5,
@@ -410,7 +410,7 @@
       }
     },
     "Naalwijk_diep": {
-      "POP": {
+      "pop_layer": {
         "mean": 14,
         "limits": [
           0,
@@ -589,7 +589,7 @@
         "standard_deviation": 0.06,
         "low_characteristic_value": 0.2
       },
-      "POP": {
+      "pop_layer": {
         "mean": 30,
         "limits": [
           0,
