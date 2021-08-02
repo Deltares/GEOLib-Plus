@@ -1,16 +1,15 @@
 
-import os
 import json
-import numpy as np
 from pathlib import Path
-from typing import List, Dict, Union
+from typing import List
 from pydantic import BaseModel
 
 from geolib_plus.shm.soil import Soil
 
-class Shm_tables(BaseModel):
+
+class ShmTables(BaseModel):
     """
-    "Schematiserings handleiding macrostability"  tables: 7.1, 7.2, 7.3, 7.4.
+    "Schematiseringshandleiding macrostability"  tables: 7.1, 7.2, 7.3, 7.4.
 
     """
 
@@ -30,10 +29,11 @@ class Shm_tables(BaseModel):
         # define the path for the shape file
         path_table = Path(Path(__file__).parent, path_table, filename)
 
-        # read shapefile
+        # read json file
         with open(path_table, "r") as f:
             soils = json.load(f)
 
+        # set items in soil classes
         for k,v in soils.items():
             for sub_k, sub_v in v.items():
                 soil = Soil(name=f"{k}_{sub_k}")
@@ -41,7 +41,3 @@ class Shm_tables(BaseModel):
                 self.soils.append(soil)
 
         return
-
-tmp = Shm_tables()
-
-tmp.load_shm_tables()
