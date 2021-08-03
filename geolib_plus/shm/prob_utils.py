@@ -48,6 +48,31 @@ class ProbUtils(BaseModel):
         return corrected_std
 
     @staticmethod
+    def calculate_prob_parameters_from_lognormal(data: Iterable, is_local: bool, quantile=0.05):
+        """
+        Calculates probabilistic parameters mu and sigma from a lognormal dataset, as required in D-stability. This
+        function takes into account spread reduction factor and the student t factor
+
+        :param data: dataset, X
+        :param is_local: true if data collection is local, false if data collection is regional
+        :param quantile: quantile where the student t factor should be calculated
+        """
+        log_mean, log_std = ProbUtils.calculate_log_stats(data)
+
+        # set spread reduction factor, 0.75 if data collection is regional, 1.0 if data collection is local
+        if is_local:
+            a = 1
+        else:
+            a = 0.75
+
+        corrected_std = ProbUtils.correct_std_with_student_t(len(data), quantile, log_std, a)
+
+        mean_prob, std_prob = ProbUtils.get_mean_std_from_lognormal(log_mean, corrected_std)
+
+        return mean_prob, std_prob
+
+
+    @staticmethod
     def get_mean_std_from_lognormal(log_mean: float, log_std: float):
         """
         Calculates normal mean and standard deviation from the mean and std of LN(X)

@@ -151,9 +151,36 @@ class TestProbUtils:
         # check if exp(log_mean) is close to characteristic value of large dataset
         assert pytest.approx(np.exp(log_mean), rel=0.01) == x_kar_large
 
-        # check if low characteristic value from a small dataset is smaller than chararacteristic value from a large
+        # check if low characteristic value from a small dataset is smaller than characteristic value from a large
         # dataset
         assert x_kar_small < x_kar_large
+
+    @pytest.mark.unittest
+    def test_calculate_prob_parameters_from_lognormal(self):
+        # generate lognormal dataset (mean=5, std=2)
+        log_mean, log_std = 1.53523, 0.38525
+
+        # calculate prob mean and std from a large dataset
+        large_local_data_set = np.random.lognormal(log_mean, log_std, 10000000)
+        mean_prob, std_prob = ProbUtils.calculate_prob_parameters_from_lognormal(large_local_data_set, True)
+
+        # calculate prob mean and std from a small dataset
+        small_local_dataset = np.random.lognormal(log_mean, log_std, 10)
+        mean_prob_small, std_prob_small = ProbUtils.calculate_prob_parameters_from_lognormal(small_local_dataset, True)
+
+        # set expected mean and std of small dataset (values are meant as a regression test
+        expected_mean_small = 4.91908583464898
+        expected_std_small = 0.6076886211545873
+
+        # check if exp(log_mean) is close to mean_prob for a large dataset
+        assert pytest.approx(np.exp(log_mean), rel=0.01) == mean_prob
+        assert pytest.approx(0, abs=0.01) == std_prob
+
+        # check if mean_prob and std_prob has changed (regression test)
+        assert pytest.approx(mean_prob_small) == expected_mean_small
+        assert pytest.approx(std_prob_small) == expected_std_small
+
+
 
 
 
