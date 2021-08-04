@@ -41,6 +41,7 @@ class AbstractCPT(BaseModel):
     pwp: Optional[Iterable]
     qt: Optional[Iterable]
     Qtn: Optional[Iterable]
+    Qtncs: Optional[Iterable]
     Fr: Optional[Iterable]
     IC: Optional[Iterable]
     n: Optional[Iterable]
@@ -50,6 +51,7 @@ class AbstractCPT(BaseModel):
     permeability: Optional[Iterable]
     poisson: Optional[Iterable]
     damping: Optional[Iterable]
+    psi: Optional[Iterable]
 
     pore_pressure_u1: Optional[Iterable]
     pore_pressure_u2: Optional[Iterable]
