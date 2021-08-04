@@ -41,6 +41,7 @@ class AbstractCPT(BaseModel):
     pwp: Optional[Iterable]
     qt: Optional[Iterable]
     Qtn: Optional[Iterable]
+    Qtncs: Optional[Iterable]
     Fr: Optional[Iterable]
     IC: Optional[Iterable]
     n: Optional[Iterable]
@@ -50,6 +51,7 @@ class AbstractCPT(BaseModel):
     permeability: Optional[Iterable]
     poisson: Optional[Iterable]
     damping: Optional[Iterable]
+    psi: Optional[Iterable]
 
     pore_pressure_u1: Optional[Iterable]
     pore_pressure_u2: Optional[Iterable]
@@ -256,11 +258,7 @@ class AbstractCPT(BaseModel):
     class Config:
         arbitrary_types_allowed = True
 
-    def get_interpretation_method(self, method) -> AbstractInterpretationMethod:
-        return method()
-
-    def interpret_cpt(self, method: Type[AbstractInterpretationMethod]):
-        method = self.get_interpretation_method(method)
+    def interpret_cpt(self, method: AbstractInterpretationMethod):
         method.interpret(self)
 
     def __calculate_corrected_depth(self) -> np.ndarray:

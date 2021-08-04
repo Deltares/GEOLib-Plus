@@ -60,7 +60,7 @@ class TestUtils:
         data from the tests. If it does not exist it creates it.
         """
         directory = TestUtils.get_test_data_dir(dir_name, TestUtils._name_output)
-        if not directory.is_file():
+        if not directory.exists():
             Path.mkdir(directory)
         return directory
 

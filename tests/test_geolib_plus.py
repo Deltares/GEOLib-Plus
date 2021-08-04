@@ -204,7 +204,7 @@ class TestGeolibPlusReading:
         cpt = GefCpt()
         cpt.read(gef_file)
         cpt.pre_process_data()
-        cpt.interpret_cpt(RobertsonCptInterpretation)
+        cpt.interpret_cpt(RobertsonCptInterpretation())
         print(cpt.lithology)
 
     @pytest.mark.systemtest
