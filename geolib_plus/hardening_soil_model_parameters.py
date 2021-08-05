@@ -64,6 +64,9 @@ class HardeningSoilModelParameters(BaseModel):
     K0_NC: Optional[Union[np.ndarray, float]] = None
     R_f: Optional[Union[np.ndarray, float]] = None
 
+    class Config:
+        arbitrary_types_allowed = True
+
     def check_if_available(self, attribute_name: str, calculation_type: str):
         if getattr(self, attribute_name) is None:
             raise AttributeError(
@@ -120,7 +123,7 @@ class HardeningSoilModelParameters(BaseModel):
                 * G_0
                 * 2
                 * (1 + self.v_ur)
-                * math.pow(self.sigma_ref_h / self.sigma_cpt_h, self.m)
+                * np.power(self.sigma_ref_h * (1 / self.sigma_cpt_h), self.m)
             )
 
             self.E_50_ref = self.E_ur_ref / 5
