@@ -12,7 +12,7 @@ class HardingSoilCalculationType(IntEnum):
 
 class HardeningSoilModelParameters(BaseModel):
     """
-    Class that calculates hardening soil parameters.
+    Class that calculates and stores parameters for the hardening soil model.
 
     Attributes
     ----------
@@ -76,7 +76,7 @@ class HardeningSoilModelParameters(BaseModel):
             )
 
     def calculate_stiffness(self, calculation_type: HardingSoilCalculationType) -> None:
-        """
+        r"""
         Function that calculates hardening soil parameters based on the two following calculation types
 
         Based on the compressibility parameters:
@@ -85,7 +85,10 @@ class HardeningSoilModelParameters(BaseModel):
 
             E_{oed,ref} = (\frac{ln(10)(1+e_{0})\sigma_{ref.v}}{C_{C}})
 
+        .. math::
+
             E_{ur,ref} = (\frac{ln(10)(1+e_{0})\sigma_{ref.v}}{C_{s}})(\frac{(1+v_{ur})(1-2v_{ur})}{(1-v_{ur})})
+
 
         Based on the cone resistance:
 
@@ -93,11 +96,18 @@ class HardeningSoilModelParameters(BaseModel):
 
             G_{0} = 10 q_{c}
 
+        .. math::
+
             E_{ur,ref} = 0.5G_{0}2(1+v_{ur}) (\frac{\sigma_{ref.h}}{\sigma_{cpt.v}})^m
+
+        .. math::
 
             E_{50,ref} = (\frac{E_{ur,ref}}{5})
 
+        .. math::
+
             E_{oed,ref} = E_{50,ref}
+
 
         """
         if calculation_type == HardingSoilCalculationType.COMPRESSIBILITYPARAMETERS:
