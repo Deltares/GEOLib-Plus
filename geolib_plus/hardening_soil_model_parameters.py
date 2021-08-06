@@ -138,4 +138,4 @@ class HardeningSoilModelParameters(BaseModel):
 
             self.E_50_ref = self.E_ur_ref / 5
 
-            self.E_oed_ref = self.E_50_ref
+            self.E_oed_ref = np.copy(self.E_50_ref)
