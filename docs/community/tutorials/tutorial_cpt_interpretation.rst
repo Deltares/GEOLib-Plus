@@ -27,12 +27,13 @@ The ocrmethod can be defined from the IntEnum class :class:`~geolib_plus.roberts
     from geolib_plus.robertson_cpt_interpretation import OCRMethod
     from geolib_plus.robertson_cpt_interpretation import ShearWaveVelocityMethod
     # do pre-processing
-    interpreter = RobertsonCptInterpretation
+    interpreter = RobertsonCptInterpretation()
     interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
     interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
     interpreter.ocrmethod = OCRMethod.MAYNE    
 
-With the GEOLIB+ interpreter the water level has to be defined to calculate the pore pressures. The water level is defined in method :func:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.pwp_level_calc`.
+With the GEOLIB+ interpreter the water level has to be defined to calculate the pore pressures. 
+The water level is defined in method :func:`~geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.pwp_level_calc`.
 There are two options when it comes to defining the water level.
 
 The water level can be user defined. To do that the user need to set the property to True user_defined_water_level.

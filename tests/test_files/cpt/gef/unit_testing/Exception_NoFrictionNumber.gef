@@ -5,8 +5,9 @@
 #COLUMN= 6
 #COLUMNINFO= 1, m, sondeerlengte, 1
 #COLUMNINFO= 2, MPa, Puntdruk, 2
+#COLUMNINFO= 3, Mpa, Lokale wrijving, 3
 #COLUMNINFO= 4, Mpa, Waterdruk schouder, 6
-#COLUMNINFO= 6, %, Wrijvingsgetal, 4
+#COLUMNINFO= 5, Graden(deg), Helling, 8
 #COMPANYID= Wiertsema & Partners, Tolbert, 31
 #DATAFORMAT= ASCII
 #COLUMNVOID= 1, -9999.000000
