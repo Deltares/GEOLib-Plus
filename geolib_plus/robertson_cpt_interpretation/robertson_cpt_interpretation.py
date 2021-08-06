@@ -728,7 +728,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         .. math::
 
-            Q_{tn,cs) = K_{c} \cdot Q_{tn}
+            Q_{tn,cs} = K_{c} \cdot Q_{tn}
 
         Where K_{c} is defined as follows:
 
@@ -755,24 +755,29 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         """
 
         # initialise K_c and Q_tncs as nan
-        K_c = np.ones(len(self.data.IC))*np.nan
-        self.data.Qtncs = np.ones(len(self.data.IC))*np.nan
+        K_c = np.ones(len(self.data.IC)) * np.nan
+        self.data.Qtncs = np.ones(len(self.data.IC)) * np.nan
 
         # if IC is lower than 1.64, K_c is 1.0
         K_c[self.data.IC <= 1.64] = 1.0
 
         # calculate K_c for when (1.64 < IC <= 2.5)
         mask = (1.64 < self.data.IC) * (self.data.IC <= 2.5)
-        K_c[mask] = 5.581 * self.data.IC[mask] ** 3 - 0.403 * self.data.IC[mask] ** 4 - 21.63 * self.data.IC[mask] ** 2 + \
-                    33.75 * self.data.IC[mask] - 17.88
+        K_c[mask] = (
+            5.581 * self.data.IC[mask] ** 3
+            - 0.403 * self.data.IC[mask] ** 4
+            - 21.63 * self.data.IC[mask] ** 2
+            + 33.75 * self.data.IC[mask]
+            - 17.88
+        )
 
         # calculate K_c for when (1.64 < IC <= 2.36) and Fr < 0.5
-        mask = (1.64 < self.data.IC)* (self.data.IC <= 2.36) * (self.data.Fr < 0.5)
+        mask = (1.64 < self.data.IC) * (self.data.IC <= 2.36) * (self.data.Fr < 0.5)
         K_c[mask] = 1.0
 
         # calculate K_c for when (2.5< IC <= 2.7)
         mask = (2.5 < self.data.IC) * (self.data.IC < 2.7)
-        K_c[mask] = (6e-7) * self.data.IC[mask]**16.76
+        K_c[mask] = (6e-7) * self.data.IC[mask] ** 16.76
 
         # calculate Qtncs
         self.data.Qtncs = K_c * self.data.Qtn
@@ -788,7 +793,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         """
 
         self.data.psi = 0.56 - 0.33 * np.log10(self.data.Qtncs)
-
 
     def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
         r"""

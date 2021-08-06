@@ -74,9 +74,7 @@ class SoftSoilCreepParameters(BaseModel):
     def calculate_soft_soil_parameters(self):
         r"""
 
-        Function that calculates hardening soil parameters based on the two following calculation types
-
-        Based on the compressibility parameters:
+        Function that calculates soft soil parameters according to Vermeer :cite:`vermeer_neher_2019`.
 
         .. math::
 
@@ -89,14 +87,18 @@ class SoftSoilCreepParameters(BaseModel):
         .. math::
 
             \mu^{*} = (\frac{C_{c}}{ln(10)})
+
+
         """
         attributes_to_be_checked = ["OCR", "K0_NC", "v_ur", "Cc", "Cs", "eo"]
         for attribute_name in attributes_to_be_checked:
             self.check_if_available(attribute_name)
-        self.lamda = self.Cc / np.log(10) * (1 / (1 + self.eo))
+        self.lamda = self.Cc * (1 / (np.log(10) * (1 + self.eo)))
         a = 2 * self.K0_NC + 1
         b = 1 - 1 / self.OCR
         c = (2 * self.v_ur) * (1 / (1 - self.v_ur)) + 1
-        d = 1 / np.log(a * (1 / (a * b * c)))
-        self.kappa = (self.Cs / np.log(10) * (1 / (1 + self.eo))) * np.log(self.OCR) * d
+        d = 1 / np.log(a * (1 / (a - (b * c))))
+        self.kappa = (
+            (self.Cs * (1 / (np.log(10) * (1 + self.eo)))) * np.log(self.OCR) * d
+        )
         self.mu = self.Ca / np.log(10)
