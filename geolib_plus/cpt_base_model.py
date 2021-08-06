@@ -41,6 +41,7 @@ class AbstractCPT(BaseModel):
     pwp: Optional[Iterable]
     qt: Optional[Iterable]
     Qtn: Optional[Iterable]
+    Qtncs: Optional[Iterable]
     Fr: Optional[Iterable]
     IC: Optional[Iterable]
     n: Optional[Iterable]
@@ -50,6 +51,7 @@ class AbstractCPT(BaseModel):
     permeability: Optional[Iterable]
     poisson: Optional[Iterable]
     damping: Optional[Iterable]
+    psi: Optional[Iterable]
 
     pore_pressure_u1: Optional[Iterable]
     pore_pressure_u2: Optional[Iterable]
@@ -470,6 +472,25 @@ class AbstractCPT(BaseModel):
             self.__correct_missing_samples_top_CPT(length_of_average_points)
         return
 
+    def calculate_friction_nbr_if_not_available(self):
+        """
+        Calculates friction number if it is not present in the the cpt input file. Friction number is calculated by
+        applying: sleeve friction / cone resistance * 100
+
+        """
+        if self.friction_nbr is None and self.tip is not None and self.friction is not None:
+
+            self.friction_nbr = np.zeros(len(self.tip))
+
+            # find indices where both tip resistance and sleeve friction are 0
+            non_zero_indices = (self.tip > 0) * (self.friction > 0)
+
+            # if both sleeve friction and tip resistance are greater than 0, calculate friction number
+            self.friction_nbr[non_zero_indices] = self.friction/self.tip * 100
+
+            self.friction_nbr = self.friction/self.tip * 100
+
+
     def pre_process_data(self):
         """
         Standard pre-processes data which is read from a gef file or bro xml file.
@@ -495,6 +516,8 @@ class AbstractCPT(BaseModel):
         self.tip = self.__correct_for_negatives(self.tip)
         self.friction = self.__correct_for_negatives(self.friction)
         self.friction_nbr = self.__correct_for_negatives(self.friction_nbr)
+
+        self.calculate_friction_nbr_if_not_available()
 
         self.__get_water_data()
 

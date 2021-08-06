@@ -877,6 +877,52 @@ class TestInterpreter:
         # Check if results are equal
         assert list(interpreter.data.lithology) == list(lithology_test)
 
+    @pytest.mark.unittest
+    def test_norm_cone_resistance_clean_sand_calc(self):
+        # initialise model
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # Define the input
+        interpreter.data.Qtn = np.array([1,1,1,1,1])
+        interpreter.data.Fr = np.array([1,1,0.1,1,1])
+        interpreter.data.IC = np.array([0.5,2,2,2.6,5])
+
+        # Call the function to be tested
+        interpreter.norm_cone_resistance_clean_sand_calc()
+
+        # set expected array
+        expected_K_c2 = 5.581 * 2**3 - 0.403 * 2 **4 - 21.63 * 2 **2 + 33.75 * 2 - 17.88
+        expected_K_c4 = 6e-7 * 2.6**16.76
+        expected_Qtncs = np.array([1,expected_K_c2,1,expected_K_c4,np.nan])
+
+        # Check if results are equal
+        np.testing.assert_array_almost_equal(interpreter.data.Qtncs, expected_Qtncs)
+
+    @pytest.mark.unittest
+    def test_state_parameter_calc(self):
+        # initialise model
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # Define the input
+        interpreter.data.Qtncs = np.array([10, 100, np.nan, -10])
+
+        # Call the function to be tested
+        interpreter.state_parameter_calc()
+
+        # set expected array
+        expected_psi = np.array([0.23, -0.1, np.nan, np.nan ])
+
+        # Check if results are equal
+        np.testing.assert_array_almost_equal(interpreter.data.psi, expected_psi)
+
     @pytest.mark.systemtest
     def test_pwp_level_calc(self):
         # initialise model

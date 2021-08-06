@@ -133,6 +133,12 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         # compute permeability
         self.permeability_calc()
 
+        # compute clean sand equivalent normalised cone resistance
+        self.norm_cone_resistance_clean_sand_calc()
+
+        # compute state parameter
+        self.state_parameter_calc()
+
         # filter values
         # lithologies = [""]
         # key = ""
@@ -714,6 +720,75 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
+
+    def norm_cone_resistance_clean_sand_calc(self):
+        """
+        Calculates the clean sand equivalent normalised cone resistance, following Robertson and Cabal
+        :cite:`robertson_cabal_2014`.
+
+        .. math::
+
+            Q_{tn,cs) = K_{c} \cdot Q_{tn}
+
+        Where K_{c} is defined as follows:
+
+        When  [$I_{c} \leq 1.64$]
+
+        .. math::
+
+            K_{c} = 1.0
+
+        When  [$1.64 < I_{c} \leq 2.5$]
+
+        .. math::
+            K_{c} = 5.58 I_{c}^{3} - 0.403 I_{c}^{4} - 21.63 I_{c}^{2} + 33.65 I_{c} - 17.88
+
+        When  [$1.64 < I_{c} <2.36$] and [$F_{r} < 0.5%$]
+
+        .. math::
+            K_{c} = 1.0
+
+        When  [$2.5 < I_{c} <2.7$]
+
+        .. math::
+            K_{c} = 6 * 10^{-7} ( I_{c}^{16.76}
+        """
+
+        # initialise K_c and Q_tncs as nan
+        K_c = np.ones(len(self.data.IC))*np.nan
+        self.data.Qtncs = np.ones(len(self.data.IC))*np.nan
+
+        # if IC is lower than 1.64, K_c is 1.0
+        K_c[self.data.IC <= 1.64] = 1.0
+
+        # calculate K_c for when (1.64 < IC <= 2.5)
+        mask = (1.64 < self.data.IC) * (self.data.IC <= 2.5)
+        K_c[mask] = 5.581 * self.data.IC[mask] ** 3 - 0.403 * self.data.IC[mask] ** 4 - 21.63 * self.data.IC[mask] ** 2 + \
+                    33.75 * self.data.IC[mask] - 17.88
+
+        # calculate K_c for when (1.64 < IC <= 2.36) and Fr < 0.5
+        mask = (1.64 < self.data.IC)* (self.data.IC <= 2.36) * (self.data.Fr < 0.5)
+        K_c[mask] = 1.0
+
+        # calculate K_c for when (2.5< IC <= 2.7)
+        mask = (2.5 < self.data.IC) * (self.data.IC < 2.7)
+        K_c[mask] = (6e-7) * self.data.IC[mask]**16.76
+
+        # calculate Qtncs
+        self.data.Qtncs = K_c * self.data.Qtn
+
+    def state_parameter_calc(self):
+        """
+        Calculates state parameter from relationship with clean sand equivalent normalised cone resistance
+        :cite:`robertson_2010`.
+
+        .. math::
+
+            \psi =0.56 - 0.33 log(Q_{tn,cs})
+        """
+
+        self.data.psi = 0.56 - 0.33 * np.log10(self.data.Qtncs)
+
 
     def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
         r"""

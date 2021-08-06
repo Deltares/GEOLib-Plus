@@ -450,8 +450,8 @@ class TestReadGef:
             ),
             pytest.param(
                 "cpt/gef/unit_testing/Exception_NoFrictionNumber.gef",
-                "Key friction is not defined in the gef file",
-                id="no num",
+                "Key friction_nb is not defined in the gef file",
+                id="friction_nb",
             ),
         ],
     )
