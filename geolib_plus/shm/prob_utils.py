@@ -1,7 +1,6 @@
 
 # import packages
 
-from typing import Iterable
 from pydantic import BaseModel
 
 import numpy as np
@@ -14,6 +13,9 @@ class ProbUtils(BaseModel):
     Class contains probabilistic utilities for parameter determination following the methodology as described in
     :cite: `meer_2019`.
     """
+
+    class Config:
+        arbitrary_types_allowed = True
 
     @staticmethod
     def calculate_student_t_factor(ndof: int, quantile: float) -> float:
@@ -67,7 +69,7 @@ class ProbUtils(BaseModel):
         return corrected_std
 
     @staticmethod
-    def calculate_prob_parameters_from_lognormal(data: Iterable, is_local: bool, quantile=0.05):
+    def calculate_prob_parameters_from_lognormal(data: np.ndarray, is_local: bool, quantile=0.05):
         r"""
         Calculates probabilistic parameters mu and sigma from a lognormal dataset, as required in D-stability. This
         function takes into account spread reduction factor and the student t factor.
@@ -110,7 +112,7 @@ class ProbUtils(BaseModel):
         return mean, std
 
     @staticmethod
-    def get_log_mean_std_from_normal(mean, std):
+    def get_log_mean_std_from_normal(mean: float, std: float):
         """
         Calculates mean and standard deviation of LN(X) from the mean and std of X
 
@@ -125,7 +127,7 @@ class ProbUtils(BaseModel):
         return log_mean, log_std
 
     @staticmethod
-    def calculate_log_stats(data: Iterable):
+    def calculate_log_stats(data: np.ndarray):
         """
         Calculates mean and std of LN(X)
 
@@ -138,7 +140,7 @@ class ProbUtils(BaseModel):
         return log_mean, log_std
 
     @staticmethod
-    def calculate_normal_stats(data: Iterable):
+    def calculate_normal_stats(data: np.ndarray):
         """
         Calculates mean and std of X
 
@@ -151,7 +153,7 @@ class ProbUtils(BaseModel):
         return mean, std
 
     @staticmethod
-    def calculate_characteristic_value_from_dataset(data: Iterable, is_local: bool, is_low: bool,
+    def calculate_characteristic_value_from_dataset(data: np.ndarray, is_local: bool, is_low: bool,
                                                     is_log_normal: bool = True, char_quantile: float = 0.05):
         r"""
         Calculates the characteristic value of the dataset. A normal distribution or a lognormal distribution can be
