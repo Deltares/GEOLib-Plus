@@ -8,7 +8,7 @@ from geolib_plus.relative_density_correlated_parametes import (
 
 
 class TestRelativeDensityCorrelatedParameters:
-    @pytest.mark.systemtest
+    @pytest.mark.unittest
     def test_calculate_using_RD(self):
         # define relative density as float
         RD = 100

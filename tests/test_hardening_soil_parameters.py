@@ -10,7 +10,7 @@ from geolib_plus.hardening_soil_model_parameters import (
 
 
 class TestHardeningSoilParameters:
-    @pytest.mark.systemtest
+    @pytest.mark.unittest
     def test_calculate_stiffness_compressibility_parameters_input(self):
         # define inputs for the model as floats
         eo = 0.8
@@ -34,7 +34,7 @@ class TestHardeningSoilParameters:
             math.log(10) * (1 + eo) * sigma_ref_v / Cs
         ) * ((1 + v_ur) * (1 - 2 * v_ur) / (1 - v_ur))
 
-    @pytest.mark.systemtest
+    @pytest.mark.unittest
     def test_calculate_stiffness_cone_resistance(self):
         # define inputs for the model as floats
         # some of the inputs could come from the cpt so they might be

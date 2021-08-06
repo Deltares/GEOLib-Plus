@@ -12,8 +12,8 @@ class RelativeDensityCorrelatedParameters(BaseModel):
 
     Attributes
     ----------
-    RD : Optional[Union[np.ndarray, float]]
-        relative density of soil
+    RD_percentage : Optional[Union[np.ndarray, float]]
+        relative density of soil in percentage
     gamma_unsat : Optional[Union[np.ndarray, float]]
         unsaturated unit weight of soil
     gamma_sat : Optional[Union[np.ndarray, float]]
@@ -36,7 +36,7 @@ class RelativeDensityCorrelatedParameters(BaseModel):
         dilation angle
     """
 
-    RD: Union[np.ndarray, float]
+    RD_percentage: Union[np.ndarray, float]
     gamma_unsat: Union[np.ndarray, float]
     gamma_sat: Union[np.ndarray, float]
     E_50_ref: Union[np.ndarray, float]
@@ -52,7 +52,7 @@ class RelativeDensityCorrelatedParameters(BaseModel):
         arbitrary_types_allowed = True
 
     @classmethod
-    def calculate_using_RD(cls, RD: Union[np.ndarray, float]):
+    def calculate_using_RD(cls, RD_percentage: Union[np.ndarray, float]):
         r"""
         This method creates class that stores all parameters calculated with the input of RD,
         using the following equations :cite:`Brinkgreve_2010`
@@ -96,19 +96,19 @@ class RelativeDensityCorrelatedParameters(BaseModel):
 
         """
 
-        gamma_unsat = 15 + 4 * RD / 100
-        gamma_sat = 19 + 1.6 * RD / 100
-        E_50_ref = 60000 * RD / 100
-        E_oed_ref = 60000 * RD / 100
-        E_ur_ref = 180000 * RD / 100
-        G_o_ref = 60000 + 68000 * RD / 100
-        m = 0.7 - RD / 320
-        R_f = 1 - RD / 800
-        phi = 28 + 12.5 * RD / 100
-        psi = -2 + 12.5 * RD / 100
+        gamma_unsat = 15 + 4 * RD_percentage / 100
+        gamma_sat = 19 + 1.6 * RD_percentage / 100
+        E_50_ref = 60000 * RD_percentage / 100
+        E_oed_ref = 60000 * RD_percentage / 100
+        E_ur_ref = 180000 * RD_percentage / 100
+        G_o_ref = 60000 + 68000 * RD_percentage / 100
+        m = 0.7 - RD_percentage / 320
+        R_f = 1 - RD_percentage / 800
+        phi = 28 + 12.5 * RD_percentage / 100
+        psi = -2 + 12.5 * RD_percentage / 100
 
         return cls(
-            RD=RD,
+            RD_percentage=RD_percentage,
             gamma_sat=gamma_sat,
             gamma_unsat=gamma_unsat,
             E_50_ref=E_50_ref,

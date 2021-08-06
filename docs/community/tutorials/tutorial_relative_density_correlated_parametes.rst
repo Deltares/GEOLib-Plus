@@ -7,7 +7,8 @@ Part of the GEOLIB+ package is also a module that can determine certain paramete
 used as input of Relative Density(RD). To do that the user must used the 
 :func:`~geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.calculate_using_RD`
 method to initialize the RD class and calculate all relevant parameters. The method
-is pretty straight forward as it can be seen in the code block bellow.
+is pretty straight forward as it can be seen in the code block bellow. Note that relative density
+is expressed as a percentage.
 
     .. code-block:: python
 
@@ -24,7 +25,7 @@ is pretty straight forward as it can be seen in the code block bellow.
 The user can also choose an array input for the value of relative density. That would lead also to array outputs.
 
     .. code-block:: python
-    
+
         from geolib_plus.relative_density_correlated_parametes import RelativeDensityCorrelatedParameters
         import numpy as np
         
