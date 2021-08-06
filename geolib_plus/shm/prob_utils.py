@@ -10,11 +10,15 @@ from scipy.stats import norm
 
 
 class ProbUtils(BaseModel):
+    """
+    Class contains probabilistic utilities for parameter determination following the methodology as described in
+    :cite: `meer_2019`.
+    """
 
     @staticmethod
     def calculate_student_t_factor(ndof: int, quantile: float) -> float:
         """
-        Gets student t factor from student t distribution
+        Gets student t factor from student t distribution at a specific quantile.
 
         :param ndof: number of degrees of freedom
         :param quantile: quantile where the student t factor should be calculated
@@ -25,9 +29,24 @@ class ProbUtils(BaseModel):
 
     @staticmethod
     def correct_std_with_student_t(ndof: int, quantile: float, std: float, a: float = 0) -> float:
-        """
+        r"""
         Calculates corrected standard deviation at a quantile with the student-t factor. This includes an optional
         spread reduction factor.
+
+        The corrected standard deviation is calculated as follows:
+
+        .. math::
+
+            \sigma_{ln(x).prob} \approx  \frac{T^{0.05}_{n-1}}{u^{0.05}} \cdot \sigma_{ln(x)} \cdot \sqrt{(1-a) + \frac{1}{n}}
+
+        where:
+
+        $T^{0.05}_{n-1}$ is the student t factor at 5\percent quantile with n-1 degrees of freedom
+
+        $u^{0.05}$ is the value of the standard normal distribution at the 5 \percent quantile
+
+        $a$ is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local
+
 
         :param ndof: number of degrees of freedom
         :param quantile: quantile where the student t factor should be calculated
@@ -49,9 +68,13 @@ class ProbUtils(BaseModel):
 
     @staticmethod
     def calculate_prob_parameters_from_lognormal(data: Iterable, is_local: bool, quantile=0.05):
-        """
+        r"""
         Calculates probabilistic parameters mu and sigma from a lognormal dataset, as required in D-stability. This
-        function takes into account spread reduction factor and the student t factor
+        function takes into account spread reduction factor and the student t factor.
+
+        Firstly the standard deviation of LN(X) is corrected for the number of test samples and type of samples (local
+        or regional), secondly, the mean and standard deviation of X are calculated from the mean and corrected standard
+        deviation of LN(X)
 
         :param data: dataset, X
         :param is_local: true if data collection is local, false if data collection is regional
@@ -70,7 +93,6 @@ class ProbUtils(BaseModel):
         mean_prob, std_prob = ProbUtils.get_mean_std_from_lognormal(log_mean, corrected_std)
 
         return mean_prob, std_prob
-
 
     @staticmethod
     def get_mean_std_from_lognormal(log_mean: float, log_std: float):
@@ -131,10 +153,22 @@ class ProbUtils(BaseModel):
     @staticmethod
     def calculate_characteristic_value_from_dataset(data: Iterable, is_local: bool, is_low: bool,
                                                     is_log_normal: bool = True, char_quantile: float = 0.05):
-        """
+        r"""
         Calculates the characteristic value of the dataset. A normal distribution or a lognormal distribution can be
         assumed for the dataset. The student-t distribution is taken into account. And the spread reduction factor is
-        taken into account
+        taken into account.
+
+        The characteristic value is calculated as follows:
+
+         .. math::
+
+            x_{kar} = exp(\mu_{ln(x)} \pm T^{0.05}_{n-1} \cdot \sigma_{ln(x)} \cdot \sqrt{(1-a) + \frac{1}{n}}
+
+        where $x_{kar}$ is the characteristic value
+
+        $T^{0.05}_{n-1}$ is the student t factor at 5\percent quantile with n-1 degrees of freedom
+
+        $a$ is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local
 
         :param data: dataset, X
         :param is_local: true if data collection is local, false if data collection is regional
