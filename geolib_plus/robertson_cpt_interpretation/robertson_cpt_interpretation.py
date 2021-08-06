@@ -38,6 +38,12 @@ class ShearWaveVelocityMethod(IntEnum):
     AHMED = 5
 
 
+class RelativeDensityMethod(IntEnum):
+    BALDI = 1
+    KULHAWY = 2
+    KULHAWY_SIMPLE = 3
+
+
 class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     r"""
     Robertson soil classification.
@@ -157,9 +163,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         return self.data
 
     def soil_types(
-        self,
-        path_shapefile: Path = Path("resources"),
-        model_name: str = "Robertson",
+            self,
+            path_shapefile: Path = Path("resources"),
+            model_name: str = "Robertson",
     ):
         r"""
         Function that read shapes from shape file and passes them as Polygons.
@@ -265,10 +271,10 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 )
 
     def gamma_calc(
-        self,
-        method: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
-        gamma_min: float = 10.5,
-        gamma_max: float = 22,
+            self,
+            method: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
+            gamma_min: float = 10.5,
+            gamma_max: float = 22,
     ):
         r"""
         Computes unit weight.
@@ -301,9 +307,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         # calculate unit weight according to Robertson & Cabal 2015
         if method == UnitWeightMethod.ROBERTSON:
             aux = (
-                0.27 * np.log10(self.data.friction_nbr)
-                + 0.36 * np.log10(np.array(self.data.qt) / self.data.Pa)
-                + 1.236
+                    0.27 * np.log10(self.data.friction_nbr)
+                    + 0.36 * np.log10(np.array(self.data.qt) / self.data.Pa)
+                    + 1.236
             )
             # set lower limit
             aux = ceil_value(aux, gamma_min / self.data.g)
@@ -461,12 +467,12 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         # IC: following Robertson and Cabal (2015)
         # compute IC
         self.data.IC = (
-            (3.47 - np.log10(self.data.Qtn)) ** 2.0
-            + (np.log10(self.data.Fr) + 1.22) ** 2.0
-        ) ** 0.5
+                               (3.47 - np.log10(self.data.Qtn)) ** 2.0
+                               + (np.log10(self.data.Fr) + 1.22) ** 2.0
+                       ) ** 0.5
 
     def vs_calc(
-        self, method: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
+            self, method: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
     ):
         r"""
         Shear wave velocity and shear modulus. The following methods are available:
@@ -524,11 +530,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         elif method == ShearWaveVelocityMethod.ANDRUS:
             # vs: following Andrus (2007)
             vs = (
-                2.27
-                * self.data.qt ** 0.412
-                * self.data.IC ** 0.989
-                * self.data.depth ** 0.033
-                * 1
+                    2.27
+                    * self.data.qt ** 0.412
+                    * self.data.IC ** 0.989
+                    * self.data.depth ** 0.033
+                    * 1
             )
             self.data.vs = ceil_value(vs, 0)
 
@@ -536,29 +542,29 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         elif method == ShearWaveVelocityMethod.ZANG:
             # vs: following Zang & Tong (2017)
             vs = (
-                10.915
-                * self.data.qt ** 0.317
-                * self.data.IC ** 0.210
-                * self.data.depth ** 0.057
-                * 0.92
+                    10.915
+                    * self.data.qt ** 0.317
+                    * self.data.IC ** 0.210
+                    * self.data.depth ** 0.057
+                    * 0.92
             )
             self.data.vs = ceil_value(vs, 0)
 
             self.data.G0 = self.data.rho * self.data.vs ** 2
         elif method == ShearWaveVelocityMethod.AHMED:
             vs = (
-                1000.0
-                * np.exp(-0.887 * self.data.IC)
-                * (
-                    1.0
-                    + 0.443
-                    * self.data.Fr
-                    * self.data.effective_stress
-                    / self.data.Pa
-                    * self.data.g
-                    / self.gamma
-                )
-                ** 0.5
+                    1000.0
+                    * np.exp(-0.887 * self.data.IC)
+                    * (
+                            1.0
+                            + 0.443
+                            * self.data.Fr
+                            * self.data.effective_stress
+                            / self.data.Pa
+                            * self.data.g
+                            / self.gamma
+                    )
+                    ** 0.5
             )
             self.data.vs = ceil_value(vs, 0)
             self.data.G0 = self.data.rho * self.data.vs ** 2
@@ -577,13 +583,13 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.E0 = 2 * self.data.G0 * (1 + self.data.poisson)
 
     def damp_calc(
-        self,
-        method: OCRMethod = OCRMethod.MAYNE,
-        d_min: float = 2,
-        Cu: float = 2.0,
-        D50: float = 0.2,
-        Ip: float = 40.0,
-        freq: float = 1.0,
+            self,
+            method: OCRMethod = OCRMethod.MAYNE,
+            d_min: float = 2,
+            Cu: float = 2.0,
+            D50: float = 0.2,
+            Ip: float = 40.0,
+            freq: float = 1.0,
     ):
         r"""
         Damping calculation.
@@ -623,38 +629,38 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         for i, lithology_index in enumerate(self.data.lithology):
             # if  clay
             if (
-                lithology_index == "3"
-                or lithology_index == "4"
-                or lithology_index == "5"
+                    lithology_index == "3"
+                    or lithology_index == "4"
+                    or lithology_index == "5"
             ):
                 if method == OCRMethod.MAYNE:
                     OCR[i] = (
-                        0.33
-                        * (self.data.qt[i] - self.data.total_stress[i])
-                        / self.data.effective_stress[i]
+                            0.33
+                            * (self.data.qt[i] - self.data.total_stress[i])
+                            / self.data.effective_stress[i]
                     )
                 elif method == OCRMethod.ROBERTSON:
                     OCR[i] = 0.25 * self.data.Qtn[i] ** 1.25
 
                 self.data.damping[i] = (
-                    (0.8005 + 0.0129 * Ip * OCR[i] ** (-0.1069))
-                    * (self.data.effective_stress[i] / self.data.Pa) ** (-0.2889)
-                    * (1 + 0.2919 * np.log(freq))
+                        (0.8005 + 0.0129 * Ip * OCR[i] ** (-0.1069))
+                        * (self.data.effective_stress[i] / self.data.Pa) ** (-0.2889)
+                        * (1 + 0.2919 * np.log(freq))
                 )
 
             # if peat
             elif lithology_index == "1" or lithology_index == "2":
                 # same as clay: OCR=1 IP=100
                 self.data.damping[i] = (
-                    2.512 * (self.data.effective_stress[i] / self.data.Pa) ** -0.2889
+                        2.512 * (self.data.effective_stress[i] / self.data.Pa) ** -0.2889
                 )
             # if sand
             else:
                 self.data.damping[i] = (
-                    0.55
-                    * Cu ** 0.1
-                    * D50 ** -0.3
-                    * (self.data.effective_stress[i] / self.data.Pa) ** -0.08
+                        0.55
+                        * Cu ** 0.1
+                        * D50 ** -0.3
+                        * (self.data.effective_stress[i] / self.data.Pa) ** -0.08
                 )
 
         # limit the damping (when stress is zero damping is infinite)
@@ -720,6 +726,72 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
+
+    def relative_density_calc(self, method: RelativeDensityMethod, c_0: Union[np.ndarray, float] = 15.7,
+                              c_2: Union[np.ndarray, float] = 2.41, Q_c: Union[np.ndarray, float] = 1,
+                              OCR: Union[np.ndarray, float] = 1, age: Union[np.ndarray, float] = 1000):
+        """
+        Computes relative density. Following methods described in Robertson :cite:`robertson_cabal_2014`. This method
+        calculates the relative density for all the non cohesive soils along the whole cpt, i.e. RD is calculated when
+        the lithology index is either 6, 7, 8 or 9.
+
+        The relative density can be computed according to Baldi :cite: `baldi_1989` or
+        Kulhawy and Mayne :cite: `kulhawy_1990`. Furthermore Kulhawy method can be simplified for most young,
+        uncemented-based sands.
+
+        .. math::
+
+            RD_{Baldi} = (\frac{1}{C_{2})LN(\frac{Q_{cn}}{C_{0}})
+
+            RD_{Kulhawy}^{2} = \frac{Q_{cn}}{305 Q_{c} Q_{ocr} Q_{A}}
+
+            Q_{ocr} = OCR^{0.18}
+
+            Q_{A} = 1.2 + 0.05log(age/100)
+
+            RD_{Kulhawy_simple}^{2} = \frac{Q_{tn}}{350}
+
+        :param method: Method for calculation of relative density.
+        :param c_0: (optional float or np array) soil constant for Baldi method. Default is 15.7
+        :param c_2: (optional float or np array) soil constant for Baldi method. Default is 2.41
+        :param Q_c: (optional float or np array) compressibility factor, 0.9 for low compressibility, 1.1 for
+                    high compressibility. Default is 1.0
+        :param OCR: (optional float or np array) Over consolidation ratio. Default = 1.0
+        :param age: (optional float or np array) age of the soil in years. Default is 1000
+
+        """
+
+        self.data.relative_density = np.ones(len(self.data.qt)) * np.nan
+        if method == RelativeDensityMethod.BALDI:
+            # calculate normalised cpt resistance, corrected for overburden pressure
+            Q_cn = (self.data.qt / self.data.Pa) / (self.data.effective_stress / self.data.Pa) ** 0.5
+
+            # calculate rd if Q_cn > c_0
+            mask = Q_cn > c_0
+            self.data.relative_density[mask] = (1 / c_2 * np.log(Q_cn / c_0))[mask]
+
+        elif method == RelativeDensityMethod.KULHAWY:
+            # calculate normalised cpt resistance, corrected for overburden pressure
+            Q_cn = (self.data.qt / self.data.Pa) / (self.data.effective_stress / self.data.Pa) ** 0.5
+
+            # calculate overconsolidation factor
+            Q_ocr = OCR ** 0.18
+
+            # calculate aging factor
+            Q_a = 1.2 + 0.05 * np.log10(age / 100)
+            self.data.relative_density = np.sqrt(Q_cn / (305 * Q_c * Q_ocr * Q_a))
+
+        elif method == RelativeDensityMethod.KULHAWY_SIMPLE:
+            # method Kulhawy simple, valid for most young, uncemented silica based sands
+            self.data.relative_density = np.sqrt(self.data.Qtn / 350)
+
+        # check if soil is non cohesive
+        is_non_cohesive = (self.data.lithology == "6") + (self.data.lithology == "7") \
+                          + (self.data.lithology == "8") + (self.data.lithology == "9")
+
+        # dispose_cohesive_soils. This order of removing the non cohesive soils is chosen, such that the above formulas
+        # accept both floats and np arrays as inputs.
+        self.data.relative_density[~is_non_cohesive] = np.nan
 
     def norm_cone_resistance_clean_sand_calc(self):
         """
@@ -863,7 +935,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         # delete all attributes
         for att in attributes:
-            setattr(self, att, getattr(self, att)[idx_to_delete[-1] + 1 :])
+            setattr(self, att, getattr(self, att)[idx_to_delete[-1] + 1:])
 
         # correct depth
         self.data.depth -= self.data.depth[0]
