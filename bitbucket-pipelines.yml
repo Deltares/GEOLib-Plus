@@ -16,7 +16,7 @@ pipelines:
           - pip
         script: # Modify the commands below to build your repository.
           - pip install -r requirements.txt
-          - pip install tests\test_files\geolib_package\geolib-0.1.5-py3-none-any.whl
+          - pip install tests/test_files/geolib_package/geolib-0.1.5-py3-none-any.whl
     - parallel:
         - step: # Run unittest
             name: Run unittest and codecoverage.
@@ -38,7 +38,7 @@ pipelines:
               - pip
             script:
               - pip install -r requirements.txt
-              - pip install tests\test_files\geolib_package\geolib-0.1.5-py3-none-any.whl
+              - pip install tests/test_files/geolib_package/geolib-0.1.5-py3-none-any.whl
               - pytest -v --junitxml=test-reports/report_system.xml tests/ -m "systemtest and not workinprogress"
   branches:
     master:
@@ -48,7 +48,7 @@ pipelines:
             - pip
           script:
             - pip install -r requirements.txt
-            - pip install tests\test_files\geolib_package\geolib-0.1.5-py3-none-any.whl
+            - pip install tests/test_files/geolib_package/geolib-0.1.5-py3-none-any.whl
       - parallel:
           - step: # Run tests with code coverage for unittest
               name: Run tests and code coverage.
