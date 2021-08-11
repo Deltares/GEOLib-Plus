@@ -3,6 +3,7 @@ from geolib_plus.robertson_cpt_interpretation import (
     UnitWeightMethod,
     OCRMethod,
     ShearWaveVelocityMethod,
+    RelativeDensityMethod
 )
 from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.bro_xml_cpt import BroXmlCpt
@@ -59,7 +60,7 @@ class TestIntergration:
         gef_cpt.pre_process_data()
         bro_cpt.pre_process_data()
         # initialise interpretation model
-        robertson = RobertsonCptInterpretation
+        robertson = RobertsonCptInterpretation()
         robertson.unitweightmethod = UnitWeightMethod.ROBERTSON
         # interpet the results
         gef_cpt.interpret_cpt(robertson)
@@ -127,7 +128,7 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
         interpreter.ocrmethod = OCRMethod.MAYNE
@@ -157,7 +158,7 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
         interpreter.ocrmethod = OCRMethod.ROBERTSON
@@ -187,7 +188,7 @@ class TestInterpreter:
         # do pre-processing
         cpt.pre_process_data()
         # initialise interpretation model
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
         interpreter.ocrmethod = OCRMethod.MAYNE
@@ -876,6 +877,135 @@ class TestInterpreter:
 
         # Check if results are equal
         assert list(interpreter.data.lithology) == list(lithology_test)
+
+    @pytest.fixture
+    def set_up_relative_density_test(self):
+        # initialise model
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+
+        # Define the input
+        interpreter.data.tip = np.array([1, 1, 1, 1])
+        interpreter.data.qt = np.array([20000, 20000, 20000, 20000])
+        interpreter.data.friction_nbr = np.array([1, 1, 1, 1])
+        interpreter.data.friction = np.array([1, 1, 1, 1])
+        interpreter.data.effective_stress = np.array([10000, 10000, 10000, 10000])
+        interpreter.data.total_stress = np.array([2, 2, 2, 2])
+        interpreter.data.Qtn = np.array([1, 1, 1, 1])
+        interpreter.data.Fr = np.array([1, 1, 1, 1])
+        interpreter.data.Pa = 100
+        interpreter.data.lithology = np.array(["1", "2", "6", "7"])
+
+        return interpreter
+
+    @pytest.mark.unittest
+    def test_relative_density_calc_baldi(self,set_up_relative_density_test ):
+
+        # define method
+        method = RelativeDensityMethod.BALDI
+
+        # get test data
+        interpreter = set_up_relative_density_test
+
+        # calculate relative density
+        interpreter.relative_density_calc(method)
+
+        # get expected value
+        expected_rd_value = 1 / 2.41 * np.log(20/ 15.7)
+        expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
+
+        # assert
+        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+
+    @pytest.mark.unittest
+    def test_relative_density_calc_kulhawy(self, set_up_relative_density_test):
+
+        # define method
+        method = RelativeDensityMethod.KULHAWY
+
+        # get test data
+        interpreter = set_up_relative_density_test
+
+        # calculate relative density
+        interpreter.relative_density_calc(method)
+
+        # get expected value
+        expected_rd_value = np.sqrt(20/(305*1*1**0.18*(1.2+0.05*np.log10(10))))
+        expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
+
+        # assert
+        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+
+    @pytest.mark.unittest
+    def test_relative_density_calc_kulhawy_simple(self, set_up_relative_density_test):
+
+        # define method
+        method = RelativeDensityMethod.KULHAWY_SIMPLE
+
+        # get test data
+        interpreter = set_up_relative_density_test
+        interpreter.data.Qtn = np.ones(4) * 20
+
+        # calculate relative density
+        interpreter.relative_density_calc(method)
+
+        # get expected value
+        expected_rd_value = np.sqrt(20/350)
+        expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
+
+        # assert
+        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+
+    @pytest.mark.unittest
+    def test_norm_cone_resistance_clean_sand_calc(self):
+        # initialise model
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # Define the input
+        interpreter.data.Qtn = np.array([1,1,1,1,1])
+        interpreter.data.Fr = np.array([1,1,0.1,1,1])
+        interpreter.data.IC = np.array([0.5,2,2,2.6,5])
+
+        # Call the function to be tested
+        interpreter.norm_cone_resistance_clean_sand_calc()
+
+        # set expected array
+        expected_K_c2 = 5.581 * 2**3 - 0.403 * 2 **4 - 21.63 * 2 **2 + 33.75 * 2 - 17.88
+        expected_K_c4 = 6e-7 * 2.6**16.76
+        expected_Qtncs = np.array([1,expected_K_c2,1,expected_K_c4,np.nan])
+
+        # Check if results are equal
+        np.testing.assert_array_almost_equal(interpreter.data.Qtncs, expected_Qtncs)
+
+    @pytest.mark.unittest
+    def test_state_parameter_calc(self):
+        # initialise model
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # Define the input
+        interpreter.data.Qtncs = np.array([10, 100, np.nan, -10])
+
+        # Call the function to be tested
+        interpreter.state_parameter_calc()
+
+        # set expected array
+        expected_psi = np.array([0.23, -0.1, np.nan, np.nan ])
+
+        # Check if results are equal
+        np.testing.assert_array_almost_equal(interpreter.data.psi, expected_psi)
 
     @pytest.mark.systemtest
     def test_pwp_level_calc(self):
