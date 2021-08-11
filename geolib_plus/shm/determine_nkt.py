@@ -4,91 +4,275 @@ from typing import Optional, Iterable, List, Type, Union
 from pydantic import BaseModel
 from copy import deepcopy
 import numpy as np
-import math
+
+from geolib_plus.shm.prob_utils import ProbUtils
 
 from scipy.optimize import minimize as sc_minimize
 
-class DetermineNkt:
-    nkt_mean: Optional[Union[np.ndarray, float]]
-    nkt_std: Optional[Union[np.ndarray, float]]
-    nkt_vc: Optional[Union[np.ndarray, float]]
 
-    __nkt_std: Optional[Union[np.ndarray, float]]
-    __nkt_vc: Optional[Union[np.ndarray, float]]
+class NktUtils(BaseModel):
+    """
+    This class contains utility functions which are used to determine Nkt and the characteristic value and probabilistic
+    parameters.
+    """
 
-    class Config:
-        arbitrary_types_allowed = True
+    @staticmethod
+    def get_default_nkt(is_saturated: Optional[Union[np.ndarray, bool]]) \
+            -> (Union[np.ndarray, bool], Union[np.ndarray, bool]):
+        r"""
+        Gets default Nkt values.
 
-    @property
-    def nkt_std(self):
-        return self.__nkt_std
+        For saturated soil: mean Nkt is 20 and variation coefficient is 0.25
+        For unsaturated soil: mean Nkt is 60 and variation coefficient is 0.25
 
-    @nkt_std.setter
-    def nkt_std(self, nkt_std):
-        self.__nkt_vc = nkt_std / self.nkt_mean
-        self.__nkt_std = nkt_std
 
-    @property
-    def nkt_vc(self):
-        return self.__nkt_vc
+        :param is_saturated: boolean or numpy array with booleans which indicate of the soil/soils is/are saturated
 
-    @nkt_vc.setter
-    def nkt_vc(self, nkt_vc):
-        self.__nkt_std = nkt_vc * self.nkt_mean
-        self.__nkt_vc = nkt_vc
+        :return: mean of Nkt, std of Nkt
+        """
 
-    def get_default_nkt(self, is_saturated: Optional[Union[np.ndarray, bool]]):
-
+        # set mean and variation coefficient values of nkt
         saturated_nkt_mean = 20
         saturated_nkt_vc = 0.25
         unsaturated_nkt_mean = 60
         unsaturated_nkt_vc = 0.25
 
+        # set singular Nkt mean and variation coefficient
         if isinstance(is_saturated, bool):
             if is_saturated:
-                self.nkt_mean = saturated_nkt_mean
-                self.nkt_vc = saturated_nkt_vc
+                nkt_mean = saturated_nkt_mean
+                nkt_vc = saturated_nkt_vc
             else:
-                self.nkt_mean = unsaturated_nkt_mean
-                self.nkt_vc = unsaturated_nkt_vc
+                nkt_mean = unsaturated_nkt_mean
+                nkt_vc = unsaturated_nkt_vc
 
+        # set np array of Nkt means and variation coefficients
         else:
-            self.nkt_mean = np.zeros(len(is_saturated))
-            self.nkt_vc = np.zeros(len(is_saturated))
+            nkt_mean = np.zeros(len(is_saturated))
+            nkt_vc = np.zeros(len(is_saturated))
 
-            self.nkt_mean[is_saturated] = saturated_nkt_mean
-            self.nkt_vc[is_saturated] = saturated_nkt_vc
+            nkt_mean[is_saturated] = saturated_nkt_mean
+            nkt_vc[is_saturated] = saturated_nkt_vc
 
-            self.nkt_mean[~is_saturated] = unsaturated_nkt_mean
-            self.nkt_vc[~is_saturated] = unsaturated_nkt_vc
+            nkt_mean[~is_saturated] = unsaturated_nkt_mean
+            nkt_vc[~is_saturated] = unsaturated_nkt_vc
+
+        # calculate Nkt standard deviation
+        nkt_std = nkt_mean * nkt_vc
+
+        return nkt_mean, nkt_std
+
+    @staticmethod
+    def get_nkt_stats_from_weighted_regression(su: Iterable, q_net: Iterable) -> (float, float):
+        r"""
+        Gets Nkt statistics from weighted regression. With this method, the mean of Nkt and the variation coefficient
+        of q_net/Nkt are found through weighted regression where the variation coefficient is minimised.
+
+        The function to be minimised is:
+
+        .. math::
+
+            V_{\frac{q_{net}}{N_{kt}}.tot} = \sqrt{\frac{\sum{(\frac{s_{u,i} \cdot \mu_{N_{kt}}}{q_{net,i}} -1)^{2}{n-1}}
 
 
-    def get_nkt_from_minimising_vc(self, su, q_net):
+        :param su: iterable of undrained shear strength
+        :param q_net: iterable of net cone resistance
 
-        minimisation_function = lambda mu_nkt:  np.sqrt(np.sum(((np.array(su) * mu_nkt)/np.array(q_net) -1)**2) / (len(su)-1))
+        :return: mean of Nkt, variation coefficient of q_net/Nkt
+        """
+
+        # set minimisation function
+        minimisation_function = lambda mu_nkt:  np.sqrt(np.sum(((np.array(su) * mu_nkt)/np.array(q_net) -1)**2) /
+                                                        (len(su)-1))
+
+        # perform minimisation
         res = sc_minimize(minimisation_function, 0)
 
-        self.nkt_mean = res.x
-        self.nkt_vc = res.fun
+        # get Nkt mean and variation coefficient of  q_net/Nkt
+        nkt_mean = res.x
+        vc_qnet_nkt_tot = res.fun
+
+        return nkt_mean, vc_qnet_nkt_tot
+
+    @staticmethod
+    def get_chararacteristic_value_nkt_from_weighted_regression(su: Iterable, q_net: Iterable, vc_loc=None) -> float:
+        r"""
+        Gets characteristic value of nkt from weighted regression.
+
+        The characteristic value of N_kt is calculated by using the following formula:
+
+        .. math::
+
+            N_{kt,kar} = \frac{\mu_{N_{kt}}}{(1-T^{0.05}_{n-1} \cdot V_{\frac{q_{net}}{N_{kt}},gem} \cdot \sqrt{1 + \frac{1}{n}}}
 
 
-    def get_nkt_from_statistics(self, su, q_net):
+        :param su: iterable of undrained shear strength
+        :param q_net: iterable of net cone resistance
+        :param vc_loc: local variation coefficient of q_net/N_kt, if None: vc_loc = 0.5 vc_total
 
+        :return: characteristic value of N_kt
+        """
+
+        # get mean Nkt and variation coefficient of q_net/nkt_total through weighted regression
+        nkt_mean, vc_qnet_nkt_tot = NktUtils.get_nkt_stats_from_weighted_regression(su, q_net)
+
+        # set vc_loc as 0.5 of variation coefficient of q_net/nkt_total if none is given
+        if vc_loc is None:
+            vc_loc = 0.5 * vc_qnet_nkt_tot
+
+        # calculate average variation coefficient of q_net/nkt
+        vc_average = np.sqrt(vc_qnet_nkt_tot**2 - vc_loc**2)
+
+        # get number of tests
+        n = len(su)
+
+        # calculate student t factor at 95 percentile
+        student_t_factor =ProbUtils.calculate_student_t_factor(n-1,0.95)
+
+        # calculate characteristic value of Nkt
+        nkt_char = nkt_mean / (1-student_t_factor * vc_average * np.sqrt(1+1/n))
+
+        return nkt_char
+
+    @staticmethod
+    def get_nkt_from_statistics(su: Iterable, q_net: Iterable) -> (float, float):
+        r"""
+        Calculates log mean of N_kt and total log standard deviation of N_kt through statistics
+
+        :param su: iterable of undrained shear strength
+        :param q_net: iterable of net cone resistance
+
+        :return: mean of Ln Nkt, total standard deviation of Ln Nkt
+        """
+
+        # calculate Nkt
         nkt = np.array(q_net) / np.array(su)
 
+        # get log mean and std
+        log_nkt_mean, log_nkt_std_tot = ProbUtils.calculate_log_stats(nkt)
+
+        return log_nkt_mean, log_nkt_std_tot
+
+    @staticmethod
+    def get_chararacteristic_value_nkt_from_statistics(su: Iterable, q_net: Iterable, std_loc: float = None) -> float:
+        r"""
+         Gets characteristic value of N_kt through statistics.
+
+        The characteristic value of N_kt is calculated by using the following formula:
+
+        .. math::
+
+            N_{kt,kar} = exp(\mu_{N_{kt}} + T^{0.05}_{n-1} \cdot \sigma_{Ln(N_{kt,gem}) \cdot \sqrt{1 + \frac{1}{n}})
 
 
+        :param su: iterable of undrained shear strength
+        :param q_net: iterable of net cone resistance
+        :param std_loc: local standard deviation of log N_kt, if None: std_loc = 0.5 std_total
 
-determine_nkt = DetermineNkt()
+        :return: characteristic value of N_kt
+        """
 
-determine_nkt.nkt_mean = 6
-determine_nkt.nkt_std = 1
+        # get log nkt mean and total standard deviation from statistics
+        log_nkt_mean, log_nkt_std_tot = NktUtils.get_nkt_from_statistics(su, q_net)
 
-determine_nkt.nkt_vc = 0.5
+        # set local standard deviation
+        if std_loc is None:
+            std_loc = 0.5 * log_nkt_std_tot
 
-determine_nkt.nkt_std =1
+        # calculate average standard deviation
+        std_average = np.sqrt(log_nkt_std_tot**2 - std_loc**2)
 
-a=1+1
+        # get number of data points
+        n = len(su)
+
+        # get student t factor at 95 percentile
+        student_t_factor = ProbUtils.calculate_student_t_factor(n - 1, 0.95)
+
+        # calculate characteristic value of N_kt
+        nkt_char = np.exp(log_nkt_mean + student_t_factor * std_average * np.sqrt(1+1/n) )
+
+        return nkt_char
+
+    @staticmethod
+    def get_prob_nkt_parameters_from_weighted_regression(su: Iterable, q_net: Iterable, vc_loc: float = None) \
+            -> (float, float):
+        r"""
+        Get Nkt parameters for probabilistic analysis through weighted regression.
+
+        Firstly, weighted regression is used to get the mean of the Nkt values and the variation coefficient of
+        q_net / N_kt. Afterwards, the variation coefficient is adjusted for the number of samples with the student T
+        distribution
+
+
+        :param su: iterable of undrained shear strength
+        :param q_net: iterable of net cone resistance
+        :param vc_loc: local variation coefficient of q_net/N_kt, if None: vc_loc = 0.5 vc_total
+
+        :return: mean and standard deviation of N_kt for probabilistic analysis
+        """
+
+        # calculate mean of the Nkt values and the variation coefficient of q_net / N_kt
+        nkt_mean, vc_qnet_nkt_tot = NktUtils.get_nkt_stats_from_weighted_regression(su, q_net)
+
+        # set local variation coefficient in case it is not given
+        if vc_loc is None:
+            vc_loc = 0.5 * vc_qnet_nkt_tot
+
+        # calculate average variation coefficient
+        vc_average = np.sqrt(vc_qnet_nkt_tot ** 2 - vc_loc ** 2)
+
+        # calculate variation coefficient for probabilistic analysis
+        vc_prob = ProbUtils.correct_std_with_student_t(len(su), 0.05, vc_average, 0)
+
+        # calculate standard deviation for prob analysis
+        std_prob = ProbUtils.calculate_std_from_vc(nkt_mean, vc_prob)
+
+        return nkt_mean, std_prob
+
+    @staticmethod
+    def get_prob_nkt_parameters_from_statistics(su, q_net, log_std_loc=None):
+        r"""
+        Get Nkt parameters for probabilistic analysis through statistics.
+
+        Firstly, statistics are used to get the mean and standard deviation of the log Nkt values.
+        Afterwards, the mean and standard deviation for probabilistic analysis are calculated, where the student T
+        distribution is taken into account.
+
+        :param su: iterable of undrained shear strength
+        :param q_net: iterable of net cone resistance
+        :param log_std_loc: local standard deviation of log N_kt, if None: std_loc = 0.5 std_total
+
+        :return: mean and standard deviation of N_kt for probabilistic analysis
+        """
+
+        # get mean and std of log Nkt
+        log_nkt_mean, log_nkt_std_tot = NktUtils.get_nkt_from_statistics(su, q_net)
+
+        # set local standard deviation in case it is not given
+        if log_std_loc is None:
+            log_std_loc = 0.5 * log_nkt_std_tot
+
+        # calculate average local standard deviation
+        log_std_average = np.sqrt(log_nkt_std_tot ** 2 - log_std_loc ** 2)
+
+        # adjust std of Log nkt with the student T distribution
+        log_std_prob = ProbUtils.correct_std_with_student_t(len(su), 0.05, log_std_average, 0)
+
+        # calculate mean and standard deviation of Nkt
+        mean_nkt_prob, std_nkt_prob = ProbUtils.get_mean_std_from_lognormal(log_nkt_mean, log_std_prob)
+
+        return mean_nkt_prob, std_nkt_prob
+
+
+nkt_utils = NktUtils()
+
+nkt_utils.nkt_mean = 6
+nkt_utils.nkt_std = 1
+
+nkt_utils.nkt_vc = 0.5
+
+nkt_utils.nkt_std =1
+
 
 q_net = [300,300, 400, 700, 1200, 1400]
 su = [20,21,24, 55, 64,60]
@@ -97,6 +281,3 @@ su = [20,21,24, 55, 64,60]
 #
 # plt.plot(q_net,su, 'o')
 # plt.show()
-
-determine_nkt.get_nkt_from_statistics(su, q_net)
-# determine_nkt.get_nkt_from_minimising_vc(su, q_net)

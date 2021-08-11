@@ -210,4 +210,24 @@ class ProbUtils(BaseModel):
 
         return x_kar
 
+    @staticmethod
+    def calculate_std_from_vc(mean: float, vc: float):
+        """
+        Calculates standard deviation from variation coefficient
 
+        :param mean: mean of distribution
+        :param vc: variation coefficient of distribution
+
+        """
+        return mean * vc
+
+    @staticmethod
+    def calculate_vc_from_std(mean: float, std: float):
+        """
+        Calculates  variation coefficient from standard deviation
+
+        :param mean: mean of distribution
+        :param std: standard deviation of distribution
+
+        """
+        return std/mean
