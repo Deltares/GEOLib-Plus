@@ -1,8 +1,5 @@
-from abc import abstractmethod
-from pathlib import Path
-from typing import Optional, Iterable, List, Type, Union
+from typing import Optional, Iterable, Union
 from pydantic import BaseModel
-from copy import deepcopy
 import numpy as np
 
 from geolib_plus.shm.prob_utils import ProbUtils
@@ -127,10 +124,10 @@ class NktUtils(BaseModel):
         n = len(su)
 
         # calculate student t factor at 95 percentile
-        student_t_factor =ProbUtils.calculate_student_t_factor(n-1,0.95)
+        student_t_factor =ProbUtils.calculate_student_t_factor(n-1,0.05)
 
         # calculate characteristic value of Nkt
-        nkt_char = nkt_mean / (1-student_t_factor * vc_average * np.sqrt(1+1/n))
+        nkt_char = nkt_mean * (1-student_t_factor * vc_average * np.sqrt(1+(1/n)))
 
         return nkt_char
 
@@ -264,18 +261,13 @@ class NktUtils(BaseModel):
         return mean_nkt_prob, std_nkt_prob
 
 
-nkt_utils = NktUtils()
 
-nkt_utils.nkt_mean = 6
-nkt_utils.nkt_std = 1
+    # a=1+1
 
-nkt_utils.nkt_vc = 0.5
-
-nkt_utils.nkt_std =1
-
-
-q_net = [300,300, 400, 700, 1200, 1400]
-su = [20,21,24, 55, 64,60]
+# nkt_utils = NktUtils()
+#
+# q_net = [300,300, 400, 700, 1200, 1400]
+# su = [20,21,24, 55, 64,60]
 
 # import matplotlib.pyplot as plt
 #
