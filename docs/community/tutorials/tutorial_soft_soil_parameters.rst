@@ -24,6 +24,9 @@ should be initialized.
 
 
 The user will then read and interpret a gef file using GEOLIB+.
+Note that reading the cpt is not neccessary for the SSC parameter determination. 
+Input parameters can also come from labtests (which is more accurate). 
+
 
     .. code-block:: python
 

@@ -26,7 +26,7 @@ class TestSoftSoilCreepParameters:
         parameters_for_SSC.calculate_soft_soil_parameters()
         # check results
         assert parameters_for_SSC.kappa is not None
-        assert parameters_for_SSC.lamda is not None
+        assert parameters_for_SSC.lambda_index is not None
         assert parameters_for_SSC.mu is not None
 
     def test_calculate_soft_soil_parameters_test_values(self):
@@ -49,5 +49,5 @@ class TestSoftSoilCreepParameters:
         parameters_for_SSC.calculate_soft_soil_parameters()
         # check results
         assert abs(parameters_for_SSC.kappa - (-0.306)) < 0.00051
-        assert abs(parameters_for_SSC.lamda - 0.217) < 0.00051
+        assert abs(parameters_for_SSC.lambda_index - 0.217) < 0.00051
         assert abs(parameters_for_SSC.mu - 0.0434) < 0.00051

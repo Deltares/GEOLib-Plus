@@ -22,7 +22,7 @@ class SoftSoilCreepParameters(BaseModel):
         dilatancy angle
     kappa: Optional[Union[np.ndarray, float]] = None
         modified swelling index
-    lamda: Optional[Union[np.ndarray, float]] = None
+    lambda_index: Optional[Union[np.ndarray, float]] = None
         modified compression index
     mi: Optional[Union[np.ndarray, float]] = None
         modified creep index
@@ -49,7 +49,7 @@ class SoftSoilCreepParameters(BaseModel):
     phi: Optional[Union[np.ndarray, float]] = None
     psi: Optional[Union[np.ndarray, float]] = None
     kappa: Optional[Union[np.ndarray, float]] = None
-    lamda: Optional[Union[np.ndarray, float]] = None
+    lambda_index: Optional[Union[np.ndarray, float]] = None
     mu: Optional[Union[np.ndarray, float]] = None
     v_ur: Optional[Union[np.ndarray, float]] = None
     M: Optional[Union[np.ndarray, float]] = None
@@ -93,7 +93,7 @@ class SoftSoilCreepParameters(BaseModel):
         attributes_to_be_checked = ["OCR", "K0_NC", "v_ur", "Cc", "Cs", "eo"]
         for attribute_name in attributes_to_be_checked:
             self.check_if_available(attribute_name)
-        self.lamda = self.Cc * (1 / (np.log(10) * (1 + self.eo)))
+        self.lambda_index = self.Cc * (1 / (np.log(10) * (1 + self.eo)))
         a = 2 * self.K0_NC + 1
         b = 1 - 1 / self.OCR
         c = (2 * self.v_ur) * (1 / (1 - self.v_ur)) + 1
