@@ -7,10 +7,10 @@ import platform
 
 
 class GefLib:
-
     """
     Wrapper class and functions around geflib (gef2.dll) functions required for validating of gef input files (.gef)
     Collection of helper functions for validating gef files.
+
     """
 
     def __init__(self):
@@ -115,9 +115,8 @@ class GefLib:
         Converts Code to gef file code to procedure code.
 
         :param code: gef file code
-        :type code: str
         :return: gef procedure code
-        :rtype str
+
         """
 
         cs_gefbore_report: str = "GEF-BORE-REPORT"
