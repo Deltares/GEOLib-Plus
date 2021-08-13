@@ -92,7 +92,7 @@ class NktUtils(BaseModel):
         return nkt_mean, vc_qnet_nkt_tot
 
     @staticmethod
-    def get_chararacteristic_value_nkt_from_weighted_regression(su: Iterable, q_net: Iterable, vc_loc=None) -> float:
+    def get_characteristic_value_nkt_from_weighted_regression(su: Iterable, q_net: Iterable, vc_loc=None) -> float:
         r"""
         Gets characteristic value of nkt from weighted regression.
 
@@ -124,10 +124,10 @@ class NktUtils(BaseModel):
         n = len(su)
 
         # calculate student t factor at 95 percentile
-        student_t_factor =ProbUtils.calculate_student_t_factor(n-1,0.05)
+        student_t_factor =ProbUtils.calculate_student_t_factor(n-1,0.95)
 
         # calculate characteristic value of Nkt
-        nkt_char = nkt_mean * (1-student_t_factor * vc_average * np.sqrt(1+(1/n)))
+        nkt_char = nkt_mean / (1-student_t_factor * vc_average * np.sqrt(1+(1/n)))
 
         return nkt_char
 
@@ -151,7 +151,7 @@ class NktUtils(BaseModel):
         return log_nkt_mean, log_nkt_std_tot
 
     @staticmethod
-    def get_chararacteristic_value_nkt_from_statistics(su: Iterable, q_net: Iterable, std_loc: float = None) -> float:
+    def get_characteristic_value_nkt_from_statistics(su: Iterable, q_net: Iterable, std_loc: float = None) -> float:
         r"""
          Gets characteristic value of N_kt through statistics.
 
@@ -205,7 +205,7 @@ class NktUtils(BaseModel):
         :param q_net: iterable of net cone resistance
         :param vc_loc: local variation coefficient of q_net/N_kt, if None: vc_loc = 0.5 vc_total
 
-        :return: mean and standard deviation of N_kt for probabilistic analysis
+        :return: mean and standard deviation of q_net/N_kt for probabilistic analysis
         """
 
         # calculate mean of the Nkt values and the variation coefficient of q_net / N_kt
@@ -221,10 +221,10 @@ class NktUtils(BaseModel):
         # calculate variation coefficient for probabilistic analysis
         vc_prob = ProbUtils.correct_std_with_student_t(len(su), 0.05, vc_average, 0)
 
-        # calculate standard deviation for prob analysis
-        std_prob = ProbUtils.calculate_std_from_vc(nkt_mean, vc_prob)
+        # calculate mean q_net/Nkt
+        mean_qnet_nkt = np.mean(q_net) / nkt_mean
 
-        return nkt_mean, std_prob
+        return mean_qnet_nkt, vc_prob
 
     @staticmethod
     def get_prob_nkt_parameters_from_statistics(su, q_net, log_std_loc=None):
@@ -239,7 +239,7 @@ class NktUtils(BaseModel):
         :param q_net: iterable of net cone resistance
         :param log_std_loc: local standard deviation of log N_kt, if None: std_loc = 0.5 std_total
 
-        :return: mean and standard deviation of N_kt for probabilistic analysis
+        :return: mean and variation coefficient of q_net/N_kt for probabilistic analysis
         """
 
         # get mean and std of log Nkt
@@ -256,20 +256,11 @@ class NktUtils(BaseModel):
         log_std_prob = ProbUtils.correct_std_with_student_t(len(su), 0.05, log_std_average, 0)
 
         # calculate mean and standard deviation of Nkt
-        mean_nkt_prob, std_nkt_prob = ProbUtils.get_mean_std_from_lognormal(log_nkt_mean, log_std_prob)
+        mean_nkt, std_nkt = ProbUtils.get_mean_std_from_lognormal(log_nkt_mean, log_std_prob)
 
-        return mean_nkt_prob, std_nkt_prob
+        # calculate variation coefficient
+        vc_qnet_nkt = std_nkt/mean_nkt
 
-
-
-    # a=1+1
-
-# nkt_utils = NktUtils()
-#
-# q_net = [300,300, 400, 700, 1200, 1400]
-# su = [20,21,24, 55, 64,60]
-
-# import matplotlib.pyplot as plt
-#
-# plt.plot(q_net,su, 'o')
-# plt.show()
+        # calculate mean and standard deviation of Nkt
+        mean_qnet_nkt = np.mean(q_net) / mean_nkt
+        return mean_qnet_nkt, vc_qnet_nkt
