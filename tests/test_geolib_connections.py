@@ -7,6 +7,7 @@ from pathlib import Path
 from tests.utils import TestUtils
 
 import geolib
+from geolib.models.dfoundations import piles, profiles
 
 
 class TestLayers:
