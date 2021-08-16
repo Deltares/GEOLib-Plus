@@ -24,6 +24,7 @@ pipelines:
               - pip
             script:
               - pip install -r requirements.txt
+              - pip install tests/test_files/geolib_package/geolib-0.1.5-py3-none-any.whl
               - pytest -v --cov=geolib_plus --cov-report xml:test-reports/coverage.xml --junitxml=test-reports/report_unit.xml tests/ -m "unittest and not workinprogress"
         - step: # Run integrationtest
             name: Run integrationtest.

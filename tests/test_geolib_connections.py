@@ -35,7 +35,7 @@ class TestLayers:
         # pre-process cpt data
         cpt_gef.pre_process_data()
         # interpret data
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectation
         assert cpt_gef
@@ -62,7 +62,7 @@ class TestLayers:
         # pre-process cpt data
         cpt_gef.pre_process_data()
         # interpret data
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectation
         assert cpt_gef
@@ -89,7 +89,7 @@ class TestLayers:
         # pre-process cpt data
         cpt_gef.pre_process_data()
         # interpret data
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         cpt_gef.interpret_cpt(interpreter)
         cpt_gef.water = None
         # check initial expectation
@@ -145,7 +145,7 @@ class TestLayers:
         # pre-process cpt data
         cpt_gef.pre_process_data()
         # interpret data
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         cpt_gef.interpret_cpt(interpreter)
 
         cpt_dfoundations = (
@@ -192,7 +192,7 @@ class TestLayers:
         # pre-process cpt data
         cpt_gef.pre_process_data()
         # interpret data
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectations
         assert cpt_gef.name == "CPT000000029380"
@@ -220,7 +220,7 @@ class TestGefCptGeolibPlusToGeolib:
         # pre-process cpt data
         cpt_gef.pre_process_data()
         # interpret data
-        interpreter = RobertsonCptInterpretation
+        interpreter = RobertsonCptInterpretation()
         cpt_gef.interpret_cpt(interpreter)
         # check initial expectations
         assert cpt_gef.name == "CPT000000029380"
