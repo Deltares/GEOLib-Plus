@@ -16,7 +16,7 @@ class HTTPSResolver(etree.Resolver):
 
         # the resolver will only check for redirects if http/s is present
         if scheme == "http" or scheme == "https":
-            head_response = requests.head(url, allow_redirects=True)
+            head_response = requests.head(url, allow_redirects=True, verify=False)
             new_request_url = head_response.url
             if len(head_response.history) != 0:
                 # recursively, resolve the ultimate redirection target
@@ -27,7 +27,7 @@ class HTTPSResolver(etree.Resolver):
                     return self.resolve_filename(new_request_url, context)
                 elif scheme == "https":
                     # libxml2 cannot resolve this resource, so do the work
-                    get_response = requests.get(new_request_url)
+                    get_response = requests.get(new_request_url, verify=False)
                     return self.resolve_string(
                         get_response.content, context, base_url=new_request_url
                     )
@@ -73,7 +73,7 @@ class ValidatePreProcessing:
         ]
         for k in keys:
             if all(np.array(getattr(cpt, k)) == 0) or all(
-                np.array(getattr(cpt, k)) == None
+                np.array(getattr(cpt, k)) is None
             ):
                 logging.warning("File " + cpt.name + " contains empty data")
                 return
