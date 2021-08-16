@@ -60,7 +60,7 @@ class NktUtils(BaseModel):
         return nkt_mean, nkt_std
 
     @staticmethod
-    def get_nkt_stats_from_weighted_regression(su: Iterable, q_net: Iterable) -> (float, float):
+    def get_nkt_stats_from_weighted_regression(su: np.ndarray, q_net: np.ndarray) -> (float, float):
         r"""
         Gets Nkt statistics from weighted regression. With this method, the mean of Nkt and the variation coefficient
         of q_net/Nkt are found through weighted regression where the variation coefficient is minimised.
@@ -92,7 +92,8 @@ class NktUtils(BaseModel):
         return nkt_mean, vc_qnet_nkt_tot
 
     @staticmethod
-    def get_characteristic_value_nkt_from_weighted_regression(su: Iterable, q_net: Iterable, vc_loc=None) -> float:
+    def get_characteristic_value_nkt_from_weighted_regression(su: np.ndarray, q_net: np.ndarray, vc_loc: float = None) \
+            -> float:
         r"""
         Gets characteristic value of nkt from weighted regression.
 
@@ -132,7 +133,7 @@ class NktUtils(BaseModel):
         return nkt_char
 
     @staticmethod
-    def get_nkt_from_statistics(su: Iterable, q_net: Iterable) -> (float, float):
+    def get_nkt_from_statistics(su: np.ndarray, q_net: np.ndarray) -> (float, float):
         r"""
         Calculates log mean of N_kt and total log standard deviation of N_kt through statistics
 
@@ -151,7 +152,7 @@ class NktUtils(BaseModel):
         return log_nkt_mean, log_nkt_std_tot
 
     @staticmethod
-    def get_characteristic_value_nkt_from_statistics(su: Iterable, q_net: Iterable, std_loc: float = None) -> float:
+    def get_characteristic_value_nkt_from_statistics(su: np.ndarray, q_net: np.ndarray, std_loc: float = None) -> float:
         r"""
          Gets characteristic value of N_kt through statistics.
 
@@ -191,7 +192,7 @@ class NktUtils(BaseModel):
         return nkt_char
 
     @staticmethod
-    def get_prob_nkt_parameters_from_weighted_regression(su: Iterable, q_net: Iterable, vc_loc: float = None) \
+    def get_prob_nkt_parameters_from_weighted_regression(su: np.ndarray, q_net: np.ndarray, vc_loc: float = None) \
             -> (float, float):
         r"""
         Get Nkt parameters for probabilistic analysis through weighted regression.
@@ -227,7 +228,8 @@ class NktUtils(BaseModel):
         return mean_qnet_nkt, vc_prob
 
     @staticmethod
-    def get_prob_nkt_parameters_from_statistics(su, q_net, log_std_loc=None):
+    def get_prob_nkt_parameters_from_statistics(su: np.ndarray, q_net: np.ndarray, log_std_loc: float = None) \
+            -> (float, float):
         r"""
         Get Nkt parameters for probabilistic analysis through statistics.
 
