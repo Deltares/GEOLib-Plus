@@ -38,6 +38,12 @@ class ShearWaveVelocityMethod(IntEnum):
     AHMED = 5
 
 
+class RelativeDensityMethod(IntEnum):
+    BALDI = 1
+    KULHAWY = 2
+    KULHAWY_SIMPLE = 3
+
+
 class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     r"""
     Robertson soil classification.
@@ -132,6 +138,12 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         # compute permeability
         self.permeability_calc()
+
+        # compute clean sand equivalent normalised cone resistance
+        self.norm_cone_resistance_clean_sand_calc()
+
+        # compute state parameter
+        self.state_parameter_calc()
 
         # filter values
         # lithologies = [""]
@@ -714,6 +726,167 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         self.data.qt = self.data.tip + self.data.water * (1 - self.data.a)
         self.data.qt[self.data.qt <= 0] = 0
+
+    def relative_density_calc(
+        self,
+        method: RelativeDensityMethod,
+        c_0: Union[np.ndarray, float] = 15.7,
+        c_2: Union[np.ndarray, float] = 2.41,
+        Q_c: Union[np.ndarray, float] = 1,
+        OCR: Union[np.ndarray, float] = 1,
+        age: Union[np.ndarray, float] = 1000,
+    ):
+        r"""
+        Computes relative density. Following methods described in Robertson :cite:`robertson_cabal_2014`. This method
+        calculates the relative density for all the non cohesive soils along the whole cpt, i.e. RD is calculated when
+        the lithology index is either 6, 7, 8 or 9.
+
+        The relative density can be computed according to Baldi :cite:`baldi_1989` or
+        Kulhawy and Mayne :cite:`kulhawy_1990`. Furthermore Kulhawy method can be simplified for most young,
+        uncemented-based sands.
+
+        .. math::
+
+            RD_{Baldi} = (\frac{1}{C_{2}})LN(\frac{Q_{cn}}{C_{0}})
+
+        .. math::
+
+            RD_{Kulhawy}^{2} = \frac{Q_{cn}}{305 Q_{c} Q_{ocr} Q_{A}}
+
+        .. math::
+
+            Q_{ocr} = OCR^{0.18}
+
+        .. math::
+
+            Q_{A} = 1.2 + 0.05log(age/100)
+
+        .. math::
+
+            RD_{Kulhawy_simple}^{2} = \frac{Q_{tn}}{350}
+
+        :param method: Method for calculation of relative density.
+        :param c_0: (optional float or np array) soil constant for Baldi method. Default is 15.7
+        :param c_2: (optional float or np array) soil constant for Baldi method. Default is 2.41
+        :param Q_c: (optional float or np array) compressibility factor, 0.9 for low compressibility, 1.1 for
+                    high compressibility. Default is 1.0
+        :param OCR: (optional float or np array) Over consolidation ratio. Default = 1.0
+        :param age: (optional float or np array) age of the soil in years. Default is 1000
+
+        """
+
+        self.data.relative_density = np.ones(len(self.data.qt)) * np.nan
+        if method == RelativeDensityMethod.BALDI:
+            # calculate normalised cpt resistance, corrected for overburden pressure
+            Q_cn = (self.data.qt / self.data.Pa) / (
+                self.data.effective_stress / self.data.Pa
+            ) ** 0.5
+
+            # calculate rd if Q_cn > c_0
+            mask = Q_cn > c_0
+            self.data.relative_density[mask] = (1 / c_2 * np.log(Q_cn / c_0))[mask]
+
+        elif method == RelativeDensityMethod.KULHAWY:
+            # calculate normalised cpt resistance, corrected for overburden pressure
+            Q_cn = (self.data.qt / self.data.Pa) / (
+                self.data.effective_stress / self.data.Pa
+            ) ** 0.5
+
+            # calculate overconsolidation factor
+            Q_ocr = OCR ** 0.18
+
+            # calculate aging factor
+            Q_a = 1.2 + 0.05 * np.log10(age / 100)
+            self.data.relative_density = np.sqrt(Q_cn / (305 * Q_c * Q_ocr * Q_a))
+
+        elif method == RelativeDensityMethod.KULHAWY_SIMPLE:
+            # method Kulhawy simple, valid for most young, uncemented silica based sands
+            self.data.relative_density = np.sqrt(self.data.Qtn / 350)
+
+        # check if soil is non cohesive
+        is_non_cohesive = (
+            (self.data.lithology == "6")
+            + (self.data.lithology == "7")
+            + (self.data.lithology == "8")
+            + (self.data.lithology == "9")
+        )
+
+        # dispose_cohesive_soils. This order of removing the non cohesive soils is chosen, such that the above formulas
+        # accept both floats and np arrays as inputs.
+        self.data.relative_density[~is_non_cohesive] = np.nan
+
+    def norm_cone_resistance_clean_sand_calc(self):
+        """
+        Calculates the clean sand equivalent normalised cone resistance, following Robertson and Cabal
+        :cite:`robertson_cabal_2014`.
+
+        .. math::
+
+            Q_{tn,cs} = K_{c} \cdot Q_{tn}
+
+        Where K_{c} is defined as follows:
+
+        When  [$I_{c} \leq 1.64$]
+
+        .. math::
+
+            K_{c} = 1.0
+
+        When  [$1.64 < I_{c} \leq 2.5$]
+
+        .. math::
+            K_{c} = 5.58 I_{c}^{3} - 0.403 I_{c}^{4} - 21.63 I_{c}^{2} + 33.65 I_{c} - 17.88
+
+        When  [$1.64 < I_{c} <2.36$] and [$F_{r} < 0.5%$]
+
+        .. math::
+            K_{c} = 1.0
+
+        When  [$2.5 < I_{c} <2.7$]
+
+        .. math::
+            K_{c} = 6 * 10^{-7} ( I_{c}^{16.76}
+        """
+
+        # initialise K_c and Q_tncs as nan
+        K_c = np.ones(len(self.data.IC)) * np.nan
+        self.data.Qtncs = np.ones(len(self.data.IC)) * np.nan
+
+        # if IC is lower than 1.64, K_c is 1.0
+        K_c[self.data.IC <= 1.64] = 1.0
+
+        # calculate K_c for when (1.64 < IC <= 2.5)
+        mask = (1.64 < self.data.IC) * (self.data.IC <= 2.5)
+        K_c[mask] = (
+            5.581 * self.data.IC[mask] ** 3
+            - 0.403 * self.data.IC[mask] ** 4
+            - 21.63 * self.data.IC[mask] ** 2
+            + 33.75 * self.data.IC[mask]
+            - 17.88
+        )
+
+        # calculate K_c for when (1.64 < IC <= 2.36) and Fr < 0.5
+        mask = (1.64 < self.data.IC) * (self.data.IC <= 2.36) * (self.data.Fr < 0.5)
+        K_c[mask] = 1.0
+
+        # calculate K_c for when (2.5< IC <= 2.7)
+        mask = (2.5 < self.data.IC) * (self.data.IC < 2.7)
+        K_c[mask] = (6e-7) * self.data.IC[mask] ** 16.76
+
+        # calculate Qtncs
+        self.data.Qtncs = K_c * self.data.Qtn
+
+    def state_parameter_calc(self):
+        """
+        Calculates state parameter from relationship with clean sand equivalent normalised cone resistance
+        :cite:`robertson_2010`.
+
+        .. math::
+
+            \psi =0.56 - 0.33 log(Q_{tn,cs})
+        """
+
+        self.data.psi = 0.56 - 0.33 * np.log10(self.data.Qtncs)
 
     def filter(self, lithologies: List[str] = [""], key="", value: float = 0):
         r"""
