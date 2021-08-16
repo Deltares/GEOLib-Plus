@@ -1,8 +1,12 @@
 
 from geolib_plus.shm.nkt_utils import NktUtils
 
+from pathlib import Path
 import numpy as np
 import pytest
+
+from tests.utils import TestUtils
+
 
 class TestNktUtils:
 
@@ -115,7 +119,7 @@ class TestNktUtils:
         import csv
 
         # read test data
-        with open(r'..\test_files\shm\su_qnet.csv') as csv_file:
+        with open(TestUtils.get_local_test_data_dir(Path("shm", "su_qnet.csv"))) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=';')
             data = np.array([row for row in csv_reader]).astype(float)
 
