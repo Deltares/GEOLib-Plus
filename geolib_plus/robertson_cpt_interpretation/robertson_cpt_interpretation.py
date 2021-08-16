@@ -736,24 +736,32 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         OCR: Union[np.ndarray, float] = 1,
         age: Union[np.ndarray, float] = 1000,
     ):
-        """
+        r"""
         Computes relative density. Following methods described in Robertson :cite:`robertson_cabal_2014`. This method
         calculates the relative density for all the non cohesive soils along the whole cpt, i.e. RD is calculated when
         the lithology index is either 6, 7, 8 or 9.
 
-        The relative density can be computed according to Baldi :cite: `baldi_1989` or
-        Kulhawy and Mayne :cite: `kulhawy_1990`. Furthermore Kulhawy method can be simplified for most young,
+        The relative density can be computed according to Baldi :cite:`baldi_1989` or
+        Kulhawy and Mayne :cite:`kulhawy_1990`. Furthermore Kulhawy method can be simplified for most young,
         uncemented-based sands.
 
         .. math::
 
-            RD_{Baldi} = (\frac{1}{C_{2})LN(\frac{Q_{cn}}{C_{0}})
+            RD_{Baldi} = (\frac{1}{C_{2}})LN(\frac{Q_{cn}}{C_{0}})
+
+        .. math::
 
             RD_{Kulhawy}^{2} = \frac{Q_{cn}}{305 Q_{c} Q_{ocr} Q_{A}}
 
+        .. math::
+
             Q_{ocr} = OCR^{0.18}
 
+        .. math::
+
             Q_{A} = 1.2 + 0.05log(age/100)
+
+        .. math::
 
             RD_{Kulhawy_simple}^{2} = \frac{Q_{tn}}{350}
 
