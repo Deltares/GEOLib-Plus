@@ -115,7 +115,7 @@ class TestNktUtils:
         import csv
 
         # read test data
-        with open(r'D:\software_development\geolib-plus\tests\test_files\shm\su_qnet.csv') as csv_file:
+        with open(r'..\test_files\shm\su_qnet.csv') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=';')
             data = np.array([row for row in csv_reader]).astype(float)
 
