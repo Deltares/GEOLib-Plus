@@ -56,7 +56,7 @@ class DFoundationsConnector:
     @staticmethod
     def __if_not_none_add_to_dict(
         dictionary: Dict, input_list: Union[Iterable, None], name: str
-    ):
+    ) -> Dict:
         if input_list is not None:
             dictionary[name] = input_list
         return dictionary
@@ -99,7 +99,7 @@ class DFoundationsConnector:
         )
 
     @staticmethod
-    def __to_layers_for_d_foundations(cpt: AbstractCPT):
+    def __to_layers_for_d_foundations(cpt: AbstractCPT) -> List:
         """
         Function that transform interpreted cpt to soil layers. For each layer a specific soil is defined with default parameters.
         """
@@ -107,13 +107,18 @@ class DFoundationsConnector:
             raise ValueError(
                 "Field 'depth_merged' was not defined in the inputted cpt. Interpretation of the cpt must be performed. "
             )
+        if cpt.lithology_merged is None:
+            raise ValueError(
+                "Field 'lithology_merged' was not defined in the inputted cpt. Interpretation of the cpt must be performed. "
+            )
 
         soil_layers = []
-        for index, depth in enumerate(cpt.depth_merged):
+        # cpt.depth_merged will always have len(cpt.lithology_merged) + 1 length as it includes the bottom.
+        for index, depth in enumerate(cpt.depth_merged[:-1]):
             soil_layers.append(
                 dict(
-                    name="GEOLIB_plus_" + str(index),
-                    material="GEOLIB_plus_" + str(index),
+                    name=cpt.lithology_merged[index],
+                    material=cpt.lithology_merged[index],
                     top_level=-1 * depth,
                 )
             )
@@ -145,7 +150,7 @@ class DFoundationsConnector:
         return cpt.depth_to_reference[0] - 0.5
 
     @staticmethod
-    def __to_d_foundations_soils(soil_layers):
+    def __to_d_foundations_soils(soil_layers) -> Any:
         """
         Creates a list of all the soils. Each layer of the profile has a different soil defined. However, the values are set to default.
         The user can specify those for each layer before inputting them into D-Foundations.
@@ -154,9 +159,10 @@ class DFoundationsConnector:
 
         soils = []
         for layer in soil_layers:
-            local_soil = Soil(name=layer["material"], soil_type_nl=SoilType.SAND)
-            local_soil.mohr_coulomb_parameters.cohesion.mean = 0
-            local_soil.mohr_coulomb_parameters.friction_angle.mean = 0
-            local_soil.undrained_parameters.undrained_shear_strength = 0
-            soils.append(local_soil)
+            if layer["material"] not in [soil.name for soil in soils]:
+                local_soil = Soil(name=layer["material"], soil_type_nl=SoilType.SAND)
+                local_soil.mohr_coulomb_parameters.cohesion.mean = 0
+                local_soil.mohr_coulomb_parameters.friction_angle.mean = 0
+                local_soil.undrained_parameters.undrained_shear_strength = 0
+                soils.append(local_soil)
         return soils

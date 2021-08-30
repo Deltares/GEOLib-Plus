@@ -202,7 +202,7 @@ class TestLayers:
                 cpt_gef
             )
         )
-        assert len(soil_layers) == 44
+        assert len(soil_layers) == 43
 
 
 class TestGefCptGeolibPlusToGeolib:
@@ -289,7 +289,7 @@ class TestGefCptGeolibPlusToGeolib:
         # save updated file
         dfoundations_model.serialize(
             Path(
-                TestUtils.get_local_test_data_dir("input_files_geolib"),
+                TestUtils.get_output_test_data_dir("DFoundations"),
                 "bm1-1a_added_cpt.foi",
             )
         )
