@@ -51,6 +51,7 @@ of using GEOLib+.
    community/tutorials/tutorial_soft_soil_parameters
    community/tutorials/tutorial_hardening_soil_parameters
    community/tutorials/tutorial_relative_density_correlated_parametes
+   community/tutorials/tutorial_connecting_dfoundations
 
 Changelog
 ---------
