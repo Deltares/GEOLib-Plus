@@ -26,18 +26,25 @@ class ShanshepUtils(BaseModel):
         return A * x + S
 
     @staticmethod
+    def __m_inputted(X, B):
+        """ """
+        x, m = X
+        return m * x + B
+
+    @staticmethod
     def get_shanshep_parameters(
         OCR: Union[float, np.array],
         su: Union[float, np.array],
         sigma_effective: Union[float, np.array],
         S: Optional[float] = None,
+        m: Optional[float] = None,
     ):
         """
         Determines shansep parameters s and m according to :cite: `meer_2019`.
         This is done by using simple linear regression.
         Parameter S can also be given as an input.
         """
-        if S is None:
+        if (m is None) and (S is None):
             log_OCR = np.log(OCR)
             log_su_sigma = np.log(np.divide(su, sigma_effective))
 
@@ -47,7 +54,7 @@ class ShanshepUtils(BaseModel):
             # summarize the parameter values
             m, log_S = popt
             S = 10 ** log_S
-        else:
+        elif (m is None) and (S is not None):
             log_OCR = np.log(OCR)
             log_su_sigma = np.log(np.divide(su, sigma_effective))
 
@@ -59,5 +66,17 @@ class ShanshepUtils(BaseModel):
             )
             # summarize the parameter values
             m = popt[0]
+        elif (m is not None) and (S is None):
+            log_OCR = np.log(OCR)
+            log_su_sigma = np.log(np.divide(su, sigma_effective))
+
+            popt, _ = curve_fit(
+                ShanshepUtils.__m_inputted,
+                (log_OCR, np.full(log_OCR.shape, np.log(m))),
+                log_su_sigma,
+                method="lm",
+            )
+            # summarize the parameter values
+            S = popt[0]
 
         return (S, m)

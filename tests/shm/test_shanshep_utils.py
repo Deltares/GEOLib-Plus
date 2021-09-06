@@ -37,3 +37,16 @@ class TestShanshepUtils:
 
         assert S_output == 2
         assert m - (-1.661) < 0.00051
+
+        # test with a given m parameter
+        m = 0.6
+        (S_output, m_output) = ShanshepUtils.get_shanshep_parameters(
+            (inputs_modified.Pc / inputs_modified.sigma_v0_eff).to_numpy(),
+            inputs_modified.tau_40.to_numpy(),
+            inputs_modified.sigma_v0_eff.to_numpy(),
+            m=m,
+            S=None,
+        )
+
+        assert S_output - 0.136 < 0.00051
+        assert m == m_output
