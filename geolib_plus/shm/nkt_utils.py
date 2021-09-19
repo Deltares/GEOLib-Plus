@@ -1,11 +1,16 @@
 from typing import Optional, Iterable, Union
 from pydantic import BaseModel
+from enum import IntEnum
 import numpy as np
 
 from geolib_plus.shm.prob_utils import ProbUtils
 
 from scipy.optimize import minimize as sc_minimize
 
+
+class NktMethod(IntEnum):
+    REGRESSION = 1
+    STATISTICS = 2
 
 class NktUtils(BaseModel):
     """
