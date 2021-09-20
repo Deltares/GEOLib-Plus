@@ -1,10 +1,5 @@
-from typing import Optional, Iterable, Union
 from pydantic import BaseModel
 import numpy as np
-
-from geolib_plus.shm.prob_utils import ProbUtils
-from geolib_plus.shm.nkt_utils import NktMethod, NktUtils
-
 
 class StateUtils(BaseModel):
 
@@ -22,7 +17,8 @@ class StateUtils(BaseModel):
         :param S: Normally Consolidated Undrained Shear Strength Ratio [-] (input from laboratory)
         :param m: Strength Increase Exponent [-] (input from laboratory)
         """
-        return effective_stress * (su / (effective_stress * S)) ** 1 / m
+
+        return effective_stress * (su / (effective_stress * S)) ** (1 / m)
 
     @staticmethod
     def calculate_yield_stress_prob_parameters_from_cpt(effective_stress: float, q_net: float, mu_S: float, mu_m: float,
