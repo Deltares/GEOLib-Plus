@@ -8,7 +8,7 @@ from scipy.optimize import curve_fit, minimize
 class ShansepUtils(BaseModel):
     """
     Class contains shansep utilities for parameter determination following the methodology as described in
-    :cite: `meer_2019`.
+    :cite:`meer_2019`.
     """
 
     class Config:
