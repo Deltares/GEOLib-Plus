@@ -58,7 +58,7 @@ class TestShanshepUtils:
         assert m_test == m_output
 
     @pytest.mark.unittest
-    def test_get_shansep_parameters_test_validity(self):
+    def test_get_shansep_prob_parameters_with_linear_regression_validity(self):
         # denife inputs
         path_inputs = TestUtils.get_local_test_data_dir(
             Path("shm", "Data_KIJK_DSS.csv")
@@ -67,27 +67,27 @@ class TestShanshepUtils:
         mask = inputs.TestConditions == "In situ"
         inputs_modified = inputs.loc[mask].dropna(subset=["tau_40"])
         # test with a given S parameter
-        (S_test, m_test) = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
+        (S_test,s_test_std), (m_test,m_test_std) = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
             (inputs_modified.Pc / inputs_modified.sigma_v0_eff).to_numpy(),
             inputs_modified.tau_40.to_numpy(),
-            inputs_modified.sigma_v0_eff.to_numpy(),
+            inputs_modified.sigma_vc_eff.to_numpy(),
         )
 
         # If a higher m is inputted a smaller log(S) should be produced
-        (S_output, m_output) = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
+        (S_output, s_std), _ = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
             (inputs_modified.Pc / inputs_modified.sigma_v0_eff).to_numpy(),
             inputs_modified.tau_40.to_numpy(),
-            inputs_modified.sigma_v0_eff.to_numpy(),
+            inputs_modified.sigma_vc_eff.to_numpy(),
             m=m_test + 0.1,
         )
 
         assert np.log(S_output) < np.log(S_test)
 
         # If a lower m is inputted a higher log(S) should be produced
-        (S_output, m_output) = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
-            (inputs_modified.Pc / inputs_modified.sigma_v0_eff).to_numpy(),
+        (S_output, s_std), _ = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
+            (inputs_modified.Pc / inputs_modified.sigma_vc_eff).to_numpy(),
             inputs_modified.tau_40.to_numpy(),
-            inputs_modified.sigma_v0_eff.to_numpy(),
+            inputs_modified.sigma_vc_eff.to_numpy(),
             m=m_test - 0.1,
         )
 
