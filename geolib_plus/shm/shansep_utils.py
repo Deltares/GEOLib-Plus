@@ -33,13 +33,52 @@ class ShansepUtils(BaseModel):
         return m * x + B
 
     @staticmethod
+    def calculate_characteristic_shansep_parameters_with_linear_regression(
+        OCR: Union[float, np.array],
+        su: Union[float, np.array],
+        sigma_effective: Union[float, np.array],
+        S: Optional[float] = None,
+        m: Optional[float] = None) -> (float, float):
+        """
+        Calculates characteristic values of parameters s and m, according to :cite: `meer_2019`.
+        Optionally with a given S or  m
+
+        :param OCR: Union[float, np.array], over consolidation ratio [-]
+        :param su: Undrained shear strength [kPa]
+        :param sigma_effective: Effective stress [kPa]
+        :param S: S value, shear strength ratio [-]
+        :param m: m value, strength increase component [-]
+        :return: characteristic value of S and m
+
+        """
+
+        # get prob parameters of S and m
+        (S, std_s), (m, std_m), covariance_matrix = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
+            OCR, su, sigma_effective, S, m)
+
+        # calculate mean log s and std log s
+        log_s, log_std_s = ProbUtils.get_log_mean_std_from_normal(S, std_s)
+
+        # calculate characteristic log s
+        log_s_char = ProbUtils.calculate_characteristic_value_from_prob_parameters(
+            log_s, log_std_s, len(OCR), char_quantile=0.05, a=0)
+
+        # calculate characteristic S and m
+        S_char = np.exp(log_s_char)
+        m_char = ProbUtils.calculate_characteristic_value_from_prob_parameters(
+            m, std_m, len(OCR), char_quantile=0.05, a=0)
+
+        return S_char, m_char
+
+
+    @staticmethod
     def get_shansep_prob_parameters_with_linear_regression(
         OCR: Union[float, np.array],
         su: Union[float, np.array],
         sigma_effective: Union[float, np.array],
         S: Optional[float] = None,
         m: Optional[float] = None,
-    ) -> ((float, float), (float, float)):
+    ) -> ((float, float), (float, float), np.ndarray):
         """
         Determines shansep parameters s and m with linear regression according to :cite: `meer_2019`.
         Parameter S or m can also be given as an input.
@@ -47,10 +86,15 @@ class ShansepUtils(BaseModel):
         :param OCR: Union[float, np.array],
         :param su: Undrained shear strength
         :param sigma_effective: Effective stress
-        :param S: S value
-        :param m: m value
-        :return: (mean and std of S), (mean and std of m)
+        :param S: S value, shear strength ratio [-]
+        :param m: m value, strength increase component [-]
+        :return: (mean and std of S), (mean and std of m), covariance matrix
         """
+
+        # initialise covariance matrix
+        covariance_matrix = np.zeros((2, 2))
+
+        # calculate S and m
         if (m is None) and (S is None):
             log_OCR = np.log(OCR)
             log_su_sigma = np.log(np.divide(su, sigma_effective))
@@ -69,6 +113,8 @@ class ShansepUtils(BaseModel):
 
             S, std_s = ProbUtils.get_mean_std_from_lognormal(log_S, std_log_s)
 
+            covariance_matrix = cov
+
         elif (m is None) and (S is not None):
             log_OCR = np.log(OCR)
             log_su_sigma = np.log(np.divide(su, sigma_effective))
@@ -86,6 +132,8 @@ class ShansepUtils(BaseModel):
             # correct std with student t distribution
             std_m = ProbUtils.correct_std_with_student_t(len(log_su_sigma) - 1, 0.05, std_m, 0.75)
             std_s = 0
+
+            covariance_matrix[0,0] = cov[0,0]
 
         elif (m is not None) and (S is None):
             log_OCR = np.log(OCR)
@@ -106,9 +154,11 @@ class ShansepUtils(BaseModel):
             S, std_s = ProbUtils.get_mean_std_from_lognormal(log_S, std_log_s)
             std_m = 0
 
+            covariance_matrix[1, 1] = cov[0, 0]
+
         else:
             # both s and m are given
             std_s = 0
             std_m = 0
 
-        return (S, std_s), (m, std_m)
+        return (S, std_s), (m, std_m), covariance_matrix
