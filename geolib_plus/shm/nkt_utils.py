@@ -1,10 +1,16 @@
 from typing import Optional, Iterable, Union
 from pydantic import BaseModel
+from enum import IntEnum
 import numpy as np
 
 from geolib_plus.shm.prob_utils import ProbUtils
 
 from scipy.optimize import minimize as sc_minimize
+
+
+class NktMethod(IntEnum):
+    REGRESSION = 1
+    STATISTICS = 2
 
 
 class NktUtils(BaseModel):
@@ -201,12 +207,11 @@ class NktUtils(BaseModel):
         q_net / N_kt. Afterwards, the variation coefficient is adjusted for the number of samples with the student T
         distribution
 
-
         :param su: iterable of undrained shear strength
         :param q_net: iterable of net cone resistance
         :param vc_loc: local variation coefficient of q_net/N_kt, if None: vc_loc = 0.5 vc_total
 
-        :return: mean and standard deviation of q_net/N_kt for probabilistic analysis
+        :return: mean of N_kt and variation coefficient of q_net/N_kt for probabilistic analysis
         """
 
         # calculate mean of the Nkt values and the variation coefficient of q_net / N_kt
@@ -222,10 +227,7 @@ class NktUtils(BaseModel):
         # calculate variation coefficient for probabilistic analysis
         vc_prob = ProbUtils.correct_std_with_student_t(len(su), 0.05, vc_average, 0)
 
-        # calculate mean q_net/Nkt
-        mean_qnet_nkt = np.mean(q_net) / nkt_mean
-
-        return mean_qnet_nkt, vc_prob
+        return nkt_mean, vc_prob
 
     @staticmethod
     def get_prob_nkt_parameters_from_statistics(su: np.ndarray, q_net: np.ndarray, log_std_loc: float = None) \
@@ -241,7 +243,7 @@ class NktUtils(BaseModel):
         :param q_net: iterable of net cone resistance
         :param log_std_loc: local standard deviation of log N_kt, if None: std_loc = 0.5 std_total
 
-        :return: mean and variation coefficient of q_net/N_kt for probabilistic analysis
+        :return: mean  of N_kt and variation coefficient of q_net/N_kt for probabilistic analysis
         """
 
         # get mean and std of log Nkt
@@ -263,6 +265,4 @@ class NktUtils(BaseModel):
         # calculate variation coefficient
         vc_qnet_nkt = std_nkt/mean_nkt
 
-        # calculate mean and standard deviation of Nkt
-        mean_qnet_nkt = np.mean(q_net) / mean_nkt
-        return mean_qnet_nkt, vc_qnet_nkt
+        return mean_nkt, vc_qnet_nkt

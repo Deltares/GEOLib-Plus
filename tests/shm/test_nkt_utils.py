@@ -84,7 +84,7 @@ class TestNktUtils:
 
         expected_mu, expected_vc = 15.12, 0.159
 
-        assert pytest.approx(np.mean(qnet)/expected_mu,abs=0.01) == mu_prob
+        assert pytest.approx(expected_mu,abs=0.01) == mu_prob
         assert pytest.approx(expected_vc, abs=0.01) == vc_prob
 
 
@@ -108,7 +108,7 @@ class TestNktUtils:
 
         expected_mu, expected_vc = 16.01, 0.169
 
-        assert pytest.approx(np.mean(qnet)/expected_mu,abs=0.01) == mu_prob
+        assert pytest.approx(expected_mu,abs=0.01) == mu_prob
         assert pytest.approx(expected_vc, abs=0.001) == vc_prob
 
     @pytest.fixture
