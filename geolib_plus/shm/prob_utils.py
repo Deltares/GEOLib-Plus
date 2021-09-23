@@ -152,6 +152,28 @@ class ProbUtils(BaseModel):
         return mean, std
 
     @staticmethod
+    def calculate_characteristic_value_from_prob_parameters(mean: float, std: float, n: int, char_quantile=0.05, a=0):
+        r"""
+        Calculates characteristic values from prob parameters.
+
+        :param mean: mean of x
+        :param std: standard deviation of x
+        :param n: number of data points
+        :param char_quantile: quantile of characteristic value (default = 0.05)
+        :param a: spread reduction factor (default = 0)
+
+        :return: characteristic value of X
+        """
+
+        # correct std for spread and amount of tests
+        estimated_std = ProbUtils.calculate_student_t_factor(n - 1, char_quantile) * \
+                            std * np.sqrt((1 - a) + (1 / n))
+
+        x_kar = mean + estimated_std
+
+        return x_kar
+
+    @staticmethod
     def calculate_characteristic_value_from_dataset(data: np.ndarray, is_local: bool, is_low: bool,
                                                     is_log_normal: bool = True, char_quantile: float = 0.05):
         r"""
@@ -182,7 +204,12 @@ class ProbUtils(BaseModel):
         :return: characteristic value of the dataset
         """
 
-        direction_factor = -1 if is_low else 1
+        # direction_factor = -1 if is_low else 1
+
+        if char_quantile > 0.5 and is_low:
+            char_quantile = 1 - char_quantile
+        elif char_quantile < 0.5 and not is_low:
+            char_quantile = 1 - char_quantile
 
         # set spread reduction factor, 0.75 if data collection is regional, 1.0 if data collection is local
         if is_local:
@@ -194,20 +221,19 @@ class ProbUtils(BaseModel):
             # calculate characteristic value from log normal distribution
             log_mean, log_std = ProbUtils.calculate_log_stats(data)
 
-            # correct std for spread and amount of tests
-            estimated_std = abs(ProbUtils.calculate_student_t_factor(len(data)-1,char_quantile) * \
-                            log_std * np.sqrt((1-a) + 1/len(data)))
+            # calculate log_x_kar
+            log_x_kar = ProbUtils.calculate_characteristic_value_from_prob_parameters(
+                log_mean, log_std, len(data), char_quantile, a)
 
-            x_kar = np.exp(log_mean + direction_factor*estimated_std)
+            # calculate x_kar
+            x_kar = np.exp(log_x_kar)
         else:
             # calculate characteristic value from normal distribution
             mean, std = ProbUtils.calculate_normal_stats(data)
 
-            # correct std for spread and amount of tests
-            estimated_std = abs(ProbUtils.calculate_student_t_factor(len(data) - 1, char_quantile) * \
-                                std * np.sqrt((1 - a) + 1 / len(data)))
-
-            x_kar = mean + direction_factor * estimated_std
+            # calculate x_kar
+            x_kar = ProbUtils.calculate_characteristic_value_from_prob_parameters(
+                mean, std, len(data), char_quantile, a)
 
         return x_kar
 
