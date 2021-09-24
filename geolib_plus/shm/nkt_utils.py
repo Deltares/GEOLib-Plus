@@ -16,7 +16,7 @@ class NktMethod(IntEnum):
 class NktUtils(BaseModel):
     """
     This class contains utility functions which are used to determine Nkt and the characteristic value and probabilistic
-    parameters.
+    parameters. All methods are according to  :cite:`meer_2019`.
     """
 
     @staticmethod
@@ -78,8 +78,8 @@ class NktUtils(BaseModel):
             V_{\frac{q_{net}}{N_{kt}}.tot} = \sqrt{\frac{\sum{(\frac{s_{u,i} \cdot \mu_{N_{kt}}}{q_{net,i}} -1)}^{2}}{n-1}}
 
 
-        :param su: iterable of undrained shear strength
-        :param q_net: iterable of net cone resistance
+        :param su: iterable of undrained shear strength [kPa]
+        :param q_net: iterable of net cone resistance [kPa]
 
         :return: mean of Nkt, variation coefficient of q_net/Nkt
         """
