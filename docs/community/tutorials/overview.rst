@@ -18,6 +18,7 @@ Overview
    tutorial_relative_density_correlated_parametes
    tutorial_connecting_dfoundations
    tutorial_determine_nkt
+   tutorial_determine_shansep_paramaters
 
 
 

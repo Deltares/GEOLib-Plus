@@ -40,8 +40,9 @@ class ShansepUtils(BaseModel):
         S: Optional[float] = None,
         m: Optional[float] = None) -> (float, float):
         """
-        Calculates characteristic values of parameters s and m, according to :cite:`meer_2019`.
-        Optionally with a given S or  m
+        Calculates characteristic values of parameters s and m, according to :cite:`meer_2019`. This methodology
+        assumes a log normal distribution of S and a normal distribution of m
+        Optionally with a given S or m.
 
         :param OCR: Union[float, np.array], over consolidation ratio [-]
         :param su: Undrained shear strength [kPa]
@@ -80,8 +81,9 @@ class ShansepUtils(BaseModel):
         m: Optional[float] = None,
     ) -> ((float, float), (float, float), np.ndarray):
         """
-        Determines shansep parameters s and m with linear regression according to :cite:`meer_2019`.
-        Parameter S or m can also be given as an input.
+        Determines shansep parameters s and m with linear regression according to :cite:`meer_2019`. This methodology
+        assumes a log normal distribution of S and a normal distribution of m. Parameter S or m can also be given as an
+        input.
 
         :param OCR: Union[float, np.array], over consolidation ratio [-]
         :param su: Undrained shear strength [kPa]
