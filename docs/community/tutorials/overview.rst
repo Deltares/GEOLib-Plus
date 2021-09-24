@@ -17,6 +17,8 @@ Overview
    tutorial_hardening_soil_parameters
    tutorial_relative_density_correlated_parametes
    tutorial_connecting_dfoundations
+   tutorial_determine_nkt
+
 
 
 Indices and tables
