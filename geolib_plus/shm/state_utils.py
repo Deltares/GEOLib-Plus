@@ -166,7 +166,7 @@ class StateUtils(BaseModel):
     def calculate_characteristic_ocr(effective_stress: float, current_effective_stress: float,
                                               q_net: float, kar_S: float, kar_m: float, char_nkt) -> float:
         """
-       Calculates characteristic value of over consolidation ratio, using cpt data and lab data.
+        Calculates characteristic value of over consolidation ratio, using cpt data and lab data.
 
         :param effective_stress: Vertical In situ Effective Stress [kPa] at the depth of interest during cpt
         :param current_effective_stress: Vertical current Effective Stress [kPa] at the depth of interest

@@ -1,4 +1,4 @@
-..tutorialcpt
+.. tutorial_determine_shansep_parameters
 
 Tutorial determine Shansep parameters using GEOLIB+
 ===================================================

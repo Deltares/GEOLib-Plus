@@ -1,4 +1,4 @@
-..tutorialcpt
+.. tutorial_determine_nkt
 
 Tutorial determine Nkt values using GEOLIB+
 ===========================================

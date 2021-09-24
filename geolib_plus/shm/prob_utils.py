@@ -154,7 +154,7 @@ class ProbUtils(BaseModel):
     @staticmethod
     def calculate_characteristic_value_from_prob_parameters(mean: float, std: float, n: int, char_quantile=0.05, a=0):
         r"""
-        Calculates characteristic values from prob parameters.
+        Calculates characteristic values from probabilistic parameters.
 
         :param mean: mean of x
         :param std: standard deviation of x
