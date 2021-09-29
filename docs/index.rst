@@ -26,6 +26,7 @@ instructions for getting the most out of GEOLib.
    :maxdepth: 3
 
    user/intro
+   user/install
 
 API
 ---
@@ -44,14 +45,7 @@ of using GEOLib+.
 .. toctree::
    :maxdepth: 3
 
-   community/tutorials/tutorial_setup_cpt
-   community/tutorials/tutorial_cpt_interpretation
-   community/tutorials/tutorial_cpt_plotting
-   community/tutorials/tutorial_custom_cpt_interpretation
-   community/tutorials/tutorial_soft_soil_parameters
-   community/tutorials/tutorial_hardening_soil_parameters
-   community/tutorials/tutorial_relative_density_correlated_parametes
-   community/tutorials/tutorial_connecting_dfoundations
+   community/tutorials/overview
 
 Changelog
 ---------

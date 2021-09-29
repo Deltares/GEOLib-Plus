@@ -16,7 +16,7 @@ class NktMethod(IntEnum):
 class NktUtils(BaseModel):
     """
     This class contains utility functions which are used to determine Nkt and the characteristic value and probabilistic
-    parameters.
+    parameters. All methods are according to  :cite:`meer_2019`.
     """
 
     @staticmethod
@@ -75,11 +75,11 @@ class NktUtils(BaseModel):
 
         .. math::
 
-            V_{\frac{q_{net}}{N_{kt}}.tot} = \sqrt{\frac{\sum{(\frac{s_{u,i} \cdot \mu_{N_{kt}}}{q_{net,i}} -1)^{2}{n-1}}
+            V_{\frac{q_{net}}{N_{kt}}.tot} = \sqrt{\frac{\sum{(\frac{s_{u,i} \cdot \mu_{N_{kt}}}{q_{net,i}} -1)}^{2}}{n-1}}
 
 
-        :param su: iterable of undrained shear strength
-        :param q_net: iterable of net cone resistance
+        :param su: iterable of undrained shear strength [kPa]
+        :param q_net: iterable of net cone resistance [kPa]
 
         :return: mean of Nkt, variation coefficient of q_net/Nkt
         """
@@ -107,7 +107,7 @@ class NktUtils(BaseModel):
 
         .. math::
 
-            N_{kt,kar} = \frac{\mu_{N_{kt}}}{(1-T^{0.05}_{n-1} \cdot V_{\frac{q_{net}}{N_{kt}},gem} \cdot \sqrt{1 + \frac{1}{n}}}
+            N_{kt,kar} = \frac{\mu_{N_{kt}}}{(1-T^{0.05}_{n-1} \cdot V_{\frac{q_{net}}{N_{kt}},gem} \cdot \sqrt{1 + \frac{1}{n}})}
 
 
         :param su: iterable of undrained shear strength
@@ -160,13 +160,13 @@ class NktUtils(BaseModel):
     @staticmethod
     def get_characteristic_value_nkt_from_statistics(su: np.ndarray, q_net: np.ndarray, std_loc: float = None) -> float:
         r"""
-         Gets characteristic value of N_kt through statistics.
+        Gets characteristic value of N_kt through statistics.
 
         The characteristic value of N_kt is calculated by using the following formula:
 
         .. math::
 
-            N_{kt,kar} = exp(\mu_{N_{kt}} + T^{0.05}_{n-1} \cdot \sigma_{Ln(N_{kt,gem}) \cdot \sqrt{1 + \frac{1}{n}})
+            N_{kt,kar} = exp(\mu_{N_{kt}} + T^{0.05}_{n-1} \cdot \sigma_{Ln(N_{kt,gem}) \cdot \sqrt{1 + \frac{1}{n}}})
 
 
         :param su: iterable of undrained shear strength

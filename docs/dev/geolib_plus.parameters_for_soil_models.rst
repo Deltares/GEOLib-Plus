@@ -18,6 +18,6 @@ geolib\_plus.hardening\_soil\_parameters module
 
 
 geolib\_plus.relative\_density\_correlared\_parameters module
---------------------------------------------------   
+-------------------------------------------------------------
 .. autoclass:: geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters
    :members:

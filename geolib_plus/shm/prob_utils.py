@@ -11,7 +11,7 @@ from scipy.stats import norm
 class ProbUtils(BaseModel):
     """
     Class contains probabilistic utilities for parameter determination following the methodology as described in
-    :cite: `meer_2019`.
+    :cite:`meer_2019`.
     """
 
     class Config:
@@ -34,27 +34,26 @@ class ProbUtils(BaseModel):
         r"""
         Calculates corrected standard deviation at a quantile with the student-t factor. This includes an optional
         spread reduction factor.
-
         The corrected standard deviation is calculated as follows:
 
         .. math::
-
             \sigma_{ln(x).prob} \approx  \frac{T^{0.05}_{n-1}}{u^{0.05}} \cdot \sigma_{ln(x)} \cdot \sqrt{(1-a) + \frac{1}{n}}
+
 
         where:
 
-        $T^{0.05}_{n-1}$ is the student t factor at 5\percent quantile with n-1 degrees of freedom
+        :math:`T^{0.05}_{n-1}` is the student t factor at 5 :math:`\%` quantile with n-1 degrees of freedom
 
-        $u^{0.05}$ is the value of the standard normal distribution at the 5 \percent quantile
+        :math:`u^{0.05}` is the value of the standard normal distribution at the  5 :math:`\%` quantile
 
-        $a$ is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local
-
+        :math:`a` is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local
 
         :param ndof: number of degrees of freedom
         :param quantile: quantile where the student t factor should be calculated
         :param std: standard deviation
         :param a: spread reduction factor, 0.75 for regional sample collection; 1.0 for local sample collection
         :return: corrected standard deviation
+
         """
 
         # get student t factor
@@ -155,7 +154,7 @@ class ProbUtils(BaseModel):
     @staticmethod
     def calculate_characteristic_value_from_prob_parameters(mean: float, std: float, n: int, char_quantile=0.05, a=0):
         r"""
-        Calculates characteristic values from prob parameters.
+        Calculates characteristic values from probabilistic parameters.
 
         :param mean: mean of x
         :param std: standard deviation of x
@@ -188,11 +187,13 @@ class ProbUtils(BaseModel):
 
             x_{kar} = exp(\mu_{ln(x)} \pm T^{0.05}_{n-1} \cdot \sigma_{ln(x)} \cdot \sqrt{(1-a) + \frac{1}{n}}
 
-        where $x_{kar}$ is the characteristic value
+        where:
 
-        $T^{0.05}_{n-1}$ is the student t factor at 5\percent quantile with n-1 degrees of freedom
+        :math:`x_{kar}` is the characteristic value
 
-        $a$ is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local
+        :math:`T^{0.05}_{n-1}` is the student t factor at 5 :math:`\%` quantile with n-1 degrees of freedom
+
+        :math:`a` is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local
 
         :param data: dataset, X
         :param is_local: true if data collection is local, false if data collection is regional
