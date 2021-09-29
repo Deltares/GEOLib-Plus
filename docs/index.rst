@@ -26,6 +26,7 @@ instructions for getting the most out of GEOLib.
    :maxdepth: 3
 
    user/intro
+   user/install
 
 API
 ---
