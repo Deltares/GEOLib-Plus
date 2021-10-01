@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geolib_plus"
-version = "0.1.0"
+version = "0.1.1"
 description = "GEOLib+ components"
 authors = ["Maarten Pronk <git@evetion.nl>", "Deltares"]
 license = "LGPL-3.0-or-later"

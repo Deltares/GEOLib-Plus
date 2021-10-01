@@ -7,7 +7,7 @@ This part of the documentation covers the installation of GEOLib+.
 The first step to using any software package is getting it properly installed.
 
 GEOLib+ installation
--------------------
+--------------------
 GEOLib+ releases are available from publicwiki.deltares.nl as .whl files. You can
 download these and install such files with::
 
