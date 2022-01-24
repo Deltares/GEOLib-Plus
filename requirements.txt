@@ -9,6 +9,7 @@ colorama==0.4.4; sys_platform == "win32"
 coverage==5.3
 cycler==0.10.0
 docutils==0.16
+geolib==0.1.7
 idna==2.10
 imagesize==1.2.0
 importlib-metadata==2.0.0

@@ -54,3 +54,5 @@ Thumbs.db
 docs/build*
 .coverage
 test-reports
+.pycache
+__pycache__
