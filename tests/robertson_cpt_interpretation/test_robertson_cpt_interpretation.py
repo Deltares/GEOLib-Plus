@@ -34,7 +34,7 @@ class TestShapeFiles:
         np.testing.assert_array_equal(lithology_test, litho)
 
 
-class TestIntergration:
+class Testintegration:
     @pytest.mark.integrationtest
     def test_against_bro_results(self):
         # open the gef file

@@ -383,7 +383,7 @@ class TestMatchIdxWithError:
 
 
 class TestReadGef:
-    @pytest.mark.intergration
+    @pytest.mark.integration
     def test_read_gef_1(self):
         # todo move calculation of depth_to_reference outside reader
         gef_file = TestUtils.get_local_test_data_dir(
@@ -412,7 +412,7 @@ class TestReadGef:
         assert (test_friction_nbr == cpt["friction_nbr"]).all()
         assert (test_water == cpt["pore_pressure_u2"]).all()
 
-    @pytest.mark.intergration
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "filename, error",
         [
@@ -439,7 +439,7 @@ class TestReadGef:
             gef_reader.read_gef(gef_file=filename)
         assert error == str(excinfo.value)
 
-    @pytest.mark.intergration
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "filename, warning",
         [
@@ -467,7 +467,7 @@ class TestReadGef:
         assert warning in caplog.text
 
     @pytest.mark.workinprogress
-    @pytest.mark.intergration
+    @pytest.mark.integration
     def test_read_gef_3(self):
         # todo move calculation of depth_to_reference outside reader
 
