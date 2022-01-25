@@ -56,3 +56,4 @@ docs/build*
 test-reports
 .pycache
 __pycache__
+tests/test_output/
