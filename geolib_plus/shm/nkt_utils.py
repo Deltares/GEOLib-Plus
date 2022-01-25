@@ -1,11 +1,11 @@
-from typing import Optional, Iterable, Union
-from pydantic import BaseModel
 from enum import IntEnum
+from typing import Iterable, Optional, Union
+
 import numpy as np
+from pydantic import BaseModel
+from scipy.optimize import minimize as sc_minimize
 
 from geolib_plus.shm.prob_utils import ProbUtils
-
-from scipy.optimize import minimize as sc_minimize
 
 
 class NktMethod(IntEnum):
@@ -20,8 +20,9 @@ class NktUtils(BaseModel):
     """
 
     @staticmethod
-    def get_default_nkt(is_saturated: Optional[Union[np.ndarray, bool]]) \
-            -> (Union[np.ndarray, bool], Union[np.ndarray, bool]):
+    def get_default_nkt(
+        is_saturated: Optional[Union[np.ndarray, bool]]
+    ) -> (Union[np.ndarray, bool], Union[np.ndarray, bool]):
         r"""
         Gets default Nkt values.
 
@@ -66,7 +67,9 @@ class NktUtils(BaseModel):
         return nkt_mean, nkt_std
 
     @staticmethod
-    def get_nkt_stats_from_weighted_regression(su: np.ndarray, q_net: np.ndarray) -> (float, float):
+    def get_nkt_stats_from_weighted_regression(
+        su: np.ndarray, q_net: np.ndarray
+    ) -> (float, float):
         r"""
         Gets Nkt statistics from weighted regression. With this method, the mean of Nkt and the variation coefficient
         of q_net/Nkt are found through weighted regression where the variation coefficient is minimised.
@@ -85,8 +88,9 @@ class NktUtils(BaseModel):
         """
 
         # set minimisation function
-        minimisation_function = lambda mu_nkt:  np.sqrt(np.sum(((np.array(su) * mu_nkt)/np.array(q_net) -1)**2) /
-                                                        (len(su)-1))
+        minimisation_function = lambda mu_nkt: np.sqrt(
+            np.sum(((np.array(su) * mu_nkt) / np.array(q_net) - 1) ** 2) / (len(su) - 1)
+        )
 
         # perform minimisation
         res = sc_minimize(minimisation_function, 0)
@@ -98,8 +102,9 @@ class NktUtils(BaseModel):
         return nkt_mean, vc_qnet_nkt_tot
 
     @staticmethod
-    def get_characteristic_value_nkt_from_weighted_regression(su: np.ndarray, q_net: np.ndarray, vc_loc: float = None) \
-            -> float:
+    def get_characteristic_value_nkt_from_weighted_regression(
+        su: np.ndarray, q_net: np.ndarray, vc_loc: float = None
+    ) -> float:
         r"""
         Gets characteristic value of nkt from weighted regression.
 
@@ -118,23 +123,25 @@ class NktUtils(BaseModel):
         """
 
         # get mean Nkt and variation coefficient of q_net/nkt_total through weighted regression
-        nkt_mean, vc_qnet_nkt_tot = NktUtils.get_nkt_stats_from_weighted_regression(su, q_net)
+        nkt_mean, vc_qnet_nkt_tot = NktUtils.get_nkt_stats_from_weighted_regression(
+            su, q_net
+        )
 
         # set vc_loc as 0.5 of variation coefficient of q_net/nkt_total if none is given
         if vc_loc is None:
             vc_loc = 0.5 * vc_qnet_nkt_tot
 
         # calculate average variation coefficient of q_net/nkt
-        vc_average = np.sqrt(vc_qnet_nkt_tot**2 - vc_loc**2)
+        vc_average = np.sqrt(vc_qnet_nkt_tot ** 2 - vc_loc ** 2)
 
         # get number of tests
         n = len(su)
 
         # calculate student t factor at 95 percentile
-        student_t_factor =ProbUtils.calculate_student_t_factor(n-1,0.95)
+        student_t_factor = ProbUtils.calculate_student_t_factor(n - 1, 0.95)
 
         # calculate characteristic value of Nkt
-        nkt_char = nkt_mean / (1-student_t_factor * vc_average * np.sqrt(1+(1/n)))
+        nkt_char = nkt_mean / (1 - student_t_factor * vc_average * np.sqrt(1 + (1 / n)))
 
         return nkt_char
 
@@ -158,7 +165,9 @@ class NktUtils(BaseModel):
         return log_nkt_mean, log_nkt_std_tot
 
     @staticmethod
-    def get_characteristic_value_nkt_from_statistics(su: np.ndarray, q_net: np.ndarray, std_loc: float = None) -> float:
+    def get_characteristic_value_nkt_from_statistics(
+        su: np.ndarray, q_net: np.ndarray, std_loc: float = None
+    ) -> float:
         r"""
         Gets characteristic value of N_kt through statistics.
 
@@ -184,7 +193,7 @@ class NktUtils(BaseModel):
             std_loc = 0.5 * log_nkt_std_tot
 
         # calculate average standard deviation
-        std_average = np.sqrt(log_nkt_std_tot**2 - std_loc**2)
+        std_average = np.sqrt(log_nkt_std_tot ** 2 - std_loc ** 2)
 
         # get number of data points
         n = len(su)
@@ -193,13 +202,16 @@ class NktUtils(BaseModel):
         student_t_factor = ProbUtils.calculate_student_t_factor(n - 1, 0.95)
 
         # calculate characteristic value of N_kt
-        nkt_char = np.exp(log_nkt_mean + student_t_factor * std_average * np.sqrt(1+1/n) )
+        nkt_char = np.exp(
+            log_nkt_mean + student_t_factor * std_average * np.sqrt(1 + 1 / n)
+        )
 
         return nkt_char
 
     @staticmethod
-    def get_prob_nkt_parameters_from_weighted_regression(su: np.ndarray, q_net: np.ndarray, vc_loc: float = None) \
-            -> (float, float):
+    def get_prob_nkt_parameters_from_weighted_regression(
+        su: np.ndarray, q_net: np.ndarray, vc_loc: float = None
+    ) -> (float, float):
         r"""
         Get Nkt parameters for probabilistic analysis through weighted regression.
 
@@ -215,7 +227,9 @@ class NktUtils(BaseModel):
         """
 
         # calculate mean of the Nkt values and the variation coefficient of q_net / N_kt
-        nkt_mean, vc_qnet_nkt_tot = NktUtils.get_nkt_stats_from_weighted_regression(su, q_net)
+        nkt_mean, vc_qnet_nkt_tot = NktUtils.get_nkt_stats_from_weighted_regression(
+            su, q_net
+        )
 
         # set local variation coefficient in case it is not given
         if vc_loc is None:
@@ -230,8 +244,9 @@ class NktUtils(BaseModel):
         return nkt_mean, vc_prob
 
     @staticmethod
-    def get_prob_nkt_parameters_from_statistics(su: np.ndarray, q_net: np.ndarray, log_std_loc: float = None) \
-            -> (float, float):
+    def get_prob_nkt_parameters_from_statistics(
+        su: np.ndarray, q_net: np.ndarray, log_std_loc: float = None
+    ) -> (float, float):
         r"""
         Get Nkt parameters for probabilistic analysis through statistics.
 
@@ -257,12 +272,16 @@ class NktUtils(BaseModel):
         log_std_average = np.sqrt(log_nkt_std_tot ** 2 - log_std_loc ** 2)
 
         # adjust std of Log nkt with the student T distribution
-        log_std_prob = ProbUtils.correct_std_with_student_t(len(su), 0.05, log_std_average, 0)
+        log_std_prob = ProbUtils.correct_std_with_student_t(
+            len(su), 0.05, log_std_average, 0
+        )
 
         # calculate mean and standard deviation of Nkt
-        mean_nkt, std_nkt = ProbUtils.get_mean_std_from_lognormal(log_nkt_mean, log_std_prob)
+        mean_nkt, std_nkt = ProbUtils.get_mean_std_from_lognormal(
+            log_nkt_mean, log_std_prob
+        )
 
         # calculate variation coefficient
-        vc_qnet_nkt = std_nkt/mean_nkt
+        vc_qnet_nkt = std_nkt / mean_nkt
 
         return mean_nkt, vc_qnet_nkt

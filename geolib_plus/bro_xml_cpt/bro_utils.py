@@ -6,27 +6,27 @@ Functions used in the reading of bro_xml cpts
 """
 
 import logging
-from io import StringIO
-import pickle
 import mmap
+import pickle
+from io import StringIO
+from os import name, stat
 from os.path import exists, splitext
-from os import stat, name
+from pathlib import Path
+from typing import Dict, Iterable, List, Optional, TypeVar, Union
 from zipfile import ZipFile
 
+import numpy as np
+import pandas as pd
+import pyproj
 
 # External modules
 from lxml import etree
-import numpy as np
-from scipy.spatial import cKDTree as KDTree
-import pandas as pd
-import pyproj
 from lxml.etree import _Element
-from pathlib import Path
-from typing import Dict, List, Union, Iterable, Optional
 from pydantic import BaseModel
-from typing import TypeVar
+from scipy.spatial import cKDTree as KDTree
 
 from geolib_plus.cpt_base_model import CptReader
+
 from .validate_bro import validate_bro_cpt
 
 # Types not included in typing
@@ -154,7 +154,7 @@ class XMLBroCPTReader(CptReader):
             return loc.text
 
     def find_availed_data_columns(self, root: _Element) -> List:
-        """ Find which columns are not empty. """
+        """Find which columns are not empty."""
         avail_columns = []
         for parameters in root.iter(ns + "parameters"):
             for parameter in parameters:
@@ -230,7 +230,7 @@ class XMLBroCPTReader(CptReader):
         ]
 
     def are_all_required_data_available(self, avail_columns: List) -> None:
-        """ Determine if all data is available """
+        """Determine if all data is available"""
         meta_usable = self.all_single_data_available()
         data_usable = all([col in avail_columns for col in req_columns])
         if not (meta_usable and data_usable):
@@ -268,7 +268,7 @@ class XMLBroCPTReader(CptReader):
         return x, y
 
     def get_all_data_from_bro(self, root: _Element) -> None:
-        """ Extract values from bro. From the xml elements."""
+        """Extract values from bro. From the xml elements."""
         # BRO Id
         self.bro_data.id = self.search_values_in_root(
             root=root, search_item=ns4 + "broId"
@@ -299,8 +299,8 @@ class XMLBroCPTReader(CptReader):
         # cpt time of result
         for cpt in root.iter(ns + "conePenetrationTest"):
             for loc in cpt.iter(ns5 + "resultTime"):
-                if loc.text.strip() == '':
-                    for loc2 in loc.iter(ns3 + 'timePosition'):
+                if loc.text.strip() == "":
+                    for loc2 in loc.iter(ns3 + "timePosition"):
                         self.bro_data.result_time = loc2.text
                 else:
                     self.bro_data.result_time = loc.text

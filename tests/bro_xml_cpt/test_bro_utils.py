@@ -1,16 +1,18 @@
-import pytest
-from tests.utils import TestUtils
-from pathlib import Path
 import json
-import os
-from lxml import etree
-import pandas as pd
-import numpy as np
-import mmap
 import logging
+import mmap
+import os
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import pytest
+from lxml import etree
 
 from geolib_plus.bro_xml_cpt import bro_utils as bro
 from geolib_plus.bro_xml_cpt.bro_utils import XMLBroCPTReader
+from tests.utils import TestUtils
+
 
 # todo JN: write unit tests
 class TestBroUtil:
@@ -210,5 +212,5 @@ class TestBroUtil:
         assert cpt_data.bro_data.local_reference == "maaiveld"
         assert cpt_data.bro_data.vertical_datum == "NAP"
         assert cpt_data.bro_data.quality_class == "klasse2"
-        assert cpt_data.bro_data.result_time == '2011-06-29'
+        assert cpt_data.bro_data.result_time == "2011-06-29"
         assert cpt_data.bro_data.predrilled_z == 0.01

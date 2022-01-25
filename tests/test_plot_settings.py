@@ -1,4 +1,5 @@
 import pytest
+
 from geolib_plus import plot_settings
 
 
@@ -9,6 +10,7 @@ class TestPlotSettings:
     def test_plot_settings_unit_tests(self):
         raise NotImplementedError
 
+
 import unittest
 
 from teamcity import is_running_under_teamcity
@@ -18,7 +20,6 @@ from teamcity.unittestpy import TeamcityTestRunner
 
 
 class TestPlotSettings(unittest.TestCase):
-
     def setUp(self):
         self.settings = plot_settings.PlotSettings()
 
@@ -37,7 +38,9 @@ class TestPlotSettings(unittest.TestCase):
 
         for key in initial_keys:
             self.assertTrue(key in self.settings.general_settings["graph_settings"])
-        self.assertTrue(data_keys[4] not in self.settings.general_settings["graph_settings"])
+        self.assertTrue(
+            data_keys[4] not in self.settings.general_settings["graph_settings"]
+        )
 
         self.settings.set_inversed_friction_number_in_plot()
 
@@ -45,7 +48,9 @@ class TestPlotSettings(unittest.TestCase):
         for key in present_keys:
             self.assertTrue(key in self.settings.general_settings["graph_settings"])
 
-        self.assertTrue(data_keys[2] not in self.settings.general_settings["graph_settings"])
+        self.assertTrue(
+            data_keys[2] not in self.settings.general_settings["graph_settings"]
+        )
 
     def test_reset_friction_number_in_plot(self):
         """
@@ -61,10 +66,12 @@ class TestPlotSettings(unittest.TestCase):
 
         for key in present_keys:
             self.assertTrue(key in self.settings.general_settings["graph_settings"])
-        self.assertTrue(data_keys[4] not in self.settings.general_settings["graph_settings"])
+        self.assertTrue(
+            data_keys[4] not in self.settings.general_settings["graph_settings"]
+        )
 
 
-if __name__ == '__main__':  # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     if is_running_under_teamcity():
         runner = TeamcityTestRunner()
     else:

@@ -1,8 +1,10 @@
-import pytest
 import math
+
 import numpy as np
-from tests.utils import TestUtils
+import pytest
+
 from geolib_plus.soft_soil_creep_parameters import SoftSoilCreepParameters
+from tests.utils import TestUtils
 
 
 class TestSoftSoilCreepParameters:

@@ -1,12 +1,13 @@
-import pytest
 import math
-import numpy as np
 
-from tests.utils import TestUtils
+import numpy as np
+import pytest
+
 from geolib_plus.hardening_soil_model_parameters import (
     HardeningSoilModelParameters,
     HardingSoilCalculationType,
 )
+from tests.utils import TestUtils
 
 
 class TestHardeningSoilParameters:

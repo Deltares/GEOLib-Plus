@@ -1,14 +1,15 @@
+# External
+from pathlib import Path
+
+import numpy as np
+import pytest
+
 from geolib_plus import __version__
 from geolib_plus.bro_xml_cpt import *
 from geolib_plus.gef_cpt import *
 from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
-from tests.utils import TestUtils
 from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
-
-# External
-from pathlib import Path
-import numpy as np
-import pytest
+from tests.utils import TestUtils
 
 
 @pytest.mark.systemtest

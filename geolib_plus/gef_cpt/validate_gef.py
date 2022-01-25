@@ -1,9 +1,9 @@
-from ctypes import *
-from os import remove
-import warnings
-from multiprocessing import Pool
-from pathlib import Path
 import platform
+import warnings
+from ctypes import *
+from multiprocessing import Pool
+from os import remove
+from pathlib import Path
 
 
 class GefLib:

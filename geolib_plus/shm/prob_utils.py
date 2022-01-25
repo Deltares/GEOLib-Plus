@@ -1,11 +1,8 @@
-
 # import packages
 
-from pydantic import BaseModel
-
 import numpy as np
-from scipy.stats import t
-from scipy.stats import norm
+from pydantic import BaseModel
+from scipy.stats import norm, t
 
 
 class ProbUtils(BaseModel):
@@ -30,7 +27,9 @@ class ProbUtils(BaseModel):
         return t(ndof).ppf(quantile)
 
     @staticmethod
-    def correct_std_with_student_t(ndof: int, quantile: float, std: float, a: float = 0) -> float:
+    def correct_std_with_student_t(
+        ndof: int, quantile: float, std: float, a: float = 0
+    ) -> float:
         r"""
         Calculates corrected standard deviation at a quantile with the student-t factor. This includes an optional
         spread reduction factor.
@@ -57,18 +56,20 @@ class ProbUtils(BaseModel):
         """
 
         # get student t factor
-        t_factor = ProbUtils.calculate_student_t_factor(ndof-1, quantile)
+        t_factor = ProbUtils.calculate_student_t_factor(ndof - 1, quantile)
 
         # get value at percentile for normal distribution
         norm_factor = norm.ppf(quantile)
 
         # calculate corrected standard deviation
-        corrected_std = t_factor/norm_factor * std * np.sqrt((1-a) + (1/ndof))
+        corrected_std = t_factor / norm_factor * std * np.sqrt((1 - a) + (1 / ndof))
 
         return corrected_std
 
     @staticmethod
-    def calculate_prob_parameters_from_lognormal(data: np.ndarray, is_local: bool, quantile=0.05):
+    def calculate_prob_parameters_from_lognormal(
+        data: np.ndarray, is_local: bool, quantile=0.05
+    ):
         r"""
         Calculates probabilistic parameters mu and sigma from a lognormal dataset, as required in D-stability. This
         function takes into account spread reduction factor and the student t factor.
@@ -89,9 +90,13 @@ class ProbUtils(BaseModel):
         else:
             a = 0.75
 
-        corrected_std = ProbUtils.correct_std_with_student_t(len(data), quantile, log_std, a)
+        corrected_std = ProbUtils.correct_std_with_student_t(
+            len(data), quantile, log_std, a
+        )
 
-        mean_prob, std_prob = ProbUtils.get_mean_std_from_lognormal(log_mean, corrected_std)
+        mean_prob, std_prob = ProbUtils.get_mean_std_from_lognormal(
+            log_mean, corrected_std
+        )
 
         return mean_prob, std_prob
 
@@ -105,7 +110,7 @@ class ProbUtils(BaseModel):
         :return: mean and std of X
         """
 
-        mean = np.exp(log_mean + (log_std**2)/2)
+        mean = np.exp(log_mean + (log_std ** 2) / 2)
         std = mean * np.sqrt(np.exp(log_std ** 2) - 1)
 
         return mean, std
@@ -121,7 +126,7 @@ class ProbUtils(BaseModel):
         """
 
         log_mean = np.log(mean ** 2 / (np.sqrt(std ** 2 + mean ** 2)))
-        log_std = np.sqrt(np.log((std/mean)**2 + 1))
+        log_std = np.sqrt(np.log((std / mean) ** 2 + 1))
 
         return log_mean, log_std
 
@@ -134,7 +139,7 @@ class ProbUtils(BaseModel):
         :return: mean and std of LN(X)
         """
         log_mean = np.sum(np.log(data)) / len(data)
-        log_std = np.sqrt(np.sum((np.log(data)-log_mean)**2) / (len(data) - 1))
+        log_std = np.sqrt(np.sum((np.log(data) - log_mean) ** 2) / (len(data) - 1))
 
         return log_mean, log_std
 
@@ -147,12 +152,14 @@ class ProbUtils(BaseModel):
         :return: mean and std of X
         """
         mean = np.sum(data) / len(data)
-        std = np.sqrt(np.sum((data - mean)**2) / (len(data) - 1))
+        std = np.sqrt(np.sum((data - mean) ** 2) / (len(data) - 1))
 
         return mean, std
 
     @staticmethod
-    def calculate_characteristic_value_from_prob_parameters(mean: float, std: float, n: int, char_quantile=0.05, a=0):
+    def calculate_characteristic_value_from_prob_parameters(
+        mean: float, std: float, n: int, char_quantile=0.05, a=0
+    ):
         r"""
         Calculates characteristic values from probabilistic parameters.
 
@@ -166,16 +173,24 @@ class ProbUtils(BaseModel):
         """
 
         # correct std for spread and amount of tests
-        estimated_std = ProbUtils.calculate_student_t_factor(n - 1, char_quantile) * \
-                            std * np.sqrt((1 - a) + (1 / n))
+        estimated_std = (
+            ProbUtils.calculate_student_t_factor(n - 1, char_quantile)
+            * std
+            * np.sqrt((1 - a) + (1 / n))
+        )
 
         x_kar = mean + estimated_std
 
         return x_kar
 
     @staticmethod
-    def calculate_characteristic_value_from_dataset(data: np.ndarray, is_local: bool, is_low: bool,
-                                                    is_log_normal: bool = True, char_quantile: float = 0.05):
+    def calculate_characteristic_value_from_dataset(
+        data: np.ndarray,
+        is_local: bool,
+        is_low: bool,
+        is_log_normal: bool = True,
+        char_quantile: float = 0.05,
+    ):
         r"""
         Calculates the characteristic value of the dataset. A normal distribution or a lognormal distribution can be
         assumed for the dataset. The student-t distribution is taken into account. And the spread reduction factor is
@@ -223,7 +238,8 @@ class ProbUtils(BaseModel):
 
             # calculate log_x_kar
             log_x_kar = ProbUtils.calculate_characteristic_value_from_prob_parameters(
-                log_mean, log_std, len(data), char_quantile, a)
+                log_mean, log_std, len(data), char_quantile, a
+            )
 
             # calculate x_kar
             x_kar = np.exp(log_x_kar)
@@ -233,7 +249,8 @@ class ProbUtils(BaseModel):
 
             # calculate x_kar
             x_kar = ProbUtils.calculate_characteristic_value_from_prob_parameters(
-                mean, std, len(data), char_quantile, a)
+                mean, std, len(data), char_quantile, a
+            )
 
         return x_kar
 
@@ -257,4 +274,4 @@ class ProbUtils(BaseModel):
         :param std: standard deviation of distribution
 
         """
-        return std/mean
+        return std / mean

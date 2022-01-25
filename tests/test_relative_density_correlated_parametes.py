@@ -1,10 +1,10 @@
-import pytest
 import numpy as np
+import pytest
 
-from tests.utils import TestUtils
 from geolib_plus.relative_density_correlated_parametes import (
     RelativeDensityCorrelatedParameters,
 )
+from tests.utils import TestUtils
 
 
 class TestRelativeDensityCorrelatedParameters:

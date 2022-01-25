@@ -1,8 +1,10 @@
-import pytest
 import logging
 
-from geolib_plus.bro_xml_cpt.validate_bro import ValidatePreProcessing
+import pytest
+
 from geolib_plus.bro_xml_cpt import BroXmlCpt
+from geolib_plus.bro_xml_cpt.validate_bro import ValidatePreProcessing
+
 
 # todo JN: write unit tests
 class TestValidateBro:

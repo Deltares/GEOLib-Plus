@@ -1,20 +1,21 @@
-from geolib_plus.robertson_cpt_interpretation import (
-    RobertsonCptInterpretation,
-    UnitWeightMethod,
-    OCRMethod,
-    ShearWaveVelocityMethod,
-    RelativeDensityMethod
-)
-from geolib_plus.gef_cpt import GefCpt
-from geolib_plus.bro_xml_cpt import BroXmlCpt
-
-from tests.utils import TestUtils
-import numpy as np
-import pytest
-from pathlib import Path
 import csv
 import json
 import math
+from pathlib import Path
+
+import numpy as np
+import pytest
+
+from geolib_plus.bro_xml_cpt import BroXmlCpt
+from geolib_plus.gef_cpt import GefCpt
+from geolib_plus.robertson_cpt_interpretation import (
+    OCRMethod,
+    RelativeDensityMethod,
+    RobertsonCptInterpretation,
+    ShearWaveVelocityMethod,
+    UnitWeightMethod,
+)
+from tests.utils import TestUtils
 
 
 class TestShapeFiles:
@@ -904,7 +905,7 @@ class TestInterpreter:
         return interpreter
 
     @pytest.mark.unittest
-    def test_relative_density_calc_baldi(self,set_up_relative_density_test ):
+    def test_relative_density_calc_baldi(self, set_up_relative_density_test):
 
         # define method
         method = RelativeDensityMethod.BALDI
@@ -916,11 +917,13 @@ class TestInterpreter:
         interpreter.relative_density_calc(method)
 
         # get expected value
-        expected_rd_value = 1 / 2.41 * np.log(20/ 15.7)
+        expected_rd_value = 1 / 2.41 * np.log(20 / 15.7)
         expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
 
         # assert
-        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+        np.testing.assert_array_almost_equal(
+            expected_rd, interpreter.data.relative_density
+        )
 
     @pytest.mark.unittest
     def test_relative_density_calc_kulhawy(self, set_up_relative_density_test):
@@ -935,11 +938,15 @@ class TestInterpreter:
         interpreter.relative_density_calc(method)
 
         # get expected value
-        expected_rd_value = np.sqrt(20/(305*1*1**0.18*(1.2+0.05*np.log10(10))))
+        expected_rd_value = np.sqrt(
+            20 / (305 * 1 * 1 ** 0.18 * (1.2 + 0.05 * np.log10(10)))
+        )
         expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
 
         # assert
-        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+        np.testing.assert_array_almost_equal(
+            expected_rd, interpreter.data.relative_density
+        )
 
     @pytest.mark.unittest
     def test_relative_density_calc_kulhawy_simple(self, set_up_relative_density_test):
@@ -955,11 +962,13 @@ class TestInterpreter:
         interpreter.relative_density_calc(method)
 
         # get expected value
-        expected_rd_value = np.sqrt(20/350)
+        expected_rd_value = np.sqrt(20 / 350)
         expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
 
         # assert
-        np.testing.assert_array_almost_equal(expected_rd, interpreter.data.relative_density)
+        np.testing.assert_array_almost_equal(
+            expected_rd, interpreter.data.relative_density
+        )
 
     @pytest.mark.unittest
     def test_norm_cone_resistance_clean_sand_calc(self):
@@ -971,17 +980,19 @@ class TestInterpreter:
         assert cpt
         assert interpreter
         # Define the input
-        interpreter.data.Qtn = np.array([1,1,1,1,1])
-        interpreter.data.Fr = np.array([1,1,0.1,1,1])
-        interpreter.data.IC = np.array([0.5,2,2,2.6,5])
+        interpreter.data.Qtn = np.array([1, 1, 1, 1, 1])
+        interpreter.data.Fr = np.array([1, 1, 0.1, 1, 1])
+        interpreter.data.IC = np.array([0.5, 2, 2, 2.6, 5])
 
         # Call the function to be tested
         interpreter.norm_cone_resistance_clean_sand_calc()
 
         # set expected array
-        expected_K_c2 = 5.581 * 2**3 - 0.403 * 2 **4 - 21.63 * 2 **2 + 33.75 * 2 - 17.88
-        expected_K_c4 = 6e-7 * 2.6**16.76
-        expected_Qtncs = np.array([1,expected_K_c2,1,expected_K_c4,np.nan])
+        expected_K_c2 = (
+            5.581 * 2 ** 3 - 0.403 * 2 ** 4 - 21.63 * 2 ** 2 + 33.75 * 2 - 17.88
+        )
+        expected_K_c4 = 6e-7 * 2.6 ** 16.76
+        expected_Qtncs = np.array([1, expected_K_c2, 1, expected_K_c4, np.nan])
 
         # Check if results are equal
         np.testing.assert_array_almost_equal(interpreter.data.Qtncs, expected_Qtncs)
@@ -1002,7 +1013,7 @@ class TestInterpreter:
         interpreter.state_parameter_calc()
 
         # set expected array
-        expected_psi = np.array([0.23, -0.1, np.nan, np.nan ])
+        expected_psi = np.array([0.23, -0.1, np.nan, np.nan])
 
         # Check if results are equal
         np.testing.assert_array_almost_equal(interpreter.data.psi, expected_psi)

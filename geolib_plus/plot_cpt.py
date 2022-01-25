@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 if TYPE_CHECKING:
     from geolib_plus.cpt_base_model import AbstractCPT
 
-from pathlib import Path
-import numpy as np
-import matplotlib.pylab as plt
-
 import os
 import warnings
+from pathlib import Path
 from typing import Tuple
+
+import matplotlib.pylab as plt
+import numpy as np
 
 from geolib_plus import plot_utils
 
@@ -151,23 +151,30 @@ def trim_cpt_data_on_vertical_limits(
         data = cpt.water
 
     # Prevent plotting estimated predrill and invalid data
-    valid_depth = cpt.depth_to_reference[cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth]
-    valid_data = data[cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth]
+    valid_depth = cpt.depth_to_reference[
+        cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth
+    ]
+    valid_data = data[
+        cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth
+    ]
 
     # Get the data which falls within the vertical limits of the plot
     depth_in_range_idxs = np.where((y_lim[1] < valid_depth) & (valid_depth < y_lim[0]))
     data_within_lim = valid_data[depth_in_range_idxs].tolist()
     depth_in_range = valid_depth[depth_in_range_idxs].tolist()
-    if isinstance(cpt.inclination_resultant,np.ndarray):
+    if isinstance(cpt.inclination_resultant, np.ndarray):
         valid_inclination = cpt.inclination_resultant[
-            cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth]
+            cpt.depth_to_reference <= cpt.local_reference_level - cpt.undefined_depth
+        ]
         inclination_in_range = valid_inclination[depth_in_range_idxs].tolist()
     else:
         inclination_in_range = None
 
     # If multiple plots are required to show the data, add last value of previous plot to current plot
     if cpt.depth_to_reference[0] > y_lim[0]:
-        previous_idx = max(i for i in range(len(valid_depth)) if valid_depth[i] - y_lim[0] > 0)
+        previous_idx = max(
+            i for i in range(len(valid_depth)) if valid_depth[i] - y_lim[0] > 0
+        )
         data_within_lim.insert(0, valid_data[previous_idx])
         depth_in_range.insert(0, valid_depth[previous_idx])
         if inclination_in_range is not None:
@@ -322,7 +329,7 @@ def save_figures(figures: List, cpt: AbstractCPT, output_folder: Path):
     )
 
     for fig in figures:
-        pdf.savefig(fig,bbox_inches='tight')
+        pdf.savefig(fig, bbox_inches="tight")
         plt.close(fig)
 
     pdf.close()
@@ -446,6 +453,4 @@ def plot_cpt_norm(cpt: AbstractCPT, output_folder: Path, settings: Dict):
 
     save_figures(figures, cpt, output_folder)
 
-    plt.close('all')
-
-
+    plt.close("all")

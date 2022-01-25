@@ -1,17 +1,21 @@
-from geolib_plus.gef_cpt import *
-from tests.utils import TestUtils
-from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
-
 # External
 from pathlib import Path
+
 import pytest
+
+from geolib_plus.gef_cpt import *
+from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
+from tests.utils import TestUtils
+
 
 @pytest.fixture()
 def test_file():
-    yield TestUtils.get_local_test_data_dir(Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef"))
+    yield TestUtils.get_local_test_data_dir(
+        Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
+    )
+
 
 class TestBugGeolibPlus35:
-
     @pytest.mark.systemtest
     def test_no_import_geolib(self, test_file):
         # initialise models
@@ -29,6 +33,7 @@ class TestBugGeolibPlus35:
 
         # This is a workaround
         import pydantic
+
         pydantic.BaseModel.Config.validate_assignment = False
 
         # initialise models

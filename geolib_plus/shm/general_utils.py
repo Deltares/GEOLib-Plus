@@ -1,6 +1,5 @@
-from pydantic import BaseModel
-
 import numpy as np
+from pydantic import BaseModel
 
 
 class GeneralUtils(BaseModel):

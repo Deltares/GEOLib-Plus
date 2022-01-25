@@ -1,6 +1,8 @@
 from pathlib import Path
-from geolib_plus.bro_xml_cpt import BroXmlCpt
+
 import numpy as np
+
+from geolib_plus.bro_xml_cpt import BroXmlCpt
 
 cpt_file_xml = Path("test_files", "cpt", "bro_xml", "cpt_with_water.xml")
 cpt = BroXmlCpt()
@@ -61,4 +63,3 @@ cpt.plot_settings.vertical_settings["spacing_shown_cut_off_value"] = 1.5
 
 
 cpt.plot(Path("."))
-

@@ -1,13 +1,13 @@
+from pathlib import Path
+
+import geolib
 import pytest
+from geolib.models.dfoundations import piles, profiles
+
 from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.geolib_connections import DFoundationsConnector
 from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
-
-from pathlib import Path
 from tests.utils import TestUtils
-
-import geolib
-from geolib.models.dfoundations import piles, profiles
 
 
 class TestLayers:

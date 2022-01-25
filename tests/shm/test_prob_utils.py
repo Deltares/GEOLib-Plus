@@ -1,10 +1,10 @@
-from geolib_plus.shm.prob_utils import ProbUtils
-import pytest
 import numpy as np
+import pytest
+
+from geolib_plus.shm.prob_utils import ProbUtils
 
 
 class TestProbUtils:
-
     def setup_method(self):
         "setup random seed"
         np.random.seed(2021)
@@ -19,10 +19,10 @@ class TestProbUtils:
         expected_value = -1.725
 
         # calculate
-        calculated_value = ProbUtils.calculate_student_t_factor(20,0.05)
+        calculated_value = ProbUtils.calculate_student_t_factor(20, 0.05)
 
         # assert
-        np.testing.assert_almost_equal(expected_value,calculated_value, 3)
+        np.testing.assert_almost_equal(expected_value, calculated_value, 3)
 
     @pytest.mark.unittest
     def test_correct_std_with_student_t(self):
@@ -32,22 +32,34 @@ class TestProbUtils:
 
         # set expected value 1
         std = 2
-        expected_value_upper_bound = -1.725 / -1.645 *std * np.sqrt(1+1/21)
+        expected_value_upper_bound = -1.725 / -1.645 * std * np.sqrt(1 + 1 / 21)
 
         # calculate corrected standard deviation upper bound
-        calculated_value_upper_bound = ProbUtils.correct_std_with_student_t(21, 0.05, std)
+        calculated_value_upper_bound = ProbUtils.correct_std_with_student_t(
+            21, 0.05, std
+        )
 
         # calculate corrected standard deviation lower bound
-        calculated_value_lower_bound = ProbUtils.correct_std_with_student_t(int(1e10), 0.05, std, a=1)
+        calculated_value_lower_bound = ProbUtils.correct_std_with_student_t(
+            int(1e10), 0.05, std, a=1
+        )
 
         # calculate corrected standard deviation in between
-        calculated_value_between = ProbUtils.correct_std_with_student_t(21, 0.05, std, a=1)
+        calculated_value_between = ProbUtils.correct_std_with_student_t(
+            21, 0.05, std, a=1
+        )
 
         # assert
-        np.testing.assert_almost_equal(expected_value_upper_bound,calculated_value_upper_bound, 3)
+        np.testing.assert_almost_equal(
+            expected_value_upper_bound, calculated_value_upper_bound, 3
+        )
         np.testing.assert_almost_equal(0, calculated_value_lower_bound, 3)
 
-        assert expected_value_upper_bound > calculated_value_between > calculated_value_lower_bound
+        assert (
+            expected_value_upper_bound
+            > calculated_value_between
+            > calculated_value_lower_bound
+        )
 
     @pytest.mark.unittest
     def test_get_mean_std_from_lognormal(self):
@@ -60,7 +72,7 @@ class TestProbUtils:
         calc_mean, calc_std = ProbUtils.get_mean_std_from_lognormal(mean, std)
 
         # create lognormal dist with log_mean and log_std
-        normal_dist = np.random.normal(calc_mean,calc_std, 10000000)
+        normal_dist = np.random.normal(calc_mean, calc_std, 10000000)
 
         # approximate mean and std from distribution
         approximated_mean = np.mean(normal_dist)
@@ -120,8 +132,8 @@ class TestProbUtils:
     @pytest.mark.unittest
     def test_calculate_normal_stats(self):
         """
-       Tests calculate mean and standard deviation from normal distribution
-       """
+        Tests calculate mean and standard deviation from normal distribution
+        """
 
         # set log normal data
         log_mean, log_std = 5, 2
@@ -142,11 +154,15 @@ class TestProbUtils:
 
         # calculate characteristic value from a large dataset
         large_local_data_set = np.random.lognormal(log_mean, log_std, 10000000)
-        x_kar_large = ProbUtils.calculate_characteristic_value_from_dataset(large_local_data_set, True, True)
+        x_kar_large = ProbUtils.calculate_characteristic_value_from_dataset(
+            large_local_data_set, True, True
+        )
 
         # calculate characteristic value from a small dataset
         small_local_dataset = np.random.lognormal(log_mean, log_std, 10)
-        x_kar_small = ProbUtils.calculate_characteristic_value_from_dataset(small_local_dataset, True, True)
+        x_kar_small = ProbUtils.calculate_characteristic_value_from_dataset(
+            small_local_dataset, True, True
+        )
 
         # check if exp(log_mean) is close to characteristic value of large dataset
         assert pytest.approx(np.exp(log_mean), rel=0.01) == x_kar_large
@@ -162,11 +178,18 @@ class TestProbUtils:
 
         # calculate prob mean and std from a large dataset
         large_local_data_set = np.random.lognormal(log_mean, log_std, 10000000)
-        mean_prob, std_prob = ProbUtils.calculate_prob_parameters_from_lognormal(large_local_data_set, True)
+        mean_prob, std_prob = ProbUtils.calculate_prob_parameters_from_lognormal(
+            large_local_data_set, True
+        )
 
         # calculate prob mean and std from a small dataset
         small_local_dataset = np.random.lognormal(log_mean, log_std, 10)
-        mean_prob_small, std_prob_small = ProbUtils.calculate_prob_parameters_from_lognormal(small_local_dataset, True)
+        (
+            mean_prob_small,
+            std_prob_small,
+        ) = ProbUtils.calculate_prob_parameters_from_lognormal(
+            small_local_dataset, True
+        )
 
         # set expected mean and std of small dataset (values are meant as a regression test
         expected_mean_small = 4.91908583464898
@@ -179,8 +202,3 @@ class TestProbUtils:
         # check if mean_prob and std_prob has changed (regression test)
         assert pytest.approx(mean_prob_small) == expected_mean_small
         assert pytest.approx(std_prob_small) == expected_std_small
-
-
-
-
-

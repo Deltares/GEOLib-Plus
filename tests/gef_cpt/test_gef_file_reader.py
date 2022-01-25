@@ -1,9 +1,11 @@
-import pytest
-from typing import List, Dict
-import numpy as np
-import re
-from geolib_plus.gef_cpt.gef_file_reader import GefFileReader, GefProperty
 import logging
+import re
+from typing import Dict, List
+
+import numpy as np
+import pytest
+
+from geolib_plus.gef_cpt.gef_file_reader import GefFileReader, GefProperty
 from tests.utils import TestUtils
 
 
@@ -260,6 +262,7 @@ class TestReadColumnData:
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13.387
         assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
         assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == -99999.0
+
 
 class TestReadColumnIndexForGefData:
     @pytest.mark.unittest

@@ -1,12 +1,14 @@
 """
 NEN 9997 soil classification
 """
+import json
+
 # import packages
 import os
-import json
-import numpy as np
 from pathlib import Path
-from typing import List, Dict, Union
+from typing import Dict, List, Union
+
+import numpy as np
 from pydantic import BaseModel
 
 # import packages

@@ -1,8 +1,8 @@
-from typing import Iterable, List, Dict, Union, Tuple, Any
 import math
+from importlib import import_module
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
 from geolib_plus import AbstractCPT
-from importlib import import_module
 
 
 def validate_that_geolib_is_installed():
@@ -29,11 +29,11 @@ class DFoundationsConnector:
         in D-Foundations through GEOLIB.
         """
         validate_that_geolib_is_installed()
+        from geolib.geometry import Point
         from geolib.models.dfoundations.profiles import (
             Excavation as dfoundations_excavation,
         )
         from geolib.models.dfoundations.profiles import Profile as dfoundations_profile
-        from geolib.geometry import Point
 
         dfoundations_cpt = DFoundationsConnector.__define_cpt_inputs(cpt)
 

@@ -1,9 +1,10 @@
-from geolib_plus.cpt_base_model import AbstractCPT, CptReader
-from .gef_file_reader import GefFileReader
-
-from pandas import DataFrame
-from numpy import array, unique
 import numpy
+from numpy import array, unique
+from pandas import DataFrame
+
+from geolib_plus.cpt_base_model import AbstractCPT, CptReader
+
+from .gef_file_reader import GefFileReader
 
 
 class GefCpt(AbstractCPT):

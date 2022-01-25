@@ -1,8 +1,9 @@
-from lxml import etree
-from urllib.parse import urlparse
-import requests
 import logging
+from urllib.parse import urlparse
+
 import numpy as np
+import requests
+from lxml import etree
 
 from geolib_plus.cpt_base_model import AbstractCPT
 

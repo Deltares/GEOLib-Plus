@@ -1,11 +1,13 @@
-import pandas as pd
-import numpy as np
-from typing import Iterable, List
 import math
+from typing import Iterable, List
+
+import numpy as np
+import pandas as pd
+
+from geolib_plus.cpt_base_model import AbstractCPT, CptReader
 
 # External modules
 from .bro_utils import XMLBroCPTReader
-from geolib_plus.cpt_base_model import AbstractCPT, CptReader
 
 
 class BroXmlCpt(AbstractCPT):

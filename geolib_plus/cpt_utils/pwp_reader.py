@@ -1,17 +1,17 @@
 """
 NetCFD
 """
+import logging
+
 # import packages
 import netCDF4
 import numpy as np
 from pyproj import Transformer
-import logging
 
 transformer = Transformer.from_crs("epsg:28992", "epsg:4326")
 
 
 class NetCDF:
-
     def __init__(self):
         self.NAP_water_level = 0  # default value of NAP
         self.lat = []  # latitude of dataset points
@@ -30,8 +30,8 @@ class NetCDF:
         dataset = netCDF4.Dataset(cdf_file)
 
         # read coordinates
-        lat = dataset.variables['lat'][:]
-        lon = dataset.variables['lon'][:]
+        lat = dataset.variables["lat"][:]
+        lon = dataset.variables["lon"][:]
         self.data = dataset.variables["Band1"][:]
 
         # only use valid data
@@ -54,7 +54,10 @@ class NetCDF:
         y_lat, x_lon = transformer.transform(X, Y)
 
         # find nearest cell
-        id_min = ((self.lon - x_lon)**2 + (self.lat - y_lat)**2).argmin()
+        id_min = ((self.lon - x_lon) ** 2 + (self.lat - y_lat) ** 2).argmin()
         self.NAP_water_level = self.data[id_min]
-        logging.debug("For given x: {} (lon: {}) and y: {} (lat: {}), nearest point with data is {} {}".format(X, x_lon, Y, y_lat, self.lon[id_min], self.lat[id_min]))
-
+        logging.debug(
+            "For given x: {} (lon: {}) and y: {} (lat: {}), nearest point with data is {} {}".format(
+                X, x_lon, Y, y_lat, self.lon[id_min], self.lat[id_min]
+            )
+        )

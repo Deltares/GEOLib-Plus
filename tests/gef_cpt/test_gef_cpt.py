@@ -1,7 +1,9 @@
-import pytest
-import numpy as np
-from geolib_plus.gef_cpt import GefCpt
 from pathlib import Path
+
+import numpy as np
+import pytest
+
+from geolib_plus.gef_cpt import GefCpt
 from tests.utils import TestUtils
 
 

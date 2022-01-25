@@ -1,7 +1,7 @@
-
 import json
 from pathlib import Path
 from typing import List
+
 from pydantic import BaseModel
 
 from geolib_plus.shm.soil import Soil
@@ -16,7 +16,7 @@ class ShmTables(BaseModel):
     soils: List = []
 
     def load_shm_tables(
-            self, path_table: Path = Path("resources"), filename: str = "shm_tables.json"
+        self, path_table: Path = Path("resources"), filename: str = "shm_tables.json"
     ) -> None:
         """
         Function that reads the shm tables json file.
@@ -34,7 +34,7 @@ class ShmTables(BaseModel):
             soils = json.load(f)
 
         # set items in soil classes
-        for k,v in soils.items():
+        for k, v in soils.items():
             for sub_k, sub_v in v.items():
                 soil = Soil(name=f"{k}_{sub_k}")
                 soil = soil.transfer_soil_dict_to_class(sub_v, soil)

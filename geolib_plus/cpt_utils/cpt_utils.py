@@ -1,14 +1,16 @@
 """
 Tools for CPT tool
 """
+import os
+import sys
+
 # import packages
 from itertools import groupby
 from operator import itemgetter
-import numpy as np
-import os
-import sys
-from typing import List, Iterable, Union, Optional
 from pathlib import Path
+from typing import Iterable, List, Optional, Union
+
+import numpy as np
 
 from geolib_plus.cpt_base_model import AbstractCPT
 

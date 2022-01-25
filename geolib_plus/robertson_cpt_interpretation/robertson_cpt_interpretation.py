@@ -1,22 +1,22 @@
 import os
-import shapefile
-from shapely.geometry import Polygon
-from shapely.geometry import Point
-import numpy as np
-import more_itertools as mit
+from enum import IntEnum
 from pathlib import Path
 from typing import Iterable, List, Union
-from enum import IntEnum
-from pydantic import BaseModel
 
-from geolib_plus.cpt_base_model import AbstractInterpretationMethod, AbstractCPT
+import more_itertools as mit
+import numpy as np
+import shapefile
+from pydantic import BaseModel
+from shapely.geometry import Point, Polygon
+
+from geolib_plus.cpt_base_model import AbstractCPT, AbstractInterpretationMethod
 from geolib_plus.cpt_utils import (
-    resource_path,
-    NetCDF,
-    n_iter,
     NEN_classification,
+    NetCDF,
     ceil_value,
     merge_thickness,
+    n_iter,
+    resource_path,
 )
 
 

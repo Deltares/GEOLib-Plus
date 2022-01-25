@@ -1,13 +1,13 @@
-
 # import packages
-import os
 import json
-import numpy as np
-from pathlib import Path
+import os
 from enum import IntEnum
-from typing import List, Dict, Union, Optional
-from pydantic import BaseModel, validator
 from math import isfinite
+from pathlib import Path
+from typing import Dict, List, Optional, Union
+
+import numpy as np
+from pydantic import BaseModel, validator
 
 
 class SoilBaseModel(BaseModel):
@@ -22,11 +22,13 @@ class SoilBaseModel(BaseModel):
             )
         return v
 
+
 class DistributionType(IntEnum):
     Undefined = 0
     Normal = 2
     LogNormal = 3
     Deterministic = 4
+
 
 class StochasticParameter(SoilBaseModel):
     """
@@ -51,8 +53,12 @@ class Soil(SoilBaseModel):
     """
 
     name: Optional[str]
-    unsaturated_weight: Optional[Union[float, StochasticParameter]] = StochasticParameter()
-    saturated_weight: Optional[Union[float, StochasticParameter]] = StochasticParameter()
+    unsaturated_weight: Optional[
+        Union[float, StochasticParameter]
+    ] = StochasticParameter()
+    saturated_weight: Optional[
+        Union[float, StochasticParameter]
+    ] = StochasticParameter()
     shear_strength_ratio: Optional[
         Union[float, StochasticParameter]
     ] = StochasticParameter()
@@ -77,13 +83,17 @@ class Soil(SoilBaseModel):
         Returns:
 
         """
-        if isinstance(soil_dict,dict):
+        if isinstance(soil_dict, dict):
             for key, value in dict(
-                    soil_dict
+                soil_dict
             ).items():  # override default values with those of the soil
                 if key in dict(soil).keys() and value is not None:
                     if isinstance(value, dict):
-                        setattr(soil, key, Soil.transfer_soil_dict_to_class(value, getattr(soil, key)))
+                        setattr(
+                            soil,
+                            key,
+                            Soil.transfer_soil_dict_to_class(value, getattr(soil, key)),
+                        )
                     else:
                         setattr(soil, key, value)
             return soil

@@ -1,8 +1,8 @@
-from pydantic import BaseModel
-from typing import Union, Optional
+from enum import IntEnum
+from typing import Optional, Union
 
 import numpy as np
-from enum import IntEnum
+from pydantic import BaseModel
 
 
 class SoftSoilCreepParameters(BaseModel):

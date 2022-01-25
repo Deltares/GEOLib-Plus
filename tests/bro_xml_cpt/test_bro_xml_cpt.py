@@ -1,13 +1,13 @@
-import pytest
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
-from pathlib import Path
-from tests.utils import TestUtils
+import pytest
 
-from geolib_plus.bro_xml_cpt import bro_xml_cpt
-from geolib_plus.bro_xml_cpt import BroXmlCpt
+from geolib_plus.bro_xml_cpt import BroXmlCpt, bro_xml_cpt
 from geolib_plus.bro_xml_cpt.bro_utils import XMLBroCPTReader
 from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
+from tests.utils import TestUtils
 
 
 class TestBroXmlCpt:

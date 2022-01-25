@@ -1,13 +1,16 @@
 """Tools to read gef files."""
-import re
-import numpy as np
-from .validate_gef import validate_gef_cpt
-from geolib_plus.cpt_base_model import CptReader
-from typing import List, Dict, Union, Iterable
-from pathlib import Path
-from pydantic import BaseModel
-from logging import warning
 import math
+import re
+from logging import warning
+from pathlib import Path
+from typing import Dict, Iterable, List, Union
+
+import numpy as np
+from pydantic import BaseModel
+
+from geolib_plus.cpt_base_model import CptReader
+
+from .validate_gef import validate_gef_cpt
 
 
 class GefProperty(BaseModel):
@@ -84,7 +87,6 @@ class GefFileReader(CptReader):
             "effective_pressure": "effective_pressure_measured",
             "cpt_standard": "quality_class",
         }
-
 
     @staticmethod
     def get_line_index_from_data_starts_with(code_string: str, data: List[str]) -> int:
@@ -432,7 +434,6 @@ class GefFileReader(CptReader):
                     else:
                         warning(f"Key {key} is not defined in the gef file.")
         return None
-
 
     def read_column_data(self, data: List[str], idx_EOH: int) -> None:
         """

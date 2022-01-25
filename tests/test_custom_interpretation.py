@@ -1,15 +1,16 @@
-from typing import Dict, List, Optional
-from geolib_plus.gef_cpt import GefCpt
-from geolib_plus.cpt_base_model import AbstractInterpretationMethod, AbstractCPT
-
-from tests.utils import TestUtils
-import pytest
+import os
 from pathlib import Path
-from shapely import geometry
+from typing import Dict, List, Optional
+
+import pytest
 import shapefile
 from matplotlib import pyplot as plt
-import os
 from pydantic import BaseModel
+from shapely import geometry
+
+from geolib_plus.cpt_base_model import AbstractCPT, AbstractInterpretationMethod
+from geolib_plus.gef_cpt import GefCpt
+from tests.utils import TestUtils
 
 
 # Set up custom interpratation class

@@ -1,9 +1,9 @@
-from geolib_plus.shm import shm_tables
 import pytest
+
+from geolib_plus.shm import shm_tables
 
 
 class TestShmTables:
-
     @pytest.mark.unittest
     def test_load_shm_tables(self):
         """
@@ -24,7 +24,7 @@ class TestShmTables:
         # assert first soil
         assert first_soil.name == "Veen_mineraalarm"
         assert first_soil.unsaturated_weight.mean == 10.5
-        assert first_soil.unsaturated_weight.limits == [10,11]
+        assert first_soil.unsaturated_weight.limits == [10, 11]
 
         assert first_soil.pop_layer.mean == 11
         assert first_soil.pop_layer.limits == [0, 60]

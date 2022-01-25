@@ -1,6 +1,7 @@
-from pydantic import BaseModel
-from typing import Union, Optional
+from typing import Optional, Union
+
 import numpy as np
+from pydantic import BaseModel
 from scipy.optimize import curve_fit
 
 from geolib_plus.shm.prob_utils import ProbUtils
@@ -38,7 +39,8 @@ class ShansepUtils(BaseModel):
         su: Union[float, np.array],
         sigma_effective: Union[float, np.array],
         S: Optional[float] = None,
-        m: Optional[float] = None) -> (float, float):
+        m: Optional[float] = None,
+    ) -> (float, float):
         """
         Calculates characteristic values of parameters s and m, according to :cite:`meer_2019`. This methodology
         assumes a log normal distribution of S and a normal distribution of m
@@ -54,23 +56,29 @@ class ShansepUtils(BaseModel):
         """
 
         # get prob parameters of S and m
-        (S, std_s), (m, std_m), covariance_matrix = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
-            OCR, su, sigma_effective, S, m)
+        (
+            (S, std_s),
+            (m, std_m),
+            covariance_matrix,
+        ) = ShansepUtils.get_shansep_prob_parameters_with_linear_regression(
+            OCR, su, sigma_effective, S, m
+        )
 
         # calculate mean log s and std log s
         log_s, log_std_s = ProbUtils.get_log_mean_std_from_normal(S, std_s)
 
         # calculate characteristic log s
         log_s_char = ProbUtils.calculate_characteristic_value_from_prob_parameters(
-            log_s, log_std_s, len(OCR), char_quantile=0.05, a=0)
+            log_s, log_std_s, len(OCR), char_quantile=0.05, a=0
+        )
 
         # calculate characteristic S and m
         S_char = np.exp(log_s_char)
         m_char = ProbUtils.calculate_characteristic_value_from_prob_parameters(
-            m, std_m, len(OCR), char_quantile=0.05, a=0)
+            m, std_m, len(OCR), char_quantile=0.05, a=0
+        )
 
         return S_char, m_char
-
 
     @staticmethod
     def get_shansep_prob_parameters_with_linear_regression(
@@ -107,11 +115,15 @@ class ShansepUtils(BaseModel):
 
             # summarize the parameter values
             m, log_S = popt
-            std_m, std_log_s = np.sqrt(cov[0,0]), np.sqrt(cov[1, 1])
+            std_m, std_log_s = np.sqrt(cov[0, 0]), np.sqrt(cov[1, 1])
 
             # correct std with student t distribution
-            std_m = ProbUtils.correct_std_with_student_t(len(log_su_sigma)-1, 0.05,std_m, 0.75)
-            std_log_s = ProbUtils.correct_std_with_student_t(len(log_su_sigma) - 1, 0.05, std_log_s, 0.75)
+            std_m = ProbUtils.correct_std_with_student_t(
+                len(log_su_sigma) - 1, 0.05, std_m, 0.75
+            )
+            std_log_s = ProbUtils.correct_std_with_student_t(
+                len(log_su_sigma) - 1, 0.05, std_log_s, 0.75
+            )
 
             S, std_s = ProbUtils.get_mean_std_from_lognormal(log_S, std_log_s)
 
@@ -129,13 +141,15 @@ class ShansepUtils(BaseModel):
             )
             # summarize the parameter values
             m = popt[0]
-            std_m = np.sqrt(cov[0,0])
+            std_m = np.sqrt(cov[0, 0])
 
             # correct std with student t distribution
-            std_m = ProbUtils.correct_std_with_student_t(len(log_su_sigma) - 1, 0.05, std_m, 0.75)
+            std_m = ProbUtils.correct_std_with_student_t(
+                len(log_su_sigma) - 1, 0.05, std_m, 0.75
+            )
             std_s = 0
 
-            covariance_matrix[0,0] = cov[0,0]
+            covariance_matrix[0, 0] = cov[0, 0]
 
         elif (m is not None) and (S is None):
             log_OCR = np.log(OCR)
@@ -152,7 +166,9 @@ class ShansepUtils(BaseModel):
             std_log_s = np.sqrt(cov[0, 0])
 
             # correct std with student t distribution
-            std_log_s = ProbUtils.correct_std_with_student_t(len(log_su_sigma) - 1, 0.05, std_log_s, 0.75)
+            std_log_s = ProbUtils.correct_std_with_student_t(
+                len(log_su_sigma) - 1, 0.05, std_log_s, 0.75
+            )
             S, std_s = ProbUtils.get_mean_std_from_lognormal(log_S, std_log_s)
             std_m = 0
 

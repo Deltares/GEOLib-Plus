@@ -1,10 +1,11 @@
-from abc import abstractmethod
-from pathlib import Path
-from typing import Optional, Iterable, List, Type
-from pydantic import BaseModel
-from copy import deepcopy
-import numpy as np
 import math
+from abc import abstractmethod
+from copy import deepcopy
+from pathlib import Path
+from typing import Iterable, List, Optional, Type
+
+import numpy as np
+from pydantic import BaseModel
 
 from .plot_cpt import plot_cpt_norm
 from .plot_settings import PlotSettings
@@ -24,6 +25,7 @@ class CptReader:
 
 class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
+
     #  variables
     penetration_length: Optional[Iterable]
     depth: Optional[Iterable]
@@ -479,7 +481,11 @@ class AbstractCPT(BaseModel):
         applying: sleeve friction / cone resistance * 100
 
         """
-        if self.friction_nbr is None and self.tip is not None and self.friction is not None:
+        if (
+            self.friction_nbr is None
+            and self.tip is not None
+            and self.friction is not None
+        ):
 
             self.friction_nbr = np.zeros(len(self.tip))
 
@@ -487,10 +493,9 @@ class AbstractCPT(BaseModel):
             non_zero_indices = (self.tip > 0) * (self.friction > 0)
 
             # if both sleeve friction and tip resistance are greater than 0, calculate friction number
-            self.friction_nbr[non_zero_indices] = self.friction/self.tip * 100
+            self.friction_nbr[non_zero_indices] = self.friction / self.tip * 100
 
-            self.friction_nbr = self.friction/self.tip * 100
-
+            self.friction_nbr = self.friction / self.tip * 100
 
     def pre_process_data(self):
         """
