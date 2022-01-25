@@ -6,7 +6,7 @@ authors = ["Maarten Pronk <git@evetion.nl>", "Deltares"]
 license = "LGPL-3.0-or-later"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 pydantic = "^1.6"
 pyproj = "^2.6"
 pandas = "^1.1"
@@ -20,7 +20,7 @@ pyshp = "^2.1"
 more-itertools = "^8.6"
 netCDF4 = "^1.5"
 requests = "^2.26"
-d-geolib = "^0.1.6"
+d-geolib = "^0.1"
 
 [tool.poetry.dev-dependencies]
 teamcity-messages = "^1.27"
