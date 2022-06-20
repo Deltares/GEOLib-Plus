@@ -120,3 +120,6 @@ todo_include_todos = True
 releases_release_uri = "https://publicwiki.deltares.nl/download/attachments/166462065/geolib_plus-%s-py3-none-any.whl?api=v2"
 releases_issue_uri = "https://issuetracker.deltares.nl/browse/%s"
 releases_unstable_prehistory = True
+
+# Bibliography
+bibtex_bibfiles = "bibliography.bib"
