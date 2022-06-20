@@ -136,6 +136,15 @@ The unit is MPa.
     # Sets the line widths of all the sets of minor vertical lines
     plot_settings.grid["vertical_minor_line_line_widths"] = [1, 0.5]
 
+    # Sets the colour of the major grid lines
+    plot_settings.grid["horizontal_major_line_color"] = "black"
+
+    # Sets the line width of the major grid lines
+    plot_settings.grid["horizontal_major_line_line_width"] = 1.5
+
+    # Sets the locations of the major grid lines, relative to the depth data.
+    plot_settings.grid["horizontal_major_line_locations"] = [-2, -10]
+
     # sets the distances between horizontal lines, relative to the depth data. In this case
     # there are 2 sets off horizontal lines
     plot_settings.grid["horizontal_line_distances"] = [2, 1]

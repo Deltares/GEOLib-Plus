@@ -288,6 +288,18 @@ def create_custom_grid(ax, xlim, ylim, grid):
             for x_line in grid_lines
         ]
 
+    # create major vertical grid lines
+    grid_lines = np.array(grid["horizontal_major_line_locations"])
+    [
+        ax.plot(
+            xlim,
+            [y_line, y_line],
+            color=grid["horizontal_major_line_color"],
+            linewidth=grid["horizontal_major_line_line_width"],
+        )
+        for y_line in grid_lines
+    ]
+
     # create horizontal grid lines
     for idx, y_distance in enumerate(grid["horizontal_line_distances"]):
         grid_lines = np.arange(ylim[1], ylim[0], y_distance)
