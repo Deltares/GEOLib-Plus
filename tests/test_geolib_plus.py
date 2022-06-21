@@ -11,10 +11,12 @@ from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
 from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
 from tests.utils import TestUtils
 
+version = "0.1.2"
+
 
 @pytest.mark.systemtest
 def test_version():
-    assert __version__ == "0.1.1"
+    assert __version__ == version
 
 
 class TestGeolibPlusReading:
