@@ -1,9 +1,12 @@
 [tool.poetry]
-name = "geolib_plus"
+name = "d-geolib-plus"
 version = "0.1.2"
 description = "GEOLib+ components"
 authors = ["Maarten Pronk <git@evetion.nl>", "Deltares"]
 license = "LGPL-3.0-or-later"
+packages = [
+    {include = "geolib_plus"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.8 <3.10"

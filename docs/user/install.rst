@@ -8,16 +8,18 @@ The first step to using any software package is getting it properly installed.
 
 GEOLib+ installation
 --------------------
-GEOLib+ releases are available from publicwiki.deltares.nl as .whl files. You can
+Geolib+ can be installed from PyPi::
+
+    $ pip install d-geolib_plus
+
+GEOLib+ releases are also available from publicwiki.deltares.nl and github as .whl files. You can
 download these and install such files with::
 
-    $ pip install  geolib_plus-0.1.1-py3-none-any.whl
+    $ pip install geolib_plus-0.1.2-py3-none-any.whl
 
 To install the latest GEOLib+ simply the following command::
 
-    $ pip install git+git@bitbucket.org:DeltaresGEO/geolib-plus.git
-
-Note that both locations are private and require authentication.
+    $ pip install git+git@github.com:Deltares/geolib-plus.git
 
 .. warning::
 
