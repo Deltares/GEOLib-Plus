@@ -242,9 +242,7 @@ class TestGefCptGeolibPlusToGeolib:
         assert dfoundations_model
 
         # Model and calculation settings need to be set otherwise they will be overwritten
-        model_options = (
-            geolib.models.dfoundations.dfoundations_model.BearingPilesModel()
-        )
+        model_options = geolib.models.dfoundations.dfoundations_model.BearingPilesModel()
         calculation_options = geolib.models.dfoundations.dfoundations_model.CalculationOptions(
             calculationtype=geolib.models.dfoundations.dfoundations_model.CalculationType.VERIFICATION_DESIGN,
             cpt_test_level=-27,

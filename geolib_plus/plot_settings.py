@@ -15,9 +15,7 @@ class PlotSettings:
         self.plot_inv_friction_nbr_settings: Optional[
             Dict
         ] = {}  # Settings for inversed friction number graph
-        self.plot_water_settings: Optional[
-            Dict
-        ] = {}  # Settings for pore pressure graph
+        self.plot_water_settings: Optional[Dict] = {}  # Settings for pore pressure graph
         self.general_settings: Optional[Dict] = {}  # All settings
         self.grid: Optional[Dict] = {}  # Settings for grid in plot
         self.vertical_settings: Optional[

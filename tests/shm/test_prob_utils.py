@@ -35,9 +35,7 @@ class TestProbUtils:
         expected_value_upper_bound = -1.725 / -1.645 * std * np.sqrt(1 + 1 / 21)
 
         # calculate corrected standard deviation upper bound
-        calculated_value_upper_bound = ProbUtils.correct_std_with_student_t(
-            21, 0.05, std
-        )
+        calculated_value_upper_bound = ProbUtils.correct_std_with_student_t(21, 0.05, std)
 
         # calculate corrected standard deviation lower bound
         calculated_value_lower_bound = ProbUtils.correct_std_with_student_t(
@@ -187,9 +185,7 @@ class TestProbUtils:
         (
             mean_prob_small,
             std_prob_small,
-        ) = ProbUtils.calculate_prob_parameters_from_lognormal(
-            small_local_dataset, True
-        )
+        ) = ProbUtils.calculate_prob_parameters_from_lognormal(small_local_dataset, True)
 
         # set expected mean and std of small dataset (values are meant as a regression test
         expected_mean_small = 4.91908583464898

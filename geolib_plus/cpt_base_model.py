@@ -18,9 +18,7 @@ class AbstractInterpretationMethod:
 class CptReader:
     @abstractmethod
     def read_file(self, filepath: Path) -> dict:
-        raise NotImplementedError(
-            "The method should be implemented in concrete classes."
-        )
+        raise NotImplementedError("The method should be implemented in concrete classes.")
 
 
 class AbstractCPT(BaseModel):
@@ -190,9 +188,7 @@ class AbstractCPT(BaseModel):
             "water",
             "name",
         ]
-        self.check_if_attribute(
-            list_to_be_checked=list_to_be_checked, method="plotting"
-        )
+        self.check_if_attribute(list_to_be_checked=list_to_be_checked, method="plotting")
 
     def check_if_lists_have_the_same_size(self):
         same_size = []
@@ -227,21 +223,15 @@ class AbstractCPT(BaseModel):
 
     @abstractmethod
     def remove_points_with_error(self):
-        raise NotImplementedError(
-            "The method should be implemented in concrete classes."
-        )
+        raise NotImplementedError("The method should be implemented in concrete classes.")
 
     @abstractmethod
     def has_points_with_error(self) -> bool:
-        raise NotImplementedError(
-            "The method should be implemented in concrete classes."
-        )
+        raise NotImplementedError("The method should be implemented in concrete classes.")
 
     @abstractmethod
     def drop_duplicate_depth_values(self):
-        raise NotImplementedError(
-            "The method should be implemented in concrete classes."
-        )
+        raise NotImplementedError("The method should be implemented in concrete classes.")
 
     def has_duplicated_depth_values(self):
         """

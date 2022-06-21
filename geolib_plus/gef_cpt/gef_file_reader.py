@@ -114,9 +114,7 @@ class GefFileReader(CptReader):
         )
         if not line_found:
             # if not having line_found IS NOT okay.
-            raise ValueError(
-                f"No values found for field {code_string} of the gef file."
-            )
+            raise ValueError(f"No values found for field {code_string} of the gef file.")
         return line_found
 
     @staticmethod
@@ -260,9 +258,7 @@ class GefFileReader(CptReader):
             depth=self.get_as_np_array(self.property_dict["depth"].values_from_gef),
             predrilled_z=predrilled_z,
             tip=self.get_as_np_array(self.property_dict["tip"].values_from_gef),
-            friction=self.get_as_np_array(
-                self.property_dict["friction"].values_from_gef
-            ),
+            friction=self.get_as_np_array(self.property_dict["friction"].values_from_gef),
             friction_nbr=self.get_as_np_array(
                 self.property_dict["friction_nb"].values_from_gef
             ),
@@ -293,9 +289,7 @@ class GefFileReader(CptReader):
                 self.property_dict["inclination_y"].values_from_gef
             ),
             time=self.get_as_np_array(self.property_dict["time"].values_from_gef),
-            qt=self.get_as_np_array(
-                self.property_dict["corrected_tip"].values_from_gef
-            ),
+            qt=self.get_as_np_array(self.property_dict["corrected_tip"].values_from_gef),
             net_tip=self.get_as_np_array(self.property_dict["net_tip"].values_from_gef),
             pore_ratio=self.get_as_np_array(
                 self.property_dict["pore_ratio"].values_from_gef
@@ -388,9 +382,7 @@ class GefFileReader(CptReader):
         """
         Reads header information from the gef data.
         """
-        code_string = r"#MEASUREMENTTEXT= " + str(
-            self.information_dict[key_name].gef_key
-        )
+        code_string = r"#MEASUREMENTTEXT= " + str(self.information_dict[key_name].gef_key)
 
         for value in data:
             if value.startswith(code_string):

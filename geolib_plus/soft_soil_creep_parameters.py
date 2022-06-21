@@ -98,7 +98,5 @@ class SoftSoilCreepParameters(BaseModel):
         b = 1 - 1 / self.OCR
         c = (2 * self.v_ur) * (1 / (1 - self.v_ur)) + 1
         d = 1 / np.log(a * (1 / (a - (b * c))))
-        self.kappa = (
-            (self.Cs * (1 / (np.log(10) * (1 + self.eo)))) * np.log(self.OCR) * d
-        )
+        self.kappa = (self.Cs * (1 / (np.log(10) * (1 + self.eo)))) * np.log(self.OCR) * d
         self.mu = self.Ca / np.log(10)

@@ -46,9 +46,7 @@ def get_values_which_exceed_threshold(
     return np.array(shown_values), np.array(y_coord_shown_value)
 
 
-def trim_values_at_exceeding_threshold(
-    threshold: List, values: np.ndarray
-) -> np.ndarray:
+def trim_values_at_exceeding_threshold(threshold: List, values: np.ndarray) -> np.ndarray:
     """
     Trims a graph on threshold values when the threshold is exceeded.
 
@@ -89,10 +87,7 @@ def get_y_lims(cpt: AbstractCPT, settings: Dict) -> List:
     n_graphs = int(np.ceil((y_max - y_min) / vertical_settings["length_graph"]))
     n_graphs = int(
         np.ceil(
-            (
-                n_graphs * vertical_settings["repeated_distance"]
-                + np.ceil((y_max - y_min))
-            )
+            (n_graphs * vertical_settings["repeated_distance"] + np.ceil((y_max - y_min)))
             / vertical_settings["length_graph"]
         )
     )
@@ -263,9 +258,7 @@ def define_inclination_ticks_and_labels(
     tick_distance_from_ceil_meter = cpt.local_reference_level - np.ceil(
         cpt.local_reference_level
     )
-    tick_distance_inclination = settings["vertical_settings"][
-        "inclination_tick_distance"
-    ]
+    tick_distance_inclination = settings["vertical_settings"]["inclination_tick_distance"]
 
     if cpt.local_reference_level < ylim[0]:
         tick_locations_inclination = np.arange(

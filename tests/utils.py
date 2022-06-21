@@ -34,9 +34,7 @@ class TestUtils:
         pipmain(["install", package])
 
     @staticmethod
-    def get_test_files_from_local_test_dir(
-        dir_name: str, glob_filter: str
-    ) -> List[Path]:
+    def get_test_files_from_local_test_dir(dir_name: str, glob_filter: str) -> List[Path]:
         """Returns all the files that need to be used as test input parameters from a given directory.
 
         Args:

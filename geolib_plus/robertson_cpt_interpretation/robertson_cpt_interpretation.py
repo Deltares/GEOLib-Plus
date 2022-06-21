@@ -63,9 +63,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     data: AbstractCPT = None
     gamma: Iterable = []
     polygons: Iterable = []
-    path_to_water_level_file: Union[str, Path] = Path(
-        Path(__file__).parent, "resources"
-    )
+    path_to_water_level_file: Union[str, Path] = Path(Path(__file__).parent, "resources")
     name_water_level_file: str = "peilgebieden_jp_250m.nc"
     user_defined_water_level: bool = False
 
@@ -376,9 +374,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         z = np.diff(np.abs((self.data.depth - self.data.depth[0])))
         z = np.append(z, z[-1])
         # total stress
-        self.data.total_stress = np.cumsum(self.gamma * z) + self.data.depth[
-            0
-        ] * np.mean(self.gamma[:10])
+        self.data.total_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(
+            self.gamma[:10]
+        )
         # compute pwp
         # determine location of phreatic line: it cannot be above the CPT depth
         z_aux = np.min(
@@ -520,37 +518,37 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             alpha_vs = 10 ** (0.55 * self.data.IC + 1.68)
             vs = alpha_vs * (self.data.qt - self.data.total_stress) / self.data.Pa
             vs = ceil_value(vs, 0)
-            self.data.vs = vs ** 0.5
-            self.data.G0 = self.data.rho * self.data.vs ** 2
+            self.data.vs = vs**0.5
+            self.data.G0 = self.data.rho * self.data.vs**2
         elif method == ShearWaveVelocityMethod.MAYNE:
             # vs: following Mayne (2006)
             vs = 118.8 * np.log10(self.data.friction) + 18.5
             self.data.vs = ceil_value(vs, 0)
-            self.data.G0 = self.data.rho * self.data.vs ** 2
+            self.data.G0 = self.data.rho * self.data.vs**2
         elif method == ShearWaveVelocityMethod.ANDRUS:
             # vs: following Andrus (2007)
             vs = (
                 2.27
-                * self.data.qt ** 0.412
-                * self.data.IC ** 0.989
-                * self.data.depth ** 0.033
+                * self.data.qt**0.412
+                * self.data.IC**0.989
+                * self.data.depth**0.033
                 * 1
             )
             self.data.vs = ceil_value(vs, 0)
 
-            self.data.G0 = self.data.rho * self.data.vs ** 2
+            self.data.G0 = self.data.rho * self.data.vs**2
         elif method == ShearWaveVelocityMethod.ZANG:
             # vs: following Zang & Tong (2017)
             vs = (
                 10.915
-                * self.data.qt ** 0.317
-                * self.data.IC ** 0.210
-                * self.data.depth ** 0.057
+                * self.data.qt**0.317
+                * self.data.IC**0.210
+                * self.data.depth**0.057
                 * 0.92
             )
             self.data.vs = ceil_value(vs, 0)
 
-            self.data.G0 = self.data.rho * self.data.vs ** 2
+            self.data.G0 = self.data.rho * self.data.vs**2
         elif method == ShearWaveVelocityMethod.AHMED:
             vs = (
                 1000.0
@@ -567,7 +565,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 ** 0.5
             )
             self.data.vs = ceil_value(vs, 0)
-            self.data.G0 = self.data.rho * self.data.vs ** 2
+            self.data.G0 = self.data.rho * self.data.vs**2
 
     def young_calc(self):
         r"""
@@ -628,11 +626,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         for i, lithology_index in enumerate(self.data.lithology):
             # if  clay
-            if (
-                lithology_index == "3"
-                or lithology_index == "4"
-                or lithology_index == "5"
-            ):
+            if lithology_index == "3" or lithology_index == "4" or lithology_index == "5":
                 if method == OCRMethod.MAYNE:
                     OCR[i] = (
                         0.33
@@ -658,8 +652,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             else:
                 self.data.damping[i] = (
                     0.55
-                    * Cu ** 0.1
-                    * D50 ** -0.3
+                    * Cu**0.1
+                    * D50**-0.3
                     * (self.data.effective_stress[i] / self.data.Pa) ** -0.08
                 )
 
@@ -793,7 +787,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             ) ** 0.5
 
             # calculate overconsolidation factor
-            Q_ocr = OCR ** 0.18
+            Q_ocr = OCR**0.18
 
             # calculate aging factor
             Q_a = 1.2 + 0.05 * np.log10(age / 100)

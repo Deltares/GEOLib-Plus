@@ -31,9 +31,7 @@ class GefCpt(AbstractCPT):
             else:
                 altered_keys.append(key)
                 keys = list(update_dict.keys())
-                if len(keys) != 0 and current_attribute.size != len(
-                    update_dict[keys[0]]
-                ):
+                if len(keys) != 0 and current_attribute.size != len(update_dict[keys[0]]):
                     raise ValueError(
                         f"The data '{key}' (length = {current_attribute.size}) "
                         f"is not of the assumed data length = {len(update_dict[keys[0]])}"
@@ -90,9 +88,7 @@ class GefCpt(AbstractCPT):
             else:
                 altered_keys.append(key)
                 keys = list(update_dict.keys())
-                if len(keys) != 0 and len(current_attribute) != len(
-                    update_dict[keys[0]]
-                ):
+                if len(keys) != 0 and len(current_attribute) != len(update_dict[keys[0]]):
                     raise ValueError(
                         f"The data '{key}' is not of the assumed data length = {len(update_dict[keys[0]])}"
                     )

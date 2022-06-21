@@ -132,7 +132,7 @@ class NktUtils(BaseModel):
             vc_loc = 0.5 * vc_qnet_nkt_tot
 
         # calculate average variation coefficient of q_net/nkt
-        vc_average = np.sqrt(vc_qnet_nkt_tot ** 2 - vc_loc ** 2)
+        vc_average = np.sqrt(vc_qnet_nkt_tot**2 - vc_loc**2)
 
         # get number of tests
         n = len(su)
@@ -193,7 +193,7 @@ class NktUtils(BaseModel):
             std_loc = 0.5 * log_nkt_std_tot
 
         # calculate average standard deviation
-        std_average = np.sqrt(log_nkt_std_tot ** 2 - std_loc ** 2)
+        std_average = np.sqrt(log_nkt_std_tot**2 - std_loc**2)
 
         # get number of data points
         n = len(su)
@@ -236,7 +236,7 @@ class NktUtils(BaseModel):
             vc_loc = 0.5 * vc_qnet_nkt_tot
 
         # calculate average variation coefficient
-        vc_average = np.sqrt(vc_qnet_nkt_tot ** 2 - vc_loc ** 2)
+        vc_average = np.sqrt(vc_qnet_nkt_tot**2 - vc_loc**2)
 
         # calculate variation coefficient for probabilistic analysis
         vc_prob = ProbUtils.correct_std_with_student_t(len(su), 0.05, vc_average, 0)
@@ -269,7 +269,7 @@ class NktUtils(BaseModel):
             log_std_loc = 0.5 * log_nkt_std_tot
 
         # calculate average local standard deviation
-        log_std_average = np.sqrt(log_nkt_std_tot ** 2 - log_std_loc ** 2)
+        log_std_average = np.sqrt(log_nkt_std_tot**2 - log_std_loc**2)
 
         # adjust std of Log nkt with the student T distribution
         log_std_prob = ProbUtils.correct_std_with_student_t(

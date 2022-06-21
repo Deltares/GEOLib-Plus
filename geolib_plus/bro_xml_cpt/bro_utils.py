@@ -313,9 +313,7 @@ class XMLBroCPTReader(CptReader):
         self.bro_data.predrilled_z = float(z)
 
         # Cone coefficient - a
-        a = self.search_values_in_root(
-            root=root, search_item=ns + "coneSurfaceQuotient"
-        )
+        a = self.search_values_in_root(root=root, search_item=ns + "coneSurfaceQuotient")
         if a:
             self.bro_data.a = float(a)
         return None

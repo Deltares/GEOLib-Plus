@@ -37,11 +37,7 @@ def set_textbox_at_thresholds(
     cut_off_position = (threshold[1] - xlim[0]) / (xlim[1] - xlim[0])
 
     # set x-position of the textbox near the cut off position
-    if (
-        location == "top_left"
-        or location == "bottom_left"
-        or location == "bottom_middle"
-    ):
+    if location == "top_left" or location == "bottom_left" or location == "bottom_middle":
         label_x_position = cut_off_position + 0.08
         loc = 4
     else:
@@ -104,7 +100,7 @@ def set_multicolor_label(
     location="bottom_left",
     axis="x",
     anchorpad=0,
-    **kw
+    **kw,
 ):
     """
     This function creates axes labels with multiple colors
@@ -553,9 +549,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     hor_spacing = (xmax - xmin) / 100
 
     ax.add_patch(cpt_number_box)
-    __add_text_in_rectangle(
-        ax, "Bro id: " + cpt.name, ax.patches[-1], 1 / 2, hor_spacing
-    )
+    __add_text_in_rectangle(ax, "Bro id: " + cpt.name, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(norm_box)
     __add_text_in_rectangle(
@@ -640,9 +634,7 @@ def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
     y_min = ylims[plot_nr][1]
     y_max = ylims[plot_nr][0]
 
-    y_tick_size = (
-        y_max - y_min
-    ) / ax.yaxis.major.formatter.axis.major.locator.locs.size
+    y_tick_size = (y_max - y_min) / ax.yaxis.major.formatter.axis.major.locator.locs.size
 
     height_box = 3.5 * y_tick_size * scale  # [m]
     distance_from_plot = -1
@@ -740,9 +732,7 @@ def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
     hor_spacing = (xmax - xmin) / 100
 
     ax.add_patch(cpt_number_box)
-    __add_text_in_rectangle(
-        ax, "Gef id: " + cpt.name, ax.patches[-1], 1 / 2, hor_spacing
-    )
+    __add_text_in_rectangle(ax, "Gef id: " + cpt.name, ax.patches[-1], 1 / 2, hor_spacing)
 
     ax.add_patch(cpt_type_box)
     __add_text_in_rectangle(

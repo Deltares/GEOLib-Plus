@@ -56,9 +56,7 @@ class Soil(SoilBaseModel):
     unsaturated_weight: Optional[
         Union[float, StochasticParameter]
     ] = StochasticParameter()
-    saturated_weight: Optional[
-        Union[float, StochasticParameter]
-    ] = StochasticParameter()
+    saturated_weight: Optional[Union[float, StochasticParameter]] = StochasticParameter()
     shear_strength_ratio: Optional[
         Union[float, StochasticParameter]
     ] = StochasticParameter()

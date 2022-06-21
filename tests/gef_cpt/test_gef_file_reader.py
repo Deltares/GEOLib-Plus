@@ -189,9 +189,7 @@ class TestReadColumnData:
         # Run test
         gef_reader.read_column_data(data, idx_EOH)
         # Check output
-        assert (
-            gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
-        )
+        assert gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13.387000
         assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
         assert gef_reader.property_dict["pwp_u2"].values_from_gef is None
@@ -256,9 +254,7 @@ class TestReadColumnData:
         # Run test
         gef_reader.read_column_data(data, idx_EOH)
         # Check output
-        assert (
-            gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
-        )
+        assert gef_reader.property_dict["penetration_length"].values_from_gef[-1] == 25.61
         assert gef_reader.property_dict["tip"].values_from_gef[-1] == 13.387
         assert gef_reader.property_dict["friction"].values_from_gef[-1] == -99999.0
         assert gef_reader.property_dict["pwp_u2"].values_from_gef[-1] == -99999.0

@@ -244,9 +244,7 @@ class TestInterpreter:
         # Calculate analytically the solution
         np.seterr(divide="ignore")
         # Exact solution Robertson
-        aux = (
-            0.27 * np.log10(np.ones(10)) + 0.36 * (np.log10(np.ones(10) / 100)) + 1.236
-        )
+        aux = 0.27 * np.log10(np.ones(10)) + 0.36 * (np.log10(np.ones(10) / 100)) + 1.236
         aux[np.abs(aux) == np.inf] = gamma_limit / 9.81
         local_gamma1 = aux * 9.81
 
@@ -437,7 +435,7 @@ class TestInterpreter:
         test_vs = (
             test_alpha_vs * (interpreter.data.tip - interpreter.data.total_stress) / 100
         ) ** 0.5
-        test_GO = interpreter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs**2
 
         # Call function
         interpreter.vs_calc(method=ShearWaveVelocityMethod.ROBERTSON)
@@ -449,7 +447,7 @@ class TestInterpreter:
         # Check the results for  Mayne
         # Calculate analytically
         test_vs = 118.8 * np.log10(interpreter.data.friction) + 18.5
-        test_GO = interpreter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs**2
 
         # Call function
         interpreter.vs_calc(method=ShearWaveVelocityMethod.MAYNE)
@@ -462,12 +460,12 @@ class TestInterpreter:
         # Calculate analytically
         test_vs = (
             2.27
-            * interpreter.data.qt ** 0.412
-            * interpreter.data.IC ** 0.989
-            * interpreter.data.depth ** 0.033
+            * interpreter.data.qt**0.412
+            * interpreter.data.IC**0.989
+            * interpreter.data.depth**0.033
             * 1
         )
-        test_GO = interpreter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs**2
 
         # Call function
         interpreter.vs_calc(method=ShearWaveVelocityMethod.ANDRUS)
@@ -480,12 +478,12 @@ class TestInterpreter:
         # Calculate analytically
         test_vs = (
             10.915
-            * interpreter.data.tip ** 0.317
-            * interpreter.data.IC ** 0.21
-            * interpreter.data.depth ** 0.057
+            * interpreter.data.tip**0.317
+            * interpreter.data.IC**0.21
+            * interpreter.data.depth**0.057
             * 0.92
         )
-        test_GO = interpreter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs**2
 
         # Call function
         interpreter.vs_calc(method=ShearWaveVelocityMethod.ZANG)
@@ -510,7 +508,7 @@ class TestInterpreter:
             )
             ** 0.5
         )
-        test_GO = interpreter.data.rho * test_vs ** 2
+        test_GO = interpreter.data.rho * test_vs**2
 
         # Call the function
         interpreter.vs_calc(method=ShearWaveVelocityMethod.AHMED)
@@ -586,8 +584,8 @@ class TestInterpreter:
         D50 = 0.02
         test_damping = (
             0.55
-            * Cu ** 0.1
-            * D50 ** -0.3
+            * Cu**0.1
+            * D50**-0.3
             * (interpreter.data.effective_stress / 100) ** -0.08
         )
         test_damping /= 100
@@ -621,8 +619,8 @@ class TestInterpreter:
         D50 = 0.025
         test_damping = (
             0.55
-            * Cu ** 0.1
-            * D50 ** -0.3
+            * Cu**0.1
+            * D50**-0.3
             * (interpreter.data.effective_stress / 100) ** -0.08
         )
         test_damping /= 100
@@ -654,8 +652,8 @@ class TestInterpreter:
         D50 = 0.025
         test_damping = (
             0.55
-            * Cu ** 0.1
-            * D50 ** -0.3
+            * Cu**0.1
+            * D50**-0.3
             * (interpreter.data.effective_stress / 100) ** -0.08
         )
         test_damping /= 100
@@ -939,7 +937,7 @@ class TestInterpreter:
 
         # get expected value
         expected_rd_value = np.sqrt(
-            20 / (305 * 1 * 1 ** 0.18 * (1.2 + 0.05 * np.log10(10)))
+            20 / (305 * 1 * 1**0.18 * (1.2 + 0.05 * np.log10(10)))
         )
         expected_rd = [np.nan, np.nan, expected_rd_value, expected_rd_value]
 
@@ -989,9 +987,9 @@ class TestInterpreter:
 
         # set expected array
         expected_K_c2 = (
-            5.581 * 2 ** 3 - 0.403 * 2 ** 4 - 21.63 * 2 ** 2 + 33.75 * 2 - 17.88
+            5.581 * 2**3 - 0.403 * 2**4 - 21.63 * 2**2 + 33.75 * 2 - 17.88
         )
-        expected_K_c4 = 6e-7 * 2.6 ** 16.76
+        expected_K_c4 = 6e-7 * 2.6**16.76
         expected_Qtncs = np.array([1, expected_K_c2, 1, expected_K_c4, np.nan])
 
         # Check if results are equal
