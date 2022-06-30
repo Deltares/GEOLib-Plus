@@ -66,9 +66,7 @@ class TestBroUtil:
     @pytest.mark.unittest
     def test_xml_to_byte_string_wrong_path(self):
         # define input path to xml
-        test_file = TestUtils.get_local_test_data_dir(
-            Path("cpt", "bro_xml", "wrong.xml")
-        )
+        test_file = TestUtils.get_local_test_data_dir(Path("cpt", "bro_xml", "wrong.xml"))
         # final test
         with pytest.raises(FileNotFoundError):
             bro.XMLBroCPTReader.xml_to_byte_string(fn=test_file)

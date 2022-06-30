@@ -39,9 +39,7 @@ class TestNktUtils:
         # check nkt mean and std for saturated soil
         is_saturated = np.array([True, True, False])
         nkt_mean, nkt_std = NktUtils.get_default_nkt(is_saturated)
-        expected_nkt_mean, expected_nkt_std = np.array([20, 20, 60]), np.array(
-            [5, 5, 15]
-        )
+        expected_nkt_mean, expected_nkt_std = np.array([20, 20, 60]), np.array([5, 5, 15])
 
         np.testing.assert_array_equal(expected_nkt_mean, nkt_mean)
         np.testing.assert_array_equal(expected_nkt_std, nkt_std)

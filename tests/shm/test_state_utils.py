@@ -11,9 +11,7 @@ class TestNktUtils:
         """
 
         # calculate yield stress through Shansep relation
-        calculated_yield_stress = StateUtils.calculate_yield_stress(
-            7.7, 16.4, 0.38, 0.8
-        )
+        calculated_yield_stress = StateUtils.calculate_yield_stress(7.7, 16.4, 0.38, 0.8)
 
         # set expected yield stress
         expected_yield_stress = 21.36352674385969

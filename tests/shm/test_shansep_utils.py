@@ -12,9 +12,7 @@ class TestShanshepUtils:
     @pytest.mark.unittest
     def test_get_shansep_prob_parameters_with_linear_regression(self):
         # denife inputs
-        path_inputs = TestUtils.get_local_test_data_dir(
-            Path("shm", "Data_KIJK_DSS.csv")
-        )
+        path_inputs = TestUtils.get_local_test_data_dir(Path("shm", "Data_KIJK_DSS.csv"))
         inputs = pd.read_csv(path_inputs, delimiter=";")
         inputs_modified = inputs.dropna(subset=["tau_40"])
 
@@ -73,9 +71,7 @@ class TestShanshepUtils:
     @pytest.mark.unittest
     def test_get_shansep_prob_parameters_with_linear_regression_validity(self):
         # denife inputs
-        path_inputs = TestUtils.get_local_test_data_dir(
-            Path("shm", "Data_KIJK_DSS.csv")
-        )
+        path_inputs = TestUtils.get_local_test_data_dir(Path("shm", "Data_KIJK_DSS.csv"))
         inputs = pd.read_csv(path_inputs, delimiter=";")
         mask = inputs.TestConditions == "In situ"
         inputs_modified = inputs.loc[mask].dropna(subset=["tau_40"])
@@ -124,9 +120,7 @@ class TestShanshepUtils:
         Test get characteristic values of shear strength ratio S and strength increase component m
         """
 
-        path_inputs = TestUtils.get_local_test_data_dir(
-            Path("shm", "Data_KIJK_DSS.csv")
-        )
+        path_inputs = TestUtils.get_local_test_data_dir(Path("shm", "Data_KIJK_DSS.csv"))
         inputs = pd.read_csv(path_inputs, delimiter=";")
         inputs_modified = inputs.dropna(subset=["tau_40"])
 

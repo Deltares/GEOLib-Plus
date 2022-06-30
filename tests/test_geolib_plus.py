@@ -191,9 +191,8 @@ class TestGeolibPlusReading:
         # run tests
         with pytest.raises(ValueError) as excinfo:
             cpt_gef.check_if_lists_have_the_same_size()
-            assert (
-                "friction does not have the same size as the other properties"
-                in str(excinfo.value)
+            assert "friction does not have the same size as the other properties" in str(
+                excinfo.value
             )
         with pytest.raises(ValueError) as excinfo:
             cpt_bro_xml.check_if_lists_have_the_same_size()

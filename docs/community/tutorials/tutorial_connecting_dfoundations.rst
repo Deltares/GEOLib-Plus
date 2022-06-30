@@ -67,6 +67,6 @@ The new file can be later serialized.
 By opening the created DFoundations file the inputted profile and soils can be inspected.
 
 
-.. |Substitution Name| image:: ..\_static\DFoundations_profile.png
+.. image:: ..\\..\\_static\\DFoundations_profile.png
   :width: 400
   :alt: DFoundations_profile

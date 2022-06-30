@@ -15,9 +15,7 @@ class PlotSettings:
         self.plot_inv_friction_nbr_settings: Optional[
             Dict
         ] = {}  # Settings for inversed friction number graph
-        self.plot_water_settings: Optional[
-            Dict
-        ] = {}  # Settings for pore pressure graph
+        self.plot_water_settings: Optional[Dict] = {}  # Settings for pore pressure graph
         self.general_settings: Optional[Dict] = {}  # All settings
         self.grid: Optional[Dict] = {}  # Settings for grid in plot
         self.vertical_settings: Optional[
@@ -207,6 +205,9 @@ class PlotSettings:
             "vertical_minor_line_distances": [2, 1],
             "vertical_minor_line_colors": ["gray", "gray"],
             "vertical_minor_line_line_widths": [0.5, 0.25],
+            "horizontal_major_line_locations": [],
+            "horizontal_major_line_color": "gray",
+            "horizontal_major_line_line_width": 1.2,
             "horizontal_line_distances": [1, 0.5],
             "horizontal_line_colors": ["gray", "gray"],
             "horizontal_line_line_widths": [0.5, 0.25],

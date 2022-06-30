@@ -110,8 +110,8 @@ class ProbUtils(BaseModel):
         :return: mean and std of X
         """
 
-        mean = np.exp(log_mean + (log_std ** 2) / 2)
-        std = mean * np.sqrt(np.exp(log_std ** 2) - 1)
+        mean = np.exp(log_mean + (log_std**2) / 2)
+        std = mean * np.sqrt(np.exp(log_std**2) - 1)
 
         return mean, std
 
@@ -125,7 +125,7 @@ class ProbUtils(BaseModel):
         :return: mean and std of LN(X)
         """
 
-        log_mean = np.log(mean ** 2 / (np.sqrt(std ** 2 + mean ** 2)))
+        log_mean = np.log(mean**2 / (np.sqrt(std**2 + mean**2)))
         log_std = np.sqrt(np.log((std / mean) ** 2 + 1))
 
         return log_mean, log_std

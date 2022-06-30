@@ -40,9 +40,7 @@ class NEN_classification(BaseModel):
         9: [["Grind"], [["Zwak siltig"]]],
     }
 
-    def define_lithology_list(
-        self, lithology: List
-    ) -> List[List[Union[str, List[str]]]]:
+    def define_lithology_list(self, lithology: List) -> List[List[Union[str, List[str]]]]:
         return [
             self.map_dict[int(lit)]
             for lit in lithology

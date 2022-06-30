@@ -61,5 +61,11 @@ cpt.plot_settings.vertical_settings["inclination_tick_distance"] = 2
 # Minimal distance in meter between textboxes which show values which exceed the data threshold.
 cpt.plot_settings.vertical_settings["spacing_shown_cut_off_value"] = 1.5
 
+cpt.plot_settings.grid["horizontal_major_line_locations"] = -1 * np.arange(
+    -1 * cpt.depth_to_reference[0], -1 * cpt.depth_to_reference[-1], 10
+)
+cpt.plot_settings.grid["horizontal_major_line_color"] = "black"
+cpt.plot_settings.grid["horizontal_major_line_line_width"] = 2
+
 
 cpt.plot(Path("."))

@@ -215,9 +215,7 @@ def merging_thickness(local_thick: Iterable, min_layer_thick: int) -> List:
     return new_thickness
 
 
-def smooth(
-    sig: Iterable, window_len: int = 10, lim: Optional[Union[int, float]] = None
-):
+def smooth(sig: Iterable, window_len: int = 10, lim: Optional[Union[int, float]] = None):
     """
     Smooth signal
 
