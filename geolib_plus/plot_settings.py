@@ -126,7 +126,7 @@ class PlotSettings:
             "shift_graph": 0,
             "unit_converter": self.__unit_converters["None"],
             "ticks": np.arange(0, 30, 10).tolist(),
-            "x_axis_type": self.__x_axis_type[0]
+            "x_axis_type": self.__x_axis_type[0],
         }
 
         self.plot_friction_settings = {
@@ -160,7 +160,7 @@ class PlotSettings:
             "shift_graph": 0,
             "unit_converter": self.__unit_converters["None"],
             "ticks": np.arange(0, 12, 2).tolist(),
-            "x_axis_type": self.__x_axis_type[0]
+            "x_axis_type": self.__x_axis_type[0],
         }
 
         self.plot_inv_friction_nbr_settings = {
@@ -194,7 +194,7 @@ class PlotSettings:
             "shift_graph": 1,
             "unit_converter": self.__unit_converters["None"],
             "ticks": np.arange(0, 1.0, 0.2).tolist(),
-            "x_axis_type": self.__x_axis_type[0]
+            "x_axis_type": self.__x_axis_type[0],
         }
 
         graph_settings = {
