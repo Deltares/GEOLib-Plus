@@ -800,7 +800,7 @@ def create_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot):
     if cpt.__class__.__name__ == "BroXmlCpt":
         create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot)
     elif cpt.__class__.__name__ == "GefCpt":
-        create_gef_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot)
+        create_gef_information_box(ax, scale, cpt, plot_nr, ylims)
 
 
 def set_figure_size(fig, ylim):
