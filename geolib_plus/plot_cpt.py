@@ -109,7 +109,7 @@ def get_y_lims(cpt: AbstractCPT, settings: Dict) -> List:
                     - vertical_settings["repeated_distance"]
                 ),
             ]
-            for n_graph in range(n_graphs)
+            for n_graph in range(0, n_graphs)
         ]
     elif settings["plot_size"] == "unlimited":
         y_lims = [[y_max, min(y_min, y_max - vertical_settings["length_graph"])]]

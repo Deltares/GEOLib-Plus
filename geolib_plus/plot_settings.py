@@ -248,6 +248,8 @@ class PlotSettings:
             "font_size_labels": 8,
             "plot_size": self.__plot_sizes[0],
             "distance_from_plot": -1,
+            "extra_label_spacing": 0.02,
+            "secondary_top_axis_position": 1.035,
         }
 
     def set_inversed_friction_number_in_plot(self):

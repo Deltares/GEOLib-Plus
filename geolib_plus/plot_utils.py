@@ -101,6 +101,7 @@ def set_multicolor_label(
     location="bottom_left",
     axis="x",
     anchorpad=0,
+    extra_label_spacing=0.02,
     **kw,
 ):
     """
@@ -128,7 +129,7 @@ def set_multicolor_label(
     is_inverted = False
     vertical_rel_spacing = 0.06 * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
     if not (x_axis_type == "primary"):
-        vertical_rel_spacing += 0.01
+        vertical_rel_spacing += extra_label_spacing
     axis_plot = ax.xaxis
     if location == "top_left":
         bbox_to_anchor = (0.0, 1 + vertical_rel_spacing)
@@ -340,7 +341,7 @@ def set_x_axis(ax, graph, settings, ylim):
     ticks = graph["ticks"]
 
     if not (graph["x_axis_type"] == "primary"):
-        ax.spines["top"].set_position(("axes", 1.034))
+        ax.spines["top"].set_position(("axes", settings["secondary_top_axis_position"]))
         for sp in ax.spines.values():
             sp.set_visible(False)
         ax.spines["top"].set_visible(True)
@@ -359,6 +360,7 @@ def set_x_axis(ax, graph, settings, ylim):
         graph["line_style"],
         graph["x_axis_type"],
         location=graph["position_label"],
+        extra_label_spacing=settings["extra_label_spacing"]
     )
 
     return ax
