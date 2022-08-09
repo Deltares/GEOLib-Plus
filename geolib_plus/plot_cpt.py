@@ -417,7 +417,7 @@ def generate_plot(
 
     # add information_box
     plot_utils.create_information_box(
-        axes[0], scale, cpt, plot_nr, ylims, settings["distance_from_plot"]
+        axes[0], scale, cpt, plot_nr, ylims, settings["distance_meta_data_from_plot"]
     )
 
     return fig

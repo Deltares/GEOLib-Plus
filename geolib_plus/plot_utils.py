@@ -430,7 +430,7 @@ def __add_text_in_rectangle(ax, text, rectangle, rel_vertical_position, hor_spac
     )
 
 
-def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot):
+def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_meta_data_from_plot):
     """
 
     :param ax: current axis
@@ -438,6 +438,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     :param cpt: cpt data
     :param plot_nr: number of the plot within the current cpt data
     :param ylims: all vertical limits for the current cpt data
+    :param distance_meta_data_from_plot: The distance between the meta data table and the actual plot
     :return:
     """
     from datetime import date
@@ -469,7 +470,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     total_width = xmax - xmin
 
     cpt_number_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 3 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 3 / 4),
         total_width * 2 / 3,
         height_box * 1 / 4,
         facecolor="none",
@@ -478,7 +479,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     )
 
     norm_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 2 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 2 / 4),
         total_width * 1 / 2,
         height_box * 1 / 4,
         facecolor="none",
@@ -487,7 +488,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     )
 
     cpt_type_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 1 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 1 / 4),
         total_width * 1 / 2,
         height_box * 1 / 4,
         facecolor="none",
@@ -496,7 +497,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     )
 
     cpt_class_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 0 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 0 / 4),
         total_width * 1 / 2,
         height_box * 1 / 4,
         facecolor="none",
@@ -507,7 +508,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     coordinate_box = Rectangle(
         (
             xmin + total_width * 3 / 6,
-            y_max + height_box + distance_from_plot + height_box * 1 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 1 / 4,
         ),
         total_width * 1 / 6,
         height_box * 2 / 4,
@@ -518,7 +519,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     page_box = Rectangle(
         (
             xmin + total_width * 3 / 6,
-            y_max + height_box + distance_from_plot + height_box * 0 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 0 / 4,
         ),
         total_width * 1 / 6,
         height_box * 1 / 4,
@@ -530,7 +531,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     cpt_date_box = Rectangle(
         (
             xmin + total_width * 2 / 3,
-            y_max + height_box + distance_from_plot + height_box * 3 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 3 / 4,
         ),
         total_width * 1 / 3,
         height_box * 1 / 4,
@@ -541,7 +542,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     plot_data_box = Rectangle(
         (
             xmin + total_width * 2 / 3,
-            y_max + height_box + distance_from_plot + height_box * 2 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 2 / 4,
         ),
         total_width * 1 / 3,
         height_box * 1 / 4,
@@ -553,7 +554,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plo
     empty_box = Rectangle(
         (
             xmin + total_width * 2 / 3,
-            y_max + height_box + distance_from_plot + height_box * 0 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 0 / 4,
         ),
         total_width * 1 / 3,
         height_box * 2 / 4,

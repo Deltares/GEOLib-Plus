@@ -67,7 +67,7 @@ cpt.plot_settings.grid["horizontal_major_line_locations"] = -1 * np.arange(
 cpt.plot_settings.grid["horizontal_major_line_color"] = "black"
 cpt.plot_settings.grid["horizontal_major_line_line_width"] = 2
 
-cpt.plot_settings.general_settings["distance_from_plot"] = -0.1
+cpt.plot_settings.general_settings["distance_meta_data_from_plot"] = -0.1
 cpt.plot_settings.general_settings["extra_label_spacing"] = 0.02
 cpt.plot_settings.general_settings["secondary_top_axis_position"] = 1.08
 cpt.plot_settings.general_settings['graph_settings']['qc']['x_axis_type'] = 'primary'

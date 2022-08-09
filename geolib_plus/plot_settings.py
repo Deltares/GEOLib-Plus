@@ -247,7 +247,7 @@ class PlotSettings:
             "nbr_scale_units": 16,
             "font_size_labels": 8,
             "plot_size": self.__plot_sizes[0],
-            "distance_from_plot": -1,
+            "distance_meta_data_from_plot": -1,
             "extra_label_spacing": 0.02,
             "secondary_top_axis_position": 1.035,
         }
