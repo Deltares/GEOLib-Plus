@@ -379,7 +379,6 @@ def generate_plot(
                 graph["threshold"] * graph["unit_converter"],
                 graph["position_label"],
             )
-
             axes.append(ax)
 
     axes[
