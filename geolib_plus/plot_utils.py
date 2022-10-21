@@ -276,7 +276,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
             ylim,
             color=grid["vertical_major_line_color"],
             linewidth=grid["vertical_major_line_line_width"],
-            zorder=0
+            zorder=0,
         )
         for x_line in grid_lines
     ]
@@ -290,7 +290,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
                 ylim,
                 color=grid["vertical_minor_line_colors"][idx],
                 linewidth=grid["vertical_minor_line_line_widths"][idx],
-                zorder=-1
+                zorder=-1,
             )
             for x_line in grid_lines
         ]
@@ -303,7 +303,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
             [y_line, y_line],
             color=grid["horizontal_major_line_color"],
             linewidth=grid["horizontal_major_line_line_width"],
-            zorder=0
+            zorder=0,
         )
         for y_line in grid_lines
     ]
@@ -317,7 +317,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
                 [y_line, y_line],
                 color=grid["horizontal_line_colors"][idx],
                 linewidth=grid["horizontal_line_line_widths"][idx],
-                zorder=-1
+                zorder=-1,
             )
             for y_line in grid_lines
         ]
@@ -364,7 +364,7 @@ def set_x_axis(ax, graph, settings, ylim):
         graph["line_style"],
         graph["x_axis_type"],
         location=graph["position_label"],
-        extra_label_spacing=settings["extra_label_spacing"]
+        extra_label_spacing=settings["extra_label_spacing"],
     )
 
     return ax
@@ -434,7 +434,9 @@ def __add_text_in_rectangle(ax, text, rectangle, rel_vertical_position, hor_spac
     )
 
 
-def create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_meta_data_from_plot):
+def create_bro_information_box(
+    ax, scale, cpt, plot_nr, ylims, distance_meta_data_from_plot
+):
     """
 
     :param ax: current axis

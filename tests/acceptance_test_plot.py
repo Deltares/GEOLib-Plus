@@ -4,7 +4,9 @@ import numpy as np
 
 from geolib_plus.bro_xml_cpt import BroXmlCpt
 
-cpt_file_xml = Path("D:\\bro_xml_viewer\\unit_testing\\unit_testing_files\\xml_example_1\\CPT000000006560_IMBRO_A.xml")
+cpt_file_xml = Path(
+    "D:\\bro_xml_viewer\\unit_testing\\unit_testing_files\\xml_example_1\\CPT000000006560_IMBRO_A.xml"
+)
 cpt = BroXmlCpt()
 cpt.read(cpt_file_xml)
 cpt.pre_process_data()
@@ -46,7 +48,7 @@ cpt.plot_settings.vertical_settings["absolute_top_level"] = 2
 cpt.plot_settings.vertical_settings["buffer_at_top"] = 1.5
 
 # Vertical length of the graph in meter
-#cpt.plot_settings.vertical_settings["length_graph"] = 50
+# cpt.plot_settings.vertical_settings["length_graph"] = 50
 
 # The distance in meter which is repeated from one graph to the subsequent graph (in case the data exceeds the bottom
 # of the graph).
@@ -66,19 +68,29 @@ cpt.plot_settings.grid["horizontal_major_line_locations"] = -1 * np.arange(
 )
 cpt.plot_settings.grid["horizontal_major_line_color"] = "gray"
 cpt.plot_settings.grid["horizontal_major_line_line_width"] = 2
-cpt.plot_settings.grid['vertical_major_line_color'] = 'black'
-cpt.plot_settings.grid['vertical_major_line_line_width'] = 2.
+cpt.plot_settings.grid["vertical_major_line_color"] = "black"
+cpt.plot_settings.grid["vertical_major_line_line_width"] = 2.0
 
 cpt.plot_settings.general_settings["distance_meta_data_from_plot"] = -0.1
 cpt.plot_settings.general_settings["extra_label_spacing"] = 0.02
 cpt.plot_settings.general_settings["secondary_top_axis_position"] = 1.08
-cpt.plot_settings.general_settings['graph_settings']['qc']['x_axis_type'] = 'primary'
-cpt.plot_settings.general_settings['graph_settings']['water']['x_axis_type'] = 'secondary'
-cpt.plot_settings.general_settings['graph_settings']['friction']['x_axis_type'] = 'secondary'
-cpt.plot_settings.general_settings['graph_settings']['friction_nbr']['x_axis_type'] = 'secondary'
-cpt.plot_settings.general_settings['graph_settings']['qc']['position_label'] = 'top_left'
-cpt.plot_settings.general_settings['graph_settings']['water']['position_label'] = 'top_middle'
-cpt.plot_settings.general_settings['graph_settings']['friction']['position_label'] = 'top_left'
-cpt.plot_settings.general_settings['graph_settings']['friction_nbr']['position_label'] = 'top_right'
+cpt.plot_settings.general_settings["graph_settings"]["qc"]["x_axis_type"] = "primary"
+cpt.plot_settings.general_settings["graph_settings"]["water"]["x_axis_type"] = "secondary"
+cpt.plot_settings.general_settings["graph_settings"]["friction"][
+    "x_axis_type"
+] = "secondary"
+cpt.plot_settings.general_settings["graph_settings"]["friction_nbr"][
+    "x_axis_type"
+] = "secondary"
+cpt.plot_settings.general_settings["graph_settings"]["qc"]["position_label"] = "top_left"
+cpt.plot_settings.general_settings["graph_settings"]["water"][
+    "position_label"
+] = "top_middle"
+cpt.plot_settings.general_settings["graph_settings"]["friction"][
+    "position_label"
+] = "top_left"
+cpt.plot_settings.general_settings["graph_settings"]["friction_nbr"][
+    "position_label"
+] = "top_right"
 
 cpt.plot(Path("test_output"))
