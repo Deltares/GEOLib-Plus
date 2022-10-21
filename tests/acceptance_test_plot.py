@@ -66,8 +66,10 @@ cpt.plot_settings.vertical_settings["spacing_shown_cut_off_value"] = 1.5
 cpt.plot_settings.grid["horizontal_major_line_locations"] = -1 * np.arange(
     -1 * cpt.depth_to_reference[0], -1 * cpt.depth_to_reference[-1], 10
 )
-cpt.plot_settings.grid["horizontal_major_line_color"] = "black"
+cpt.plot_settings.grid["horizontal_major_line_color"] = "gray"
 cpt.plot_settings.grid["horizontal_major_line_line_width"] = 2
+cpt.plot_settings.grid["vertical_major_line_color"] = "black"
+cpt.plot_settings.grid["vertical_major_line_line_width"] = 2.0
 
 cpt.plot_settings.general_settings["distance_meta_data_from_plot"] = -0.1
 cpt.plot_settings.general_settings["extra_label_spacing"] = 0.02
