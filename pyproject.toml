@@ -4,6 +4,10 @@ version = "0.1.2"
 description = "GEOLib+ components"
 authors = ["Maarten Pronk <git@evetion.nl>", "Deltares"]
 license = "LGPL-3.0-or-later"
+homepage = "https://deltares.github.io/geolib-plus/"
+documentation = "https://deltares.github.io/geolib-plus/"
+repository = "https://github.com/Deltares/geolib-plus"
+readme = "README.rst"
 packages = [
     {include = "geolib_plus"}
 ]
