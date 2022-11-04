@@ -14,7 +14,9 @@ class RegressionUtils(BaseModel):
 
     @staticmethod
     def __linear(x, slope, intercept):
-        """ """
+        """ 
+        Linear funciton as input for optimizing routine
+        """
         return slope * x + intercept
 
     @staticmethod
@@ -23,7 +25,11 @@ class RegressionUtils(BaseModel):
         y: Union[float, np.array],
         bounds=([-np.inf,-np.inf],[np.inf,np.inf]) ,
         ) -> (dict, dict, tuple):
-        """ """
+        """ 
+        Do a linear regression between x and y. The inputs x and y are arrays. 
+        You can specify bounds for the intercept and slope parameter. 
+        In case of an unbounded problem the 'trf' method is used in stead of Levenberg Maquard. 
+        """
 
         # initialise covariance matrix
         covariance_matrix = np.zeros((2, 2))
