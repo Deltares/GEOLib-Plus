@@ -35,7 +35,7 @@ class RegressionUtils(BaseModel):
         covariance_matrix = np.zeros((2, 2))
 
         if np.any(
-            (np.array(bounds[0]) > -np.inf) | (np.array(bounds[1]) < np.inf)
+            (np.array(bounds[0]) > -np.inf) or (np.array(bounds[1]) < np.inf)
         ):  # bounded problem use trf
             method = "trf"
         else:  # unbounded problem use levenberg maquard
