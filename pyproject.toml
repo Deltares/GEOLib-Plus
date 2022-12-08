@@ -39,10 +39,15 @@ rst2pdf = "^0.99"
 isort = "^5.10.1"
 black = "^22.10.0"
 sphinx = "^5.3.0"
+mypy = "^0.991"
 
 [build-system]
 requires = ["poetry>=1.2.2"]
 build-backend = "poetry.masonry.api"
+
+[tox]
+isolated_build = true
+envlist = "py38, py39, py310"
 
 [tool.pytest.ini_options]
 testpaths = [
