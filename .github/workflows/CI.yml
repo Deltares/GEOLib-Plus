@@ -2,16 +2,18 @@ name: ci
 
 on:
   push:
+    branches:
+    - master
   pull_request:
     branches:
-      - master
+    - master
 
 jobs:
   CI:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.8, 3.9, "3.10"]
+        python-version: [3.7, 3.8, 3.9, "3.10"]
         os: [ubuntu-22.04, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
