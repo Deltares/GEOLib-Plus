@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tutorial Custom Cpt interpretation using GEOLIB+ &#8212; geolib+ 0.1.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorial defining and calculating parameters for the Soft Soil Creep model" href="tutorial_soft_soil_parameters.html" />
+    <link rel="prev" title="Tutorial Cpt plotting using GEOLIB+" href="tutorial_cpt_plotting.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tutorial_cpt_plotting.html" title="Previous document">Tutorial Cpt plotting using GEOLIB+</a>
+        </li>
+        <li>
+          <a href="tutorial_soft_soil_parameters.html" title="Next document">Tutorial defining and calculating parameters for the Soft Soil Creep model</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-custom-cpt-interpretation-using-geolib">
+<h1>Tutorial  Custom Cpt interpretation using GEOLIB+<a class="headerlink" href="#tutorial-custom-cpt-interpretation-using-geolib" title="Permalink to this heading">¶</a></h1>
+<p>Following this tutorial the user can learn how to create a custom interpretation class using GEOLIB+.
+Because the <a class="reference internal" href="../../dev/geolib_plus.robertson_cpt_interpretation.html#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobertsonCptInterpretation</span></code></a> class
+might not have specific functionalities desired by the user.</p>
+<p>In the following example, a custom cpt interpretation method is created called “qc only rule”. In this example, the
+classification of the soil depends solely on the cpt cone resistance. In this example, the user wants to fulfill the
+following two requirements:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The class must be able to classify the soil into “clay”, “peat” and “sand” based on a provided shapefile.</p></li>
+<li><p>The class must be able to determine the unit weight of the soil based on the soil classification.</p></li>
+</ul>
+</div></blockquote>
+<p>In the following figure, a visual representation
+of the new interpretation model is presented after plotting it.</p>
+<a class="reference internal image-reference" href="../../_images/qc_only_rule.png"><img alt="../../_images/qc_only_rule.png" src="../../_images/qc_only_rule.png" style="width: 400px;" /></a>
+<p>As a first step the user creates a shapefile that represents the qc-only classification method.
+The user can do this by using the following python code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">geometry</span>
+<span class="kn">import</span> <span class="nn">shapefile</span>
+
+<span class="c1"># define points</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">D</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="n">G</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="c1"># define polygons</span>
+<span class="n">polygon_sand</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">([[</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="n">G</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">E</span><span class="p">]])</span>
+<span class="n">polygon_clay</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">([[</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="n">E</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">C</span><span class="p">]])</span>
+<span class="n">polygon_peat</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">([[</span><span class="n">p</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">y</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">A</span><span class="p">]])</span>
+<span class="n">shapefile_polygon</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;sand&quot;</span><span class="p">:</span> <span class="n">polygon_sand</span><span class="p">,</span>
+    <span class="s2">&quot;clay&quot;</span><span class="p">:</span> <span class="n">polygon_clay</span><span class="p">,</span>
+    <span class="s2">&quot;peat&quot;</span><span class="p">:</span> <span class="n">polygon_peat</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="c1"># write shapefile</span>
+<span class="n">shapefile_location</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;qc_only_rule&quot;</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">shapefile</span><span class="o">.</span><span class="n">Writer</span><span class="p">(</span><span class="n">shapefile_location</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span>
+<span class="n">final_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">shapefile_polygon</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">final_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">poly</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]))])</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The user can also check if the shapefile contains the correct geometry by plotting it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Plot Shape file</span>
+<span class="n">sf</span> <span class="o">=</span> <span class="n">shapefile</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;qc_only_rule&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;number of shapes imported:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">shapes</span><span class="p">()))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">iterShapeRecords</span><span class="p">()):</span>
+    <span class="n">x_lon</span><span class="p">,</span> <span class="n">y_lat</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">shape</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">x_lon</span><span class="p">,</span> <span class="n">y_lat</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">shape</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Friction ratio (Fr) [%]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Cone resistance (qc) [MPa]&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then the user should make their own custom interpretation class which should inherit for the <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.cpt_base_model.AbstractInterpretationMethod" title="geolib_plus.cpt_base_model.AbstractInterpretationMethod"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractInterpretationMethod</span></code></a>.
+In the following example the class created is named <strong>CustomCptInterpretation</strong>, this class inherits from both
+<a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.cpt_base_model.AbstractInterpretationMethod" title="geolib_plus.cpt_base_model.AbstractInterpretationMethod"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractInterpretationMethod</span></code></a> and BaseModel.</p>
+<p>The properties of this class are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>cpt_data: Which contains the cpt data as read by GEOLIB+</p></li>
+<li><p>soil_types_for_classification: Which is a dictionary of values that are read from the soil classification shapefile.</p></li>
+<li><p>path_shapefile: The path to the soil classification shapefile.</p></li>
+<li><p>unit_weight_soil: A list of the final unit weight results</p></li>
+</ul>
+</div></blockquote>
+<p>Apart from that there are three different functions included in the <strong>CustomCptInterpretation</strong> class.
+The function <strong>interpret</strong> is the one that should always be defined by the user as it is also part of
+the <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCPT</span></code></a> class.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To find out more about the concept of inheritance in python see &lt;<a class="reference external" href="https://docs.python.org/3/tutorial/classes.html">https://docs.python.org/3/tutorial/classes.html</a>&gt; and &lt;<a class="reference external" href="https://www.w3schools.com/python/python_inheritance.asp">https://www.w3schools.com/python/python_inheritance.asp</a>&gt; .</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">geolib_plus.cpt_base_model</span> <span class="kn">import</span> <span class="n">AbstractInterpretationMethod</span><span class="p">,</span> <span class="n">AbstractCPT</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">shapefile</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="k">class</span> <span class="nc">CustomCptInterpretation</span><span class="p">(</span><span class="n">AbstractInterpretationMethod</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">cpt_data</span><span class="p">:</span> <span class="n">AbstractCPT</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">soil_types_for_classification</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">path_shapefile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">unit_weight_soil</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpt</span><span class="p">:</span> <span class="n">AbstractCPT</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that interprets the cpt inputs.</span>
+<span class="sd">        Lithology for each layer is determined according to</span>
+<span class="sd">        the qc only method. Note that the pre_process method</span>
+<span class="sd">        should be run before the interpret method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># import cpt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span> <span class="o">=</span> <span class="n">cpt</span>
+        <span class="c1"># Perform unit tranformations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">friction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">friction</span> <span class="o">*</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">friction</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">friction</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+
+        <span class="c1"># read soil classification from shapefile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">soil_types</span><span class="p">()</span>
+        <span class="c1"># calculate lithology</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lithology</span><span class="p">()</span>
+        <span class="c1"># calculate unit weights based on the lithology found</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit_weight</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">unit_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that determines the unit weight of different soil types depending</span>
+<span class="sd">        on the classification type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">unit_weight</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">typical_unit_weight_sand</span> <span class="o">=</span> <span class="mi">20</span>
+        <span class="n">typical_unit_weight_clay</span> <span class="o">=</span> <span class="mi">15</span>
+        <span class="n">typical_unit_weight_peat</span> <span class="o">=</span> <span class="mi">10</span>
+        <span class="k">for</span> <span class="n">soil_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">lithology</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">soil_type</span> <span class="o">==</span> <span class="s2">&quot;sand&quot;</span><span class="p">:</span>
+                <span class="n">unit_weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">typical_unit_weight_sand</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">soil_type</span> <span class="o">==</span> <span class="s2">&quot;clay&quot;</span><span class="p">:</span>
+                <span class="n">unit_weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">typical_unit_weight_clay</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">soil_type</span> <span class="o">==</span> <span class="s2">&quot;peat&quot;</span><span class="p">:</span>
+                <span class="n">unit_weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">typical_unit_weight_peat</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">unit_weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit_weight_soil</span> <span class="o">=</span> <span class="n">unit_weight</span>
+
+    <span class="k">def</span> <span class="nf">point_intersects_one_polygon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">soil_name</span><span class="p">,</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_types_for_classification</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">point</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">polygon</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">soil_name</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">lithology</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that reads a soil classification shapefile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># determine into which soil type the point is</span>
+        <span class="n">lithology</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">counter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">friction</span><span class="p">)):</span>
+            <span class="n">point_to_check</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">tip</span><span class="p">[</span><span class="n">counter</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">friction</span><span class="p">[</span><span class="n">counter</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">lithology</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_intersects_one_polygon</span><span class="p">(</span><span class="n">point_to_check</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">lithology</span> <span class="o">=</span> <span class="n">lithology</span>
+
+    <span class="k">def</span> <span class="nf">soil_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function that read shapes from shape file and passes them as Polygons.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># read shapefile</span>
+        <span class="n">sf</span> <span class="o">=</span> <span class="n">shapefile</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_shapefile</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">sf</span><span class="o">.</span><span class="n">iterShapeRecords</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">soil_types_for_classification</span><span class="p">[</span><span class="n">polygon</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+                <span class="n">polygon</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">points</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+<p>After defining the custom class the user can use it in the following way.
+First of all, the user has to read a cpt and perform a pre_process calculation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.gef_cpt</span> <span class="kn">import</span> <span class="n">GefCpt</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="n">cpt_file_gef</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cpt&quot;</span><span class="p">,</span> <span class="s2">&quot;gef&quot;</span><span class="p">,</span> <span class="s2">&quot;test_cpt.gef&quot;</span><span class="p">)</span>
+<span class="c1"># initialize models</span>
+<span class="n">cpt_gef</span> <span class="o">=</span> <span class="n">GefCpt</span><span class="p">()</span>
+<span class="c1"># read the cpt for each type of file</span>
+<span class="n">cpt_gef</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">cpt_file_gef</span><span class="p">)</span>
+<span class="c1"># do pre-processing of the gef file</span>
+<span class="n">cpt_gef</span><span class="o">.</span><span class="n">pre_process_data</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Secondly, the interpret class should be called and the interpretation can be performed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># call custom interpretation class</span>
+<span class="n">interpreter</span> <span class="o">=</span> <span class="n">CustomCptInterpretation</span><span class="p">()</span>
+<span class="n">interpreter</span><span class="o">.</span><span class="n">path_shapefile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;qc_only_rule.shp&quot;</span><span class="p">)</span>
+<span class="c1"># use GEOLIB+ to run interpreter</span>
+<span class="n">cpt</span><span class="o">.</span><span class="n">interpret_cpt</span><span class="p">(</span><span class="n">interpreter</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After the interpretation is performed the user can inspect the results. Plotting them is an easy method to inspect the outcomes.
+To do that use the following code block.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">interpreter</span><span class="o">.</span><span class="n">unit_weight_soil</span><span class="p">,</span>
+    <span class="n">cpt</span><span class="o">.</span><span class="n">depth_to_reference</span><span class="p">,</span>
+    <span class="n">label</span><span class="o">=</span><span class="n">cpt</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Unit weight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;depth&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The final plot can be observed after the interpretation is performed.</p>
+<a class="reference internal image-reference" href="../../_images/results_custom_interpretation.png"><img alt="../../_images/results_custom_interpretation.png" src="../../_images/results_custom_interpretation.png" style="width: 400px;" /></a>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tutorial_cpt_plotting.html" title="Previous document">Tutorial Cpt plotting using GEOLIB+</a>
+        </li>
+        <li>
+          <a href="tutorial_soft_soil_parameters.html" title="Next document">Tutorial defining and calculating parameters for the Soft Soil Creep model</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/overview.html">Developer API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tutorial_setup_cpt.html">Tutorial setup Cpt class interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_cpt_interpretation.html">Tutorial Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_cpt_plotting.html">Tutorial Cpt plotting using GEOLIB+</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial  Custom Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_soft_soil_parameters.html">Tutorial defining and calculating parameters for the Soft Soil Creep model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_hardening_soil_parameters.html">Tutorial Defining and calculating parameters for the Hardening Soil model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_relative_density_correlated_parameters.html">Tutorial derive model parameters for sands using relative density input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_connecting_dfoundations.html">Create a D-Foundations soil profile using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_nkt.html">Tutorial determine Nkt values using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_shansep_parameters.html">Tutorial determine Shansep parameters using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_state_parameters.html">Tutorial determine state parameters using GEOLIB+</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Tutorials</a><ul>
+      <li>Previous: <a href="tutorial_cpt_plotting.html" title="previous chapter">Tutorial Cpt plotting using GEOLIB+</a></li>
+      <li>Next: <a href="tutorial_soft_soil_parameters.html" title="next chapter">Tutorial defining and calculating parameters for the Soft Soil Creep model</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

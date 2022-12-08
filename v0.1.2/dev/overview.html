@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Developer API &#8212; geolib+ 0.1.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geolib_plus package" href="geolib_plus.html" />
+    <link rel="prev" title="Installation" href="../user/install.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="../user/install.html" title="Previous document">Installation</a>
+        </li>
+        <li>
+          <a href="geolib_plus.html" title="Next document">geolib_plus package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="developer-api">
+<span id="devapi"></span><h1>Developer API<a class="headerlink" href="#developer-api" title="Permalink to this heading">¶</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.html#module-geolib_plus.cpt_base_model">geolib_plus.cpt_base_model module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT"><code class="docutils literal notranslate"><span class="pre">AbstractCPT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractInterpretationMethod"><code class="docutils literal notranslate"><span class="pre">AbstractInterpretationMethod</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.CptReader"><code class="docutils literal notranslate"><span class="pre">CptReader</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.html#module-geolib_plus">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#module-geolib_plus.bro_xml_cpt.bro_utils">geolib_plus.bro_xml_cpt.bro_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader"><code class="docutils literal notranslate"><span class="pre">XMLBroCPTReader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues"><code class="docutils literal notranslate"><span class="pre">XMLBroColumnValues</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData"><code class="docutils literal notranslate"><span class="pre">XMLBroFullData</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#module-geolib_plus.bro_xml_cpt.bro_xml_cpt">geolib_plus.bro_xml_cpt.bro_xml_cpt module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt"><code class="docutils literal notranslate"><span class="pre">BroXmlCpt</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#module-geolib_plus.bro_xml_cpt.validate_bro">geolib_plus.bro_xml_cpt.validate_bro module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.validate_bro.HTTPSResolver"><code class="docutils literal notranslate"><span class="pre">HTTPSResolver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.validate_bro.ValidatePreProcessing"><code class="docutils literal notranslate"><span class="pre">ValidatePreProcessing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.validate_bro.validate_bro"><code class="docutils literal notranslate"><span class="pre">validate_bro()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.validate_bro.validate_bro_cpt"><code class="docutils literal notranslate"><span class="pre">validate_bro_cpt()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html#module-geolib_plus.bro_xml_cpt">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.gef_cpt.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.gef_cpt.html#module-geolib_plus.gef_cpt.gef_cpt">geolib_plus.gef_cpt.gef_cpt module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html#geolib_plus.gef_cpt.gef_cpt.GefCpt"><code class="docutils literal notranslate"><span class="pre">GefCpt</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.gef_cpt.html#module-geolib_plus.gef_cpt.gef_file_reader">geolib_plus.gef_cpt.gef_file_reader module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html#geolib_plus.gef_cpt.gef_file_reader.GefColumnProperty"><code class="docutils literal notranslate"><span class="pre">GefColumnProperty</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html#geolib_plus.gef_cpt.gef_file_reader.GefFileReader"><code class="docutils literal notranslate"><span class="pre">GefFileReader</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html#geolib_plus.gef_cpt.gef_file_reader.GefProperty"><code class="docutils literal notranslate"><span class="pre">GefProperty</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.gef_cpt.html#module-geolib_plus.gef_cpt.validate_gef">geolib_plus.gef_cpt.validate_gef module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html#geolib_plus.gef_cpt.validate_gef.GefLib"><code class="docutils literal notranslate"><span class="pre">GefLib</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html#geolib_plus.gef_cpt.validate_gef.validate_gef_cpt"><code class="docutils literal notranslate"><span class="pre">validate_gef_cpt()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.gef_cpt.html#module-geolib_plus.gef_cpt">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#module-geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation">geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod"><code class="docutils literal notranslate"><span class="pre">OCRMethod</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod"><code class="docutils literal notranslate"><span class="pre">RelativeDensityMethod</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation"><code class="docutils literal notranslate"><span class="pre">RobertsonCptInterpretation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod"><code class="docutils literal notranslate"><span class="pre">ShearWaveVelocityMethod</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod"><code class="docutils literal notranslate"><span class="pre">UnitWeightMethod</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html#module-geolib_plus.robertson_cpt_interpretation">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.plotting.html">geolib_plus.plot_plotting package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.plotting.html#module-geolib_plus.plot_cpt">geolib_plus.plot_cpt module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.define_inclination_ticks_and_labels"><code class="docutils literal notranslate"><span class="pre">define_inclination_ticks_and_labels()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.generate_plot"><code class="docutils literal notranslate"><span class="pre">generate_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.get_values_which_exceed_threshold"><code class="docutils literal notranslate"><span class="pre">get_values_which_exceed_threshold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.get_y_lims"><code class="docutils literal notranslate"><span class="pre">get_y_lims()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.plot_cpt_norm"><code class="docutils literal notranslate"><span class="pre">plot_cpt_norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.save_figures"><code class="docutils literal notranslate"><span class="pre">save_figures()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.trim_cpt_data"><code class="docutils literal notranslate"><span class="pre">trim_cpt_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.trim_cpt_data_on_vertical_limits"><code class="docutils literal notranslate"><span class="pre">trim_cpt_data_on_vertical_limits()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_cpt.trim_values_at_exceeding_threshold"><code class="docutils literal notranslate"><span class="pre">trim_values_at_exceeding_threshold()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.plotting.html#geolib-plus-plot-settings-module">geolib_plus.plot_settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_settings.PlotSettings"><code class="docutils literal notranslate"><span class="pre">PlotSettings</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.plotting.html#module-geolib_plus.plot_utils">geolib_plus.plot_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.create_bro_information_box"><code class="docutils literal notranslate"><span class="pre">create_bro_information_box()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.create_custom_grid"><code class="docutils literal notranslate"><span class="pre">create_custom_grid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.create_gef_information_box"><code class="docutils literal notranslate"><span class="pre">create_gef_information_box()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.create_information_box"><code class="docutils literal notranslate"><span class="pre">create_information_box()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.set_figure_size"><code class="docutils literal notranslate"><span class="pre">set_figure_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.set_local_reference_line"><code class="docutils literal notranslate"><span class="pre">set_local_reference_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.set_multicolor_label"><code class="docutils literal notranslate"><span class="pre">set_multicolor_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.set_textbox_at_thresholds"><code class="docutils literal notranslate"><span class="pre">set_textbox_at_thresholds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.set_x_axis"><code class="docutils literal notranslate"><span class="pre">set_x_axis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html#geolib_plus.plot_utils.set_y_axis"><code class="docutils literal notranslate"><span class="pre">set_y_axis()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html">geolib_plus.parameters_for_soil_models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html#geolib-plus-soft-soil-creep-parameters-module">geolib_plus.soft_soil_creep_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html#geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters"><code class="docutils literal notranslate"><span class="pre">SoftSoilCreepParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html#geolib-plus-hardening-soil-parameters-module">geolib_plus.hardening_soil_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters"><code class="docutils literal notranslate"><span class="pre">HardeningSoilModelParameters</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html#geolib-plus-relative-density-correlared-parameters-module">geolib_plus.relative_density_correlared_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters"><code class="docutils literal notranslate"><span class="pre">RelativeDensityCorrelatedParameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#module-geolib_plus.shm.general_utils">geolib_plus.shm.general_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.general_utils.GeneralUtils"><code class="docutils literal notranslate"><span class="pre">GeneralUtils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#module-geolib_plus.shm.nkt_utils">geolib_plus.shm.nkt_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.nkt_utils.NktMethod"><code class="docutils literal notranslate"><span class="pre">NktMethod</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.nkt_utils.NktUtils"><code class="docutils literal notranslate"><span class="pre">NktUtils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#module-geolib_plus.shm.prob_utils">geolib_plus.shm.prob_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.prob_utils.ProbUtils"><code class="docutils literal notranslate"><span class="pre">ProbUtils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#module-geolib_plus.shm.shansep_utils">geolib_plus.shm.shansep_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.shansep_utils.ShansepUtils"><code class="docutils literal notranslate"><span class="pre">ShansepUtils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#module-geolib_plus.shm.shm_tables">geolib_plus.shm.shm_tables module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.shm_tables.ShmTables"><code class="docutils literal notranslate"><span class="pre">ShmTables</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#module-geolib_plus.shm.soil">geolib_plus.shm.soil module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.soil.DistributionType"><code class="docutils literal notranslate"><span class="pre">DistributionType</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.soil.Soil"><code class="docutils literal notranslate"><span class="pre">Soil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.soil.SoilBaseModel"><code class="docutils literal notranslate"><span class="pre">SoilBaseModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html#geolib_plus.shm.soil.StochasticParameter"><code class="docutils literal notranslate"><span class="pre">StochasticParameter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.shm.html#module-geolib_plus.shm">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.geolib_connections.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geolib_plus.geolib_connections.html#module-geolib_plus.geolib_connections">geolib_plus.geolib_connectionsmodule</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html#geolib_plus.geolib_connections.DFoundationsConnector"><code class="docutils literal notranslate"><span class="pre">DFoundationsConnector</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html#geolib_plus.geolib_connections.validate_that_geolib_is_installed"><code class="docutils literal notranslate"><span class="pre">validate_that_geolib_is_installed()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="../py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="../search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="../user/install.html" title="Previous document">Installation</a>
+        </li>
+        <li>
+          <a href="geolib_plus.html" title="Next document">geolib_plus package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html">geolib_plus.plot_plotting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html">geolib_plus.parameters_for_soil_models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/tutorials/overview.html">Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../user/install.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="geolib_plus.html" title="next chapter">geolib_plus package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,656 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>geolib_plus.robertson_cpt_interpretation package &#8212; geolib+ 0.1.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geolib_plus.shm package" href="geolib_plus.shm.html" />
+    <link rel="prev" title="geolib_plus.gef_cpt package" href="geolib_plus.gef_cpt.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.gef_cpt.html" title="Previous document">geolib_plus.gef_cpt package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.shm.html" title="Next document">geolib_plus.shm package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="geolib-plus-robertson-cpt-interpretation-package">
+<h1>geolib_plus.robertson_cpt_interpretation package<a class="headerlink" href="#geolib-plus-robertson-cpt-interpretation-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation">
+<span id="geolib-plus-robertson-cpt-interpretation-robertson-cpt-interpretation-module"></span><h2>geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation module<a class="headerlink" href="#module-geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.</span></span><span class="sig-name descname"><span class="pre">OCRMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod.MAYNE">
+<span class="sig-name descname"><span class="pre">MAYNE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod.MAYNE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod.ROBERTSON">
+<span class="sig-name descname"><span class="pre">ROBERTSON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod.ROBERTSON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.</span></span><span class="sig-name descname"><span class="pre">RelativeDensityMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod.BALDI">
+<span class="sig-name descname"><span class="pre">BALDI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod.BALDI" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod.KULHAWY">
+<span class="sig-name descname"><span class="pre">KULHAWY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod.KULHAWY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod.KULHAWY_SIMPLE">
+<span class="sig-name descname"><span class="pre">KULHAWY_SIMPLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod.KULHAWY_SIMPLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.</span></span><span class="sig-name descname"><span class="pre">RobertsonCptInterpretation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitweightmethod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod"><span class="pre">UnitWeightMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">UnitWeightMethod.ROBERTSON</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ocrmethod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod"><span class="pre">OCRMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">OCRMethod.ROBERTSON</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shearwavevelocitymethod</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod"><span class="pre">ShearWaveVelocityMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ShearWaveVelocityMethod.ROBERTSON</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polygons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_water_level_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">WindowsPath('D:/buildAgent/work/ca49001b42bc6873/geolib/geolib_plus/robertson_cpt_interpretation/resources')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_water_level_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'peilgebieden_jp_250m.nc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_defined_water_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractInterpretationMethod" title="geolib_plus.cpt_base_model.AbstractInterpretationMethod"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractInterpretationMethod</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Robertson soil classification.</p>
+<p>Classification of soils according to Robertson chart.</p>
+<figure class="align-center" id="element">
+<a class="reference internal image-reference" href="../_images/robertson.png"><img alt="../_images/robertson.png" src="../_images/robertson.png" style="width: 350px;" /></a>
+</figure>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.IC_calc">
+<span class="sig-name descname"><span class="pre">IC_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.IC_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>IC, following Robertson and Cabal <span id="id1">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<div class="math">
+<p><img src="_images/math/5f24898833535cc8438f405367bb5400ce927b81.png" alt="I_{c} = \left[ \left(3.47 - \log\left(Q_{tn}\right) \right)^{2} + \left(\log\left(F_{r}\right) + 1.22 \right)^{2} \right]^{0.5}"/></p>
+</div></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.NEN_calc">
+<span class="sig-name descname"><span class="pre">NEN_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.NEN_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the consistency according to the NEN 997-1:2016</p>
+<p>The NEN method is based on the tip resistance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.calculate_corrected_depth">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_corrected_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">penetration_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.calculate_corrected_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correct the penetration length with the inclination angle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>penetration_length</strong> – measured penetration length</p></li>
+<li><p><strong>inclination</strong> – measured inclination of the cone</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>corrected depth</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.damp_calc">
+<span class="sig-name descname"><span class="pre">damp_calc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod"><span class="pre">OCRMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">OCRMethod.MAYNE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D50</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">40.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.damp_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Damping calculation.</p>
+<p>For clays and peats, the damping is assumed as the minimum damping following Darendeli <span id="id2">[<a class="reference internal" href="../references.html#id9" title="M.B. Darendeli. Development of a new family of normalized modulus reduction and material damping curves. PhD thesis, University of Texas, 2001.">2</a>]</span>.</p>
+<div class="math">
+<p><img src="_images/math/17e6a648524f271a86d3ccce234cecfedd92729f.png" alt="D_{min} = \left(0.8005 + 0.0129 \cdot PI \cdot OCR^{-0.1069} \right) \cdot \sigma_{v0}'^{-0.2889} \cdot \left[ 1 + 0.2919 \ln \left( freq \right) \right]"/></p>
+</div><p>The OCR can be computed according to Mayne <span id="id3">[<a class="reference internal" href="../references.html#id5" title="P.W. Mayne. Cone Penetration Testing. A Synthesis of Highway Practice. National Academies Press, Washington DC, 2007.">3</a>]</span> or Robertson and Cabal <span id="id4">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<div class="math">
+<p><img src="_images/math/fd6a98f322db8df1afd6e76953fc861f4c008a19.png" alt="OCR_{Mayne} = 0.33 \cdot \frac{q_{t} - \sigma_{v0}}{\sigma_{v0}'}
+
+OCR_{Rob} = 0.25 \left(Q_{t}\right)^{1.25}"/></p>
+</div><p>For sand the damping is assumed as the minimum damping following Menq :cite`menq_2003`.</p>
+<div class="math">
+<p><img src="_images/math/7d99c3ef12c5172352b24898347c648ba50313a0.png" alt="D_{min} = 0.55 \cdot C_{u}^{0.1} \cdot d_{50}^{-0.3} \cdot  \left(\frac{\sigma'_{v}}{p_{a}} \right)^-0.08"/></p>
+</div><p>:param :
+:type : param method: (optional) Method for calculation of OCR. Default is Mayne
+:param :
+:type : param d_min: (optional) Minimum damping. Default is 2%
+:param :
+:type : param Cu: (optional) Coefficient of uniformity. Default is 2.0
+:param :
+:type : param D50: (optional) Median grain size. Default is 0.2 mm
+:param :
+:type : param Ip: (optional) Plasticity index. Default is 40
+:param :
+:type : param freq: (optional) Frequency. Default is 1 Hz</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lithologies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filters the values of the CPT object.
+The filter removes the index of the object for the defined <strong>lithologies</strong>, where the <strong>key</strong> is smaller than
+the <strong>value</strong>
+The filter only removes the first consecutive samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lithologies</strong> – list of lithologies to be filtered</p></li>
+<li><p><strong>key</strong> – Key of the object to be filtered</p></li>
+<li><p><strong>value</strong> – value of the key to be limited</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.gamma">
+<span class="sig-name descname"><span class="pre">gamma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterable</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.gamma" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.gamma_calc">
+<span class="sig-name descname"><span class="pre">gamma_calc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod"><span class="pre">UnitWeightMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">UnitWeightMethod.ROBERTSON</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">22</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.gamma_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes unit weight.</p>
+<p>Computes the unit weight following Robertson and Cabal <span id="id5">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.
+If unit weight is infinity, it is set to gamma_limit.
+The formula for unit weight is:</p>
+<div class="math">
+<p><img src="_images/math/c228bc3ee3e2ccf3a60b43ecdd7995b518c9bf45.png" alt="\gamma = (0.27 \log(R_{f}) + 0.36 \log\left(\frac{q_{t}}{Pa}\right) + 1.236) * \gamma_{w}"/></p>
+</div><p>Alternative method of Lengkeek et al. <span id="id6">[<a class="reference internal" href="../references.html#id3" title="HJ Lengkeek, J de Greef, and Stan Joosten. Cpt based unit weight estimation extended to soft organic soils and peat. In Cone Penetration Testing 2018, 389–394. CRC Press, 2018.">4</a>]</span>:</p>
+<div class="math">
+<p><img src="_images/math/fc118c3c1e8ccc511f339059457e56f52fdd5c71.png" alt="\gamma = \gamma_{sat,ref} - \beta
+\left( \frac{\log \left( \frac{q_{t,ref}}{q_{t}} \right)}{\log \left(\frac{R_{f,ref}}{R_{f}}\right)} \right)"/></p>
+</div><p>:param :
+:type : param method: (optional) Method to compute unit weight. Default is Robertson
+:param :
+:type : param gamma_max: (optional) Maximum gamma. Default is 22
+:param :
+:type : param gamma_min: (optional) Minimum gamma. Default is 10.5</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.interpret">
+<span class="sig-name descname"><span class="pre">interpret</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.interpret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that interprets the cpt inputs.
+Lithology for each layer is determined according to
+the robertson’s method. Note that the pre_process method
+should be run before the interpret method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.lithology">
+<span class="sig-name descname"><span class="pre">lithology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Qtn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.lithology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifies lithology of CPT points, following Robertson and Cabal <span id="id7">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<p>:param :
+:type : return: lithology array, Qtn, Fr</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.lithology_calc">
+<span class="sig-name descname"><span class="pre">lithology_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.lithology_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lithology calculation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>soil_classification</strong> – shape file with soil classification</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.name_water_level_file">
+<span class="sig-name descname"><span class="pre">name_water_level_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.name_water_level_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.norm_calc">
+<span class="sig-name descname"><span class="pre">norm_calc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.norm_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>normalisation of qc and friction into Qtn and Fr, following Robertson and Cabal <span id="id8">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<div class="math">
+<p><img src="_images/math/fe0ab9671390cb10e449d2ef604e72d28f0f0c8d.png" alt="Q_{tn} = \left(\frac{q_{t} - \sigma_{v0}}{Pa} \right) \left(\frac{Pa}{\sigma_{v0}'}\right)^{n}
+
+F_{r} = \frac{f_{s}}{q_{t}-\sigma_{v0}} \cdot 100"/></p>
+</div><p>:param :
+:type : param n_method: (optional) parameter <em>n</em> stress exponent. Default is n computed in an iterative way.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.norm_cone_resistance_clean_sand_calc">
+<span class="sig-name descname"><span class="pre">norm_cone_resistance_clean_sand_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.norm_cone_resistance_clean_sand_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the clean sand equivalent normalised cone resistance, following Robertson and Cabal
+<span id="id9">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<div class="math">
+<p><img src="_images/math/cb26c1ee00c2d4b77ec28ae17f6508ff25105af5.png" alt="Q_{tn,cs} = K_{c} \cdot Q_{tn}"/></p>
+</div><p>Where K_{c} is defined as follows:</p>
+<p>When  [$I_{c} leq 1.64$]</p>
+<div class="math">
+<p><img src="_images/math/aa1766031ed466df40b10f68ff39d1598183c961.png" alt="K_{c} = 1.0"/></p>
+</div><p>When  [$1.64 &lt; I_{c} leq 2.5$]</p>
+<div class="math">
+<p><img src="_images/math/5fdc31955830ee476080094250d3547dbfed25af.png" alt="K_{c} = 5.58 I_{c}^{3} - 0.403 I_{c}^{4} - 21.63 I_{c}^{2} + 33.65 I_{c} - 17.88"/></p>
+</div><p>When  [$1.64 &lt; I_{c} &lt;2.36$] and [$F_{r} &lt; 0.5%$]</p>
+<div class="math">
+<p><img src="_images/math/aa1766031ed466df40b10f68ff39d1598183c961.png" alt="K_{c} = 1.0"/></p>
+</div><p>When  [$2.5 &lt; I_{c} &lt;2.7$]</p>
+<div class="math">
+<p><img src="_images/math/5150e383c8ed5a9edbdd21d54da06df2de067bcf.png" alt="K_{c} = 6 * 10^{-7} ( I_{c}^{16.76}"/></p>
+</div></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.ocrmethod">
+<span class="sig-name descname"><span class="pre">ocrmethod</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.OCRMethod"><span class="pre">OCRMethod</span></a></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.ocrmethod" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.path_to_water_level_file">
+<span class="sig-name descname"><span class="pre">path_to_water_level_file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.path_to_water_level_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.permeability_calc">
+<span class="sig-name descname"><span class="pre">permeability_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.permeability_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permeability calculation. Following Robertson <span id="id10">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<p>When  [$1.0 &lt; I_{c} leq 3.27$]</p>
+<div class="math">
+<p><img src="_images/math/a22187b396dd3e3082c0484b3386e77cb5e68fee.png" alt="k = 10^{0.952-3.04 I_{c}}"/></p>
+</div><p>When  [$3.27 &lt; I_{c} &lt; 4.0$]</p>
+<div class="math">
+<p><img src="_images/math/28818449e57e2def2a18de4de4f68907866e2b89.png" alt="k = 10^{-4.52-1.37 I_{c}}"/></p>
+</div></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.poisson_calc">
+<span class="sig-name descname"><span class="pre">poisson_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.poisson_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Poisson ratio. Following Mayne <span id="id11">[<a class="reference internal" href="../references.html#id5" title="P.W. Mayne. Cone Penetration Testing. A Synthesis of Highway Practice. National Academies Press, Washington DC, 2007.">3</a>]</span>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.polygons">
+<span class="sig-name descname"><span class="pre">polygons</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Iterable</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.polygons" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.pwp_level_calc">
+<span class="sig-name descname"><span class="pre">pwp_level_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.pwp_level_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the estimated pwp level for the cpt coordinate.
+If the user has not defined a pwp in the cpt class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.qt_calc">
+<span class="sig-name descname"><span class="pre">qt_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.qt_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Corrected cone resistance, following Robertson and Cabal <span id="id12">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<div class="math">
+<p><img src="_images/math/cb05f8d23805b0746d659e00cf6d0aa965d4a11c.png" alt="q_{t} = q_{c} + u_{2} \left( 1 - a\right)"/></p>
+</div></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.relative_density_calc">
+<span class="sig-name descname"><span class="pre">relative_density_calc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RelativeDensityMethod"><span class="pre">RelativeDensityMethod</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">15.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.41</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Q_c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OCR</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">age</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.relative_density_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes relative density. Following methods described in Robertson <span id="id13">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>. This method
+calculates the relative density for all the non cohesive soils along the whole cpt, i.e. RD is calculated when
+the lithology index is either 6, 7, 8 or 9.</p>
+<p>The relative density can be computed according to Baldi <span id="id14">[<a class="reference internal" href="../references.html#id21" title="G Baldi, R Bellotti, VN Ghionna, M Jamiolkowski, and DCF Lo Presti. Modulus of sands from cpt's and dmt's. In Congrès international de mécanique des sols et des travaux de fondations. 12, 165–170. 1989.">5</a>]</span> or
+Kulhawy and Mayne <span id="id15">[<a class="reference internal" href="../references.html#id22" title="Fred H Kulhawy and Paul W Mayne. Manual on estimating soil properties for foundation design. Technical Report, Electric Power Research Inst., Palo Alto, CA (USA); Cornell Univ., Ithaca …, 1990.">6</a>]</span>. Furthermore Kulhawy method can be simplified for most young,
+uncemented-based sands.</p>
+<div class="math">
+<p><img src="_images/math/6b3d75f8c0610f6ac50eaebdafaa243f3a7fed92.png" alt="RD_{Baldi} = (\frac{1}{C_{2}})LN(\frac{Q_{cn}}{C_{0}})"/></p>
+</div><div class="math">
+<p><img src="_images/math/0da088cde81df09ab75bd7e6de625780f9fcc244.png" alt="RD_{Kulhawy}^{2} = \frac{Q_{cn}}{305 Q_{c} Q_{ocr} Q_{A}}"/></p>
+</div><div class="math">
+<p><img src="_images/math/4990a03f94d92803fbab025a74f8cf18ede99be7.png" alt="Q_{ocr} = OCR^{0.18}"/></p>
+</div><div class="math">
+<p><img src="_images/math/35ca02ff98322584afd2b37627225502a68d02b0.png" alt="Q_{A} = 1.2 + 0.05log(age/100)"/></p>
+</div><div class="math">
+<p><img src="_images/math/4308b35cb849fdbc20d868f4ae52a54ec0e020b7.png" alt="RD_{Kulhawy_simple}^{2} = \frac{Q_{tn}}{350}"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>method</strong> – Method for calculation of relative density.</p></li>
+<li><p><strong>c_0</strong> – (optional float or np array) soil constant for Baldi method. Default is 15.7</p></li>
+<li><p><strong>c_2</strong> – (optional float or np array) soil constant for Baldi method. Default is 2.41</p></li>
+<li><p><strong>Q_c</strong> – (optional float or np array) compressibility factor, 0.9 for low compressibility, 1.1 for
+high compressibility. Default is 1.0</p></li>
+<li><p><strong>OCR</strong> – (optional float or np array) Over consolidation ratio. Default = 1.0</p></li>
+<li><p><strong>age</strong> – (optional float or np array) age of the soil in years. Default is 1000</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.rho_calc">
+<span class="sig-name descname"><span class="pre">rho_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.rho_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes density of soil.</p>
+<p>The formula for density is:</p>
+<div class="math">
+<p><img src="_images/math/58c67afa9b0e62a04b6ce630600dcb6906664153.png" alt="\rho = \frac{\gamma}{g}"/></p>
+</div></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.shearwavevelocitymethod">
+<span class="sig-name descname"><span class="pre">shearwavevelocitymethod</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod"><span class="pre">ShearWaveVelocityMethod</span></a></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.shearwavevelocitymethod" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.soil_types">
+<span class="sig-name descname"><span class="pre">soil_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_shapefile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">WindowsPath('resources')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Robertson'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.soil_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that read shapes from shape file and passes them as Polygons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_shapefile</strong> – Path to the shapefile</p></li>
+<li><p><strong>model_name</strong> – Name of model and shapefile</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of the polygons defining the soil types</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.state_parameter_calc">
+<span class="sig-name descname"><span class="pre">state_parameter_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.state_parameter_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates state parameter from relationship with clean sand equivalent normalised cone resistance
+<span id="id16">[<a class="reference internal" href="../references.html#id17" title="P.K. Robertson. Soil behaviour type from the cpt: an update. 2nd International Symposium on Cone Penetration Testing, 2:575–583, 2010.">7</a>]</span>.</p>
+<div class="math">
+<p><img src="_images/math/d4dcf1e5f37a29ccb9fbc4c028136307fc60853b.png" alt="\psi =0.56 - 0.33 log(Q_{tn,cs})"/></p>
+</div></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.stress_calc">
+<span class="sig-name descname"><span class="pre">stress_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.stress_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes total and effective stress</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.unitweightmethod">
+<span class="sig-name descname"><span class="pre">unitweightmethod</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod"><span class="pre">UnitWeightMethod</span></a></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.unitweightmethod" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.user_defined_water_level">
+<span class="sig-name descname"><span class="pre">user_defined_water_level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.user_defined_water_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.vs_calc">
+<span class="sig-name descname"><span class="pre">vs_calc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod"><span class="pre">ShearWaveVelocityMethod</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ShearWaveVelocityMethod.ROBERTSON</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.vs_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shear wave velocity and shear modulus. The following methods are available:</p>
+<ul class="simple">
+<li><p>Robertson and Cabal <span id="id17">[<a class="reference internal" href="../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>:</p></li>
+</ul>
+<div class="math">
+<p><img src="_images/math/afb4f05936837fd9d41029261ef8b55943c37220.png" alt="v_{s} = \left( \alpha_{vs} \cdot \frac{q_{t} - \sigma_{v0}}{Pa} \right)^{0.5}
+
+\alpha_{vs} = 10^{0.55 I_{c} + 1.68}
+
+G_{0} = \frac{\gamma}{g} \cdot v_{s}^{2}"/></p>
+</div><ul class="simple">
+<li><p>Mayne <span id="id18">[<a class="reference internal" href="../references.html#id5" title="P.W. Mayne. Cone Penetration Testing. A Synthesis of Highway Practice. National Academies Press, Washington DC, 2007.">3</a>]</span>:</p></li>
+</ul>
+<div class="math">
+<p><img src="_images/math/b2b1a73b54ecaf7bcd421ac49b42a810e0c204cc.png" alt="v_{s} = e^{\frac{\gamma_{sat} + 4.03}{4.17}} \cdot \left( \frac{\sigma_{v0}'}{\sigma_{atm}} \right)^{0.25}
+
+v_{s} = 118.8 \cdot \log \left(f_{s} \right) + 18.5"/></p>
+</div><ul class="simple">
+<li><p>Andrus <em>et al.</em> <span id="id19">[<a class="reference internal" href="../references.html#id6" title="R.D. Andrus, N.P. Mohanan, P. Piratheepan, B.S. Ellis, and T. Holzer. Predicting shear-wave velocity from cone penetration resistance. In Proceedings of the 4th International Conference on Earthquake Geotechnical Engineering, Thessaloniki, Greece, volume 2528. 2007.">8</a>]</span>:</p></li>
+</ul>
+<div class="math">
+<p><img src="_images/math/84a8060075d24d411390b871f1dcdd13800246d8.png" alt="v_{s} = 2.27 \cdot q_{t}^{0.412} \cdot I_{c}^{0.989} \cdot D^{0.033} \cdot ASF  (Holocene)
+
+v_{s} = 2.62 \cdot q_{t}^{0.395} \cdot I_{c}^{0.912} \cdot D^{0.124} \cdot SF   (Pleistocene)"/></p>
+</div><ul class="simple">
+<li><p>Zhang and Tong <span id="id20">[<a class="reference internal" href="../references.html#id7" title="M. Zhang and L. Tong. New statistical and graphical assessment of cpt-based empirical correlations for the shear wave velocity of soils. Engineering Geology, 226:184–191, 2017.">9</a>]</span>:</p></li>
+</ul>
+<div class="math">
+<p><img src="_images/math/f545e5c0015a4cc59149588d6ee8629fa45976df.png" alt="v_{s} = 10.915 \cdot q_{t}^{0.317} \cdot I_{c}^{0.210} \cdot D^{0.057} \cdot SF^{a}  (Holocene)"/></p>
+</div><ul class="simple">
+<li><p>Ahmed <span id="id21">[<a class="reference internal" href="../references.html#id8" title="S.M. Ahmed. Predicting shear-wave velocity from cone penetration resistance. In Proceedings of the 2nd World Congress on Civil, Structural, and Environmental Engineering. 2017.">10</a>]</span>:</p></li>
+</ul>
+<div class="math">
+<p><img src="_images/math/0178a2b28fe92765aaf51a523b242037ecb07668.png" alt="v_{s} = 1000 \cdot e^{-0.887 \cdot I_{c}} \cdot \left( \left(1 + 0.443 \cdot F_{r} \right) \cdot \left(\frac{\sigma'_{v}}{p_{a}} \right) \cdot \left(\frac{\gamma_{w}}{\gamma} \right) \right)^{0.5}"/></p>
+</div></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.young_calc">
+<span class="sig-name descname"><span class="pre">young_calc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation.young_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Young modulus calculation.</p>
+<p>Computes the Young modulus:</p>
+<div class="math">
+<p><img src="_images/math/e0c337a27b29ff78ac05748122e8186a67e563a8.png" alt="E = 2 \cdot G (1 + \mu)"/></p>
+</div></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.</span></span><span class="sig-name descname"><span class="pre">ShearWaveVelocityMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.AHMED">
+<span class="sig-name descname"><span class="pre">AHMED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.AHMED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.ANDRUS">
+<span class="sig-name descname"><span class="pre">ANDRUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.ANDRUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.MAYNE">
+<span class="sig-name descname"><span class="pre">MAYNE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.MAYNE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.ROBERTSON">
+<span class="sig-name descname"><span class="pre">ROBERTSON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.ROBERTSON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.ZANG">
+<span class="sig-name descname"><span class="pre">ZANG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.ShearWaveVelocityMethod.ZANG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.</span></span><span class="sig-name descname"><span class="pre">UnitWeightMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod.LENGKEEK">
+<span class="sig-name descname"><span class="pre">LENGKEEK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod.LENGKEEK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod.ROBERTSON">
+<span class="sig-name descname"><span class="pre">ROBERTSON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.UnitWeightMethod.ROBERTSON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.robertson_cpt_interpretation">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geolib_plus.robertson_cpt_interpretation" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.gef_cpt.html" title="Previous document">geolib_plus.gef_cpt package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.shm.html" title="Next document">geolib_plus.shm package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Developer API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html">geolib_plus.plot_plotting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html">geolib_plus.parameters_for_soil_models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/tutorials/overview.html">Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Developer API</a><ul>
+  <li><a href="geolib_plus.html">geolib_plus package</a><ul>
+      <li>Previous: <a href="geolib_plus.gef_cpt.html" title="previous chapter">geolib_plus.gef_cpt package</a></li>
+      <li>Next: <a href="geolib_plus.shm.html" title="next chapter">geolib_plus.shm package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

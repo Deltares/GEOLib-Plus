@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>geolib_plus.gef_cpt package &#8212; geolib+ 0.1.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geolib_plus.robertson_cpt_interpretation package" href="geolib_plus.robertson_cpt_interpretation.html" />
+    <link rel="prev" title="geolib_plus.bro_xml_cpt package" href="geolib_plus.bro_xml_cpt.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.bro_xml_cpt.html" title="Previous document">geolib_plus.bro_xml_cpt package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.robertson_cpt_interpretation.html" title="Next document">geolib_plus.robertson_cpt_interpretation package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="geolib-plus-gef-cpt-package">
+<h1>geolib_plus.gef_cpt package<a class="headerlink" href="#geolib-plus-gef-cpt-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-geolib_plus.gef_cpt.gef_cpt">
+<span id="geolib-plus-gef-cpt-gef-cpt-module"></span><h2>geolib_plus.gef_cpt.gef_cpt module<a class="headerlink" href="#module-geolib_plus.gef_cpt.gef_cpt" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_cpt.GefCpt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.gef_cpt.gef_cpt.</span></span><span class="sig-name descname"><span class="pre">GefCpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penetration_length:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates:</span> <span class="pre">~typing.Optional[~typing.List]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_reference_level:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_to_reference:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tip:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction_nbr:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_stress:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effective_stress:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwp:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qt:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Qtn:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Qtncs:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fr:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IC:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vs:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E0:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permeability:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poisson:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_density:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_pressure_u1:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_pressure_u2:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_pressure_u3:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lithology:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">litho_points:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lithology_merged:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_merged:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_merged:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertical_datum:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_reference:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_x:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_y:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_ns:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_ew:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_resultant:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_tip:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_ratio:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tip_nbr:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_weight_measured:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwp_ini:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_pressure_measured:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effective_pressure_measured:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electric_cond:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_x:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_y:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_z:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_tot:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_inclination:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_declination:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predrilled_z:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined_depth:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_standard:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality_class:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_type:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_time:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water_measurement_type:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">litho_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohesion_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fr_angle_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_settings:</span> <span class="pre">~geolib_plus.plot_settings.PlotSettings</span> <span class="pre">=</span> <span class="pre">&lt;geolib_plus.plot_settings.PlotSettings</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">9.81</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pa:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_codes:</span> <span class="pre">dict</span> <span class="pre">=</span> <span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_cpt.GefCpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCPT</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_cpt.GefCpt.drop_duplicate_depth_values">
+<span class="sig-name descname"><span class="pre">drop_duplicate_depth_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_cpt.GefCpt.drop_duplicate_depth_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates fields by removing penetration_length that are duplicate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_cpt.GefCpt.get_cpt_reader">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cpt_reader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.CptReader" title="geolib_plus.cpt_base_model.CptReader"><span class="pre">CptReader</span></a></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_cpt.GefCpt.get_cpt_reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_cpt.GefCpt.has_points_with_error">
+<span class="sig-name descname"><span class="pre">has_points_with_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_cpt.GefCpt.has_points_with_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>A routine which checks whether the data is free of points with error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the gef cpt data is free of error flags</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_cpt.GefCpt.remove_points_with_error">
+<span class="sig-name descname"><span class="pre">remove_points_with_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_cpt.GefCpt.remove_points_with_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates fields by removing depths that contain values with errors. i.e. incomplete data</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.gef_cpt.gef_file_reader">
+<span id="geolib-plus-gef-cpt-gef-file-reader-module"></span><h2>geolib_plus.gef_cpt.gef_file_reader module<a class="headerlink" href="#module-geolib_plus.gef_cpt.gef_file_reader" title="Permalink to this heading">¶</a></h2>
+<p>Tools to read gef files.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefColumnProperty">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.gef_cpt.gef_file_reader.</span></span><span class="sig-name descname"><span class="pre">GefColumnProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gef_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values_from_gef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplication_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gef_column_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefColumnProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geolib_plus.gef_cpt.gef_file_reader.GefProperty" title="geolib_plus.gef_cpt.gef_file_reader.GefProperty"><code class="xref py py-class docutils literal notranslate"><span class="pre">GefProperty</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefColumnProperty.gef_column_index">
+<span class="sig-name descname"><span class="pre">gef_column_index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefColumnProperty.gef_column_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefColumnProperty.multiplication_factor">
+<span class="sig-name descname"><span class="pre">multiplication_factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefColumnProperty.multiplication_factor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.gef_cpt.gef_file_reader.</span></span><span class="sig-name descname"><span class="pre">GefFileReader</span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.CptReader" title="geolib_plus.cpt_base_model.CptReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">CptReader</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_as_np_array">
+<span class="sig-name descname"><span class="pre">get_as_np_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values_from_gef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_as_np_array" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts iterable to np array if the values are not None
+:param values_from_gef:
+:return: numpy array</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_line_from_data_that_ends_with">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_line_from_data_that_ends_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_line_from_data_that_ends_with" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of strings it returns the first one ending with the given code_string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code_string</strong> (<em>str</em>) – Code string to find at the end of each line.</p></li>
+<li><p><strong>data</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of strings to iterate through.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – When no code_string argument is given.</p></li>
+<li><p><strong>ValueError</strong> – When no data argument is given.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Line ending with the requested code_string.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_line_index_from_data_starts_with">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_line_index_from_data_starts_with</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_line_index_from_data_starts_with" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a list of strings it returns the position of the first one which starts by the code string given.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code_string</strong> (<em>str</em>) – The line that needs to be found.</p></li>
+<li><p><strong>data</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Collection of strings representing lines.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – When the code_string argument is not given or is None.</p></li>
+<li><p><strong>ValueError</strong> – When the data argument is not given or is None.</p></li>
+<li><p><strong>ValueError</strong> – When no values where found for the given arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Line index where the data can be found.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_pre_drill_depth">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_pre_drill_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">penetration_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_pre_drill_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the pre-drill depth from the penetration length</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.map_error_codes_to_external_property_names">
+<span class="sig-name descname"><span class="pre">map_error_codes_to_external_property_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.map_error_codes_to_external_property_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matches error keys of GefFileReader dictionary to AbstractCPT class.
+That are used later in pre-processing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.match_idx_with_error">
+<span class="sig-name descname"><span class="pre">match_idx_with_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx_errors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.match_idx_with_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>In the gef file each of the parameters has a value that is written
+when an error in the cpt data accumulation ocurred.
+The depth and tip keys are required inputs of the gef file. If they
+are missing then the function will raise an error. If another key is
+missing then a warning should be given back.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_column_data">
+<span class="sig-name descname"><span class="pre">read_column_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx_EOH</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_column_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read column data from the gef file table.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_column_index_for_gef_data">
+<span class="sig-name descname"><span class="pre">read_column_index_for_gef_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_column_index_for_gef_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>In the gef file ‘#COLUMNINFO=id , name , column_number’ format is used.
+This function returns the id number. Which will be later used
+as reference for the errors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_date_cpt">
+<span class="sig-name descname"><span class="pre">read_date_cpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_date_cpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the date from the cpt. If startdate is present, the date is defined as the startdate.
+Else the date is equal to the filedate, which is always present.
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_gef">
+<span class="sig-name descname"><span class="pre">read_gef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gef_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fct_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_gef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens and reads gef file. Returns dictionary containing all possible
+inputs from gef file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_information_for_gef_data">
+<span class="sig-name descname"><span class="pre">read_information_for_gef_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.read_information_for_gef_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads header information from the gef data.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefProperty">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.gef_cpt.gef_file_reader.</span></span><span class="sig-name descname"><span class="pre">GefProperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gef_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values_from_gef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefProperty.error_code">
+<span class="sig-name descname"><span class="pre">error_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefProperty.error_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefProperty.gef_key">
+<span class="sig-name descname"><span class="pre">gef_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefProperty.gef_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefProperty.values_from_gef">
+<span class="sig-name descname"><span class="pre">values_from_gef</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefProperty.values_from_gef" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.gef_cpt.validate_gef">
+<span id="geolib-plus-gef-cpt-validate-gef-module"></span><h2>geolib_plus.gef_cpt.validate_gef module<a class="headerlink" href="#module-geolib_plus.gef_cpt.validate_gef" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.validate_gef.GefLib">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.gef_cpt.validate_gef.</span></span><span class="sig-name descname"><span class="pre">GefLib</span></span><a class="headerlink" href="#geolib_plus.gef_cpt.validate_gef.GefLib" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wrapper class and functions around geflib (gef2.dll) functions required for validating of gef input files (.gef)
+Collection of helper functions for validating gef files.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.validate_gef.GefLib.get_code">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.validate_gef.GefLib.get_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts Code to gef file code to procedure code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>code</strong> – gef file code</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>gef procedure code</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.gef_cpt.validate_gef.validate_gef_cpt">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.gef_cpt.validate_gef.</span></span><span class="sig-name descname"><span class="pre">validate_gef_cpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logging</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.gef_cpt.validate_gef.validate_gef_cpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execution of validation. This is thread safe.
+Thus multiple versions of geflib.dll can be loaded in spawned processes without interferring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>Path</em>) – path to gef file</p></li>
+<li><p><strong>logging</strong> (<em>bool</em>) – generate warning and error log file</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.gef_cpt">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geolib_plus.gef_cpt" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.bro_xml_cpt.html" title="Previous document">geolib_plus.bro_xml_cpt package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.robertson_cpt_interpretation.html" title="Next document">geolib_plus.robertson_cpt_interpretation package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Developer API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html">geolib_plus.plot_plotting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html">geolib_plus.parameters_for_soil_models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/tutorials/overview.html">Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Developer API</a><ul>
+  <li><a href="geolib_plus.html">geolib_plus package</a><ul>
+      <li>Previous: <a href="geolib_plus.bro_xml_cpt.html" title="previous chapter">geolib_plus.bro_xml_cpt package</a></li>
+      <li>Next: <a href="geolib_plus.robertson_cpt_interpretation.html" title="next chapter">geolib_plus.robertson_cpt_interpretation package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

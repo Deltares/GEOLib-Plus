@@ -1,0 +1,875 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>geolib_plus.shm package &#8212; geolib+ 0.1.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geolib_plus.plot_plotting package" href="geolib_plus.plotting.html" />
+    <link rel="prev" title="geolib_plus.robertson_cpt_interpretation package" href="geolib_plus.robertson_cpt_interpretation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.robertson_cpt_interpretation.html" title="Previous document">geolib_plus.robertson_cpt_interpretation package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.plotting.html" title="Next document">geolib_plus.plot_plotting package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="geolib-plus-shm-package">
+<h1>geolib_plus.shm package<a class="headerlink" href="#geolib-plus-shm-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-geolib_plus.shm.general_utils">
+<span id="geolib-plus-shm-general-utils-module"></span><h2>geolib_plus.shm.general_utils module<a class="headerlink" href="#module-geolib_plus.shm.general_utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.general_utils.GeneralUtils">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.general_utils.</span></span><span class="sig-name descname"><span class="pre">GeneralUtils</span></span><a class="headerlink" href="#geolib_plus.shm.general_utils.GeneralUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Contains general static functions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.general_utils.GeneralUtils.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#geolib_plus.shm.general_utils.GeneralUtils.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.general_utils.GeneralUtils.Config.arbitrary_types_allowed">
+<span class="sig-name descname"><span class="pre">arbitrary_types_allowed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#geolib_plus.shm.general_utils.GeneralUtils.Config.arbitrary_types_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.general_utils.GeneralUtils.linearise_data_over_layer">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">linearise_data_over_layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_to_linearized</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_zone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.general_utils.GeneralUtils.linearise_data_over_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that returns the linearised data of the layer inputted by the user.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.shm.nkt_utils">
+<span id="geolib-plus-shm-nkt-utils-module"></span><h2>geolib_plus.shm.nkt_utils module<a class="headerlink" href="#module-geolib_plus.shm.nkt_utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktMethod">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.nkt_utils.</span></span><span class="sig-name descname"><span class="pre">NktMethod</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktMethod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktMethod.REGRESSION">
+<span class="sig-name descname"><span class="pre">REGRESSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktMethod.REGRESSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktMethod.STATISTICS">
+<span class="sig-name descname"><span class="pre">STATISTICS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktMethod.STATISTICS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.nkt_utils.</span></span><span class="sig-name descname"><span class="pre">NktUtils</span></span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>This class contains utility functions which are used to determine Nkt and the characteristic value and probabilistic
+parameters. All methods are according to  <span id="id1">[<a class="reference internal" href="../references.html#id20" title="A. Meer. Povm actuele sterkte activiteit 9 - voorbeeld schuifsterkteschematisering. Technical Report, POV Macro Stabiliteit, 2019.">11</a>]</span>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils.get_characteristic_value_nkt_from_statistics">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_characteristic_value_nkt_from_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">su</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std_loc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils.get_characteristic_value_nkt_from_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets characteristic value of N_kt through statistics.</p>
+<p>The characteristic value of N_kt is calculated by using the following formula:</p>
+<div class="math">
+<p><img src="_images/math/77be17a12c64aeb76e26bbe59677f7bc77360ef0.png" alt="N_{kt,kar} = exp(\mu_{N_{kt}} + T^{0.05}_{n-1} \cdot \sigma_{Ln(N_{kt,gem}) \cdot \sqrt{1 + \frac{1}{n}}})"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>su</strong> – iterable of undrained shear strength</p></li>
+<li><p><strong>q_net</strong> – iterable of net cone resistance</p></li>
+<li><p><strong>std_loc</strong> – local standard deviation of log N_kt, if None: std_loc = 0.5 std_total</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>characteristic value of N_kt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils.get_characteristic_value_nkt_from_weighted_regression">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_characteristic_value_nkt_from_weighted_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">su</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_net</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vc_loc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils.get_characteristic_value_nkt_from_weighted_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets characteristic value of nkt from weighted regression.</p>
+<p>The characteristic value of N_kt is calculated by using the following formula:</p>
+<div class="math">
+<p><img src="_images/math/a7cb10a5c697793676c548f6c58b88b0d320caaf.png" alt="N_{kt,kar} = \frac{\mu_{N_{kt}}}{(1-T^{0.05}_{n-1} \cdot V_{\frac{q_{net}}{N_{kt}},gem} \cdot \sqrt{1 + \frac{1}{n}})}"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>su</strong> – iterable of undrained shear strength</p></li>
+<li><p><strong>q_net</strong> – iterable of net cone resistance</p></li>
+<li><p><strong>vc_loc</strong> – local variation coefficient of q_net/N_kt, if None: vc_loc = 0.5 vc_total</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>characteristic value of N_kt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils.get_default_nkt">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_default_nkt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_saturated</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils.get_default_nkt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets default Nkt values.</p>
+<p>For saturated soil: mean Nkt is 20 and variation coefficient is 0.25
+For unsaturated soil: mean Nkt is 60 and variation coefficient is 0.25</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is_saturated</strong> – boolean or numpy array with booleans which indicate of the soil/soils is/are saturated</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean of Nkt, std of Nkt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils.get_nkt_from_statistics">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_nkt_from_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">su:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_net:</span> <span class="pre">~numpy.ndarray)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'float'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils.get_nkt_from_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates log mean of N_kt and total log standard deviation of N_kt through statistics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>su</strong> – iterable of undrained shear strength</p></li>
+<li><p><strong>q_net</strong> – iterable of net cone resistance</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean of Ln Nkt, total standard deviation of Ln Nkt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils.get_nkt_stats_from_weighted_regression">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_nkt_stats_from_weighted_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">su:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_net:</span> <span class="pre">~numpy.ndarray)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'float'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils.get_nkt_stats_from_weighted_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets Nkt statistics from weighted regression. With this method, the mean of Nkt and the variation coefficient
+of q_net/Nkt are found through weighted regression where the variation coefficient is minimised.</p>
+<p>The function to be minimised is:</p>
+<div class="math">
+<p><img src="_images/math/10a7905c61b5f1a196dac43d1fdacb99ac8971c3.png" alt="V_{\frac{q_{net}}{N_{kt}}.tot} = \sqrt{\frac{\sum{(\frac{s_{u,i} \cdot \mu_{N_{kt}}}{q_{net,i}} -1)}^{2}}{n-1}}"/></p>
+</div><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>su</strong> – iterable of undrained shear strength [kPa]</p></li>
+<li><p><strong>q_net</strong> – iterable of net cone resistance [kPa]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean of Nkt, variation coefficient of q_net/Nkt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils.get_prob_nkt_parameters_from_statistics">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_prob_nkt_parameters_from_statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">su:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_net:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_std_loc:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'float'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils.get_prob_nkt_parameters_from_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Nkt parameters for probabilistic analysis through statistics.</p>
+<p>Firstly, statistics are used to get the mean and standard deviation of the log Nkt values.
+Afterwards, the mean and standard deviation for probabilistic analysis are calculated, where the student T
+distribution is taken into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>su</strong> – iterable of undrained shear strength</p></li>
+<li><p><strong>q_net</strong> – iterable of net cone resistance</p></li>
+<li><p><strong>log_std_loc</strong> – local standard deviation of log N_kt, if None: std_loc = 0.5 std_total</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean  of N_kt and variation coefficient of q_net/N_kt for probabilistic analysis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.nkt_utils.NktUtils.get_prob_nkt_parameters_from_weighted_regression">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_prob_nkt_parameters_from_weighted_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">su:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_net:</span> <span class="pre">~numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vc_loc:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">&lt;class</span> <span class="pre">'float'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.nkt_utils.NktUtils.get_prob_nkt_parameters_from_weighted_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Nkt parameters for probabilistic analysis through weighted regression.</p>
+<p>Firstly, weighted regression is used to get the mean of the Nkt values and the variation coefficient of
+q_net / N_kt. Afterwards, the variation coefficient is adjusted for the number of samples with the student T
+distribution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>su</strong> – iterable of undrained shear strength</p></li>
+<li><p><strong>q_net</strong> – iterable of net cone resistance</p></li>
+<li><p><strong>vc_loc</strong> – local variation coefficient of q_net/N_kt, if None: vc_loc = 0.5 vc_total</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean of N_kt and variation coefficient of q_net/N_kt for probabilistic analysis</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.shm.prob_utils">
+<span id="geolib-plus-shm-prob-utils-module"></span><h2>geolib_plus.shm.prob_utils module<a class="headerlink" href="#module-geolib_plus.shm.prob_utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.prob_utils.</span></span><span class="sig-name descname"><span class="pre">ProbUtils</span></span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class contains probabilistic utilities for parameter determination following the methodology as described in
+<span id="id2">[<a class="reference internal" href="../references.html#id20" title="A. Meer. Povm actuele sterkte activiteit 9 - voorbeeld schuifsterkteschematisering. Technical Report, POV Macro Stabiliteit, 2019.">11</a>]</span>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.Config.arbitrary_types_allowed">
+<span class="sig-name descname"><span class="pre">arbitrary_types_allowed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.Config.arbitrary_types_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_characteristic_value_from_dataset">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_characteristic_value_from_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_local</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_low</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_log_normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">char_quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_characteristic_value_from_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the characteristic value of the dataset. A normal distribution or a lognormal distribution can be
+assumed for the dataset. The student-t distribution is taken into account. And the spread reduction factor is
+taken into account.</p>
+<p>The characteristic value is calculated as follows:</p>
+<blockquote>
+<div><div class="math">
+<p><img src="_images/math/72d6a60249c7338e83fc57733034d3caaa10ee48.png" alt="x_{kar} = exp(\mu_{ln(x)} \pm T^{0.05}_{n-1} \cdot \sigma_{ln(x)} \cdot \sqrt{(1-a) + \frac{1}{n}}"/></p>
+</div></div></blockquote>
+<p>where:</p>
+<p><img class="math" src="_images/math/c445800da1f482d870160a31858c3c272666e94b.png" alt="x_{kar}"/> is the characteristic value</p>
+<p><img class="math" src="_images/math/e2108db55f82d4fa0bbc5006d89a7ff418411fdf.png" alt="T^{0.05}_{n-1}"/> is the student t factor at 5 <img class="math" src="_images/math/a17f10003919c96bfb47c69665ed2a6d69fd72e0.png" alt="\%"/> quantile with n-1 degrees of freedom</p>
+<p><img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – dataset, X</p></li>
+<li><p><strong>is_local</strong> – true if data collection is local, false if data collection is regional</p></li>
+<li><p><strong>is_low</strong> – true if low characteristic value is to be calculated, false if high characteristic value desired</p></li>
+<li><p><strong>is_log_normal</strong> – True if a log normal distribution is assumed, false for normal distribution</p></li>
+<li><p><strong>char_quantile</strong> – Quantile which is considered for the characteristic value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>characteristic value of the dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_characteristic_value_from_prob_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_characteristic_value_from_prob_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">char_quantile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_characteristic_value_from_prob_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates characteristic values from probabilistic parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> – mean of x</p></li>
+<li><p><strong>std</strong> – standard deviation of x</p></li>
+<li><p><strong>n</strong> – number of data points</p></li>
+<li><p><strong>char_quantile</strong> – quantile of characteristic value (default = 0.05)</p></li>
+<li><p><strong>a</strong> – spread reduction factor (default = 0)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>characteristic value of X</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_log_stats">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_log_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_log_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates mean and std of LN(X)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – dataset, X</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean and std of LN(X)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_normal_stats">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_normal_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_normal_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates mean and std of X</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – dataset, X</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean and std of X</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_prob_parameters_from_lognormal">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_prob_parameters_from_lognormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_local</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_prob_parameters_from_lognormal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates probabilistic parameters mu and sigma from a lognormal dataset, as required in D-stability. This
+function takes into account spread reduction factor and the student t factor.</p>
+<p>Firstly the standard deviation of LN(X) is corrected for the number of test samples and type of samples (local
+or regional), secondly, the mean and standard deviation of X are calculated from the mean and corrected standard
+deviation of LN(X)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – dataset, X</p></li>
+<li><p><strong>is_local</strong> – true if data collection is local, false if data collection is regional</p></li>
+<li><p><strong>quantile</strong> – quantile where the student t factor should be calculated</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_std_from_vc">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_std_from_vc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_std_from_vc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates standard deviation from variation coefficient</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> – mean of distribution</p></li>
+<li><p><strong>vc</strong> – variation coefficient of distribution</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_student_t_factor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_student_t_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_student_t_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets student t factor from student t distribution at a specific quantile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ndof</strong> – number of degrees of freedom</p></li>
+<li><p><strong>quantile</strong> – quantile where the student t factor should be calculated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Student t factor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.calculate_vc_from_std">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_vc_from_std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.calculate_vc_from_std" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates  variation coefficient from standard deviation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> – mean of distribution</p></li>
+<li><p><strong>std</strong> – standard deviation of distribution</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.correct_std_with_student_t">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">correct_std_with_student_t</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.correct_std_with_student_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates corrected standard deviation at a quantile with the student-t factor. This includes an optional
+spread reduction factor.
+The corrected standard deviation is calculated as follows:</p>
+<div class="math">
+<p><img src="_images/math/26413b289b501009527ba245b48694d33721b09d.png" alt="\sigma_{ln(x).prob} \approx  \frac{T^{0.05}_{n-1}}{u^{0.05}} \cdot \sigma_{ln(x)} \cdot \sqrt{(1-a) + \frac{1}{n}}"/></p>
+</div><p>where:</p>
+<p><img class="math" src="_images/math/e2108db55f82d4fa0bbc5006d89a7ff418411fdf.png" alt="T^{0.05}_{n-1}"/> is the student t factor at 5 <img class="math" src="_images/math/a17f10003919c96bfb47c69665ed2a6d69fd72e0.png" alt="\%"/> quantile with n-1 degrees of freedom</p>
+<p><img class="math" src="_images/math/53f807e09dd8f9ee6a06c0fd5a2fdb5486d094df.png" alt="u^{0.05}"/> is the value of the standard normal distribution at the  5 <img class="math" src="_images/math/a17f10003919c96bfb47c69665ed2a6d69fd72e0.png" alt="\%"/> quantile</p>
+<p><img class="math" src="_images/math/b3e65e3b6408fcfa00452530b73f55d1755f9965.png" alt="a"/> is the spread reduction factor; 0.75 if data collection is regional, 1.0 if data collection is local</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ndof</strong> – number of degrees of freedom</p></li>
+<li><p><strong>quantile</strong> – quantile where the student t factor should be calculated</p></li>
+<li><p><strong>std</strong> – standard deviation</p></li>
+<li><p><strong>a</strong> – spread reduction factor, 0.75 for regional sample collection; 1.0 for local sample collection</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>corrected standard deviation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.get_log_mean_std_from_normal">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_log_mean_std_from_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.get_log_mean_std_from_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates mean and standard deviation of LN(X) from the mean and std of X</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mean</strong> – mean of X</p></li>
+<li><p><strong>std</strong> – std X</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean and std of LN(X)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.prob_utils.ProbUtils.get_mean_std_from_lognormal">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_mean_std_from_lognormal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_std</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.prob_utils.ProbUtils.get_mean_std_from_lognormal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates normal mean and standard deviation from the mean and std of LN(X)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log_mean</strong> – mean of LN(X)</p></li>
+<li><p><strong>log_std</strong> – std of LN(X)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>mean and std of X</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.shm.shansep_utils">
+<span id="geolib-plus-shm-shansep-utils-module"></span><h2>geolib_plus.shm.shansep_utils module<a class="headerlink" href="#module-geolib_plus.shm.shansep_utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.shansep_utils.ShansepUtils">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.shansep_utils.</span></span><span class="sig-name descname"><span class="pre">ShansepUtils</span></span><a class="headerlink" href="#geolib_plus.shm.shansep_utils.ShansepUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class contains shansep utilities for parameter determination following the methodology as described in
+<span id="id3">[<a class="reference internal" href="../references.html#id20" title="A. Meer. Povm actuele sterkte activiteit 9 - voorbeeld schuifsterkteschematisering. Technical Report, POV Macro Stabiliteit, 2019.">11</a>]</span>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.shansep_utils.ShansepUtils.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#geolib_plus.shm.shansep_utils.ShansepUtils.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.shansep_utils.ShansepUtils.Config.arbitrary_types_allowed">
+<span class="sig-name descname"><span class="pre">arbitrary_types_allowed</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#geolib_plus.shm.shansep_utils.ShansepUtils.Config.arbitrary_types_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.shansep_utils.ShansepUtils.calculate_characteristic_shansep_parameters_with_linear_regression">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_characteristic_shansep_parameters_with_linear_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">OCR:</span> <span class="pre">~typing.Union[float,</span> <span class="pre">~numpy.array],</span> <span class="pre">su:</span> <span class="pre">~typing.Union[float,</span> <span class="pre">~numpy.array],</span> <span class="pre">sigma_effective:</span> <span class="pre">~typing.Union[float,</span> <span class="pre">~numpy.array],</span> <span class="pre">S:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">m:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None)</span> <span class="pre">-&gt;</span> <span class="pre">(&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.shansep_utils.ShansepUtils.calculate_characteristic_shansep_parameters_with_linear_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates characteristic values of parameters s and m, according to <span id="id4">[<a class="reference internal" href="../references.html#id20" title="A. Meer. Povm actuele sterkte activiteit 9 - voorbeeld schuifsterkteschematisering. Technical Report, POV Macro Stabiliteit, 2019.">11</a>]</span>. This methodology
+assumes a log normal distribution of S and a normal distribution of m
+Optionally with a given S or m.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OCR</strong> – Union[float, np.array], over consolidation ratio [-]</p></li>
+<li><p><strong>su</strong> – Undrained shear strength [kPa]</p></li>
+<li><p><strong>sigma_effective</strong> – Effective stress [kPa]</p></li>
+<li><p><strong>S</strong> – S value, shear strength ratio [-]</p></li>
+<li><p><strong>m</strong> – m value, strength increase component [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>characteristic value of S and m</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.shansep_utils.ShansepUtils.get_shansep_prob_parameters_with_linear_regression">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_shansep_prob_parameters_with_linear_regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">OCR:</span> <span class="pre">~typing.Union[float,</span> <span class="pre">~numpy.array],</span> <span class="pre">su:</span> <span class="pre">~typing.Union[float,</span> <span class="pre">~numpy.array],</span> <span class="pre">sigma_effective:</span> <span class="pre">~typing.Union[float,</span> <span class="pre">~numpy.array],</span> <span class="pre">S:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">m:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None)</span> <span class="pre">-&gt;</span> <span class="pre">((&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;),</span> <span class="pre">(&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;),</span> <span class="pre">&lt;class</span> <span class="pre">'numpy.ndarray'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.shansep_utils.ShansepUtils.get_shansep_prob_parameters_with_linear_regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines shansep parameters s and m with linear regression according to <span id="id5">[<a class="reference internal" href="../references.html#id20" title="A. Meer. Povm actuele sterkte activiteit 9 - voorbeeld schuifsterkteschematisering. Technical Report, POV Macro Stabiliteit, 2019.">11</a>]</span>. This methodology
+assumes a log normal distribution of S and a normal distribution of m. Parameter S or m can also be given as an
+input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>OCR</strong> – Union[float, np.array], over consolidation ratio [-]</p></li>
+<li><p><strong>su</strong> – Undrained shear strength [kPa]</p></li>
+<li><p><strong>sigma_effective</strong> – Effective stress [kPa]</p></li>
+<li><p><strong>S</strong> – S value, shear strength ratio [-]</p></li>
+<li><p><strong>m</strong> – m value, strength increase component [-]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(mean and std of S), (mean and std of m), covariance matrix</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.shm.shm_tables">
+<span id="geolib-plus-shm-shm-tables-module"></span><h2>geolib_plus.shm.shm_tables module<a class="headerlink" href="#module-geolib_plus.shm.shm_tables" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.shm_tables.ShmTables">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.shm_tables.</span></span><span class="sig-name descname"><span class="pre">ShmTables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soils</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.shm_tables.ShmTables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>“Schematiseringshandleiding macrostability”  tables: 7.1, 7.2, 7.3, 7.4.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.shm_tables.ShmTables.load_shm_tables">
+<span class="sig-name descname"><span class="pre">load_shm_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">WindowsPath('resources')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'shm_tables.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#geolib_plus.shm.shm_tables.ShmTables.load_shm_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that reads the shm tables json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_table</strong> – Path to the tables file</p></li>
+<li><p><strong>filename</strong> – Name of the tables file</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with the NEN data structure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.shm_tables.ShmTables.soils">
+<span class="sig-name descname"><span class="pre">soils</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span></em><a class="headerlink" href="#geolib_plus.shm.shm_tables.ShmTables.soils" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.shm.soil">
+<span id="geolib-plus-shm-soil-module"></span><h2>geolib_plus.shm.soil module<a class="headerlink" href="#module-geolib_plus.shm.soil" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.DistributionType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.soil.</span></span><span class="sig-name descname"><span class="pre">DistributionType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.soil.DistributionType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.DistributionType.Deterministic">
+<span class="sig-name descname"><span class="pre">Deterministic</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#geolib_plus.shm.soil.DistributionType.Deterministic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.DistributionType.LogNormal">
+<span class="sig-name descname"><span class="pre">LogNormal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#geolib_plus.shm.soil.DistributionType.LogNormal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.DistributionType.Normal">
+<span class="sig-name descname"><span class="pre">Normal</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#geolib_plus.shm.soil.DistributionType.Normal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.DistributionType.Undefined">
+<span class="sig-name descname"><span class="pre">Undefined</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#geolib_plus.shm.soil.DistributionType.Undefined" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.soil.</span></span><span class="sig-name descname"><span class="pre">Soil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unsaturated_weight:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saturated_weight:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shear_strength_ratio:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strength_increase_exponent:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohesion:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilatancy_angle:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction_angle:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pop_layer:</span> <span class="pre">~typing.Optional[~typing.Union[float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">~geolib_plus.shm.soil.StochasticParameter]]</span> <span class="pre">=</span> <span class="pre">StochasticParameter(is_probabilistic=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type=&lt;DistributionType.Normal:</span> <span class="pre">2&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits=None)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.soil.Soil" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geolib_plus.shm.soil.SoilBaseModel" title="geolib_plus.shm.soil.SoilBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoilBaseModel</span></code></a></p>
+<p>Schematisation manual macrostability soil class</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.cohesion">
+<span class="sig-name descname"><span class="pre">cohesion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.cohesion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.dilatancy_angle">
+<span class="sig-name descname"><span class="pre">dilatancy_angle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.dilatancy_angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.friction_angle">
+<span class="sig-name descname"><span class="pre">friction_angle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.friction_angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.pop_layer">
+<span class="sig-name descname"><span class="pre">pop_layer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.pop_layer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.saturated_weight">
+<span class="sig-name descname"><span class="pre">saturated_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.saturated_weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.shear_strength_ratio">
+<span class="sig-name descname"><span class="pre">shear_strength_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.shear_strength_ratio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.strength_increase_exponent">
+<span class="sig-name descname"><span class="pre">strength_increase_exponent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.strength_increase_exponent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.transfer_soil_dict_to_class">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transfer_soil_dict_to_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.soil.Soil.transfer_soil_dict_to_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transfers items from  dictionary to soil class if the item is not None
+:param soil_dict: soil dictionary
+:param soil: geolib_plus soil class soil in model</p>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.Soil.unsaturated_weight">
+<span class="sig-name descname"><span class="pre">unsaturated_weight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.shm.soil.StochasticParameter" title="geolib_plus.shm.soil.StochasticParameter"><span class="pre">StochasticParameter</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.Soil.unsaturated_weight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.SoilBaseModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.soil.</span></span><span class="sig-name descname"><span class="pre">SoilBaseModel</span></span><a class="headerlink" href="#geolib_plus.shm.soil.SoilBaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.SoilBaseModel.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#geolib_plus.shm.soil.SoilBaseModel.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.SoilBaseModel.Config.extra">
+<span class="sig-name descname"><span class="pre">extra</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'forbid'</span></em><a class="headerlink" href="#geolib_plus.shm.soil.SoilBaseModel.Config.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.SoilBaseModel.fail_on_infinite">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fail_on_infinite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.soil.SoilBaseModel.fail_on_infinite" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.shm.soil.</span></span><span class="sig-name descname"><span class="pre">StochasticParameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_probabilistic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standard_deviation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#geolib_plus.shm.soil.DistributionType" title="geolib_plus.shm.soil.DistributionType"><span class="pre">DistributionType</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">DistributionType.Normal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correlation_coefficient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_characteristic_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_characteristic_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_design_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high_design_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geolib_plus.shm.soil.SoilBaseModel" title="geolib_plus.shm.soil.SoilBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoilBaseModel</span></code></a></p>
+<p>Stochastic parameters class</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.correlation_coefficient">
+<span class="sig-name descname"><span class="pre">correlation_coefficient</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.correlation_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.distribution_type">
+<span class="sig-name descname"><span class="pre">distribution_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#geolib_plus.shm.soil.DistributionType" title="geolib_plus.shm.soil.DistributionType"><span class="pre">DistributionType</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.distribution_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.high_characteristic_value">
+<span class="sig-name descname"><span class="pre">high_characteristic_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.high_characteristic_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.high_design_value">
+<span class="sig-name descname"><span class="pre">high_design_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.high_design_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.is_probabilistic">
+<span class="sig-name descname"><span class="pre">is_probabilistic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.is_probabilistic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.limits">
+<span class="sig-name descname"><span class="pre">limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.limits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.low_characteristic_value">
+<span class="sig-name descname"><span class="pre">low_characteristic_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.low_characteristic_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.low_design_value">
+<span class="sig-name descname"><span class="pre">low_design_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.low_design_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.mean">
+<span class="sig-name descname"><span class="pre">mean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.mean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.shm.soil.StochasticParameter.standard_deviation">
+<span class="sig-name descname"><span class="pre">standard_deviation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.shm.soil.StochasticParameter.standard_deviation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.shm">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geolib_plus.shm" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.robertson_cpt_interpretation.html" title="Previous document">geolib_plus.robertson_cpt_interpretation package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.plotting.html" title="Next document">geolib_plus.plot_plotting package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Developer API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html">geolib_plus.plot_plotting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html">geolib_plus.parameters_for_soil_models package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geolib_plus.shm package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/tutorials/overview.html">Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Developer API</a><ul>
+  <li><a href="geolib_plus.html">geolib_plus package</a><ul>
+      <li>Previous: <a href="geolib_plus.robertson_cpt_interpretation.html" title="previous chapter">geolib_plus.robertson_cpt_interpretation package</a></li>
+      <li>Next: <a href="geolib_plus.plotting.html" title="next chapter">geolib_plus.plot_plotting package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
