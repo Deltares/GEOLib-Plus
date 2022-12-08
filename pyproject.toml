@@ -37,7 +37,7 @@ pytest-cov = "^4.0.0"
 releases = "^1.6.3"
 rst2pdf = "^0.99"
 isort = "^5.10.1"
-black = "^22.10.0"
+black = ">=22.8.0,<22.10.0"
 sphinx = "^5.3.0"
 mypy = "^0.991"
 
