@@ -28,6 +28,7 @@ matplotlib = "^3.6.2"
 numpy = "^1.23.5"
 shapely = "^1.8.5.post1"
 netcdf4 = "^1.6.2"
+folium = "^0.13.0"
 
 [tool.poetry.group.dev.dependencies]
 teamcity-messages = "^1.32"
@@ -41,6 +42,7 @@ black = ">=22.8.0,<22.10.0"
 sphinx = "^5.3.0"
 mypy = "^0.991"
 sphinxcontrib-bibtex = "^2.5.0"
+folium = "^0.13.0"
 
 [build-system]
 requires = ["poetry>=1.2.2"]
