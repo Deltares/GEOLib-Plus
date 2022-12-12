@@ -18,6 +18,7 @@ Overview
    geolib_plus.parameters_for_soil_models
    geolib_plus.shm
    geolib_plus.geolib_connections
+   geolib_plus.plot_dynamic_map
 
 
 Indices and tables
