@@ -1,3 +1,21 @@
+"""
+To use take for example an arleady read cpt by the geolib-plus library
+
+
+
+Usage::
+
+    >>> import geolib_plus
+    >>> from geolib_plus.plot_dynamic_map import ObjectLocationMap, Location
+    >>> from pathlib import Path
+    >>> cpt_file_gef = Path("cpt", "gef", "test_cpt.gef")
+    >>> cpt_gef = geolib_plus.gef_cpt.GefCpt()
+    >>> cpt_gef.read(cpt_file_gef)
+    >>> locations = [Location(x=cpt_gef.coordinates[0], y=cpt_gef.coordinates[1], label=cpt_gef.name, meta_data={'Norm': cpt_gef.cpt_standard})]
+    >>> extract_map = ObjectLocationMap(object_locations=locations, results_folder=Path(""))
+
+"""
+
 import pathlib
 from pathlib import Path
 from typing import List
@@ -6,26 +24,8 @@ import folium
 import pyproj
 from pydantic import BaseModel
 
-COL_HEX = [
-    "#440154",
-    "#481a6c",
-    "#472f7d",
-    "#414487",
-    "#39568c",
-    "#31688e",
-    "#2a788e",
-    "#23888e",
-    "#1f988b",
-    "#22a884",
-    "#35b779",
-    "#54c568",
-    "#7ad151",
-    "#a5db36",
-    "#d2e21b",
-]
 
-
-def number_DivIcon(color, number):
+def number_div_icon(number):
     """
     Create a 'numbered' icon
 
@@ -94,7 +94,7 @@ class ObjectLocationMap(BaseModel):
             self.object_locations[0].x, self.object_locations[0].y
         )
         m = folium.Map(location=[lat, lon], zoom_start=15, control_scale=True)
-        tile = folium.TileLayer(
+        folium.TileLayer(
             tiles="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
             attr="Esri",
             name="Esri Satellite",
@@ -121,7 +121,7 @@ class ObjectLocationMap(BaseModel):
             label = f"{location.label}"
             folium.Marker(
                 location=[lat, lon],
-                icon=number_DivIcon(COL_HEX[0], label),
+                icon=number_div_icon(label),
                 draggable=True,
             ).add_to(feature_group)
         feature_group.add_to(m)
