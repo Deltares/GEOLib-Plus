@@ -8,7 +8,8 @@ from matplotlib import pyplot as plt
 from pydantic import BaseModel
 from shapely import geometry
 
-from geolib_plus.cpt_base_model import AbstractCPT, AbstractInterpretationMethod
+from geolib_plus.cpt_base_model import (AbstractCPT,
+                                        AbstractInterpretationMethod)
 from geolib_plus.gef_cpt import GefCpt
 from tests.utils import TestUtils
 

@@ -2,7 +2,6 @@
 NEN 9997 soil classification
 """
 import json
-
 # import packages
 import os
 from pathlib import Path

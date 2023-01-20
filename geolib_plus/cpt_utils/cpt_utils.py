@@ -3,7 +3,6 @@ Tools for CPT tool
 """
 import os
 import sys
-
 # import packages
 from itertools import groupby
 from operator import itemgetter

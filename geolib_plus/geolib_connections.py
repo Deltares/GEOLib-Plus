@@ -30,10 +30,10 @@ class DFoundationsConnector:
         """
         validate_that_geolib_is_installed()
         from geolib.geometry import Point
-        from geolib.models.dfoundations.profiles import (
-            Excavation as dfoundations_excavation,
-        )
-        from geolib.models.dfoundations.profiles import Profile as dfoundations_profile
+        from geolib.models.dfoundations.profiles import \
+            Excavation as dfoundations_excavation
+        from geolib.models.dfoundations.profiles import \
+            Profile as dfoundations_profile
 
         dfoundations_cpt = DFoundationsConnector.__define_cpt_inputs(cpt)
 

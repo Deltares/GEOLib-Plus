@@ -9,12 +9,8 @@ import pytest
 from geolib_plus.bro_xml_cpt import BroXmlCpt
 from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.robertson_cpt_interpretation import (
-    OCRMethod,
-    RelativeDensityMethod,
-    RobertsonCptInterpretation,
-    ShearWaveVelocityMethod,
-    UnitWeightMethod,
-)
+    OCRMethod, RelativeDensityMethod, RobertsonCptInterpretation,
+    ShearWaveVelocityMethod, UnitWeightMethod)
 from tests.utils import TestUtils
 
 

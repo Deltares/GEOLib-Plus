@@ -4,9 +4,7 @@ import numpy as np
 import pytest
 
 from geolib_plus.hardening_soil_model_parameters import (
-    HardeningSoilModelParameters,
-    HardingSoilCalculationType,
-)
+    HardeningSoilModelParameters, HardingSoilCalculationType)
 from tests.utils import TestUtils
 
 
