@@ -97,9 +97,11 @@ def set_multicolor_label(
     font_size_text,
     font_size_arrow,
     line_style,
+    x_axis_type,
     location="bottom_left",
     axis="x",
     anchorpad=0,
+    extra_label_spacing=0.02,
     **kw,
 ):
     """
@@ -126,28 +128,35 @@ def set_multicolor_label(
 
     is_inverted = False
     vertical_rel_spacing = 0.06 * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+    if not (x_axis_type == "primary"):
+        vertical_rel_spacing += extra_label_spacing
+    axis_plot = ax.xaxis
     if location == "top_left":
         bbox_to_anchor = (0.0, 1 + vertical_rel_spacing)
         loc = 2
-        ax.xaxis.tick_top()
+        axis_plot.tick_top()
     elif location == "top_right":
         bbox_to_anchor = (1.0, 1 + vertical_rel_spacing)
         loc = 1
-        ax.xaxis.tick_top()
+        axis_plot.tick_top()
         is_inverted = True
+    elif location == "top_middle":
+        bbox_to_anchor = (5 / 16, 1 + vertical_rel_spacing)
+        loc = 2
+        axis_plot.tick_top()
     elif location == "bottom_left":
         bbox_to_anchor = (0.0, -vertical_rel_spacing)
         loc = 3
-        ax.xaxis.tick_bottom()
+        axis_plot.tick_bottom()
     elif location == "bottom_right":
         bbox_to_anchor = (1.0, -vertical_rel_spacing)
         loc = 4
-        ax.xaxis.tick_bottom()
+        axis_plot.tick_bottom()
         is_inverted = True
     else:  # bottom_center
         bbox_to_anchor = (5 / 16, -vertical_rel_spacing)
         loc = 3
-        ax.xaxis.tick_bottom()
+        axis_plot.tick_bottom()
 
     if is_inverted:
         arrow_string = r"$" + line_style_string + "leftarrow$"
@@ -267,6 +276,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
             ylim,
             color=grid["vertical_major_line_color"],
             linewidth=grid["vertical_major_line_line_width"],
+            zorder=0,
         )
         for x_line in grid_lines
     ]
@@ -280,6 +290,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
                 ylim,
                 color=grid["vertical_minor_line_colors"][idx],
                 linewidth=grid["vertical_minor_line_line_widths"][idx],
+                zorder=-1,
             )
             for x_line in grid_lines
         ]
@@ -292,6 +303,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
             [y_line, y_line],
             color=grid["horizontal_major_line_color"],
             linewidth=grid["horizontal_major_line_line_width"],
+            zorder=0,
         )
         for y_line in grid_lines
     ]
@@ -305,6 +317,7 @@ def create_custom_grid(ax, xlim, ylim, grid):
                 [y_line, y_line],
                 color=grid["horizontal_line_colors"][idx],
                 linewidth=grid["horizontal_line_line_widths"][idx],
+                zorder=-1,
             )
             for y_line in grid_lines
         ]
@@ -331,6 +344,12 @@ def set_x_axis(ax, graph, settings, ylim):
 
     ticks = graph["ticks"]
 
+    if not (graph["x_axis_type"] == "primary"):
+        ax.spines["top"].set_position(("axes", settings["secondary_top_axis_position"]))
+        for sp in ax.spines.values():
+            sp.set_visible(False)
+        ax.spines["top"].set_visible(True)
+        # ax.spines["top"].set_edgecolor(graph["graph_color"])
     ax.set_xlim(x_lim)
     ax.set_xticks(ticks)
     ax.tick_params(axis="x", colors=graph["graph_color"])
@@ -343,7 +362,9 @@ def set_x_axis(ax, graph, settings, ylim):
         settings["font_size_labels"],
         settings["font_size_labels"] * 2,
         graph["line_style"],
+        graph["x_axis_type"],
         location=graph["position_label"],
+        extra_label_spacing=settings["extra_label_spacing"],
     )
 
     return ax
@@ -413,7 +434,9 @@ def __add_text_in_rectangle(ax, text, rectangle, rel_vertical_position, hor_spac
     )
 
 
-def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
+def create_bro_information_box(
+    ax, scale, cpt, plot_nr, ylims, distance_meta_data_from_plot
+):
     """
 
     :param ax: current axis
@@ -421,6 +444,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     :param cpt: cpt data
     :param plot_nr: number of the plot within the current cpt data
     :param ylims: all vertical limits for the current cpt data
+    :param distance_meta_data_from_plot: The distance between the meta data table and the actual plot
     :return:
     """
     from datetime import date
@@ -445,7 +469,6 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     y_max = ylims[plot_nr][0]
 
     height_box = 3.5 * scale  # [m]
-    distance_from_plot = -1
 
     xmin = ax.dataLim.x0
     xmax = ax.dataLim.x1
@@ -453,7 +476,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     total_width = xmax - xmin
 
     cpt_number_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 3 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 3 / 4),
         total_width * 2 / 3,
         height_box * 1 / 4,
         facecolor="none",
@@ -462,7 +485,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     )
 
     norm_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 2 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 2 / 4),
         total_width * 1 / 2,
         height_box * 1 / 4,
         facecolor="none",
@@ -471,7 +494,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     )
 
     cpt_type_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 1 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 1 / 4),
         total_width * 1 / 2,
         height_box * 1 / 4,
         facecolor="none",
@@ -480,7 +503,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     )
 
     cpt_class_box = Rectangle(
-        (xmin, y_max + height_box + distance_from_plot + height_box * 0 / 4),
+        (xmin, y_max + height_box + distance_meta_data_from_plot + height_box * 0 / 4),
         total_width * 1 / 2,
         height_box * 1 / 4,
         facecolor="none",
@@ -491,7 +514,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     coordinate_box = Rectangle(
         (
             xmin + total_width * 3 / 6,
-            y_max + height_box + distance_from_plot + height_box * 1 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 1 / 4,
         ),
         total_width * 1 / 6,
         height_box * 2 / 4,
@@ -502,7 +525,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     page_box = Rectangle(
         (
             xmin + total_width * 3 / 6,
-            y_max + height_box + distance_from_plot + height_box * 0 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 0 / 4,
         ),
         total_width * 1 / 6,
         height_box * 1 / 4,
@@ -514,7 +537,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     cpt_date_box = Rectangle(
         (
             xmin + total_width * 2 / 3,
-            y_max + height_box + distance_from_plot + height_box * 3 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 3 / 4,
         ),
         total_width * 1 / 3,
         height_box * 1 / 4,
@@ -525,7 +548,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     plot_data_box = Rectangle(
         (
             xmin + total_width * 2 / 3,
-            y_max + height_box + distance_from_plot + height_box * 2 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 2 / 4,
         ),
         total_width * 1 / 3,
         height_box * 1 / 4,
@@ -537,7 +560,7 @@ def create_bro_information_box(ax, scale, cpt, plot_nr, ylims):
     empty_box = Rectangle(
         (
             xmin + total_width * 2 / 3,
-            y_max + height_box + distance_from_plot + height_box * 0 / 4,
+            y_max + height_box + distance_meta_data_from_plot + height_box * 0 / 4,
         ),
         total_width * 1 / 3,
         height_box * 2 / 4,
@@ -782,9 +805,9 @@ def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
     ax.add_patch(empty_box)
 
 
-def create_information_box(ax, scale, cpt, plot_nr, ylims):
+def create_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot):
     if cpt.__class__.__name__ == "BroXmlCpt":
-        create_bro_information_box(ax, scale, cpt, plot_nr, ylims)
+        create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot)
     elif cpt.__class__.__name__ == "GefCpt":
         create_gef_information_box(ax, scale, cpt, plot_nr, ylims)
 

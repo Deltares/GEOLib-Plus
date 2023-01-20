@@ -122,4 +122,4 @@ releases_issue_uri = "https://issuetracker.deltares.nl/browse/%s"
 releases_unstable_prehistory = True
 
 # Bibliography
-bibtex_bibfiles = "bibliography.bib"
+bibtex_bibfiles = ["bibliography.bib"]

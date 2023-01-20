@@ -109,7 +109,7 @@ def get_y_lims(cpt: AbstractCPT, settings: Dict) -> List:
                     - vertical_settings["repeated_distance"]
                 ),
             ]
-            for n_graph in range(n_graphs)
+            for n_graph in range(0, n_graphs)
         ]
     elif settings["plot_size"] == "unlimited":
         y_lims = [[y_max, min(y_min, y_max - vertical_settings["length_graph"])]]
@@ -379,7 +379,6 @@ def generate_plot(
                 graph["threshold"] * graph["unit_converter"],
                 graph["position_label"],
             )
-
             axes.append(ax)
 
     axes[
@@ -416,7 +415,9 @@ def generate_plot(
     fig.subplots_adjust(top=scale, left=1 - scale)
 
     # add information_box
-    plot_utils.create_information_box(axes[0], scale, cpt, plot_nr, ylims)
+    plot_utils.create_information_box(
+        axes[0], scale, cpt, plot_nr, ylims, settings["distance_meta_data_from_plot"]
+    )
 
     return fig
 
