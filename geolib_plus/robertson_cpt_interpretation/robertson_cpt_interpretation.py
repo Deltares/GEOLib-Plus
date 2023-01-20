@@ -7,7 +7,7 @@ import more_itertools as mit
 import numpy as np
 import shapefile
 from pydantic import BaseModel
-from shapely.geometry import Point, Polygon
+from shapely import Point, Polygon
 
 from geolib_plus.cpt_base_model import AbstractCPT, AbstractInterpretationMethod
 from geolib_plus.cpt_utils import (
