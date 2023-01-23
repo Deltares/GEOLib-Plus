@@ -9,10 +9,15 @@ import shapefile
 from pydantic import BaseModel
 from shapely import Point, Polygon
 
-from geolib_plus.cpt_base_model import (AbstractCPT,
-                                        AbstractInterpretationMethod)
-from geolib_plus.cpt_utils import (NEN_classification, NetCDF, ceil_value,
-                                   merge_thickness, n_iter, resource_path)
+from geolib_plus.cpt_base_model import AbstractCPT, AbstractInterpretationMethod
+from geolib_plus.cpt_utils import (
+    NEN_classification,
+    NetCDF,
+    ceil_value,
+    merge_thickness,
+    n_iter,
+    resource_path,
+)
 
 
 class UnitWeightMethod(IntEnum):

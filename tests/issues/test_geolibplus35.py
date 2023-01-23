@@ -30,6 +30,7 @@ class TestBugGeolibPlus35:
     def test_import_geolib(self, test_file):
         # import geolib
         import geolib
+
         # This is a workaround
         import pydantic
 

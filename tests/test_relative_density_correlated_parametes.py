@@ -1,8 +1,9 @@
 import numpy as np
 import pytest
 
-from geolib_plus.relative_density_correlated_parametes import \
-    RelativeDensityCorrelatedParameters
+from geolib_plus.relative_density_correlated_parametes import (
+    RelativeDensityCorrelatedParameters,
+)
 from tests.utils import TestUtils
 
 
