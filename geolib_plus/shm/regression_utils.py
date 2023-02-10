@@ -1,15 +1,15 @@
 # import packages
 import warnings
-import numpy as np
-
 from typing import Optional, Union
+
+import numpy as np
 from pydantic import BaseModel
 from scipy.optimize import curve_fit
+
 from geolib_plus.shm.prob_utils import ProbUtils
 
 
 class RegressionUtils(BaseModel):
-
     class Config:
         arbitrary_types_allowed = True
 
@@ -22,9 +22,9 @@ class RegressionUtils(BaseModel):
 
     @staticmethod
     def linear_regression(
-            x: Union[float, np.array],
-            y: Union[float, np.array],
-            bounds=([-np.inf, -np.inf], [np.inf, np.inf]),
+        x: Union[float, np.array],
+        y: Union[float, np.array],
+        bounds=([-np.inf, -np.inf], [np.inf, np.inf]),
     ) -> (dict, dict, tuple):
         """
         Method for linear regression between x and y. The inputs x and y are arrays.
@@ -73,9 +73,8 @@ class RegressionUtils(BaseModel):
             "residuals": residuals,
         }
 
-
         def regression_function(x, alpha=0, quantile=0.05):
-            '''
+            """
             After fitting the regression, the regression function y = slope * x + intercept is returned.
             A specific upper or lower limit of the regression line can be retrieved by specifying the:
             - quantile (default 5% lower limit: quantile = 0.05).
@@ -87,13 +86,13 @@ class RegressionUtils(BaseModel):
                 - alpha = 0.75  : partly avaraging, regional data where 75% of the variance is assumed to average.
                 - alpha = 0     : no averaging, uncertainty in single point value.
 
-            '''
+            """
 
             Z = (
-                    (std_intercept ** 2)
-                    + (x ** 2 * std_slope ** 2)
-                    + 2 * rho * x * std_intercept * std_slope
-                    + (1 - alpha) * residuals / (N - 2)
+                (std_intercept**2)
+                + (x**2 * std_slope**2)
+                + 2 * rho * x * std_intercept * std_slope
+                + (1 - alpha) * residuals / (N - 2)
             )
 
             from scipy.stats import t
