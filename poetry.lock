@@ -155,7 +155,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "d-geolib"
-version = "0.2.4"
+version = "0.6.0"
 description = "Python wrappers around the input and output files of the Deltares D-Serie and D-GEO Suite models"
 category = "main"
 optional = false
@@ -164,11 +164,11 @@ python-versions = ">=3.7,<4.0"
 [package.dependencies]
 jinja2 = ">=3.1.2,<4.0.0"
 pydantic = {version = ">=1.6.1,<2.0.0", extras = ["dotenv"]}
-requests = ">=2.24.0,<3.0.0"
-zipp = ">=3.1.0,<4.0.0"
+requests = ">=2.28.1,<3.0.0"
+zipp = ">=3.11.0,<4.0.0"
 
 [package.extras]
-server = ["fastapi (>=0.58)", "httpx (>=0.23.1,<0.24.0)", "uvicorn (>=0.11)"]
+server = ["fastapi (>=0.88.0,<0.89.0)", "httpx (>=0.23.1,<0.24.0)", "uvicorn (>=0.20.0,<0.21.0)"]
 
 [[package]]
 name = "docutils"
@@ -429,7 +429,11 @@ optional = false
 python-versions = ">=3.8"
 
 [package.dependencies]
-numpy = {version = ">=1.20.3", markers = "python_version < \"3.10\""}
+numpy = [
+    {version = ">=1.20.3", markers = "python_version < \"3.10\""},
+    {version = ">=1.21.0", markers = "python_version >= \"3.10\""},
+    {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
+]
 python-dateutil = ">=2.8.1"
 pytz = ">=2020.1"
 
@@ -991,7 +995,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8 <4"
-content-hash = "aacbaa8d9bed59cd28bd87c9026dcb1f3193b9dc0d22b49a5540a025e6d0225f"
+content-hash = "321abe8bf9bbe5546795a8cb9abad06ef4674b72e55e9c1839874220d6b69139"
 
 [metadata.files]
 alabaster = [
@@ -1202,8 +1206,8 @@ cycler = [
     {file = "cycler-0.11.0.tar.gz", hash = "sha256:9c87405839a19696e837b3b818fed3f5f69f16f1eec1a1ad77e043dcea9c772f"},
 ]
 d-geolib = [
-    {file = "d_geolib-0.2.4-py3-none-any.whl", hash = "sha256:21bbf88c2c7b786b42f3af88d0cac71b5bbabeeb68e494cd0653726ca773609e"},
-    {file = "d_geolib-0.2.4.tar.gz", hash = "sha256:c1929395e82d41372e11173614ca1b824555da657a21f7b2fd0f2672329f8107"},
+    {file = "d_geolib-0.6.0-py3-none-any.whl", hash = "sha256:446a532592770eb825a5cf6a3f734693e9a42a35e5611258a963036ab53dd290"},
+    {file = "d_geolib-0.6.0.tar.gz", hash = "sha256:9ad7f276140c1e7516afc1c8269462abbe95394329fe58f977d26f245b86247d"},
 ]
 docutils = [
     {file = "docutils-0.19-py3-none-any.whl", hash = "sha256:5e1de4d849fee02c63b040a4a3fd567f4ab104defd8a5511fbbc24a8a017efbc"},
