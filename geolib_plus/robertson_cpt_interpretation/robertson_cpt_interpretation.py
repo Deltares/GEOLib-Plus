@@ -207,7 +207,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             if all(not x for x in aux):
                 aux = []
                 for polygon in self.polygons:
-                    aux.append(polygon.touches(pnt))
+                    aux.append(polygon.intersection(pnt) or polygon.touches(pnt))
 
             idx = np.where(np.array(aux))[0][0]
             lithology_array[i] = str(idx + 1)
