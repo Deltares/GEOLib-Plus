@@ -46,6 +46,7 @@ of using GEOLib+.
    :maxdepth: 3
 
    community/tutorials/overview
+   community/probabilistic_macrostability/probabilistic_tutorials
 
 Changelog
 ---------

@@ -37,6 +37,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinx.ext.imgmath",
     "releases",
+    "myst_nb",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
