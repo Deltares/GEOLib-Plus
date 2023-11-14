@@ -28,7 +28,7 @@ netCDF4 = "^1.5"
 requests = "^2.26"
 d-geolib = "^0.6.0"
 shapely = "^2.0.0"
-myst_nb = "^0.10.0"
+myst_nb = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 teamcity-messages = "^1.32"
