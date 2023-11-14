@@ -13,14 +13,14 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9 <4"
+python = "^3.9 <3.13"
 pydantic = "^1"
 pyproj = "^3.3"
 pandas = "^1.4"
 tqdm = "^4"
-scipy = "^1.6"
+scipy = "^1.11.3"
 lxml = "^4.7"
-numpy = "^1.19"
+numpy = "^1.26.2"
 matplotlib = "^3.4"
 pyshp = "^2.1"
 more-itertools = "^8.6"
