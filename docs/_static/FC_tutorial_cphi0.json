@@ -1,0 +1,584 @@
+{
+  "Calculations": [
+    {
+      "Label": "UV FORM",
+      "Beta": 1.562805350249588,
+      "WaterLevel": 11.0,
+      "Contributions": [
+        {
+          "Stochast": "14",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "13",
+          "Alpha": 0.66546210036916709
+        },
+        {
+          "Stochast": "16",
+          "Alpha": 0.039515804732686129
+        },
+        {
+          "Stochast": "15",
+          "Alpha": 0.53963499823607319
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.28059186588023349
+        },
+        {
+          "Stochast": "2",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "5",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "6",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "7",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "8",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "9",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "10",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "11",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "12",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "0",
+          "Alpha": -0.43088393753908638
+        }
+      ]
+    },
+    {
+      "Label": "UV FORM",
+      "Beta": 1.4600264899735229,
+      "WaterLevel": 12.0,
+      "Contributions": [
+        {
+          "Stochast": "14",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "13",
+          "Alpha": 0.69322203580057873
+        },
+        {
+          "Stochast": "16",
+          "Alpha": 0.040912675329969034
+        },
+        {
+          "Stochast": "15",
+          "Alpha": 0.51691249952417062
+        },
+        {
+          "Stochast": "18",
+          "Alpha": 0.27078801850637052
+        },
+        {
+          "Stochast": "19",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "20",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "21",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "22",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "23",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "24",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "25",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "26",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "27",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "28",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "29",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "17",
+          "Alpha": -0.42100436927294921
+        }
+      ]
+    }
+  ],
+  "Stochasts": [
+    {
+      "Id": "0",
+      "Label": "UV FORM",
+      "ParameterType": "ModelFactor",
+      "DistributionType": "LogNormal",
+      "Mean": 1.05,
+      "StandardDeviation": 0.033,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "1",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "2",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "3",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "4",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "5",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "6",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "7",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "8",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "9",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "10",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "11",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "12",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "13",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.3,
+      "StandardDeviation": 0.05,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "14",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.95,
+      "StandardDeviation": 0.025,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "15",
+      "Label": "H_Rk_ko",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.28,
+      "StandardDeviation": 0.02,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "16",
+      "Label": "H_Rk_ko",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.9,
+      "StandardDeviation": 0.03,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "17",
+      "Label": "UV FORM",
+      "ParameterType": "ModelFactor",
+      "DistributionType": "LogNormal",
+      "Mean": 1.05,
+      "StandardDeviation": 0.033,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "18",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "19",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "20",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "21",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "22",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "23",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "24",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "25",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "26",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "27",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "28",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "29",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "30",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.3,
+      "StandardDeviation": 0.05,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "31",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.95,
+      "StandardDeviation": 0.025,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "32",
+      "Label": "H_Rk_ko",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.28,
+      "StandardDeviation": 0.02,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "33",
+      "Label": "H_Rk_ko",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.9,
+      "StandardDeviation": 0.03,
+      "VariationCoefficient": 0.0
+    }
+  ],
+  "Correlations": [
+    {
+      "Stochast1": "13",
+      "Stochast2": "14",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "2",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "3",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "4",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "5",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "6",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "7",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "8",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "9",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "10",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "11",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "12",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "30",
+      "Stochast2": "31",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "19",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "20",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "21",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "22",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "23",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "24",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "25",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "26",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "27",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "28",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "18",
+      "Stochast2": "29",
+      "Correlation": 1.0
+    }
+  ]
+}

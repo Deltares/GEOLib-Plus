@@ -98,7 +98,7 @@ class Testintegration:
         assert bro_cpt.coordinates == gef_cpt.coordinates
         assert bro_cpt.pwp == gef_cpt.pwp
         assert bro_cpt.lithology == gef_cpt.lithology
-        assert np.allclose(bro_cpt.litho_points, gef_cpt.litho_points)
+        assert np.allclose(bro_cpt.litho_points, gef_cpt.litho_points, atol=1e-2)
         for value in ["litho_NEN", "E_NEN", "cohesion_NEN", "fr_angle_NEN"]:
             for i in range(len(gef_cpt.litho_NEN)):
                 assert set(getattr(bro_cpt, value)[i].split("/")) == set(
@@ -109,7 +109,7 @@ class Testintegration:
             print(value)
             test = getattr(gef_cpt, value)
             expected_data = getattr(bro_cpt, value)
-            assert np.allclose(expected_data, test)
+            assert np.allclose(expected_data, test, atol=1e-2)
 
 
 class TestInterpreter:

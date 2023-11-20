@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.8, 3.9, "3.10"]
+        python-version: [3.9, "3.10"]
         os: [ubuntu-22.04, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
@@ -51,7 +51,7 @@ jobs:
         run: poetry run pytest --cov=geolib-plus --cov-report xml:coverage-reports/coverage-geolib-plus.xml --junitxml=xunit-reports/xunit-result-geolib-plus.xml -m "unittest and not workinprogress"
 
       - name: Autoformat code if the check fails
-        if: ${{ (matrix.os == 'ubuntu-22.04') && (matrix.python-version == 3.8) }}
+        if: ${{ (matrix.os == 'ubuntu-22.04') && (matrix.python-version == 3.9) }}
         run: |
           poetry run isort .
           poetry run black .
