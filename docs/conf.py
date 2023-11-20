@@ -29,15 +29,14 @@ author = "Deltares"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinxcontrib.bibtex",
+    "releases",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.todo",
     "sphinx.ext.coverage",
     "sphinx.ext.napoleon",
-    "rst2pdf.pdfbuilder",
-    "sphinxcontrib.bibtex",
-    "sphinx.ext.imgmath",
     "releases",
-    "myst_nb",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

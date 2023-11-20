@@ -177,7 +177,7 @@ Specify the fragility curve names and locations. Instantiate a ``DStabilityFragi
 
 
 
-.. image:: Tutorial_3_Fragility_Curve_Integration_files%5CTutorial_3_Fragility_Curve_Integration_9_0.png
+.. image:: ../../_static/Tutorial_3_Fragility_Curve_Integration_files/Tutorial_3_Fragility_Curve_Integration_9_0.png
 
 
 --------------
@@ -215,15 +215,17 @@ Here we assume the water level follows a Gumbel distribution.
 
 
 
-.. image:: Tutorial_3_Fragility_Curve_Integration_files%5CTutorial_3_Fragility_Curve_Integration_11_0.png
+.. image:: ../../_static/Tutorial_3_Fragility_Curve_Integration_files/Tutorial_3_Fragility_Curve_Integration_11_0.png
 
 
---------------
 
 Calculating the probability of exceedence for range of H
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-$ P_f = :raw-latex:`\int `P(F|h) . f_h(h) dh $
+.. math ::
+
+    P_f = \int P(F|h) . f_h(h) dh
+
 
 .. code:: ipython3
 
@@ -269,25 +271,25 @@ $ P_f = :raw-latex:`\int `P(F|h) . f_h(h) dh $
     Reliability index after integration = 3.998
     
 
---------------
 
-Calculating the influence coefficients after integration $:raw-latex:`\alpha`\_i \| h $
----------------------------------------------------------------------------------------
+Calculating the influence coefficients after integration :math:`\alpha \_i \| h`
+--------------------------------------------------------------------------------
 
-:math:`\alpha_h = \frac{u^*}{ -\beta} =\frac{ \Phi^{-1}(F_h(h^*))} { \Phi^{-1}(P_f)}`
+.. math::
 
-$ :raw-latex:`\Sigma`\_i ( :raw-latex:`\alpha`\_i \|h^\*)^2
-+:raw-latex:`\alpha`\_h^2 =1 $
+    \alpha_h = \frac{u^*}{ -\beta} =\frac{ \Phi^{-1}(F_h(h^*))} { \Phi^{-1}(P_f)}
 
-$:raw-latex:`\alpha`\_{T_i} ^2 = (:raw-latex:`\alpha`\_i
-\|h^\*)^2(1-:raw-latex:`\alpha`\_h^2) $
+    \Sigma_i \alpha_i^2 = \alpha_h^2 =1
+
+    \alpha_{T_i} ^2 = (\alpha_i \|h^*)^2(1-\alpha_h^2)
+
 
 where:
 
-$:raw-latex:`\alpha`\_{T_i} $ : transformed influence coefficient(s) of
+:math:`\alpha\_{T_i}` : transformed influence coefficient(s) of
 strength variable
 
-$ :raw-latex:`\alpha`\_i \|h^*$: Influence coefficient(s) of strength
+:math:`\alpha \_i \|h^*`: Influence coefficient(s) of strength
 variable, directly from FORM at design point water level (e.g., based on
 interpolation between fragility points)
 

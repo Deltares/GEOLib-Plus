@@ -13,7 +13,7 @@ Determine the inputs for D-Stability, taking into account the
 statistical uncertainty
 
 Step 1: Importing the dataset, and interpreting the data.
-=========================================================
+---------------------------------------------------------
 
 In the next cells, we import the python packages necessary to run this
 tutorial. If the packages are not available, install them in your Python
@@ -140,7 +140,7 @@ the data.
 
 
 
-.. image:: Tutorial_1_Fit_Lognormal_Distribution_files%5CTutorial_1_Fit_Lognormal_Distribution_6_0.png
+.. image:: ../../_static/Tutorial_1_Fit_Lognormal_Distribution_files/Tutorial_1_Fit_Lognormal_Distribution_6_0.png
 
 
 Step 2: Sample mean and sample standard deviation of the data set
@@ -296,7 +296,7 @@ deviation).
     
 
 Step 3c: Visual inspection of the results
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now we can visulize the results. We first set up two functions for
 drawing the pdf of a normal and a lognormal. Then we call this function
@@ -345,7 +345,7 @@ to make the plots we want.
 
 
 
-.. image:: Tutorial_1_Fit_Lognormal_Distribution_files%5CTutorial_1_Fit_Lognormal_Distribution_21_0.png
+.. image:: ../../_static/Tutorial_1_Fit_Lognormal_Distribution_files/Tutorial_1_Fit_Lognormal_Distribution_21_0.png
 
 
 Optional step 3d: Derive parameters for a shifted Lognormal distribution, with all values shifted to 14
@@ -379,7 +379,7 @@ to the plots.
     
 
 
-.. image:: Tutorial_1_Fit_Lognormal_Distribution_files%5CTutorial_1_Fit_Lognormal_Distribution_23_1.png
+.. image:: ../../_static/Tutorial_1_Fit_Lognormal_Distribution_files/Tutorial_1_Fit_Lognormal_Distribution_23_1.png
 
 
 Step 4: Characteristic values
@@ -393,9 +393,12 @@ estimated mean and standard deviation. Therefore we apply the Student-T
 factor to account for statistical uncertainty due to a small number of
 samples. The characteristic value is calculated as follows:
 
-:math:`X_{char.,5\%} = \exp( m + t_{5\%,n-1} \cdot s \cdot \sqrt{ 1+ 1/n)}`
-with :math:`m` and :math:`s` the lognormal parameters :math:`\mu_Y` and
-:math:`\sigma_Y`.
+.. math::
+
+    X_{char, 5\%} = \exp( m + t_{5\%,n-1} \cdot s \cdot \sqrt{ 1+ 1/n)}
+
+
+with :math:`m` and :math:`s` the lognormal parameters :math:`\mu_Y` and :math:`\sigma_Y`.
 
 .. code:: ipython3
 
@@ -473,7 +476,7 @@ asssumptions with a black vertical line and a colored dot.
 
 
 
-.. image:: Tutorial_1_Fit_Lognormal_Distribution_files%5CTutorial_1_Fit_Lognormal_Distribution_31_0.png
+.. image:: ../../_static/Tutorial_1_Fit_Lognormal_Distribution_files/Tutorial_1_Fit_Lognormal_Distribution_31_0.png
 
 
 Step 5: Get the inputs for D-Stability, taking into account the statistical uncertainty
@@ -592,5 +595,5 @@ Step 5d: Visualize the results
 
 
 
-.. image:: Tutorial_1_Fit_Lognormal_Distribution_files%5CTutorial_1_Fit_Lognormal_Distribution_40_0.png
+.. image:: ../../_static/Tutorial_1_Fit_Lognormal_Distribution_files/Tutorial_1_Fit_Lognormal_Distribution_40_0.png
 

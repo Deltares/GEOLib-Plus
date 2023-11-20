@@ -209,7 +209,7 @@ Plot the fragility points
 
 
 
-.. image:: Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files%5CTutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_10_0.png
+.. image:: ../../_static/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_10_0.png
 
 
 Extrapolate fragility curves linearly along the given range, with the given discretisation
@@ -236,7 +236,7 @@ Plot the extrapolated fragility curves
 
 
 
-.. image:: Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files%5CTutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_14_0.png
+.. image:: ../../_static/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_14_0.png
 
 
 Load the water level dependent scenario probability and densify and extrapolate
@@ -282,7 +282,7 @@ Plot the scenario probabilities
 
 
 
-.. image:: Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files%5CTutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_20_0.png
+.. image:: ../../_static/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_20_0.png
 
 
 The combination of 2 fragility curves
@@ -331,7 +331,7 @@ Plot the combined fragility curve
 
 
 
-.. image:: Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files%5CTutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_24_0.png
+.. image:: ../../_static/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_files/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_24_0.png
 
 
 Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)

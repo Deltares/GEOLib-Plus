@@ -214,7 +214,7 @@ level of 6.25 m.
 
 
 
-.. image:: Tutorial_2_Fit_GEV_Distribution_files%5CTutorial_2_Fit_GEV_Distribution_8_0.png
+.. image:: ../../_static/Tutorial_2_Fit_GEV_Distribution_files/Tutorial_2_Fit_GEV_Distribution_8_0.png
 
 
 Step 5: Fitting a Generalized Extreme Value (GEV) distribution
@@ -281,7 +281,7 @@ all.
 
 
 
-.. image:: Tutorial_2_Fit_GEV_Distribution_files%5CTutorial_2_Fit_GEV_Distribution_10_0.png
+.. image:: ../../_static/Tutorial_2_Fit_GEV_Distribution_files/Tutorial_2_Fit_GEV_Distribution_10_0.png
 
 
 .. parsed-literal::
@@ -364,7 +364,7 @@ We show the cdf of the GEV with the optimized parameters in a graph
 
 
 
-.. image:: Tutorial_2_Fit_GEV_Distribution_files%5CTutorial_2_Fit_GEV_Distribution_14_0.png
+.. image:: ../../_static/Tutorial_2_Fit_GEV_Distribution_files/Tutorial_2_Fit_GEV_Distribution_14_0.png
 
 
 Step 8: Force fitting a Gumbel distribution
@@ -424,5 +424,5 @@ points!
     
 
 
-.. image:: Tutorial_2_Fit_GEV_Distribution_files%5CTutorial_2_Fit_GEV_Distribution_16_1.png
+.. image:: ../../_static/Tutorial_2_Fit_GEV_Distribution_files/Tutorial_2_Fit_GEV_Distribution_16_1.png
 
