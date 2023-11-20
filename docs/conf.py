@@ -38,7 +38,7 @@ extensions = [
     "sphinx.ext.imgmath",
     "releases",
     "myst_nb",
-    "dollarmath",
+    "sphinx_math_dollar",
     "amsmath",
 ]
 
