@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tutorial setup Cpt class interpretation using GEOLIB+ &#8212; geolib+ 0.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorial Cpt interpretation using GEOLIB+" href="tutorial_cpt_interpretation.html" />
+    <link rel="prev" title="Tutorials" href="overview.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="overview.html" title="Previous document">Tutorials</a>
+        </li>
+        <li>
+          <a href="tutorial_cpt_interpretation.html" title="Next document">Tutorial Cpt interpretation using GEOLIB+</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-setup-cpt-class-interpretation-using-geolib">
+<h1>Tutorial setup Cpt class interpretation using GEOLIB+<a class="headerlink" href="#tutorial-setup-cpt-class-interpretation-using-geolib" title="Permalink to this heading">¶</a></h1>
+<p>By following the next steps the user can read, process and interpret a cpt file. The formats that can be read by GEOLIB+ are the gef and bro xml files.
+The gef format is formulated as in <span id="id1">[<a class="reference internal" href="../../references.html#id15" title="Geotechnical exchange format for cpt-data. Civieltechnisch Centrum Uitvoering Research en Regelgeving, Büchnerweg 1, Postbus 420, 2800 AK Gouda, September 2006.">14</a>]</span>. The bro xml  is formulated in <span id="id2">[<a class="reference internal" href="../../references.html#id16" title="Tno Geologische Dienst Nederland. Bro-catalogus geotechnisch sondeeronderzoek versie 1.0. Technical Report, Ministerie van infrastructuur en milieu, 2017.">15</a>]</span>.</p>
+<ol class="arabic simple">
+<li><p>First the user must define where the cpt file is located. This process is the same for both xml and gef files.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="n">cpt_file_gef</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cpt&quot;</span><span class="p">,</span> <span class="s2">&quot;gef&quot;</span><span class="p">,</span> <span class="s2">&quot;test_cpt.gef&quot;</span><span class="p">)</span>
+<span class="n">cpt_file_xml</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cpt&quot;</span><span class="p">,</span> <span class="s2">&quot;xml&quot;</span><span class="p">,</span> <span class="s2">&quot;test_cpt.xml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>2. Then the corresponding class should be initialized. For gef initialize class <a class="reference internal" href="../../dev/geolib_plus.gef_cpt.html#geolib_plus.gef_cpt.gef_cpt.GefCpt" title="geolib_plus.gef_cpt.gef_cpt.GefCpt"><code class="xref py py-class docutils literal notranslate"><span class="pre">GefCpt</span></code></a>.
+For bro xml initialize the class <a class="reference internal" href="../../dev/geolib_plus.bro_xml_cpt.html#geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt" title="geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt"><code class="xref py py-class docutils literal notranslate"><span class="pre">BroXmlCpt</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.gef_cpt</span> <span class="kn">import</span> <span class="n">GefCpt</span>
+<span class="kn">from</span> <span class="nn">geolib_plus.bro_xml_cpt</span> <span class="kn">import</span> <span class="n">BroXmlCpt</span>
+
+<span class="c1"># initialize models</span>
+<span class="n">cpt_gef</span> <span class="o">=</span> <span class="n">GefCpt</span><span class="p">()</span>
+<span class="n">cpt_xml</span> <span class="o">=</span> <span class="n">BroXmlCpt</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>3. After that, the raw data can be read for both of the cpts.
+In this case the raw data from the files are allocated into the properties of the class <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCPT</span></code></a>.
+For example the penetration length of the cpt is property penetration_length of the  class <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCPT</span></code></a>.
+As it is of type Iterable you can print out the first element.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># read the cpt for each type of file</span>
+<span class="n">cpt_gef</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">cpt_file_gef</span><span class="p">)</span>
+<span class="n">cpt_xml</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">cpt_file_xml</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cpt_gef</span><span class="o">.</span><span class="n">penetration_length</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cpt_xml</span><span class="o">.</span><span class="n">penetration_length</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>4. Until step 3 only the raw data are part of the class. With GEOLIB+ the user can also run the pre-processing methods. These methods are required before plotting and
+interpretation the results. Both the gef and the bro xml cpt classes can call the pre_process_data method. However, these are two different methods.
+For the gef cpt <code class="xref py py-func docutils literal notranslate"><span class="pre">pre_process_data()</span></code> is called. Where the following processes take place:</p>
+<ul class="simple">
+<li><p>The <code class="xref py py-func docutils literal notranslate"><span class="pre">perform_pre_drill_interpretation()</span></code> method where all the values are updated if a pre-drill operation was performed in the cpt.</p></li>
+<li><p>The <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT.pre_process_data" title="geolib_plus.cpt_base_model.AbstractCPT.pre_process_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">pre_process_data()</span></code></a> method. This includes methods that calculate the depth depending on the inputs of the cpt, correcting negative values and calculating the pore pressures.</p></li>
+</ul>
+<p>For the bro xml cpt the <code class="xref py py-func docutils literal notranslate"><span class="pre">pre_process_data()</span></code> method is called. Where the following process take place:</p>
+<ul class="simple">
+<li><p>The <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT.pre_process_data" title="geolib_plus.cpt_base_model.AbstractCPT.pre_process_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">pre_process_data()</span></code></a> method. This includes methods that calculate the depth depending on the inputs of the cpt, correcting negative values and calculating the pore pressures.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># do pre-processing</span>
+<span class="n">cpt_gef</span><span class="o">.</span><span class="n">pre_process_data</span><span class="p">()</span>
+<span class="n">cpt_xml</span><span class="o">.</span><span class="n">pre_process_data</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="overview.html" title="Previous document">Tutorials</a>
+        </li>
+        <li>
+          <a href="tutorial_cpt_interpretation.html" title="Next document">Tutorial Cpt interpretation using GEOLIB+</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/overview.html">Developer API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial setup Cpt class interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_cpt_interpretation.html">Tutorial Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="tutorial_cpt_plotting.html">Tutorial Cpt plotting using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_custom_cpt_interpretation.html">Tutorial  Custom Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_soft_soil_parameters.html">Tutorial defining and calculating parameters for the Soft Soil Creep model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_hardening_soil_parameters.html">Tutorial Defining and calculating parameters for the Hardening Soil model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_relative_density_correlated_parameters.html">Tutorial derive model parameters for sands using relative density input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_connecting_dfoundations.html">Create a D-Foundations soil profile using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_nkt.html">Tutorial determine Nkt values using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_shansep_parameters.html">Tutorial determine Shansep parameters using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_state_parameters.html">Tutorial determine state parameters using GEOLIB+</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Tutorials</a><ul>
+      <li>Previous: <a href="overview.html" title="previous chapter">Tutorials</a></li>
+      <li>Next: <a href="tutorial_cpt_interpretation.html" title="next chapter">Tutorial Cpt interpretation using GEOLIB+</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
