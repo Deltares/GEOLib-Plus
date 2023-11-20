@@ -11,7 +11,7 @@ from geolib_plus.gef_cpt.validate_gef import validate_gef_cpt
 from geolib_plus.robertson_cpt_interpretation import RobertsonCptInterpretation
 from tests.utils import TestUtils
 
-version = "0.3.0"
+version = "0.3.1"
 
 
 @pytest.mark.systemtest
