@@ -1,0 +1,673 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tutorial 4: Combining 2 fragility curves for different scenario’s. &#8212; geolib+ 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-4-combining-2-fragility-curves-for-different-scenario-s">
+<h1>Tutorial 4: Combining 2 fragility curves for different scenario’s.<a class="headerlink" href="#tutorial-4-combining-2-fragility-curves-for-different-scenario-s" title="Permalink to this heading">¶</a></h1>
+<p>We consider the slope reliability with a relatively thin blanket layer.</p>
+<p>In the base case, the blanket layer has a strength, but in case of uplift the strength reduces (to 0). For the latter, a scenario is calculated with c/ph=0 in the uplift zone.</p>
+<p>The water level at which uplift happens is uncertain. At low water levels, the probability of uplift (and strength reduction) is rather low, whereas at high water levels, the probability of uplift is high (and thus the c/phi=0 scenario).</p>
+<section id="import-necessary-python-packages">
+<h2>Import necessary python packages<a class="headerlink" href="#import-necessary-python-packages" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span> <span class="c1"># for reading fragility curves in D-Stability .json format</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> <span class="c1"># for array calculations</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span> <span class="c1"># for statisitcal functions</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># for reading excel files</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span> <span class="c1"># for linear inter- and extrapolation outside the range</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span> <span class="c1"># for plotting</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-base-class-for-fragility-curve-operations">
+<h2>Load base class for Fragility curve operations<a class="headerlink" href="#load-base-class-for-fragility-curve-operations" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A class for importing DStability Fragility curves</span>
+<span class="k">class</span> <span class="nc">DStabilityFragilityCurve</span><span class="p">:</span>
+    
+    <span class="c1"># A static method in a class can be used without the the class-data. </span>
+    <span class="c1"># This method densifies and extrapolates a fragility curve</span>
+    <span class="nd">@staticmethod</span> 
+    <span class="k">def</span> <span class="nf">densify_extrapolate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xrange</span><span class="p">,</span> <span class="n">xdelta</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">):</span>
+        <span class="n">xnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xrange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">xdelta</span><span class="p">,</span> <span class="n">xdelta</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">ynew</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">xnew</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xnew</span><span class="p">,</span> <span class="n">ynew</span>  
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        - stores the given label</span>
+<span class="sd">        - loads the json as raw data</span>
+<span class="sd">        - initiates the preprocess_rawdata() method</span>
+<span class="sd">        &#39;&#39;&#39;</span>     
+        <span class="bp">self</span><span class="o">.</span><span class="n">Label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_rawdata</span><span class="p">()</span>
+        
+    <span class="k">def</span> <span class="nf">preprocess_rawdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">        - preprocesses the raw data into a structure</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Calculations&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Stochasts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Stochasts&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Correlations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Correlations&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Beta&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span><span class="p">]</span>
+
+        <span class="c1"># Make dictionary for translating Stochast Id to Label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">stochast</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Stochasts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;ModelFactor&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Id&#39;</span><span class="p">):</span> <span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">)})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Id&#39;</span><span class="p">):</span> <span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">)</span> <span class="o">+</span>
+                                       <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Label&#39;</span><span class="p">)})</span>
+
+        <span class="k">for</span> <span class="n">fragilitypoint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">contribution</span> <span class="ow">in</span> <span class="n">fragilitypoint</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Contributions&#39;</span><span class="p">):</span>
+                <span class="n">contribution</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">contribution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Stochast&#39;</span><span class="p">))})</span>
+
+        <span class="c1"># cleanup for alpha values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alphas</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">drop_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">correlation_item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Stochast2&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">correlation_item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Correlations</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">unique_stochast_name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="o">.</span><span class="n">items</span><span class="p">()]):</span>
+            <span class="n">alphas</span> <span class="o">=</span> <span class="p">[</span><span class="n">contribution</span><span class="p">[</span><span class="s1">&#39;Alpha&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span>
+                      <span class="k">for</span> <span class="n">contribution</span> <span class="ow">in</span> <span class="n">point</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Contributions&#39;</span><span class="p">)</span>
+                      <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="p">[</span><span class="n">contribution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Stochast&#39;</span><span class="p">)]</span> <span class="o">==</span> <span class="n">unique_stochast_name</span>
+                          <span class="ow">and</span> <span class="n">contribution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Stochast&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">drop_list</span> <span class="p">)</span> <span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alphas</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unique_stochast_name</span><span class="p">:</span> <span class="n">alphas</span><span class="p">})</span>
+            <span class="c1"># final cleanup</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alphas</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphas</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">val</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_scenario_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Import the scenario probabliity (weights) from excel file. </span>
+<span class="sd">        Note the column headers match the labels of the fragility curve</span>
+<span class="sd">        in the format P({self.Label})</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">scenario_probability_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scenario_probability_data</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scenario_probability_data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;P(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Label</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">set_extrapolation_range_and_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">range_h</span><span class="p">,</span> <span class="n">delta_h</span> <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span> <span class="o">=</span> <span class="n">range_h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span> <span class="o">=</span> <span class="n">delta_h</span>
+          
+    <span class="k">def</span> <span class="nf">densify_extrapolate_fc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># For the beta&#39;s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">DStabilityFragilityCurve</span><span class="o">.</span><span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
+        <span class="c1"># For the alpha&#39;s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Alphas</span><span class="o">=</span><span class="p">{}</span>
+        <span class="k">for</span> <span class="n">unique_stochast_name</span><span class="p">,</span> <span class="n">alphas</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">alphas</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">H</span><span class="p">,</span> <span class="n">Alphas</span> <span class="o">=</span> <span class="n">DStabilityFragilityCurve</span><span class="o">.</span><span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> 
+                                                                     <span class="n">alphas</span><span class="p">,</span> 
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span> 
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alphas</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unique_stochast_name</span><span class="p">:</span> <span class="n">alphas</span><span class="p">})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Alphas</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unique_stochast_name</span><span class="p">:</span> <span class="n">Alphas</span><span class="p">})</span>
+        
+    <span class="k">def</span> <span class="nf">densify_extrapolate_scenario_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logarithmic</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">logarithmic</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span><span class="o">&lt;</span><span class="p">(</span><span class="mf">1e-9</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">1e-9</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">1e-9</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="mf">1e-9</span>
+        
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">DStabilityFragilityCurve</span><span class="o">.</span><span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_h</span><span class="p">,</span> 
+                                                                      <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span><span class="p">),</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="mf">10.</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span><span class="p">)</span><span class="o">.</span><span class="n">bfill</span><span class="p">()</span><span class="o">.</span><span class="n">ffill</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">DStabilityFragilityCurve</span><span class="o">.</span><span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_h</span><span class="p">,</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span><span class="p">,</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span> 
+                                                                      <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
+        
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="code-for-plotting">
+<h1>Code for plotting<a class="headerlink" href="#code-for-plotting" title="Permalink to this heading">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="n">figures_to_plot</span><span class="p">):</span>
+    <span class="c1"># Instantiate a figure with a specified size</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+        
+    <span class="c1"># Set the axis labels and title</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Water level, h&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Reliability index, $\beta$&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Scenario probability, P&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot_fragility_points</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="c1"># Add the fragility points to the figure</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> 
+                <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Fragility Points </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span> <span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">plot_extrapolated_fragility_curve</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="c1"># Add the fragility curve to the figure</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>  <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> 
+                <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Extrapolated Fragility Curve </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot_scenario_probability</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="c1"># Add the scenario probability to the figure</span>
+        <span class="c1"># ax2.stackplot(h, p)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>  <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> 
+                 <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Scenario Probability </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+     
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tab:blue&#39;</span><span class="p">,</span><span class="s1">&#39;tab:orange&#39;</span><span class="p">,</span><span class="s1">&#39;tab:green&#39;</span><span class="p">,</span><span class="s1">&#39;tab:red&#39;</span><span class="p">,</span><span class="s1">&#39;tab:purple&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;tab:brown&#39;</span><span class="p">,</span><span class="s1">&#39;tab:pink&#39;</span><span class="p">,</span><span class="s1">&#39;tab:gray&#39;</span><span class="p">,</span><span class="s1">&#39;tab:olive&#39;</span><span class="p">,</span><span class="s1">&#39;tab:cyan&#39;</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">FC</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">FC_list</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">figures_to_plot</span><span class="p">:</span>
+            <span class="n">plot_fragility_points</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">FC</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="n">FC</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">Label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">figures_to_plot</span><span class="p">:</span>
+            <span class="n">plot_extrapolated_fragility_curve</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">Label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="k">if</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">figures_to_plot</span><span class="p">:</span>
+            <span class="n">plot_scenario_probability</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">P</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">Label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+            <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="load-fragility-curves-create-dstabilityfragilitycurve-objects-and-save-in-list">
+<h1>Load fragility curves, create DStabilityFragilityCurve objects, and save in list<a class="headerlink" href="#load-fragility-curves-create-dstabilityfragilitycurve-objects-and-save-in-list" title="Permalink to this heading">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fragility_curves_list</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;FC_basis&#39;</span><span class="p">,</span><span class="s1">&#39;../../_static/FC_tutorial_basis.json&#39;</span> <span class="p">),</span>
+                           <span class="p">(</span><span class="s1">&#39;FC_cphi0&#39;</span><span class="p">,</span><span class="s1">&#39;../../_static/FC_tutorial_cphi0.json&#39;</span> <span class="p">)]</span>
+<span class="n">FC_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">fc_label</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="ow">in</span> <span class="n">fragility_curves_list</span><span class="p">:</span>
+    <span class="n">FC</span> <span class="o">=</span> <span class="n">DStabilityFragilityCurve</span><span class="p">(</span><span class="n">fc_label</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">FC_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">FC</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">FC_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="k">for</span> <span class="p">(</span><span class="n">fc_label</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="ow">in</span> <span class="n">fragility_curves_list</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">5</span>     <span class="n">FC</span> <span class="o">=</span> <span class="n">DStabilityFragilityCurve</span><span class="p">(</span><span class="n">fc_label</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">FC_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">FC</span> <span class="p">)</span>
+
+<span class="nn">Cell In[2], line 20,</span> in <span class="ni">DStabilityFragilityCurve.__init__</span><span class="nt">(self, label, filename)</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span><span class="w"> </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span><span class="sd"> - stores the given label</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span><span class="sd"> - loads the json as raw data</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span><span class="sd"> - initiates the preprocess_rawdata() method</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span><span class="sd"> &#39;&#39;&#39;</span>     
+<span class="g g-Whitespace">     </span><span class="mi">19</span> <span class="bp">self</span><span class="o">.</span><span class="n">Label</span> <span class="o">=</span> <span class="n">label</span>
+<span class="ne">---&gt; </span><span class="mi">20</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">21</span>     <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_rawdata</span><span class="p">()</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\IPython\core\interactiveshell.py:308,</span> in <span class="ni">_modified_open</span><span class="nt">(file, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="k">if</span> <span class="n">file</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">}:</span>
+<span class="g g-Whitespace">    </span><span class="mi">302</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">303</span>         <span class="sa">f</span><span class="s2">&quot;IPython won&#39;t let you open fd=</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> by default &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">304</span>         <span class="s2">&quot;as it is likely to crash IPython. If you know what you are doing, &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span>         <span class="s2">&quot;you can use builtins&#39; open.&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">308</span> <span class="k">return</span> <span class="n">io_open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../../_static/FC_tutorial_basis.json&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="plot-the-fragility-points">
+<h2>Plot the fragility points<a class="headerlink" href="#plot-the-fragility-points" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the figure</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="c1"># Show the figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/d5c83f7aca8232be90ff01687b3e448003b2611e71648fef5619464b884574e4.png" src="../../../../_images/d5c83f7aca8232be90ff01687b3e448003b2611e71648fef5619464b884574e4.png" />
+</div>
+</div>
+</section>
+<section id="extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation">
+<h2>Extrapolate fragility curves linearly along the given range, with the given discretisation<a class="headerlink" href="#extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">range_h</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">14</span><span class="p">]</span>
+<span class="n">delta_h</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+<span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
+    <span class="n">FC</span><span class="o">.</span><span class="n">set_extrapolation_range_and_density</span><span class="p">(</span><span class="n">range_h</span><span class="p">,</span> <span class="n">delta_h</span><span class="p">)</span>
+    <span class="n">FC</span><span class="o">.</span><span class="n">densify_extrapolate_fc</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-the-extrapolated-fragility-curves">
+<h2>Plot the extrapolated fragility curves<a class="headerlink" href="#plot-the-extrapolated-fragility-curves" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the figure</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="c1"># Show the figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/c8e13252a950daa5bcb46748d9bebe9404c9c9526868ac12f54c765492dbd2a6.png" src="../../../../_images/c8e13252a950daa5bcb46748d9bebe9404c9c9526868ac12f54c765492dbd2a6.png" />
+</div>
+</div>
+</section>
+<section id="load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate">
+<h2>Load the water level dependent scenario probability and densify and extrapolate<a class="headerlink" href="#load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
+    <span class="n">FC</span><span class="o">.</span><span class="n">get_scenario_probability</span><span class="p">(</span><span class="s1">&#39;../../_static/ScenarioProbabilityFragilityCurvesUplift_2.xlsx&#39;</span><span class="p">)</span>
+    <span class="c1"># Note we linearly extrapolate the logarithmic values of the probability</span>
+    <span class="n">FC</span><span class="o">.</span><span class="n">densify_extrapolate_scenario_probability</span><span class="p">(</span><span class="n">logarithmic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\compat\_optional.py:132,</span> in <span class="ni">import_optional_dependency</span><span class="nt">(name, extra, errors, min_version)</span>
+<span class="g g-Whitespace">    </span><span class="mi">131</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">132</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\importlib\__init__.py:126,</span> in <span class="ni">import_module</span><span class="nt">(name, package)</span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span>         <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="ne">--&gt; </span><span class="mi">126</span> <span class="k">return</span> <span class="n">_bootstrap</span><span class="o">.</span><span class="n">_gcd_import</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="n">level</span><span class="p">:],</span> <span class="n">package</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:1050,</span> in <span class="ni">_gcd_import</span><span class="nt">(name, package, level)</span>
+
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:1027,</span> in <span class="ni">_find_and_load</span><span class="nt">(name, import_)</span>
+
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:1004,</span> in <span class="ni">_find_and_load_unlocked</span><span class="nt">(name, import_)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;openpyxl&#39;
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">FC</span><span class="o">.</span><span class="n">get_scenario_probability</span><span class="p">(</span><span class="s1">&#39;../../_static/ScenarioProbabilityFragilityCurvesUplift_2.xlsx&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="c1"># Note we linearly extrapolate the logarithmic values of the probability</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">FC</span><span class="o">.</span><span class="n">densify_extrapolate_scenario_probability</span><span class="p">(</span><span class="n">logarithmic</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nn">Cell In[2], line 66,</span> in <span class="ni">DStabilityFragilityCurve.get_scenario_probability</span><span class="nt">(self, file)</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span> <span class="k">def</span> <span class="nf">get_scenario_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span><span class="w">     </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span><span class="sd">     Import the scenario probabliity (weights) from excel file. </span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span><span class="sd">     Note the column headers match the labels of the fragility curve</span>
+<span class="nn">     64    </span> in <span class="ni">the format P</span><span class="nt">({self.Label})</span>
+<span class="g g-Whitespace">     </span><span class="mi">65</span><span class="sd">     &#39;&#39;&#39;</span>
+<span class="ne">---&gt; </span><span class="mi">66</span>     <span class="n">scenario_probability_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span>     <span class="bp">self</span><span class="o">.</span><span class="n">scenario_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scenario_probability_data</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">68</span>     <span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scenario_probability_data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;P(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">Label</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\excel\_base.py:504,</span> in <span class="ni">read_excel</span><span class="nt">(io, sheet_name, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skiprows, nrows, na_values, keep_default_na, na_filter, verbose, parse_dates, date_parser, date_format, thousands, decimal, comment, skipfooter, storage_options, dtype_backend, engine_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">502</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">io</span><span class="p">,</span> <span class="n">ExcelFile</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">503</span>     <span class="n">should_close</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="ne">--&gt; </span><span class="mi">504</span>     <span class="n">io</span> <span class="o">=</span> <span class="n">ExcelFile</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">505</span>         <span class="n">io</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">506</span>         <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">507</span>         <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">508</span>         <span class="n">engine_kwargs</span><span class="o">=</span><span class="n">engine_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">509</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">510</span> <span class="k">elif</span> <span class="n">engine</span> <span class="ow">and</span> <span class="n">engine</span> <span class="o">!=</span> <span class="n">io</span><span class="o">.</span><span class="n">engine</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">511</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">512</span>         <span class="s2">&quot;Engine should not be specified when passing &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">513</span>         <span class="s2">&quot;an ExcelFile - ExcelFile already has the engine set&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">514</span>     <span class="p">)</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\excel\_base.py:1580,</span> in <span class="ni">ExcelFile.__init__</span><span class="nt">(self, path_or_buffer, engine, storage_options, engine_kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1577</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+<span class="g g-Whitespace">   </span><span class="mi">1578</span> <span class="bp">self</span><span class="o">.</span><span class="n">storage_options</span> <span class="o">=</span> <span class="n">storage_options</span>
+<span class="ne">-&gt; </span><span class="mi">1580</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engines</span><span class="p">[</span><span class="n">engine</span><span class="p">](</span>
+<span class="g g-Whitespace">   </span><span class="mi">1581</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_io</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1582</span>     <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1583</span>     <span class="n">engine_kwargs</span><span class="o">=</span><span class="n">engine_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1584</span> <span class="p">)</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\excel\_openpyxl.py:552,</span> in <span class="ni">OpenpyxlReader.__init__</span><span class="nt">(self, filepath_or_buffer, storage_options, engine_kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">534</span> <span class="nd">@doc</span><span class="p">(</span><span class="n">storage_options</span><span class="o">=</span><span class="n">_shared_docs</span><span class="p">[</span><span class="s2">&quot;storage_options&quot;</span><span class="p">])</span>
+<span class="g g-Whitespace">    </span><span class="mi">535</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">536</span>     <span class="bp">self</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">539</span>     <span class="n">engine_kwargs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">540</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">541</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">542</span><span class="sd">     Reader using openpyxl engine.</span>
+<span class="g g-Whitespace">    </span><span class="mi">543</span><span class="sd"> </span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">    </span><span class="mi">550</span><span class="sd">         Arbitrary keyword arguments passed to excel engine.</span>
+<span class="g g-Whitespace">    </span><span class="mi">551</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">552</span>     <span class="n">import_optional_dependency</span><span class="p">(</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">553</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">554</span>         <span class="n">filepath_or_buffer</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">555</span>         <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">556</span>         <span class="n">engine_kwargs</span><span class="o">=</span><span class="n">engine_kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">557</span>     <span class="p">)</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\compat\_optional.py:135,</span> in <span class="ni">import_optional_dependency</span><span class="nt">(name, extra, errors, min_version)</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="k">if</span> <span class="n">errors</span> <span class="o">==</span> <span class="s2">&quot;raise&quot;</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">135</span>         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">136</span>     <span class="k">return</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">138</span> <span class="c1"># Handle submodules: if we have submodule, grab parent module from sys.modules</span>
+
+<span class="ne">ImportError</span>: Missing optional dependency &#39;openpyxl&#39;.  Use pip or conda to install openpyxl.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sanity-checks">
+<h2>Sanity checks<a class="headerlink" href="#sanity-checks" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if all arrays in the list are identical</span>
+<span class="n">h_array_identical</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">H</span> <span class="o">==</span> <span class="n">FC_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">H</span><span class="p">)</span> <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">)</span>
+
+<span class="c1"># Check if all scenario probabilies sum to 1 with precision 0.001</span>
+<span class="n">sum_to_one_bool</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span> <span class="p">[</span><span class="n">FC</span><span class="o">.</span><span class="n">P</span> <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span> <span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span>
+<span class="n">scenarios_exhaustive</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">sum_to_one_bool</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">h_array_identical</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Arrays in the list are not identical. Correct the extrapolation bounds&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">scenarios_exhaustive</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scenario probabilies do not sum to 1.0. I.e. the scenarios are not </span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="s2">&quot;collectively exhaustive. Correct the scenario probabilities.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">FC_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">H</span><span class="p">[</span><span class="o">~</span><span class="n">sum_to_one_bool</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">FC</span><span class="o">.</span><span class="n">P</span><span class="p">[</span><span class="o">~</span><span class="n">sum_to_one_bool</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-the-scenario-probabilities">
+<h2>Plot the scenario probabilities<a class="headerlink" href="#plot-the-scenario-probabilities" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the figure</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>\
+<span class="c1"># Show the figure</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/ced87db3d69250504adb4268537974b2a60c9e4b4582db637994f6a3df199d0d.png" src="../../../../_images/ced87db3d69250504adb4268537974b2a60c9e4b4582db637994f6a3df199d0d.png" />
+</div>
+</div>
+</section>
+<section id="the-combination-of-2-fragility-curves">
+<h2>The combination of 2 fragility curves<a class="headerlink" href="#the-combination-of-2-fragility-curves" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">h_array_identical</span> <span class="ow">and</span> <span class="n">scenarios_exhaustive</span><span class="p">:</span>
+    <span class="c1"># Combine all curves with the respective scenario probabilities </span>
+    <span class="n">Pf_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">[</span><span class="n">FC</span><span class="o">.</span><span class="n">P</span> <span class="o">*</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="o">-</span> <span class="n">FC</span><span class="o">.</span><span class="n">B</span> <span class="p">)</span> <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">beta_combined</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">Pf_combined</span><span class="p">)</span>
+    <span class="n">h_combined</span> <span class="o">=</span> <span class="n">FC_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">H</span>
+    
+    <span class="c1"># Get weighted alpha&#39;s for all unique stochasts</span>
+    <span class="n">stochast_names</span><span class="o">=</span><span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
+        <span class="n">stochast_names</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">FC</span><span class="o">.</span><span class="n">Alphas</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="n">alphas_combined</span><span class="o">=</span><span class="p">{}</span>
+    
+    <span class="k">for</span> <span class="n">unique_stochast_name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">stochast_names</span><span class="p">):</span>
+        <span class="n">alpha_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span> 
+            <span class="p">[</span><span class="n">FC</span><span class="o">.</span><span class="n">P</span> <span class="o">*</span> <span class="n">FC</span><span class="o">.</span><span class="n">Alphas</span><span class="p">[</span><span class="n">unique_stochast_name</span><span class="p">]</span> <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">alphas_combined</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unique_stochast_name</span><span class="p">:</span><span class="n">alpha_combined</span><span class="p">})</span>
+        
+    <span class="n">normalization_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">arr</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">arr</span> <span class="ow">in</span> <span class="n">alphas_combined</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">arr</span> <span class="ow">in</span> <span class="n">alphas_combined</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">arr</span><span class="o">/=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">normalization_factor</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">arr</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">arr</span> <span class="ow">in</span> <span class="n">alphas_combined</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-3</span><span class="p">)</span> <span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Something is wrong with the normalization of alpha-factors&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">alphas_combined</span><span class="p">)</span>    
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-the-combined-fragility-curve">
+<h2>Plot the combined fragility curve<a class="headerlink" href="#plot-the-combined-fragility-curve" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h_combined</span><span class="p">,</span> <span class="n">beta_combined</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Combined Fragility Curve&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/46c0d9927e04e27e4bc9e3b5eeea18d7140a88fe38dfdc61cc42ab05fe4ffdce.png" src="../../../../_images/46c0d9927e04e27e4bc9e3b5eeea18d7140a88fe38dfdc61cc42ab05fe4ffdce.png" />
+</div>
+</div>
+</section>
+<section id="save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit">
+<h2>Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)<a class="headerlink" href="#save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit" title="Permalink to this heading">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Store the combined fragility curve to json.</span>
+<span class="n">alpha_values</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">stochasts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+<span class="k">for</span> <span class="n">stochast_name</span><span class="p">,</span> <span class="n">arr</span> <span class="ow">in</span> <span class="n">alphas_combined</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">alpha_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">stop</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">stop</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">stochast</span> <span class="ow">in</span> <span class="n">FC</span><span class="o">.</span><span class="n">Stochasts</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">stochast</span><span class="p">[</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">]</span><span class="o">+</span><span class="s2">&quot;.&quot;</span><span class="o">+</span><span class="n">stochast</span><span class="p">[</span><span class="s1">&#39;Label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">stochast_name</span><span class="p">:</span>
+                        <span class="n">stochast</span><span class="p">[</span><span class="s1">&#39;Id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="n">stochasts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stochast</span><span class="p">)</span>
+                        <span class="n">stop</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">stochast</span><span class="p">[</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ModelFactor&#39;</span> <span class="ow">and</span> \
+                                     <span class="n">stochast_name</span> <span class="o">==</span> <span class="s1">&#39;ModelFactor&#39;</span><span class="p">:</span>
+                        <span class="n">stochasts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stochast</span><span class="p">)</span>
+                        <span class="n">stochast</span><span class="p">[</span><span class="s1">&#39;Id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                        <span class="n">stop</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+    <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+
+<span class="n">json_out</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Calculations&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;Label&quot;</span><span class="p">:</span><span class="s2">&quot;FC combined&quot;</span><span class="p">,</span> 
+                              <span class="s2">&quot;Beta&quot;</span><span class="p">:</span><span class="n">b</span><span class="p">,</span> 
+                              <span class="s2">&quot;WaterLevel&quot;</span><span class="p">:</span><span class="n">h</span><span class="p">,</span> 
+                              <span class="s2">&quot;Contributions&quot;</span><span class="p">:[{</span><span class="s1">&#39;Stochast&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span>
+                                                <span class="s1">&#39;Alpha&#39;</span><span class="p">:</span><span class="n">a</span><span class="p">}</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">alphas</span><span class="p">)]</span>
+                             <span class="p">}</span> <span class="k">for</span> <span class="n">h</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">alphas</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">h_combined</span><span class="p">,</span> 
+                                                     <span class="n">beta_combined</span><span class="p">,</span> 
+                                                     <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alpha_values</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)],</span>
+            <span class="s2">&quot;Stochasts&quot;</span><span class="p">:</span>    <span class="n">stochasts</span> <span class="p">,</span>
+            <span class="s2">&quot;Correlations&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;Combined_FC.json&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_out</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user/install.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev/overview.html">Developer API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/tutorials/overview.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

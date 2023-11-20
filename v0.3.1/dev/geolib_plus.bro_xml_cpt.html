@@ -1,0 +1,574 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>geolib_plus.bro_xml_cpt package &#8212; geolib+ 0.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geolib_plus.gef_cpt package" href="geolib_plus.gef_cpt.html" />
+    <link rel="prev" title="geolib_plus package" href="geolib_plus.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.html" title="Previous document">geolib_plus package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.gef_cpt.html" title="Next document">geolib_plus.gef_cpt package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="geolib-plus-bro-xml-cpt-package">
+<h1>geolib_plus.bro_xml_cpt package<a class="headerlink" href="#geolib-plus-bro-xml-cpt-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-geolib_plus.bro_xml_cpt.bro_utils">
+<span id="geolib-plus-bro-xml-cpt-bro-utils-module"></span><h2>geolib_plus.bro_xml_cpt.bro_utils module<a class="headerlink" href="#module-geolib_plus.bro_xml_cpt.bro_utils" title="Permalink to this heading">¶</a></h2>
+<p>bro_utils :</p>
+<p>Functions used in the reading of bro_xml cpts</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.bro_utils.</span></span><span class="sig-name descname"><span class="pre">XMLBroCPTReader</span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.CptReader" title="geolib_plus.cpt_base_model.CptReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">CptReader</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.all_single_data_available">
+<span class="sig-name descname"><span class="pre">all_single_data_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.all_single_data_available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.are_all_required_data_available">
+<span class="sig-name descname"><span class="pre">are_all_required_data_available</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">avail_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.are_all_required_data_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if all data is available</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.bro_data">
+<span class="sig-name descname"><span class="pre">bro_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData" title="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData"><span class="pre">XMLBroFullData</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">XMLBroFullData(penetrationLength=None,</span> <span class="pre">depth=None,</span> <span class="pre">elapsedTime=None,</span> <span class="pre">coneResistance=None,</span> <span class="pre">correctedConeResistance=None,</span> <span class="pre">netConeResistance=None,</span> <span class="pre">magneticFieldStrengthX=None,</span> <span class="pre">magneticFieldStrengthY=None,</span> <span class="pre">magneticFieldStrengthZ=None,</span> <span class="pre">magneticFieldStrengthTotal=None,</span> <span class="pre">electricalConductivity=None,</span> <span class="pre">inclinationEW=None,</span> <span class="pre">inclinationNS=None,</span> <span class="pre">inclinationX=None,</span> <span class="pre">inclinationY=None,</span> <span class="pre">inclinationResultant=None,</span> <span class="pre">magneticInclination=None,</span> <span class="pre">magneticDeclination=None,</span> <span class="pre">localFriction=None,</span> <span class="pre">poreRatio=None,</span> <span class="pre">temperature=None,</span> <span class="pre">porePressureU1=None,</span> <span class="pre">porePressureU2=None,</span> <span class="pre">porePressureU3=None,</span> <span class="pre">frictionRatio=None,</span> <span class="pre">id=None,</span> <span class="pre">location_x=None,</span> <span class="pre">location_y=None,</span> <span class="pre">offset_z=None,</span> <span class="pre">predrilled_z=None,</span> <span class="pre">a=0.8,</span> <span class="pre">vertical_datum=None,</span> <span class="pre">local_reference=None,</span> <span class="pre">quality_class=None,</span> <span class="pre">cone_penetrometer_type=None,</span> <span class="pre">cpt_standard=None,</span> <span class="pre">result_time=None,</span> <span class="pre">dataframe=None)</span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.bro_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.bro_dataframe_map">
+<span class="sig-name descname"><span class="pre">bro_dataframe_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'depth':</span> <span class="pre">'depth',</span> <span class="pre">'electric_cond':</span> <span class="pre">'electricalConductivity',</span> <span class="pre">'friction':</span> <span class="pre">'localFriction',</span> <span class="pre">'friction_nbr':</span> <span class="pre">'frictionRatio',</span> <span class="pre">'inclination_ew':</span> <span class="pre">'inclinationEW',</span> <span class="pre">'inclination_ns':</span> <span class="pre">'inclinationNS',</span> <span class="pre">'inclination_resultant':</span> <span class="pre">'inclinationResultant',</span> <span class="pre">'inclination_x':</span> <span class="pre">'inclinationX',</span> <span class="pre">'inclination_y':</span> <span class="pre">'inclinationY',</span> <span class="pre">'magnetic_declination':</span> <span class="pre">'magneticDeclination',</span> <span class="pre">'magnetic_inclination':</span> <span class="pre">'magneticInclination',</span> <span class="pre">'magnetic_strength_tot':</span> <span class="pre">'magneticFieldStrengthTotal',</span> <span class="pre">'magnetic_strength_x':</span> <span class="pre">'magneticFieldStrengthX',</span> <span class="pre">'magnetic_strength_y':</span> <span class="pre">'magneticFieldStrengthY',</span> <span class="pre">'magnetic_strength_z':</span> <span class="pre">'magneticFieldStrengthZ',</span> <span class="pre">'net_tip':</span> <span class="pre">'netConeResistance',</span> <span class="pre">'penetration_length':</span> <span class="pre">'penetrationLength',</span> <span class="pre">'pore_pressure_u1':</span> <span class="pre">'porePressureU1',</span> <span class="pre">'pore_pressure_u2':</span> <span class="pre">'porePressureU2',</span> <span class="pre">'pore_pressure_u3':</span> <span class="pre">'porePressureU3',</span> <span class="pre">'pore_ratio':</span> <span class="pre">'poreRatio',</span> <span class="pre">'qt':</span> <span class="pre">'correctedConeResistance',</span> <span class="pre">'temperature':</span> <span class="pre">'temperature',</span> <span class="pre">'time':</span> <span class="pre">'elapsedTime',</span> <span class="pre">'tip':</span> <span class="pre">'coneResistance'}</span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.bro_dataframe_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.find_availed_data_columns">
+<span class="sig-name descname"><span class="pre">find_availed_data_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.find_availed_data_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find which columns are not empty.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.get_all_data_from_bro">
+<span class="sig-name descname"><span class="pre">get_all_data_from_bro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_Element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.get_all_data_from_bro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract values from bro. From the xml elements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.parse_bro_xml">
+<span class="sig-name descname"><span class="pre">parse_bro_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xml</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.parse_bro_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populates class with xml data. No interpretation of results occurs
+at this function. This is simply reading the xml.
+TODO Replace iter by single search as iter can give multiple results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>xml</strong> – XML bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.parse_xml_location">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_xml_location</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tdata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.parse_xml_location" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return x y of location.
+TODO Don’t user iter
+:param tdata: XML bytes
+:returns: list – of x y string coordinates</p>
+<p>Will transform coordinates not in EPSG:28992</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.read_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.search_values_in_root">
+<span class="sig-name descname"><span class="pre">search_values_in_root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_item</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.search_values_in_root" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.transform_dict_fields_to_arrays">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform_dict_fields_to_arrays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.transform_dict_fields_to_arrays" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.water_measurement_type">
+<span class="sig-name descname"><span class="pre">water_measurement_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.water_measurement_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.xml_to_byte_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xml_to_byte_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroCPTReader.xml_to_byte_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens an xml-file and returns a byte-string
+:param fn: xml file name
+:return: byte-string of the xml file</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.bro_utils.</span></span><span class="sig-name descname"><span class="pre">XMLBroColumnValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penetrationLength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsedTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coneResistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correctedConeResistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">netConeResistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthX</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthY</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthZ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthTotal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electricalConductivity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationEW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationNS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationX</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationY</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationResultant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticInclination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticDeclination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localFriction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poreRatio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porePressureU1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porePressureU2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porePressureU3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frictionRatio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.coneResistance">
+<span class="sig-name descname"><span class="pre">coneResistance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.coneResistance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.correctedConeResistance">
+<span class="sig-name descname"><span class="pre">correctedConeResistance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.correctedConeResistance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.depth">
+<span class="sig-name descname"><span class="pre">depth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.depth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.elapsedTime">
+<span class="sig-name descname"><span class="pre">elapsedTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.elapsedTime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.electricalConductivity">
+<span class="sig-name descname"><span class="pre">electricalConductivity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.electricalConductivity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.frictionRatio">
+<span class="sig-name descname"><span class="pre">frictionRatio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.frictionRatio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationEW">
+<span class="sig-name descname"><span class="pre">inclinationEW</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationEW" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationNS">
+<span class="sig-name descname"><span class="pre">inclinationNS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationNS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationResultant">
+<span class="sig-name descname"><span class="pre">inclinationResultant</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationResultant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationX">
+<span class="sig-name descname"><span class="pre">inclinationX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationY">
+<span class="sig-name descname"><span class="pre">inclinationY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.inclinationY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.localFriction">
+<span class="sig-name descname"><span class="pre">localFriction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.localFriction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticDeclination">
+<span class="sig-name descname"><span class="pre">magneticDeclination</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticDeclination" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthTotal">
+<span class="sig-name descname"><span class="pre">magneticFieldStrengthTotal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthTotal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthX">
+<span class="sig-name descname"><span class="pre">magneticFieldStrengthX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthY">
+<span class="sig-name descname"><span class="pre">magneticFieldStrengthY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthZ">
+<span class="sig-name descname"><span class="pre">magneticFieldStrengthZ</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticFieldStrengthZ" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticInclination">
+<span class="sig-name descname"><span class="pre">magneticInclination</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.magneticInclination" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.netConeResistance">
+<span class="sig-name descname"><span class="pre">netConeResistance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.netConeResistance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.penetrationLength">
+<span class="sig-name descname"><span class="pre">penetrationLength</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.penetrationLength" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.porePressureU1">
+<span class="sig-name descname"><span class="pre">porePressureU1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.porePressureU1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.porePressureU2">
+<span class="sig-name descname"><span class="pre">porePressureU2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.porePressureU2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.porePressureU3">
+<span class="sig-name descname"><span class="pre">porePressureU3</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.porePressureU3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.poreRatio">
+<span class="sig-name descname"><span class="pre">poreRatio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.poreRatio" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.temperature">
+<span class="sig-name descname"><span class="pre">temperature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues.temperature" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.bro_utils.</span></span><span class="sig-name descname"><span class="pre">XMLBroFullData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penetrationLength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elapsedTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coneResistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correctedConeResistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">netConeResistance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthX</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthY</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthZ</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticFieldStrengthTotal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electricalConductivity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationEW</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationNS</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationX</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationY</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclinationResultant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticInclination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magneticDeclination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localFriction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poreRatio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porePressureU1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porePressureU2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">porePressureU3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frictionRatio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset_z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predrilled_z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertical_datum</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_reference</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality_class</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cone_penetrometer_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_standard</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataframe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues" title="geolib_plus.bro_xml_cpt.bro_utils.XMLBroColumnValues"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLBroColumnValues</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.a" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.columns_string_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">columns_string_list</span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.columns_string_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.cone_penetrometer_type">
+<span class="sig-name descname"><span class="pre">cone_penetrometer_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.cone_penetrometer_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.cpt_standard">
+<span class="sig-name descname"><span class="pre">cpt_standard</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.cpt_standard" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.dataframe">
+<span class="sig-name descname"><span class="pre">dataframe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.dataframe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.local_reference">
+<span class="sig-name descname"><span class="pre">local_reference</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.local_reference" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.location_x">
+<span class="sig-name descname"><span class="pre">location_x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.location_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.location_y">
+<span class="sig-name descname"><span class="pre">location_y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.location_y" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.offset_z">
+<span class="sig-name descname"><span class="pre">offset_z</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.offset_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.predrilled_z">
+<span class="sig-name descname"><span class="pre">predrilled_z</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.predrilled_z" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.quality_class">
+<span class="sig-name descname"><span class="pre">quality_class</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.quality_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.result_time">
+<span class="sig-name descname"><span class="pre">result_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.result_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.vertical_datum">
+<span class="sig-name descname"><span class="pre">vertical_datum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_utils.XMLBroFullData.vertical_datum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.bro_xml_cpt.bro_xml_cpt">
+<span id="geolib-plus-bro-xml-cpt-bro-xml-cpt-module"></span><h2>geolib_plus.bro_xml_cpt.bro_xml_cpt module<a class="headerlink" href="#module-geolib_plus.bro_xml_cpt.bro_xml_cpt" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.bro_xml_cpt.</span></span><span class="sig-name descname"><span class="pre">BroXmlCpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penetration_length:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates:</span> <span class="pre">~typing.Optional[~typing.List]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_reference_level:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_to_reference:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tip:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">friction_nbr:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_stress:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effective_stress:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwp:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qt:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Qtn:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Qtncs:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Fr:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">IC:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vs:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G0:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E0:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permeability:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">poisson:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damping:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_density:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_pressure_u1:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_pressure_u2:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_pressure_u3:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lithology:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">litho_points:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lithology_merged:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_merged:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_merged:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertical_datum:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_reference:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_x:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_y:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_ns:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_ew:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination_resultant:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_tip:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pore_ratio:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tip_nbr:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_weight_measured:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pwp_ini:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_pressure_measured:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effective_pressure_measured:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">electric_cond:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_x:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_y:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_z:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_strength_tot:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_inclination:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">magnetic_declination:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predrilled_z:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">undefined_depth:</span> <span class="pre">~typing.Optional[float]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_standard:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality_class:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt_type:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_time:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water_measurement_type:</span> <span class="pre">~typing.Optional[str]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">litho_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cohesion_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fr_angle_NEN:</span> <span class="pre">~typing.Optional[~typing.Iterable]</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_settings:</span> <span class="pre">~geolib_plus.plot_settings.PlotSettings</span> <span class="pre">=</span> <span class="pre">&lt;geolib_plus.plot_settings.PlotSettings</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">9.81</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Pa:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">100.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCPT</span></code></a></p>
+<p>Class that contains gets the reader and contains pre-processing functions.
+That can be used to modify the raw data.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.drop_duplicate_depth_values">
+<span class="sig-name descname"><span class="pre">drop_duplicate_depth_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.drop_duplicate_depth_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates fields by removing penetration_length that are duplicate.
+This means that all the properties in __list_of_array_values will be updated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.get_cpt_reader">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_cpt_reader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.CptReader" title="geolib_plus.cpt_base_model.CptReader"><span class="pre">CptReader</span></a></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.get_cpt_reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.has_points_with_error">
+<span class="sig-name descname"><span class="pre">has_points_with_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.has_points_with_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>A routine which checks whether the data is free of points with error.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>If the gef cpt data is free of error flags</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.remove_points_with_error">
+<span class="sig-name descname"><span class="pre">remove_points_with_error</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.bro_xml_cpt.BroXmlCpt.remove_points_with_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates fields by removing depths that contain nan values.
+This means that all the properties in __list_of_array_values will be updated.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-geolib_plus.bro_xml_cpt.validate_bro">
+<span id="geolib-plus-bro-xml-cpt-validate-bro-module"></span><h2>geolib_plus.bro_xml_cpt.validate_bro module<a class="headerlink" href="#module-geolib_plus.bro_xml_cpt.validate_bro" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.validate_bro.HTTPSResolver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.validate_bro.</span></span><span class="sig-name descname"><span class="pre">HTTPSResolver</span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.validate_bro.HTTPSResolver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resolver</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.validate_bro.HTTPSResolver.resolve">
+<span class="sig-name descname"><span class="pre">resolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.validate_bro.HTTPSResolver.resolve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method to resolve an external source by
+<code class="docutils literal notranslate"><span class="pre">system_url</span></code> and <code class="docutils literal notranslate"><span class="pre">public_id</span></code>.  The third argument is an
+opaque context object.</p>
+<p>Return the result of one of the <code class="docutils literal notranslate"><span class="pre">resolve_*()</span></code> methods.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.validate_bro.ValidatePreProcessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.validate_bro.</span></span><span class="sig-name descname"><span class="pre">ValidatePreProcessing</span></span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.validate_bro.ValidatePreProcessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.validate_bro.ValidatePreProcessing.validate_length_and_samples_cpt">
+<span class="sig-name descname"><span class="pre">validate_length_and_samples_cpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.validate_bro.ValidatePreProcessing.validate_length_and_samples_cpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs initial checks regarding the availability of
+data in the cpt. Returns a string that contains all the
+error messages.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.validate_bro.validate_bro">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.validate_bro.</span></span><span class="sig-name descname"><span class="pre">validate_bro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema_url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bro_xml_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.validate_bro.validate_bro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.bro_xml_cpt.validate_bro.validate_bro_cpt">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.bro_xml_cpt.validate_bro.</span></span><span class="sig-name descname"><span class="pre">validate_bro_cpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bro_xml_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.bro_xml_cpt.validate_bro.validate_bro_cpt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-geolib_plus.bro_xml_cpt">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-geolib_plus.bro_xml_cpt" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.html" title="Previous document">geolib_plus package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.gef_cpt.html" title="Next document">geolib_plus.gef_cpt package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Developer API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html">geolib_plus.plot_plotting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html">geolib_plus.parameters_for_soil_models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/tutorials/overview.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Developer API</a><ul>
+  <li><a href="geolib_plus.html">geolib_plus package</a><ul>
+      <li>Previous: <a href="geolib_plus.html" title="previous chapter">geolib_plus package</a></li>
+      <li>Next: <a href="geolib_plus.gef_cpt.html" title="next chapter">geolib_plus.gef_cpt package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

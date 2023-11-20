@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tutorial 2: Fit an extreme value distribution for the water level &#8212; geolib+ 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-2-fit-an-extreme-value-distribution-for-the-water-level">
+<h1>Tutorial 2: Fit an extreme value distribution for the water level<a class="headerlink" href="#tutorial-2-fit-an-extreme-value-distribution-for-the-water-level" title="Permalink to this heading">¶</a></h1>
+<p>This example shows how to fit an extreme value probability distribution from data of water levels and their return periods.
+This notebook consists of the following steps:</p>
+<ol class="arabic simple">
+<li><p>Importing packages and data</p></li>
+<li><p>Importing the data from an external source</p></li>
+<li><p>Preprocessing the data</p></li>
+<li><p>Visually checking the data</p></li>
+<li><p>Fitting a Generalized Extreme Value (GEV) distribution</p></li>
+<li><p>Optimizing the distribution parameters using Python</p></li>
+<li><p>Plotting the result</p></li>
+<li><p>Force fitting a Gumbel distribution</p></li>
+</ol>
+<section id="step-1-importing-packages-and-data">
+<h2>Step 1: Importing packages and data<a class="headerlink" href="#step-1-importing-packages-and-data" title="Permalink to this heading">¶</a></h2>
+<p>In the next cell, we import the python packages necessary to run this tutorial.
+We also print the versions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">genextreme</span> <span class="k">as</span> <span class="n">gev</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;numpy version </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">__version__</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scipy version </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">__version__</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pandas version </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">__version__</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>numpy version 1.26.2
+scipy version 1.11.4
+pandas version 2.1.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-2-importing-the-data-from-external-source">
+<h2>Step 2: Importing the data from external source<a class="headerlink" href="#step-2-importing-the-data-from-external-source" title="Permalink to this heading">¶</a></h2>
+<p>To import the data, we specify the file path, and import the file with the data.
+The data is automatically stored in a Pandas Dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use Pandas to import the csv file. The headers are taken as column names</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../_static/input_waterlevels_returnperiod.txt&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Use Pandas to import the csv file. The headers are taken as column names</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../_static/input_waterlevels_returnperiod.txt&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\parsers\readers.py:948,</span> in <span class="ni">read_csv</span><span class="nt">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)</span>
+<span class="g g-Whitespace">    </span><span class="mi">935</span> <span class="n">kwds_defaults</span> <span class="o">=</span> <span class="n">_refine_defaults_read</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">936</span>     <span class="n">dialect</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">937</span>     <span class="n">delimiter</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">944</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">945</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">946</span> <span class="n">kwds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds_defaults</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">948</span> <span class="k">return</span> <span class="n">_read</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\parsers\readers.py:611,</span> in <span class="ni">_read</span><span class="nt">(filepath_or_buffer, kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">608</span> <span class="n">_validate_names</span><span class="p">(</span><span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">610</span> <span class="c1"># Create the parser.</span>
+<span class="ne">--&gt; </span><span class="mi">611</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">TextFileReader</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">613</span> <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">or</span> <span class="n">iterator</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">614</span>     <span class="k">return</span> <span class="n">parser</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\parsers\readers.py:1448,</span> in <span class="ni">TextFileReader.__init__</span><span class="nt">(self, f, engine, **kwds)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1445</span>     <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1447</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">IOHandles</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">-&gt; </span><span class="mi">1448</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_engine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\parsers\readers.py:1705,</span> in <span class="ni">TextFileReader._make_engine</span><span class="nt">(self, f, engine)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1703</span>     <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1704</span>         <span class="n">mode</span> <span class="o">+=</span> <span class="s2">&quot;b&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1705</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1706</span>     <span class="n">f</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1707</span>     <span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1708</span>     <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1709</span>     <span class="n">compression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1710</span>     <span class="n">memory_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memory_map&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1711</span>     <span class="n">is_text</span><span class="o">=</span><span class="n">is_text</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1712</span>     <span class="n">errors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1713</span>     <span class="n">storage_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1714</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1715</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1716</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
+
+<span class="nn">File D:\buildAgent\work\ca49001b42bc6873\geoLibPlusCondaEnv\lib\site-packages\pandas\io\common.py:863,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">858</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">859</span>     <span class="c1"># Check whether the filename is to be opened in binary mode.</span>
+<span class="g g-Whitespace">    </span><span class="mi">860</span>     <span class="c1"># Binary mode does not support &#39;encoding&#39; and &#39;newline&#39;.</span>
+<span class="g g-Whitespace">    </span><span class="mi">861</span>     <span class="k">if</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">and</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">862</span>         <span class="c1"># Encoding</span>
+<span class="ne">--&gt; </span><span class="mi">863</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">864</span>             <span class="n">handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">865</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">866</span>             <span class="n">encoding</span><span class="o">=</span><span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">867</span>             <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">868</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">869</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">870</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">871</span>         <span class="c1"># Binary mode</span>
+<span class="g g-Whitespace">    </span><span class="mi">872</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;../../_static/input_waterlevels_returnperiod.txt&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-3-preprocessing-of-the-data">
+<h2>Step 3: Preprocessing of the data.<a class="headerlink" href="#step-3-preprocessing-of-the-data" title="Permalink to this heading">¶</a></h2>
+<p>To fit a probability distribution, we need to do some preprocessing.
+We need to calculate a probability of exceedance from the return period.</p>
+<p>The frequency of exceedance is $$f = 1/T$$ per year, and is calculated for each water level $h$.</p>
+<p>The probability of exceedance is calculated as follows: $$P(h&gt;H)=1-\exp(-f)$$ to prevent probabilities larger than 1 for frequencies larger than 1 per year.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute the freqency per yearand add it to the dataframe</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;FrequencyPerYear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ReturnPeriod&#39;</span><span class="p">]</span>
+<span class="c1"># Compute the exceedance probabilities from the frequency. </span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;ExceedanceProbability&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;FrequencyPerYear&#39;</span><span class="p">])</span>
+<span class="c1"># Sort the water levels in ascending order</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ReturnPeriod</th>
+      <th>WaterLevel</th>
+      <th>FrequencyPerYear</th>
+      <th>ExceedanceProbability</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>3.50</td>
+      <td>1.000000</td>
+      <td>0.632121</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>10</td>
+      <td>5.06</td>
+      <td>0.100000</td>
+      <td>0.095163</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>30</td>
+      <td>5.64</td>
+      <td>0.033333</td>
+      <td>0.032784</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>50</td>
+      <td>5.83</td>
+      <td>0.020000</td>
+      <td>0.019801</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>100</td>
+      <td>6.03</td>
+      <td>0.010000</td>
+      <td>0.009950</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>300</td>
+      <td>6.26</td>
+      <td>0.003333</td>
+      <td>0.003328</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>1000</td>
+      <td>6.44</td>
+      <td>0.001000</td>
+      <td>0.001000</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>3000</td>
+      <td>6.56</td>
+      <td>0.000333</td>
+      <td>0.000333</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>10000</td>
+      <td>6.67</td>
+      <td>0.000100</td>
+      <td>0.000100</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>30000</td>
+      <td>6.76</td>
+      <td>0.000033</td>
+      <td>0.000033</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>100000</td>
+      <td>6.87</td>
+      <td>0.000010</td>
+      <td>0.000010</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="step-4-visually-checking-the-data">
+<h2>Step 4: Visually checking the data<a class="headerlink" href="#step-4-visually-checking-the-data" title="Permalink to this heading">¶</a></h2>
+<p>Now we have the data points with the water level and the exceedance probability for that water level. We plot the datapoints on a logarithmic y-scale to judge if the data is logical.</p>
+<p>The data in this example seems logical, viz. the exceedance probabilities monotonously decrease with the waterlevel. Morover, we observe that the last 5 points are rather linear (on a logarithmic scale), and there seems to be a bend/kink in the data around a water level of 6.25 m.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_waterdata</span><span class="p">(</span><span class="n">ax</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Create a funtion to plot the waterdata, so we can later acess it again</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">],</span> 
+                <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ExceedanceProbability&#39;</span><span class="p">],</span> 
+                <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data Points&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Water Level h&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Probability of exceedance&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">()</span>
+<span class="n">plot_waterdata</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/cb74e796880c2a55025a420b76d020368360af05ba2259d59a04e0346567d9aa.png" src="../../../../_images/cb74e796880c2a55025a420b76d020368360af05ba2259d59a04e0346567d9aa.png" />
+</div>
+</div>
+</section>
+<section id="step-5-fitting-a-generalized-extreme-value-gev-distribution">
+<h2>Step 5: Fitting a Generalized Extreme Value (GEV) distribution<a class="headerlink" href="#step-5-fitting-a-generalized-extreme-value-gev-distribution" title="Permalink to this heading">¶</a></h2>
+<p>Now we fit an extreme value distribution. We choose the Generalized Extreme Value distribution.</p>
+<p>We want to set the parameters of a GEV distribution such that the cdf fits the data points. We can make a few tries and see how this works out. With a few manual iterations, the result would not too bad after all.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_GEV_cdf</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">distribution_parameters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Create a funtion to plot the cdf, so we can later acess it again</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Define a range of water levels for our fits</span>
+    <span class="c1"># Base the bounds on the minimum and maximum of the data points.</span>
+    <span class="n">h_plotting_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">*</span><span class="mf">0.9</span><span class="p">,</span> 
+                                   <span class="n">df</span><span class="p">[</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">*</span><span class="mf">1.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># For each guess, we calculate the cdf values for the given range</span>
+    <span class="n">p_exc_fit</span> <span class="o">=</span> <span class="n">gev</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">h_plotting_range</span><span class="p">,</span> 
+                        <span class="n">c</span> <span class="o">=</span> <span class="n">distribution_parameters</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">],</span> 
+                        <span class="n">loc</span> <span class="o">=</span> <span class="n">distribution_parameters</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">],</span> 
+                        <span class="n">scale</span> <span class="o">=</span> <span class="n">distribution_parameters</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">])</span>
+
+    <span class="c1"># And plot the exceedance probability = 1 - cdf </span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">h_plotting_range</span><span class="p">,</span> 
+                 <span class="mi">1</span><span class="o">-</span><span class="n">p_exc_fit</span><span class="p">,</span> 
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fitted GEV (shape=</span><span class="si">{:.3g}</span><span class="s1">, loc=</span><span class="si">{:.3g}</span><span class="s1">, scale=</span><span class="si">{:.3g}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                     <span class="n">distribution_parameters</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">],</span>
+                     <span class="n">distribution_parameters</span><span class="p">[</span><span class="s1">&#39;location&#39;</span><span class="p">],</span>
+                     <span class="n">distribution_parameters</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]))</span>
+            
+<span class="c1"># Re-instantiate the previous figure</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">()</span>
+<span class="n">plot_waterdata</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+
+<span class="c1"># We define different guesses for the shape, location, and scale parameter. </span>
+<span class="c1"># Note we have a Frechet (shape&lt;1,), Gumbel (shape=0), and Weibull (shape&gt;1). </span>
+<span class="c1"># Note that the opposite convention of the sign of the shape parameter in scipy, compared </span>
+<span class="c1"># to several other sources (e.g. Wikipedia) and software packages (Probabilistic Toolkit).</span>
+<span class="n">distribution_parameters_list</span> <span class="o">=</span> <span class="p">[</span> 
+    <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="mf">5.8</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">:</span><span class="mf">0.04</span><span class="p">},</span> <span class="c1"># Frechet</span>
+    <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span><span class="mf">0.00</span><span class="p">,</span> <span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="mf">5.0</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">},</span>   <span class="c1"># Gumbel</span>
+    <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span><span class="mf">0.25</span><span class="p">,</span> <span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="mf">3.0</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">:</span><span class="mf">1.0</span><span class="p">}]</span>   <span class="c1"># Weibull</span>
+                                  
+<span class="c1"># For each guess (distribution_parameter_set in distribution_parameter_set_list), </span>
+<span class="c1"># calculate the cdf and plot it.</span>
+<span class="k">for</span> <span class="n">distribution_parameters</span> <span class="ow">in</span> <span class="n">distribution_parameters_list</span><span class="p">:</span>
+    <span class="n">plot_GEV_cdf</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">distribution_parameters</span><span class="p">)</span>
+
+<span class="c1"># Adjust the limits, and add labels</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">1e-6</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Data and fitted GEV Distributions&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;GEV-fit.png&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Note the opposite convention of the sign of the shape parameter c in scipy, compared to several other sources (e.g. Wikipedia) and software packages (Probabilistic Toolkit).&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/ef9e85e4ec9fecea5d7b3b73c526acc73451dc2ebc5c0ab6907d2d6bc8be3627.png" src="../../../../_images/ef9e85e4ec9fecea5d7b3b73c526acc73451dc2ebc5c0ab6907d2d6bc8be3627.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Note the opposite convention of the sign of the shape parameter c in scipy, compared to several other sources (e.g. Wikipedia) and software packages (Probabilistic Toolkit).
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-6-optimizing-the-distribution-parameters-using-python">
+<h2>Step 6: Optimizing the distribution parameters using Python<a class="headerlink" href="#step-6-optimizing-the-distribution-parameters-using-python" title="Permalink to this heading">¶</a></h2>
+<p>To optimize the distribution parameters, we create a loss function <code class="docutils literal notranslate"><span class="pre">square_log_err</span></code>. We define the loss as the squared difference between the $P_{exc}$ of the fitted GEV, and the $P_{exc}$ of the data points. The loss depends on the distribution parameters of the GEV. We take the logarithmic value of the differense, to prevent data points in the tail having a negligible weigth.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">scipy.minimize</span></code> function is used with an initial guess and bounds for the distribution parameters to get the best combination of parameters, for which the squared difference is the smallest.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">square_log_err</span><span class="p">(</span><span class="n">params</span><span class="p">,):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function defines the sum of the squared log-differences </span>
+<span class="sd">    between P_exc of the fitted GEV, and the P_exc of the data points.</span>
+<span class="sd">    Note that we use gev.sf as the survival function (=1-cdf), </span>
+<span class="sd">    and gev.logsf as the log of the survival function (=np.log(1-cdf)), </span>
+<span class="sd">    because it is numerically more accurate with values close to 0.0/1.0. </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">shape</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">params</span>
+    <span class="n">data_h</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:]</span>
+    <span class="n">data_p</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ExceedanceProbability&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:]</span>
+    <span class="n">log_pexc_fit</span> <span class="o">=</span> <span class="n">gev</span><span class="o">.</span><span class="n">logsf</span><span class="p">(</span><span class="n">data_h</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+    <span class="n">log_err</span> <span class="o">=</span>  <span class="n">log_pexc_fit</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">data_p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">log_err</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># The minimization needs an initial guess for the parameters</span>
+<span class="c1"># and bounds for the distribution parameters.</span>
+<span class="n">initial_guess</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">),(</span><span class="mf">0.01</span><span class="p">,</span><span class="mi">5</span><span class="p">)]</span>
+
+<span class="c1"># Minimize squared difference to optimize the fit of the GEV distribution</span>
+<span class="n">result_gev</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">square_log_err</span><span class="p">,</span> <span class="n">initial_guess</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+
+<span class="c1"># Extract the fitted parameters</span>
+<span class="n">fitted_shape</span><span class="p">,</span> <span class="n">fitted_location</span><span class="p">,</span> <span class="n">fitted_scale</span> <span class="o">=</span> <span class="n">result_gev</span><span class="o">.</span><span class="n">x</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted GEV: Shape, Location, Scale: </span><span class="si">{:.3g}</span><span class="s2"> </span><span class="si">{:.3g}</span><span class="s2"> </span><span class="si">{:.3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">fitted_shape</span><span class="p">,</span> <span class="n">fitted_location</span><span class="p">,</span> <span class="n">fitted_scale</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Note that for use in several other software packages (e.g. </span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="s2">&quot;Probabilistic Toolkit), the opposite convention of the sign of </span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="s2">&quot;the shape parameter c is used.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fitted GEV: Shape, Location, Scale: 0.231 3.86 0.743
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Note that for use in several other software packages (e.g. 
+Probabilistic Toolkit), the opposite convention of the sign of 
+the shape parameter c is used.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-7-plot-the-result">
+<h2>Step 7: Plot the result<a class="headerlink" href="#step-7-plot-the-result" title="Permalink to this heading">¶</a></h2>
+<p>We show the cdf of the GEV with the optimized parameters in a graph</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Re-instantiate the figure with water data</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">()</span>
+<span class="n">plot_waterdata</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">distribution_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span><span class="n">fitted_shape</span><span class="p">,</span> 
+                           <span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="n">fitted_location</span><span class="p">,</span> 
+                           <span class="s1">&#39;scale&#39;</span><span class="p">:</span><span class="n">fitted_scale</span><span class="p">}</span>
+<span class="n">plot_GEV_cdf</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">distribution_parameters</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../../_images/ed8dee5f30bae196834724263cce27a394373d6aeeafcf96d06b911dcba4df8c.png" src="../../../../_images/ed8dee5f30bae196834724263cce27a394373d6aeeafcf96d06b911dcba4df8c.png" />
+</div>
+</div>
+</section>
+<section id="step-8-force-fitting-a-gumbel-distribution">
+<h2>Step 8: Force fitting a Gumbel distribution<a class="headerlink" href="#step-8-force-fitting-a-gumbel-distribution" title="Permalink to this heading">¶</a></h2>
+<p>Finally, we consider if we can fit a Gumbel distrubtion using only the last 5 data points. The main reason is that these last 5 points seem rather linear on a log-scale. A Gumbel distribution is a special occasion of a GEV, which has shape parameter 0, and therefore is linear on logarithmic scale. We might want to do this if only the tail of the distribution is important.</p>
+<p>A Gumbel distribution has shape parameter 0, so we put this as a constraint for the mimization by adjusting the bounds.</p>
+<p>Note that we also adjust the loss function, so it uses only the last 5 points!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For a Gumbel distribution, the shape parameter = 0, so adjust the bounds</span>
+<span class="n">initial_guess</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+<span class="n">bounds</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">),(</span><span class="mf">0.01</span><span class="p">,</span><span class="mi">1</span><span class="p">)]</span>
+
+<span class="k">def</span> <span class="nf">square_log_err</span><span class="p">(</span><span class="n">params</span><span class="p">,):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Define the logarithmic difference again. </span>
+<span class="sd">    However, note that only the last 5 datapoints are used</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">shape</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">params</span>
+    <span class="n">data_h</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span>
+    <span class="n">data_p</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ExceedanceProbability&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span>
+    <span class="n">log_pexc_fit</span> <span class="o">=</span> <span class="n">gev</span><span class="o">.</span><span class="n">logsf</span><span class="p">(</span><span class="n">data_h</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">loc</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+    <span class="n">log_err</span> <span class="o">=</span>  <span class="n">log_pexc_fit</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">data_p</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">log_err</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Make the fit</span>
+<span class="n">result_gumbel</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">square_log_err</span><span class="p">,</span> <span class="n">initial_guess</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
+<span class="n">fitted_shape_gumbel</span><span class="p">,</span> <span class="n">fitted_location_gumbel</span><span class="p">,</span> <span class="n">fitted_scale_gumbel</span> <span class="o">=</span> <span class="n">result_gumbel</span><span class="o">.</span><span class="n">x</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fitted Gumbel: Shape, Location, Scale: </span><span class="si">{:.3g}</span><span class="s2"> </span><span class="si">{:.3g}</span><span class="s2"> </span><span class="si">{:.3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">fitted_shape_gumbel</span><span class="p">,</span> <span class="n">fitted_location_gumbel</span><span class="p">,</span> <span class="n">fitted_scale_gumbel</span><span class="p">))</span>
+
+<span class="c1"># Re-instantiate the figure with water data</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">()</span>
+<span class="n">plot_waterdata</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">distribution_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;shape&#39;</span><span class="p">:</span><span class="n">fitted_shape_gumbel</span><span class="p">,</span> 
+                           <span class="s1">&#39;location&#39;</span><span class="p">:</span><span class="n">fitted_location_gumbel</span><span class="p">,</span> 
+                           <span class="s1">&#39;scale&#39;</span><span class="p">:</span><span class="n">fitted_scale_gumbel</span><span class="p">}</span>
+<span class="n">plot_GEV_cdf</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">distribution_parameters</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fitted Gumbel: Shape, Location, Scale: 0 5.81 0.0923
+</pre></div>
+</div>
+<img alt="../../../../_images/4bcd7703323c7647c65b6d1922e65010caa25bf659c5a88ba3814090a19af78a.png" src="../../../../_images/4bcd7703323c7647c65b6d1922e65010caa25bf659c5a88ba3814090a19af78a.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../../index.html">
+    <img class="logo" src="../../../../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user/install.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev/overview.html">Developer API</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/tutorials/overview.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

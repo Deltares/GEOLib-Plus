@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tutorial derive model parameters for sands using relative density input &#8212; geolib+ 0.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Create a D-Foundations soil profile using GEOLIB+" href="tutorial_connecting_dfoundations.html" />
+    <link rel="prev" title="Tutorial Defining and calculating parameters for the Hardening Soil model" href="tutorial_hardening_soil_parameters.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tutorial_hardening_soil_parameters.html" title="Previous document">Tutorial Defining and calculating parameters for the Hardening Soil model</a>
+        </li>
+        <li>
+          <a href="tutorial_connecting_dfoundations.html" title="Next document">Create a D-Foundations soil profile using GEOLIB+</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-derive-model-parameters-for-sands-using-relative-density-input">
+<h1>Tutorial derive model parameters for sands using relative density input<a class="headerlink" href="#tutorial-derive-model-parameters-for-sands-using-relative-density-input" title="Permalink to this heading">¶</a></h1>
+<p>Part of the GEOLIB+ package is also a module that can determine certain parameters
+used as input of Relative Density(RD). To do that the user must used the
+<a class="reference internal" href="../../dev/geolib_plus.parameters_for_soil_models.html#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.calculate_using_RD" title="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.calculate_using_RD"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_using_RD()</span></code></a>
+method to initialize the RD class and calculate all relevant parameters. The method
+is pretty straight forward as it can be seen in the code block bellow. Note that relative density
+is expressed as a percentage.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.relative_density_correlated_parametes</span> <span class="kn">import</span> <span class="n">RelativeDensityCorrelatedParameters</span>
+<span class="c1"># define relative density as float</span>
+<span class="n">RD</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="c1"># create class</span>
+<span class="n">RD_parameters</span> <span class="o">=</span> <span class="n">RelativeDensityCorrelatedParameters</span><span class="o">.</span><span class="n">calculate_using_RD</span><span class="p">(</span><span class="n">RD</span><span class="p">)</span>
+<span class="c1"># check expectations</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">RD_parameters</span><span class="o">.</span><span class="n">gamma_unsat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">RD_parameters</span><span class="o">.</span><span class="n">gamma_sat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">RD_parameters</span><span class="o">.</span><span class="n">E_ur_ref</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The user can also choose an array input for the value of relative density. That would lead also to array outputs.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="kn">from</span> <span class="nn">geolib_plus.relative_density_correlated_parametes</span> <span class="kn">import</span> <span class="n">RelativeDensityCorrelatedParameters</span>
+ <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+ <span class="c1"># define relative density as an array input</span>
+ <span class="n">RD</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">80</span><span class="p">,</span> <span class="mi">60</span><span class="p">])</span>
+ <span class="c1"># create class</span>
+ <span class="n">RD_parameters_array</span> <span class="o">=</span> <span class="n">RelativeDensityCorrelatedParameters</span><span class="o">.</span><span class="n">calculate_using_RD</span><span class="p">(</span><span class="n">RD</span><span class="p">)</span>
+<span class="c1"># check expectations</span>
+ <span class="nb">print</span><span class="p">(</span><span class="n">RD_parameters</span><span class="o">.</span><span class="n">gamma_unsat</span><span class="p">)</span>
+ <span class="nb">print</span><span class="p">(</span><span class="n">RD_parameters</span><span class="o">.</span><span class="n">gamma_sat</span><span class="p">)</span>
+ <span class="nb">print</span><span class="p">(</span><span class="n">RD_parameters</span><span class="o">.</span><span class="n">E_ur_ref</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tutorial_hardening_soil_parameters.html" title="Previous document">Tutorial Defining and calculating parameters for the Hardening Soil model</a>
+        </li>
+        <li>
+          <a href="tutorial_connecting_dfoundations.html" title="Next document">Create a D-Foundations soil profile using GEOLIB+</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/overview.html">Developer API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tutorial_setup_cpt.html">Tutorial setup Cpt class interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_cpt_interpretation.html">Tutorial Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_cpt_plotting.html">Tutorial Cpt plotting using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_custom_cpt_interpretation.html">Tutorial  Custom Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_soft_soil_parameters.html">Tutorial defining and calculating parameters for the Soft Soil Creep model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_hardening_soil_parameters.html">Tutorial Defining and calculating parameters for the Hardening Soil model</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial derive model parameters for sands using relative density input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_connecting_dfoundations.html">Create a D-Foundations soil profile using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_nkt.html">Tutorial determine Nkt values using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_shansep_parameters.html">Tutorial determine Shansep parameters using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_state_parameters.html">Tutorial determine state parameters using GEOLIB+</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Tutorials</a><ul>
+      <li>Previous: <a href="tutorial_hardening_soil_parameters.html" title="previous chapter">Tutorial Defining and calculating parameters for the Hardening Soil model</a></li>
+      <li>Next: <a href="tutorial_connecting_dfoundations.html" title="next chapter">Create a D-Foundations soil profile using GEOLIB+</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
