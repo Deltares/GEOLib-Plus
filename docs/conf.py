@@ -38,7 +38,6 @@ extensions = [
     "sphinx.ext.imgmath",
     "releases",
     "myst_nb",
-    "sphinx_math_dollar",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
