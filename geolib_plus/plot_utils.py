@@ -63,9 +63,17 @@ def set_textbox_at_thresholds(
             or location == "bottom_left"
             or location == "bottom_middle"
         ):
-            label_text = r"$\longleftarrow$" + "{0:.2f}".format(max_data[idx])
+            if max_data[idx] <= 100:
+                label_text = r"$\longleftarrow$" + "{0:.2f}".format(max_data[idx])
+            else:
+                # scientific notation
+                label_text = r"$\longleftarrow$" + "{0:.2e}".format(max_data[idx])
         else:
-            label_text = str(max_data[idx]) + r"$\longrightarrow$"
+            if max_data[idx] <= 100:
+                label_text = str(max_data[idx]) + r"$\longrightarrow$"
+            else:
+                # scientific notation
+                label_text = "{0:.2e}".format(max_data[idx]) + r"$\longrightarrow$"
 
         # generate text box
         boxes = [
