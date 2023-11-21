@@ -48,4 +48,3 @@ class TestPlotSettings:
         for key in present_keys:
             assert key in self.settings.general_settings["graph_settings"]
         assert data_keys[4] not in self.settings.general_settings["graph_settings"]
-
