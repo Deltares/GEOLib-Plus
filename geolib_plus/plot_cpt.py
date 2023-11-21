@@ -141,7 +141,7 @@ def trim_cpt_data_on_vertical_limits(
     if settings["data_key"] == "friction_nbr":
         data = cpt.friction_nbr
     if settings["data_key"] == "inv_friction_nbr":
-        data = cpt.tip / cpt.friction
+        data = np.nan_to_num(cpt.tip / cpt.friction, posinf=1e10)
     if settings["data_key"] == "water":
         data = cpt.water
 
