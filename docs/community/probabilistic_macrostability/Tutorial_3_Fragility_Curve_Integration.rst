@@ -126,7 +126,8 @@ Specify the fragility curve names and locations. Instantiate a ``DStabilityFragi
         FC = DStabilityFragilityCurve(fc_label, filename)
         FC_list.append( FC )
 
-#### Plot the fragility points and the extrapolated fragility curve
+Plot the fragility points and the extrapolated fragility curve
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -183,10 +184,10 @@ Specify the fragility curve names and locations. Instantiate a ``DStabilityFragi
 --------------
 
 Now we integrate the fragility curve with the probability density of water level.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Here we assume the water level follows a Gumbel distribution.
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
 .. code:: ipython3
 
@@ -220,7 +221,7 @@ Here we assume the water level follows a Gumbel distribution.
 
 
 Calculating the probability of exceedence for range of H
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. math ::
 
