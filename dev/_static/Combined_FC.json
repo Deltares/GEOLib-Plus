@@ -1,0 +1,3346 @@
+{
+  "Calculations": [
+    {
+      "Label": "FC combined",
+      "Beta": 2.2595367636416643,
+      "WaterLevel": 8.0,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5623739474724297
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.301637875125123
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4246032057490356
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03717128909734978
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6411556351064542
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.25446982578749,
+      "WaterLevel": 8.05,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.562269823233896
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30172879227579047
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4245536488253898
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03732728371890762
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.641227927457571
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.2494028879333148,
+      "WaterLevel": 8.100000000000001,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5621656696212554
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3018196945492555
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4245040698975747
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03748327737335892
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6413001874623354
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.2443359500791398,
+      "WaterLevel": 8.150000000000002,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5620614866499611
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30191058193130393
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4244544689728023
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0376392700367523
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6413724151090799
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.239269012224965,
+      "WaterLevel": 8.200000000000003,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5619572743354798
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3020014544077283
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4244048460582947
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03779526168513641
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.641444610386152
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.23420207437079,
+      "WaterLevel": 8.250000000000004,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5618530326932922
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3020923119643277
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4243552011612844
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03795125229455995
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6415167732819135
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.229135136516615,
+      "WaterLevel": 8.300000000000004,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5617487617388927
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30218315458690787
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.424305534289014
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03810724184107169
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6415889037847413
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.22406819866244,
+      "WaterLevel": 8.350000000000005,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5616444614877892
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3022739822612812
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42425584544873657
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03826323030072049
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6416610018830268
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.219001260808266,
+      "WaterLevel": 8.400000000000006,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5615401319555037
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3023647949732667
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.424206134647715
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0384192176495553
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6417330675651761
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.213934322954091,
+      "WaterLevel": 8.450000000000006,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5614357731575715
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30245559270868994
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42415640189322273
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03857520386362518
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.64180510081961
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.208867385099916,
+      "WaterLevel": 8.500000000000007,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5613313851095421
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3025463754533832
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4241066471925434
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.038731188918979365
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.641877101634764
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.2038004472457415,
+      "WaterLevel": 8.550000000000008,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5612269678269783
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30263714319318574
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42405687055297087
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.038887172791667236
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6419490699990887
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1987335093915665,
+      "WaterLevel": 8.600000000000009,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5611225213254569
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.302727895913943
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4240070719818088
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.039043155457738316
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.642021005901049
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1936665715373924,
+      "WaterLevel": 8.65000000000001,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5610180456205683
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30281863360150746
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42395725148637187
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03919913689324239
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6420929093291251
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.188599633683217,
+      "WaterLevel": 8.70000000000001,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5609135407279165
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30290935624173826
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42390740907398416
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.039355117074229395
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6421647802718112
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1835326958290424,
+      "WaterLevel": 8.75000000000001,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5608090066631187
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30300006382050093
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42385754475198006
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03951109597674951
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6422366187176167
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1784657579748674,
+      "WaterLevel": 8.800000000000011,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5607044434418069
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3030907563236685
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4238076585277048
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03966707357685321
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6423084246550662
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.173398820120693,
+      "WaterLevel": 8.850000000000012,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5605998510796257
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3031814337371199
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42375775040851305
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.039823049850591194
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6423801980726987
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1683318822665183,
+      "WaterLevel": 8.900000000000013,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5604952295922336
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30327209604674127
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42370782040176996
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.03997902477401445
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6424519389590676
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1632649444123437,
+      "WaterLevel": 8.950000000000014,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5603905789953029
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3033627432384255
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42365786851485093
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0401349983231743
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6425236473027419
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1581980065581683,
+      "WaterLevel": 9.000000000000014,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5602858993045194
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3034533752980721
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42360789475514143
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04029097047412236
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.642595323092305
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1531310687039937,
+      "WaterLevel": 9.050000000000015,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5601811905355824
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3035439922115873
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4235578991300369
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0404469412029106
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6426669663163552
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1480641308498183,
+      "WaterLevel": 9.100000000000016,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5600764527042048
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30363459396488457
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4235078816469432
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04060291048559136
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6427385769635057
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1429971929956446,
+      "WaterLevel": 9.150000000000016,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5599716858261131
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3037251805438836
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4234578423132762
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.040758878298217324
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6428101550223843
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1379302551414687,
+      "WaterLevel": 9.200000000000017,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5598668899170475
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3038157519345113
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42340778113646205
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04091484461684162
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6428817004816341
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1328633172872946,
+      "WaterLevel": 9.250000000000018,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5597620649927615
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30390630812270136
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4233576981239371
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.041070809417517784
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6429532133299128
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.12779637943312,
+      "WaterLevel": 9.300000000000018,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5596572110690222
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30399684909439434
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4233075932831474
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.041226772676299754
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6430246935558933
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1227294415789446,
+      "WaterLevel": 9.35000000000002,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5595523281616102
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30408737483553716
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4232574666215494
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.041382734369241926
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6430961411482625
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1176625037247705,
+      "WaterLevel": 9.40000000000002,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5594474162863196
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3041778853320843
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42320731814660983
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0415386944723992
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6431675560957233
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.112595565870596,
+      "WaterLevel": 9.45000000000002,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5593424754589582
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3042683805699969
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42315714786580544
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04169465296182694
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6432389383869931
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.1075286280164205,
+      "WaterLevel": 9.500000000000021,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5592375056953471
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3043588605352427
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4231069557866229
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.041850609813581026
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6433102880108039
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.102461690162246,
+      "WaterLevel": 9.550000000000022,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5591325070113207
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30444932521379653
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42305674191655906
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.042006565003717855
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.643381604955903
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0973947523080714,
+      "WaterLevel": 9.600000000000023,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5590274794227272
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30453977459164033
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42300650626312114
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.042162518508294375
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6434528892110526
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.092327814453897,
+      "WaterLevel": 9.650000000000023,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5589224229454278
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30463020865476254
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42295624883382604
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0423184703033681
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6435241407650295
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.087260876599722,
+      "WaterLevel": 9.700000000000024,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5588173375952978
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30472062738915884
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.422905969636201
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04247442036499711
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6435953596066262
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0821939387455473,
+      "WaterLevel": 9.750000000000025,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5587122233882255
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3048110307808318
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42285566867778335
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04263036866924011
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6436665457246492
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.077127000891372,
+      "WaterLevel": 9.800000000000026,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5586070803401122
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3049014188157909
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4228053459661203
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04278631519215639
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6437376991079208
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0720600630371973,
+      "WaterLevel": 9.850000000000026,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5585019084668735
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3049917914800525
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4227550015087694
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04294225990980591
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6438088197452776
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0669931251830223,
+      "WaterLevel": 9.900000000000027,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5583967077844377
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30508214875964
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42270463531329794
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04309820279824926
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6438799076255718
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.061926187328848,
+      "WaterLevel": 9.950000000000028,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5582914783087467
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3051724906405839
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42265424738728363
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.043254143833547705
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6439509627376703
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.056859249474673,
+      "WaterLevel": 10.000000000000028,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5581862200557558
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3052628171089215
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42260383773831406
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04341008299176324
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.644021985070455
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.051792311620498,
+      "WaterLevel": 10.05000000000003,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5580809330414336
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30535312815069715
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42255340637398675
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0435660202489585
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6440929746128229
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.046725373766324,
+      "WaterLevel": 10.10000000000003,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.557975617281762
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30544342375196243
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42250295330190946
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.043721955581196896
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6441639313536859
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.041658435912149,
+      "WaterLevel": 10.15000000000003,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5578702727927364
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30553370389877554
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4224524785296998
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04387788896454258
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.644234855281971
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0365914980579745,
+      "WaterLevel": 10.200000000000031,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5577648995903651
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3056239685772021
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42240198206498564
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04403382037506048
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6443057463866202
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0315245602037995,
+      "WaterLevel": 10.250000000000032,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5576594976906702
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3057142177733146
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42235146391540457
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04418974978881626
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6443766046565909
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.026457622349625,
+      "WaterLevel": 10.300000000000033,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5575540671096868
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3058044514731926
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42230092408860453
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04434567718187644
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6444474300808547
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.02139068449545,
+      "WaterLevel": 10.350000000000033,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5574486078634632
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30589466966292267
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4222503625922433
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.044501602530308326
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6445182226483994
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.016323746641275,
+      "WaterLevel": 10.400000000000034,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5573431199680613
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30598487232859856
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4221997794339886
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04465752581018007
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6445889823482269
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0112568087871,
+      "WaterLevel": 10.450000000000035,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.557237603439556
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3060750594563212
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42214917462151835
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.044813446997560694
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6446597091693548
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.006189870932925,
+      "WaterLevel": 10.500000000000036,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5571320582940354
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30616523103219834
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4220985481625202
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04496936606852008
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6447304031008156
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 2.0011229330787508,
+      "WaterLevel": 10.550000000000036,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5570264845476011
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.306255387042345
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42204790006469206
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04512528299912901
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6448010641316567
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9960559952245758,
+      "WaterLevel": 10.600000000000037,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5569208822163673
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3063455274728834
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4219972303357416
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.045281197765459164
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6448716922509409
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9909890573704008,
+      "WaterLevel": 10.650000000000038,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5568152513164623
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30643565230994285
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4219465389833867
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04543711034358318
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6449422874477461
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9859221195162262,
+      "WaterLevel": 10.700000000000038,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5567095918640268
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3065257615396597
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4218958260153549
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.045593020709574626
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.645012849711165
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9808551816620517,
+      "WaterLevel": 10.750000000000039,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5566039038752152
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3066158551481775
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42184509143938415
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.045748928839508034
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6450833790303059
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9757882438078764,
+      "WaterLevel": 10.80000000000004,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5564981873661947
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30670593312164707
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42179433526322185
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04590483470945893
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6451538753942919
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9707213059537019,
+      "WaterLevel": 10.85000000000004,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.556392442353146
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30679599544622627
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4217435574946258
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04606073829550383
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6452243387922614
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.965654368099527,
+      "WaterLevel": 10.900000000000041,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5562866688522624
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30688604210808007
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42169275814136326
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.046216639573720276
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6452947692133677
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.960587430245352,
+      "WaterLevel": 10.950000000000042,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5561808668797511
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.306976073093381
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42164193721121196
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.046372538520186884
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6453651666467798
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.955520492391178,
+      "WaterLevel": 11.000000000000043,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5560750364518318
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3070660883883084
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42159109471195927
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04652843511098328
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6454355310816816
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9504535545370032,
+      "WaterLevel": 11.050000000000043,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5559691775847374
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30715608797904903
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4215402306514026
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.046684329322190195
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6455058625072718
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9453866166828278,
+      "WaterLevel": 11.100000000000044,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.555863290294714
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30724607185179686
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4214893450373492
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04684022112988944
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.645576160912765
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9403196788286532,
+      "WaterLevel": 11.150000000000045,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.555757374598021
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30733603999275305
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4214384378776162
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04699611051016395
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6456464262873906
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9352527409744789,
+      "WaterLevel": 11.200000000000045,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5556514305109305
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30742599238812607
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42138750918003076
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0471519974390978
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6457166586203932
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9301858031203036,
+      "WaterLevel": 11.250000000000046,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5555454580497275
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30751592902413155
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4213365589524299
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04730788189277619
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6457868579010325
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9251188652661289,
+      "WaterLevel": 11.300000000000047,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5554394572307108
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3076058498869925
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42128558720266057
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.047463763847285505
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6458570241185838
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9200519274119543,
+      "WaterLevel": 11.350000000000048,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5553334280701915
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3076957549629392
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42123459393857954
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04761964327871333
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6459271572623376
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9149849895577797,
+      "WaterLevel": 11.400000000000048,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5552273705844938
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30778564423820914
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42118357916805355
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04777552016314842
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6459972573215991
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9099180517036045,
+      "WaterLevel": 11.450000000000049,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5551212847899553
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3078755176990472
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42113254289895913
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.047931394476680794
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6460673242856896
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.9048511138494302,
+      "WaterLevel": 11.50000000000005,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5550151707029263
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3079653753317054
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4210814851391828
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04808726619540168
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6461373581439447
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8997841759952552,
+      "WaterLevel": 11.55000000000005,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5549090283397701
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3080552171224434
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42103040589662083
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.048243135295403576
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.646207358885716
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8947172381410806,
+      "WaterLevel": 11.600000000000051,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5548028577168631
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30814504305752793
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4209793051791795
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04839900175278028
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6462773265003702
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8896503002869052,
+      "WaterLevel": 11.650000000000052,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5546966588505944
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3082348531232332
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4209281829947747
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.048554865543626854
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6463472609772892
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8845833624327308,
+      "WaterLevel": 11.700000000000053,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5545904317573662
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3083246473058406
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4208770393513325
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0487107266440397
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6464171623058701
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8795164245785556,
+      "WaterLevel": 11.750000000000053,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5544841764535938
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3084144255916391
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4208258742567887
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.048866585030116545
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6464870304755255
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.874449486724381,
+      "WaterLevel": 11.800000000000054,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5543778929557049
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30850418796692497
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42077468771908866
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.049022440677956455
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6465568654756833
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8693825488702063,
+      "WaterLevel": 11.850000000000055,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5542715812801409
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3085939344180018
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42072347974618796
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.049178293563659894
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6466266672957864
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8643156110160315,
+      "WaterLevel": 11.900000000000055,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5541652414433552
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3086836649311806
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4206722503460517
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04933414366332869
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6466964359252936
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.859248673161857,
+      "WaterLevel": 11.950000000000056,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5540588734618146
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3087733794927799
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42062099952665516
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04948999095306609
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6467661713536783
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8541817353076504,
+      "WaterLevel": 12.000000000000057,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5539524773519967
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3088630780891233
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42056972729598313
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04964583540897627
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6468358735704327
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.8216757735717042,
+      "WaterLevel": 12.050000000000058,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5520109461573778
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3070580497721258
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42057012561035584
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.049366834381815036
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.649371199314986
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.790513414288622,
+      "WaterLevel": 12.100000000000058,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5499625792944738
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.305192709585174
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4205236734438899
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04907886269555967
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6520350272045179
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.760545103996531,
+      "WaterLevel": 12.150000000000059,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5478062640072597
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.3032664542818938
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4204295015979924
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04878182335375889
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6548260247714982
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.7316446517352762,
+      "WaterLevel": 12.20000000000006,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5455408542525196
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.30127866826840033
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.42028670093025666
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.048475617236139225
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6577427642647136
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.70370456217504,
+      "WaterLevel": 12.25000000000006,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5431651742650154
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2992287259724799
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4200943235497669
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.048160143457595575
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6607837187173647
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.676632482556084,
+      "WaterLevel": 12.300000000000061,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5406780223773497
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2971159943530076
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4198513841595908
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04783529974866699
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6639472579467233
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.6503484581981231,
+      "WaterLevel": 12.350000000000062,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5380781751028499
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2949398355531547
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.41955686155557737
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.047500982858098256
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6672316445066239
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.6247827848328265,
+      "WaterLevel": 12.400000000000063,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5353643914891781
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2926996097004447
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4192097002906164
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04715708897801484
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6706350296159607
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.599874308111029,
+      "WaterLevel": 12.450000000000063,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5325354177495708
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.29039467785611944
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4188088125134658
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.046803514192150834
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6741554490883067
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.575569062732215,
+      "WaterLevel": 12.500000000000064,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5295899921776382
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2880244051155806
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4183530799911113
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.046440154947466006
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.67779081928978
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.5518191727122135,
+      "WaterLevel": 12.550000000000065,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5265268503504934
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.28558816386086333
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.41784135632336267
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.046066908549367167
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6815389331543185
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.528581954717021,
+      "WaterLevel": 12.600000000000065,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5233447306236022
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.28308533716517875
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.41727246935802864
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04568367368061092
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6853974562875782
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.5058191809449473,
+      "WaterLevel": 12.650000000000066,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5200423799191819
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2805153223485181
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4166452238145068
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.045290350943808295
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6893639231927114
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.4834964685634677,
+      "WaterLevel": 12.700000000000067,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5166185598081695
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.27787753468215987
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4159584041229899
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.044886843427276786
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.6934357336532984
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.4615827704158844,
+      "WaterLevel": 12.750000000000068,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5130720528837701
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2751714112386329
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4152107774857077
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.044473057293791196
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.697610149310652
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.4400499474269717,
+      "WaterLevel": 12.800000000000068,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5094016694223377
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.27239641488228866
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.41440109716567397
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04404890239157118
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7018842904745732
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.4188724074192065,
+      "WaterLevel": 12.850000000000069,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5056062543248695
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.26955203839411407
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4135281060073074
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04361429288661184
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7062551332083635
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3980267982936567,
+      "WaterLevel": 12.90000000000007,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.5016846943296865
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2666378087227763
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.41259054019200797
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.043169147915213125
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7107195067304586
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.377491746008225,
+      "WaterLevel": 12.95000000000007,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.49763592548393515
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.26365329135213805
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.41158713323031304
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.042713392255295364
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7152740911764035
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3572476296974505,
+      "WaterLevel": 13.000000000000071,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4934589408584171
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2605980947736369
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.41051662019061447
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04224695701480516
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.71991541576598
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3521086866836465,
+      "WaterLevel": 13.050000000000072,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4922690141611176
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.26007931464480555
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4099771649961336
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04231192835004287
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7212200723023201
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3469697436698438,
+      "WaterLevel": 13.100000000000072,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.49107754789154523
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25955969594747796
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4094363241714239
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.042376729047169916
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7225217750910593
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3418308006560409,
+      "WaterLevel": 13.150000000000073,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.48988455637279515
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2590392450448547
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4088941046974986
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04244135850473479
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7238205117195318
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3366918576422375,
+      "WaterLevel": 13.200000000000074,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.48869005396828036
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2585179683231664
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4083505135960533
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.042505816127382856
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7251162698820971
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3315529146284342,
+      "WaterLevel": 13.250000000000075,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.48749405508088484
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2579958721912909
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4078055579290271
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.042570101325882105
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.726409037380696
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3264139716146304,
+      "WaterLevel": 13.300000000000075,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.48629657415211525
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2574729630803697
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4072592447981608
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04263421351714842
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7276988021253963
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3212750286008275,
+      "WaterLevel": 13.350000000000076,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4850976256612486
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25694924744342207
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4067115813445516
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04269815212427012
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7289855521349276
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3161360855870239,
+      "WaterLevel": 13.400000000000077,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4838972241244784
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2564247317549577
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.40616257474820455
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04276191657653199
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7302692755372043
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3109971425732208,
+      "WaterLevel": 13.450000000000077,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4826953840940589
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25589942251058845
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.40561223222758175
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04282550630943872
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7315499605698403
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3058581995594176,
+      "WaterLevel": 13.500000000000078,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4814921201574459
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2553733262266378
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.40506056103914806
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.042888920764737624
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7328275955806506
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.3007192565456143,
+      "WaterLevel": 13.550000000000079,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.48028744693643727
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25484644943974993
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4045075684769141
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04295215939044093
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7341021690281433
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2955803135318105,
+      "WaterLevel": 13.60000000000008,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4790813790863101
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25431879870649693
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4039532618719769
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04301522164084731
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7353736694820004
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2904413705180073,
+      "WaterLevel": 13.65000000000008,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.47787393129495653
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25379038060298464
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.40339764859205646
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04307810697656288
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.736642085623548
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2853024275042042,
+      "WaterLevel": 13.700000000000081,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.47666511828201874
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2532612017244577
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4028407360410321
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.043140814864521565
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7379074062462154
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2801634844904008,
+      "WaterLevel": 13.750000000000082,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4754549547980208
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25273126868490353
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.40228253165847344
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.043203344778004894
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7391696202559823
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2750245414765973,
+      "WaterLevel": 13.800000000000082,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4742434556235006
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2522005881166546
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.40172304291917116
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04326569619666114
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7404287166718174
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2698855984627944,
+      "WaterLevel": 13.850000000000083,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4730306355681393
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.2516691666699901
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4011622773326635
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04332786860652381
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.741684684626103
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2647466554489906,
+      "WaterLevel": 13.900000000000084,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.47181650946989057
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25113701101273717
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.40060024244276227
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.043389861500029644
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.742937513365051
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2596077124351868,
+      "WaterLevel": 13.950000000000085,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4706010921941079
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25060412782986996
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.4000369458270745
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.043451674376035906
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7441871922491061
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.2544687694213843,
+      "WaterLevel": 14.000000000000085,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.4693843986326713
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.25007052382310907
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.39947239509652366
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04351330673983706
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7454337107533393
+        }
+      ]
+    },
+    {
+      "Label": "FC combined",
+      "Beta": 1.249329826407581,
+      "WaterLevel": 14.050000000000086,
+      "Contributions": [
+        {
+          "Stochast": "0",
+          "Alpha": 0.46816644370311333
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.24953620571051907
+        },
+        {
+          "Stochast": "2",
+          "Alpha": -0.3989065978948672
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.04357475810318083
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.7466770584678285
+        }
+      ]
+    }
+  ],
+  "Stochasts": [
+    {
+      "Id": "0",
+      "Label": "H_Rk_ko",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.28,
+      "StandardDeviation": 0.02,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "1",
+      "Label": "SP 2",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 10.0,
+      "StandardDeviation": 3.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "2",
+      "Label": "UV FORM",
+      "ParameterType": "ModelFactor",
+      "DistributionType": "LogNormal",
+      "Mean": 1.05,
+      "StandardDeviation": 0.033,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "3",
+      "Label": "H_Rk_ko",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.9,
+      "StandardDeviation": 0.03,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "4",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.3,
+      "StandardDeviation": 0.05,
+      "VariationCoefficient": 0.0
+    }
+  ],
+  "Correlations": []
+}
