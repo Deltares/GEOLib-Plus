@@ -1,0 +1,691 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tutorial 1: Deriving Lognormal statistics from measurements &#8212; geolib+ 0.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorial 2: Fit an extreme value distribution for the water level" href="Tutorial_2_Fit_GEV_Distribution.html" />
+    <link rel="prev" title="Probabilistic Tutorials" href="probabilistic_tutorials.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="probabilistic_tutorials.html" title="Previous document">Probabilistic Tutorials</a>
+        </li>
+        <li>
+          <a href="Tutorial_2_Fit_GEV_Distribution.html" title="Next document">Tutorial 2: Fit an extreme value distribution for the water level</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-1-deriving-lognormal-statistics-from-measurements">
+<h1>Tutorial 1: Deriving Lognormal statistics from measurements<a class="headerlink" href="#tutorial-1-deriving-lognormal-statistics-from-measurements" title="Permalink to this heading">¶</a></h1>
+<p>This tutorial shows how to derive parameters of the Lognormal
+distribution using the Method of Moments, and by doing statistics on the
+logarithm of the values <span class="math notranslate nohighlight">\(ln(x)\)</span>. The tutorial covers the
+calculation of characteristic values, inclusing statistical uncertainty
+and (spatial) averaging. The following steps are discussed: 1. Importing
+the dataset, interpreting the data 2. Determine the sample mean and
+standard deviation 3. Determine the Lognormal distribution parameter
+using the Method of Moments 4. Determine the characteristic values 5.
+Determine the inputs for D-Stability, taking into account the
+statistical uncertainty</p>
+<section id="step-1-importing-the-dataset-and-interpreting-the-data">
+<h2>Step 1: Importing the dataset, and interpreting the data.<a class="headerlink" href="#step-1-importing-the-dataset-and-interpreting-the-data" title="Permalink to this heading">¶</a></h2>
+<p>In the next cells, we import the python packages necessary to run this
+tutorial. If the packages are not available, install them in your Python
+environment using <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&lt;package_name&gt;</span></code></p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+<p>Import the data using the Pandas package, and show the first 5 entries
+of the dataframe with the measurements</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The headers are automatically taken as column names.</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;input_volumetricweight_testresults.txt&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>VolWeight</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>17.17</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>18.16</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>19.05</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>17.50</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>17.57</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>20.26</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>18.64</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>18.35</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>17.18</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>15.58</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>17.35</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>19.52</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>22.01</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>17.36</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>21.16</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>Get our measurements in a numpy array <code class="docutils literal notranslate"><span class="pre">x</span></code>, and plot the histogram of
+the data.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;VolWeight&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Tutorial_1_Fit_Lognormal_Distribution_6_0.png" src="../../_images/Tutorial_1_Fit_Lognormal_Distribution_6_0.png" />
+</section>
+<section id="step-2-sample-mean-and-sample-standard-deviation-of-the-data-set">
+<h2>Step 2: Sample mean and sample standard deviation of the data set<a class="headerlink" href="#step-2-sample-mean-and-sample-standard-deviation-of-the-data-set" title="Permalink to this heading">¶</a></h2>
+<section id="step-2a-calculate-the-mean-and-standard-deviation-of-the-real-values">
+<h3>Step 2a: Calculate the mean and standard deviation of the ‘real’ values<a class="headerlink" href="#step-2a-calculate-the-mean-and-standard-deviation-of-the-real-values" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First set up a function to calculate.</span>
+<span class="k">def</span> <span class="nf">calculate_mean_and_std</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">sample_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">sample_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">cov</span> <span class="o">=</span> <span class="n">sample_std</span><span class="o">/</span><span class="n">sample_mean</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample mean = </span><span class="se">\t\t\t</span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sample_mean</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sample std = </span><span class="se">\t\t\t</span><span class="si">%0.3f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sample_std</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Coefficient of variation cov = </span><span class="se">\t</span><span class="si">%0.3f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">cov</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">sample_mean</span><span class="p">,</span> <span class="n">sample_std</span>
+
+<span class="c1"># Now calculate the mean and std with that function</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean and standard deviation of x&#39;</span><span class="p">)</span>
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="n">calculate_mean_and_std</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="ow">and</span> <span class="n">standard</span> <span class="n">deviation</span> <span class="n">of</span> <span class="n">x</span>
+<span class="n">Sample</span> <span class="n">mean</span> <span class="o">=</span>                       <span class="mf">18.46</span>
+<span class="n">Sample</span> <span class="n">std</span> <span class="o">=</span>                        <span class="mf">1.701</span>
+<span class="n">Coefficient</span> <span class="n">of</span> <span class="n">variation</span> <span class="n">cov</span> <span class="o">=</span>      <span class="mf">0.092</span>
+</pre></div>
+</div>
+</section>
+<section id="step-2b-calculate-the-mean-and-standard-deviation-of-the-logarithmic-values">
+<h3>Step 2b: Calculate the mean and standard deviation of the logarithmic values<a class="headerlink" href="#step-2b-calculate-the-mean-and-standard-deviation-of-the-logarithmic-values" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we do almost exactly the same, however, we</span>
+<span class="c1"># calculate the mean and std of log(x)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean and standard deviation of ln(x)&#39;</span><span class="p">)</span>
+<span class="n">m</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">calculate_mean_and_std</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mean</span> <span class="ow">and</span> <span class="n">standard</span> <span class="n">deviation</span> <span class="n">of</span> <span class="n">ln</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">Sample</span> <span class="n">mean</span> <span class="o">=</span>                       <span class="mf">2.91</span>
+<span class="n">Sample</span> <span class="n">std</span> <span class="o">=</span>                        <span class="mf">0.090</span>
+<span class="n">Coefficient</span> <span class="n">of</span> <span class="n">variation</span> <span class="n">cov</span> <span class="o">=</span>      <span class="mf">0.031</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="step-3-fitted-lognormal-distribution-using-method-of-moments-mom">
+<h2>Step 3: Fitted Lognormal Distribution using method of moments (MoM)<a class="headerlink" href="#step-3-fitted-lognormal-distribution-using-method-of-moments-mom" title="Permalink to this heading">¶</a></h2>
+<p>First we introduce two functions.</p>
+<ol class="arabic simple">
+<li><p>The first
+<code class="docutils literal notranslate"><span class="pre">lognormal_parameters_from_mu_sigma(mu_x,</span> <span class="pre">sigma_x,</span> <span class="pre">shift)</span></code>
+transforms the mean and standard deviation of x (i.e. the first and
+second moment, respectively) into the parameters of the Lognormal
+distribution.</p></li>
+<li><p>The second
+<code class="docutils literal notranslate"><span class="pre">mu_sigma_from_lognormal_parameters(mu_y,</span> <span class="pre">sigma_y,</span> <span class="pre">shift)</span></code> does the
+exact opposite: it transforms the parameters of the Lognormal
+distribution into the mean and standard deviation of x.</p></li>
+</ol>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">lognormal_parameters_from_mu_sigma</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convention: a Lognormal distribution of X,</span>
+<span class="sd">    means that Y = ln(X) is normally distributed.</span>
+<span class="sd">    INPUT</span>
+<span class="sd">        mu = mean(X)</span>
+<span class="sd">        sigma = mean(X)</span>
+<span class="sd">        shift = default 0</span>
+<span class="sd">    OUTPUT</span>
+<span class="sd">        m = mean(Y)</span>
+<span class="sd">        s = stdev(Y)</span>
+<span class="sd">        shift</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span> <span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">shift</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">shift</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">shift</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">shift</span>
+
+<span class="k">def</span> <span class="nf">mu_sigma_from_lognormal_parameters</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convention: a Lognormal distribution of X,</span>
+<span class="sd">    means that Y = ln(X) is normally distributed.</span>
+<span class="sd">    INPUT</span>
+<span class="sd">        m = mean(Y)</span>
+<span class="sd">        s = std(Y)</span>
+<span class="sd">        shift = default 0</span>
+<span class="sd">    OUTPUT</span>
+<span class="sd">        mu = mean(X)</span>
+<span class="sd">        sigma = mean(X)</span>
+<span class="sd">        shift = default 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">s</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">shift</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">mu</span> <span class="o">-</span> <span class="n">shift</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">shift</span>
+</pre></div>
+</div>
+<p>To transform the mean and standard deviation (the first and second
+moment, respectively) into the parameters of the Lognormal distribution,
+we call the function. Then we print the result.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assume the lognormal is not shifted (shift=0)</span>
+<span class="n">shift</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">shift</span> <span class="o">=</span> <span class="n">lognormal_parameters_from_mu_sigma</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Location, scale, and shift parameters of the</span><span class="se">\</span>
+<span class="s1">Lognormal distribution (Y=log(X)) are: </span><span class="se">\n\</span>
+<span class="s1">m_Y = </span><span class="se">\t\t</span><span class="si">%0.2f</span><span class="se">\n\</span>
+<span class="s1">s_Y = </span><span class="se">\t\t</span><span class="si">%0.3f</span><span class="se">\n\</span>
+<span class="s1">shift_Y =</span><span class="se">\t</span><span class="si">%0.1f</span><span class="s1"> &#39;</span><span class="o">%</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">shift</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Location</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="ow">and</span> <span class="n">shift</span> <span class="n">parameters</span> <span class="n">of</span> <span class="n">theLognormal</span> <span class="n">distribution</span> <span class="p">(</span><span class="n">Y</span><span class="o">=</span><span class="n">log</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="n">are</span><span class="p">:</span>
+<span class="n">m_Y</span> <span class="o">=</span>               <span class="mf">2.91</span>
+<span class="n">s_Y</span> <span class="o">=</span>               <span class="mf">0.092</span>
+<span class="n">shift_Y</span> <span class="o">=</span>   <span class="mf">0.0</span>
+</pre></div>
+</div>
+<p>The next step is to check the other formula for ‘the other way around’
+(parameters of the Lognormal distribution -&gt; mean and standard
+deviation).</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assume the lognormal is not shifted (shift=0)</span>
+<span class="n">shift</span><span class="o">=</span><span class="mi">0</span>
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">shift</span> <span class="o">=</span> <span class="n">mu_sigma_from_lognormal_parameters</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">s</span><span class="p">,</span><span class="n">shift</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean, standard deviation, and shift parameters of the</span><span class="se">\</span>
+<span class="s1">Lognormal distribution are:</span><span class="se">\n\</span>
+<span class="s1">mu_X = </span><span class="se">\t\t</span><span class="si">%0.2f</span><span class="se">\n\</span>
+<span class="s1">sigma_X = </span><span class="se">\t</span><span class="si">%0.3f</span><span class="se">\n\</span>
+<span class="s1">shift_X =</span><span class="se">\t</span><span class="si">%0.1f</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">shift</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mean</span><span class="p">,</span> <span class="n">standard</span> <span class="n">deviation</span><span class="p">,</span> <span class="ow">and</span> <span class="n">shift</span> <span class="n">parameters</span> <span class="n">of</span> <span class="n">theLognormal</span> <span class="n">distribution</span> <span class="n">are</span><span class="p">:</span>
+<span class="n">mu_X</span> <span class="o">=</span>              <span class="mf">18.46</span>
+<span class="n">sigma_X</span> <span class="o">=</span>   <span class="mf">1.701</span>
+<span class="n">shift_X</span> <span class="o">=</span>   <span class="mf">0.0</span>
+</pre></div>
+</div>
+<section id="step-3c-visual-inspection-of-the-results">
+<h3>Step 3c: Visual inspection of the results<a class="headerlink" href="#step-3c-visual-inspection-of-the-results" title="Permalink to this heading">¶</a></h3>
+<p>Now we can visulize the results. We first set up two functions for
+drawing the pdf of a normal and a lognormal. Then we call this function
+to make the plots we want.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First set up</span>
+<span class="k">def</span> <span class="nf">plot_pdf_normal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate the pdf values using the norm.pdf function.</span>
+<span class="sd">    Note that python uses the following terminology:</span>
+<span class="sd">      location (loc) = mean value</span>
+<span class="sd">      scale (scale) = standard deviation</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pdf_values</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x_range</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">sigma</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_range</span><span class="p">,</span> <span class="n">pdf_values</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PDF normal distribution&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Probability density (pdf)&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">plot_pdf_lognormal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculate the pdf values using the lognorm.pdf function.</span>
+<span class="sd">    Note that python uses the following terminology:</span>
+<span class="sd">      loc (location) = shift</span>
+<span class="sd">      scale (scale) = median value (where cdf=0.5 ) -&gt; exp(m)</span>
+<span class="sd">      s (standard deviation) = s</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pdf_values</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">lognorm</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x_range</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">shift</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_range</span><span class="p">,</span> <span class="n">pdf_values</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;PDF lognormal distribution &#39;</span><span class="o">+</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Probability density (pdf)&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plotting the histogram of the data</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">)</span>
+
+<span class="c1"># Set up an x range for plotting</span>
+<span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># Plot the pdf of the normal and lognormal distribution for</span>
+<span class="c1"># the xrange, using the above function.</span>
+<span class="n">plot_pdf_normal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+<span class="n">plot_pdf_lognormal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../../_images/Tutorial_1_Fit_Lognormal_Distribution_21_0.png" src="../../_images/Tutorial_1_Fit_Lognormal_Distribution_21_0.png" />
+</section>
+<section id="optional-step-3d-derive-parameters-for-a-shifted-lognormal-distribution-with-all-values-shifted-to-14">
+<h3>Optional step 3d: Derive parameters for a shifted Lognormal distribution, with all values shifted to 14<a class="headerlink" href="#optional-step-3d-derive-parameters-for-a-shifted-lognormal-distribution-with-all-values-shifted-to-14" title="Permalink to this heading">¶</a></h3>
+<p>Note: this is an advanced step to show how a (manually shifted)
+lognormal distribution could be derived. To this end, we first shift all
+our data points ‘to the left’ with a value of 14 (assuming 14 is some
+kind of physical lower limit for this parameter). Then we derive the
+statistics for the lognormal parameter, and parse the shift=14 parameter
+to the plots.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We assume 14 is a physical lower limit for our volumetric weight parameter</span>
+<span class="n">shift</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="c1"># Shift our measurements and derive the lognormal statistics.</span>
+<span class="n">m_</span><span class="p">,</span> <span class="n">s_</span> <span class="o">=</span> <span class="n">calculate_mean_and_std</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">shift</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># Plot the histogram and the pdf of a shifted Lognormal distribution</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">)</span>
+<span class="n">plot_pdf_normal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+<span class="n">plot_pdf_lognormal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">m_</span><span class="p">,</span> <span class="n">s_</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Sample</span> <span class="n">mean</span> <span class="o">=</span>                       <span class="mf">1.42</span>
+<span class="n">Sample</span> <span class="n">std</span> <span class="o">=</span>                        <span class="mf">0.401</span>
+<span class="n">Coefficient</span> <span class="n">of</span> <span class="n">variation</span> <span class="n">cov</span> <span class="o">=</span>      <span class="mf">0.282</span>
+</pre></div>
+</div>
+<img alt="../../_images/Tutorial_1_Fit_Lognormal_Distribution_23_1.png" src="../../_images/Tutorial_1_Fit_Lognormal_Distribution_23_1.png" />
+</section>
+</section>
+<section id="step-4-characteristic-values">
+<h2>Step 4: Characteristic values<a class="headerlink" href="#step-4-characteristic-values" title="Permalink to this heading">¶</a></h2>
+<section id="step-4a-calculate-the-characteristic-value-with-the-student-t-factor">
+<h3>Step 4a: Calculate the characteristic value with the Student-T factor.<a class="headerlink" href="#step-4a-calculate-the-characteristic-value-with-the-student-t-factor" title="Permalink to this heading">¶</a></h3>
+<p>The number of measurements influences the statistical uncertainty of our
+estimated mean and standard deviation. Therefore we apply the Student-T
+factor to account for statistical uncertainty due to a small number of
+samples. The characteristic value is calculated as follows:</p>
+<div class="math notranslate nohighlight">
+\[X_{char, 5\%} = \exp( m + t_{5\%,n-1} \cdot s \cdot \sqrt{ 1+ 1/n)}\]</div>
+<p>with <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(s\)</span> the lognormal parameters <span class="math notranslate nohighlight">\(\mu_Y\)</span> and <span class="math notranslate nohighlight">\(\sigma_Y\)</span>.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">student_t_factor</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># df = degrees of freedom, which is n-1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;t-value </span><span class="se">\t\t</span><span class="si">%0.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">student_t_factor</span><span class="p">))</span>
+
+<span class="c1"># The 5%-characteristic value, using the t distributions, including</span>
+<span class="c1"># the statistical uncertainty in the estimated mean (s/sqrt(n))</span>
+<span class="c1"># Note the + sign before the student_t_factor, because student_t_factor is negative</span>
+<span class="n">characteristic_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">student_t_factor</span> <span class="o">*</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n</span> <span class="p">)</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;5p-char_value = </span><span class="se">\t</span><span class="si">%0.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">characteristic_value</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span><span class="o">-</span><span class="n">value</span>             <span class="o">-</span><span class="mf">1.76</span>
+<span class="mi">5</span><span class="n">p</span><span class="o">-</span><span class="n">char_value</span> <span class="o">=</span>     <span class="mf">15.55</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4b-calculate-the-characteristic-value-with-and-without-spatial-avaraging">
+<h3>Step 4b: Calculate the characteristic value with and without spatial avaraging<a class="headerlink" href="#step-4b-calculate-the-characteristic-value-with-and-without-spatial-avaraging" title="Permalink to this heading">¶</a></h3>
+<p>To account for spatial averaging the <span class="math notranslate nohighlight">\(\Gamma^2\)</span> (variance
+reduction) factor is introduced into the equation</p>
+<p><span class="math notranslate nohighlight">\(X_{char.,5\%} = \exp( m + t_{5\%,n-1} \cdot s \cdot \sqrt{ \Gamma^2+ 1/n)}\)</span>
+with <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(s\)</span> the lognormal parameters <span class="math notranslate nohighlight">\(\mu_Y\)</span> and
+<span class="math notranslate nohighlight">\(\sigma_Y\)</span>.</p>
+<p>Default assumptions on this factor are: - <span class="math notranslate nohighlight">\(\Gamma^2 = 1.0\)</span> : point
+values, no spatial averaging - <span class="math notranslate nohighlight">\(\Gamma^2 = 0.25\)</span> : estimate of the
+regional variability, assumption half of the variance averages. -
+<span class="math notranslate nohighlight">\(\Gamma^2 = 0.0\)</span> : spatial average, full spatial avaraging</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Allocate a list to store multiple outcomes</span>
+<span class="n">stored_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Calculate the characteristic value for different choises of spatial averaging:</span>
+<span class="n">gamma2_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">];</span>
+<span class="k">for</span> <span class="n">gamma2</span> <span class="ow">in</span> <span class="n">gamma2_values</span><span class="p">:</span>
+    <span class="n">characteristic_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">student_t_factor</span> <span class="o">*</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="n">gamma2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n</span> <span class="p">)</span> <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;gamma2: 5p-char_value = </span><span class="se">\t</span><span class="si">%0.2f</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">characteristic_value</span><span class="p">))</span>
+    <span class="n">stored_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">characteristic_value</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gamma2</span><span class="p">:</span> <span class="mi">5</span><span class="n">p</span><span class="o">-</span><span class="n">char_value</span> <span class="o">=</span>     <span class="mf">15.55</span>
+<span class="n">gamma2</span><span class="p">:</span> <span class="mi">5</span><span class="n">p</span><span class="o">-</span><span class="n">char_value</span> <span class="o">=</span>     <span class="mf">16.78</span>
+<span class="n">gamma2</span><span class="p">:</span> <span class="mi">5</span><span class="n">p</span><span class="o">-</span><span class="n">char_value</span> <span class="o">=</span>     <span class="mf">17.63</span>
+</pre></div>
+</div>
+</section>
+<section id="step-4c-visually-checking-the-results">
+<h3>Step 4c: Visually checking the results<a class="headerlink" href="#step-4c-visually-checking-the-results" title="Permalink to this heading">¶</a></h3>
+<p>The results are visually checked with the histogram and the pdf’s,
+showing the calculated characteristic value for the different
+asssumptions with a black vertical line and a colored dot.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">)</span>
+<span class="n">plot_pdf_normal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+<span class="n">plot_pdf_lognormal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">gamma2</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span> <span class="n">gamma2_values</span><span class="p">,</span> <span class="n">stored_values</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$\Gamma ^</span><span class="si">{2}</span><span class="s2">=</span><span class="si">%s</span><span class="s2">$&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">gamma2</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.95</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Tutorial_1_Fit_Lognormal_Distribution_31_0.png" src="../../_images/Tutorial_1_Fit_Lognormal_Distribution_31_0.png" />
+</section>
+</section>
+<section id="step-5-get-the-inputs-for-d-stability-taking-into-account-the-statistical-uncertainty">
+<h2>Step 5: Get the inputs for D-Stability, taking into account the statistical uncertainty<a class="headerlink" href="#step-5-get-the-inputs-for-d-stability-taking-into-account-the-statistical-uncertainty" title="Permalink to this heading">¶</a></h2>
+<p>To correct the Lornormal standard deviation for the statistical
+uncertainty, we increase the std with a factor.</p>
+<p>This factor equals <span class="math notranslate nohighlight">\(t_{5\%,n-1}/z_{5\%}\)</span>, where
+<span class="math notranslate nohighlight">\(z_{5\%}=-1.645\)</span>.</p>
+<section id="step-5a-for-the-uncertainty-in-the-point-values">
+<h3>Step 5a: For the uncertainty in the point values<a class="headerlink" href="#step-5a-for-the-uncertainty-in-the-point-values" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">correction_factor</span> <span class="o">=</span> <span class="n">student_t_factor</span> <span class="o">/</span> <span class="o">-</span><span class="mf">1.645</span>
+<span class="n">s_point_incl_stat</span> <span class="o">=</span>  <span class="n">s</span> <span class="o">*</span> <span class="n">correction_factor</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">shift</span> <span class="o">=</span> <span class="n">mu_sigma_from_lognormal_parameters</span><span class="p">(</span><span class="n">m</span><span class="p">,</span>
+                                                      <span class="n">s_point_incl_stat</span><span class="p">,</span>
+                                                      <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean, standard deviation, and shift parameters of the</span><span class="se">\</span>
+<span class="s1">Lognormal distribution </span><span class="se">\n\</span>
+<span class="s1">For D-Stability input:</span><span class="se">\n\</span>
+<span class="s1">mu_X = </span><span class="se">\t\t</span><span class="si">%0.2f</span><span class="se">\n\</span>
+<span class="s1">sigma_X = </span><span class="se">\t</span><span class="si">%0.3f</span><span class="se">\n\</span>
+<span class="s1">shift_X =</span><span class="se">\t</span><span class="si">%0.1f</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">shift</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mean</span><span class="p">,</span> <span class="n">standard</span> <span class="n">deviation</span><span class="p">,</span> <span class="ow">and</span> <span class="n">shift</span> <span class="n">parameters</span> <span class="n">of</span> <span class="n">theLognormal</span> <span class="n">distribution</span>
+<span class="n">For</span> <span class="n">D</span><span class="o">-</span><span class="n">Stability</span> <span class="nb">input</span><span class="p">:</span>
+<span class="n">mu_X</span> <span class="o">=</span>              <span class="mf">18.47</span>
+<span class="n">sigma_X</span> <span class="o">=</span>   <span class="mf">1.883</span>
+<span class="n">shift_X</span> <span class="o">=</span>   <span class="mf">0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="step-5b-for-the-uncertainty-in-the-regional-average">
+<h3>Step 5b: For the uncertainty in the regional average<a class="headerlink" href="#step-5b-for-the-uncertainty-in-the-regional-average" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s_regional_average_incl_stat</span> <span class="o">=</span>  <span class="n">s</span> <span class="o">*</span> <span class="n">correction_factor</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">shift</span> <span class="o">=</span> <span class="n">mu_sigma_from_lognormal_parameters</span><span class="p">(</span><span class="n">m</span><span class="p">,</span>
+                                                      <span class="n">s_regional_average_incl_stat</span><span class="p">,</span>
+                                                      <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean, standard deviation, and shift parameters of the</span><span class="se">\</span>
+<span class="s1">Lognormal distribution </span><span class="se">\n\</span>
+<span class="s1">For D-Stability input:</span><span class="se">\n\</span>
+<span class="s1">mu_X = </span><span class="se">\t\t</span><span class="si">%0.2f</span><span class="se">\n\</span>
+<span class="s1">sigma_X = </span><span class="se">\t</span><span class="si">%0.3f</span><span class="se">\n\</span>
+<span class="s1">shift_X =</span><span class="se">\t</span><span class="si">%0.1f</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">shift</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mean</span><span class="p">,</span> <span class="n">standard</span> <span class="n">deviation</span><span class="p">,</span> <span class="ow">and</span> <span class="n">shift</span> <span class="n">parameters</span> <span class="n">of</span> <span class="n">theLognormal</span> <span class="n">distribution</span>
+<span class="n">For</span> <span class="n">D</span><span class="o">-</span><span class="n">Stability</span> <span class="nb">input</span><span class="p">:</span>
+<span class="n">mu_X</span> <span class="o">=</span>              <span class="mf">18.41</span>
+<span class="n">sigma_X</span> <span class="o">=</span>   <span class="mf">1.021</span>
+<span class="n">shift_X</span> <span class="o">=</span>   <span class="mf">0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="step-5c-for-the-uncertainty-in-the-spatial-average">
+<h3>Step 5c: For the uncertainty in the spatial average<a class="headerlink" href="#step-5c-for-the-uncertainty-in-the-spatial-average" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">s_spatial_average_incl_stat</span> <span class="o">=</span>  <span class="n">s</span> <span class="o">*</span> <span class="n">correction_factor</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">shift</span> <span class="o">=</span> <span class="n">mu_sigma_from_lognormal_parameters</span><span class="p">(</span><span class="n">m</span><span class="p">,</span>
+                                                      <span class="n">s_spatial_average_incl_stat</span><span class="p">,</span>
+                                                      <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mean, standard deviation, and shift parameters of the</span><span class="se">\</span>
+<span class="s1">Lognormal distribution </span><span class="se">\n\</span>
+<span class="s1">For D-Stability input:</span><span class="se">\n\</span>
+<span class="s1">mu_X = </span><span class="se">\t\t</span><span class="si">%0.2f</span><span class="se">\n\</span>
+<span class="s1">sigma_X = </span><span class="se">\t</span><span class="si">%0.3f</span><span class="se">\n\</span>
+<span class="s1">shift_X =</span><span class="se">\t</span><span class="si">%0.1f</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span><span class="n">sigma</span><span class="p">,</span><span class="n">shift</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Mean</span><span class="p">,</span> <span class="n">standard</span> <span class="n">deviation</span><span class="p">,</span> <span class="ow">and</span> <span class="n">shift</span> <span class="n">parameters</span> <span class="n">of</span> <span class="n">theLognormal</span> <span class="n">distribution</span>
+<span class="n">For</span> <span class="n">D</span><span class="o">-</span><span class="n">Stability</span> <span class="nb">input</span><span class="p">:</span>
+<span class="n">mu_X</span> <span class="o">=</span>              <span class="mf">18.39</span>
+<span class="n">sigma_X</span> <span class="o">=</span>   <span class="mf">0.467</span>
+<span class="n">shift_X</span> <span class="o">=</span>   <span class="mf">0.0</span>
+</pre></div>
+</div>
+</section>
+<section id="step-5d-visualize-the-results">
+<h3>Step 5d: Visualize the results<a class="headerlink" href="#step-5d-visualize-the-results" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="s1">&#39;density&#39;</span><span class="p">)</span>
+<span class="n">plot_pdf_lognormal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s_point_incl_stat</span><span class="p">,</span>
+                   <span class="n">label</span><span class="o">=</span><span class="s1">&#39;point statistics&#39;</span><span class="p">)</span>
+<span class="n">plot_pdf_lognormal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s_regional_average_incl_stat</span><span class="p">,</span>
+                   <span class="n">label</span><span class="o">=</span><span class="s1">&#39;regional average&#39;</span><span class="p">)</span>
+<span class="n">plot_pdf_lognormal</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">x_range</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s_spatial_average_incl_stat</span><span class="p">,</span>
+                   <span class="n">label</span><span class="o">=</span><span class="s1">&#39;spatial average&#39;</span><span class="p">)</span>
+
+<span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tab:blue&#39;</span><span class="p">,</span> <span class="s1">&#39;tab:orange&#39;</span><span class="p">,</span> <span class="s1">&#39;tab:green&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">gamma2</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span> <span class="n">gamma2_values</span><span class="p">,</span> <span class="n">stored_values</span><span class="p">)):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Characteristic value with $\Gamma ^</span><span class="si">{2}</span><span class="s2">=</span><span class="si">%s</span><span class="s2">$&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">gamma2</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.05</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../../_images/Tutorial_1_Fit_Lognormal_Distribution_40_0.png" src="../../_images/Tutorial_1_Fit_Lognormal_Distribution_40_0.png" />
+</section>
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="probabilistic_tutorials.html" title="Previous document">Probabilistic Tutorials</a>
+        </li>
+        <li>
+          <a href="Tutorial_2_Fit_GEV_Distribution.html" title="Next document">Tutorial 2: Fit an extreme value distribution for the water level</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/overview.html">Developer API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/overview.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="probabilistic_tutorials.html">Probabilistic Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial 1: Deriving Lognormal statistics from measurements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-importing-the-dataset-and-interpreting-the-data">Step 1: Importing the dataset, and interpreting the data.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-sample-mean-and-sample-standard-deviation-of-the-data-set">Step 2: Sample mean and sample standard deviation of the data set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-fitted-lognormal-distribution-using-method-of-moments-mom">Step 3: Fitted Lognormal Distribution using method of moments (MoM)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-characteristic-values">Step 4: Characteristic values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-get-the-inputs-for-d-stability-taking-into-account-the-statistical-uncertainty">Step 5: Get the inputs for D-Stability, taking into account the statistical uncertainty</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_2_Fit_GEV_Distribution.html">Tutorial 2: Fit an extreme value distribution for the water level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html#now-we-integrate-the-fragility-curve-with-the-probability-density-of-water-level">Now we integrate the fragility curve with the probability density of water level.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html#calculating-the-probability-of-exceedence-for-range-of-h">Calculating the probability of exceedence for range of H</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html">Tutorial 4: Combining 2 fragility curves for different scenario’s.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#code-for-plotting">Code for plotting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-fragility-points">Plot the fragility points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation">Extrapolate fragility curves linearly along the given range, with the given discretisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-extrapolated-fragility-curves">Plot the extrapolated fragility curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate">Load the water level dependent scenario probability and densify and extrapolate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#sanity-checks">Sanity checks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-scenario-probabilities">Plot the scenario probabilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#the-combination-of-2-fragility-curves">The combination of 2 fragility curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-combined-fragility-curve">Plot the combined fragility curve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit">Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="probabilistic_tutorials.html">Probabilistic Tutorials</a><ul>
+      <li>Previous: <a href="probabilistic_tutorials.html" title="previous chapter">Probabilistic Tutorials</a></li>
+      <li>Next: <a href="Tutorial_2_Fit_GEV_Distribution.html" title="next chapter">Tutorial 2: Fit an extreme value distribution for the water level</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

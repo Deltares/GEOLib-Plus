@@ -1,0 +1,588 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>geolib_plus.parameters_for_soil_models package &#8212; geolib+ 0.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geolib_plus.geolib_connectionspackage" href="geolib_plus.geolib_connections.html" />
+    <link rel="prev" title="geolib_plus.plot_plotting package" href="geolib_plus.plotting.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.plotting.html" title="Previous document">geolib_plus.plot_plotting package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.geolib_connections.html" title="Next document">geolib_plus.geolib_connectionspackage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="geolib-plus-parameters-for-soil-models-package">
+<h1>geolib_plus.parameters_for_soil_models package<a class="headerlink" href="#geolib-plus-parameters-for-soil-models-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="geolib-plus-soft-soil-creep-parameters-module">
+<h2>geolib_plus.soft_soil_creep_parameters module<a class="headerlink" href="#geolib-plus-soft-soil-creep-parameters-module" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.soft_soil_creep_parameters.</span></span><span class="sig-name descname"><span class="pre">SoftSoilCreepParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lambda_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_ur</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">OCR</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K0_NC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ca</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that calculates and stores parameters for the soft soil creep model.</p>
+<p>Attributes</p>
+<hr class="docutils" />
+<dl class="simple">
+<dt>c: Optional[Union[np.ndarray, float]] = None</dt><dd><p>cohesion</p>
+</dd>
+<dt>phi: Optional[Union[np.ndarray, float]] = None</dt><dd><p>friction angle</p>
+</dd>
+<dt>psi: Optional[Union[np.ndarray, float]] = None</dt><dd><p>dilatancy angle</p>
+</dd>
+<dt>kappa: Optional[Union[np.ndarray, float]] = None</dt><dd><p>modified swelling index</p>
+</dd>
+<dt>lambda_index: Optional[Union[np.ndarray, float]] = None</dt><dd><p>modified compression index</p>
+</dd>
+<dt>mi: Optional[Union[np.ndarray, float]] = None</dt><dd><p>modified creep index</p>
+</dd>
+<dt>v_ur: Optional[Union[np.ndarray, float]] = None</dt><dd><p>poisson’s ratio for unloading/reloading</p>
+</dd>
+<dt>M: Optional[Union[np.ndarray, float]] = None</dt><dd><p>slope of so-called ‘critical state line’</p>
+</dd>
+<dt>Cc: Optional[Union[np.ndarray, float]] = None</dt><dd><p>compression index</p>
+</dd>
+<dt>Cs: Optional[Union[np.ndarray, float]] = None</dt><dd><p>swelling index</p>
+</dd>
+<dt>eo: Optional[Union[np.ndarray, float]] = None</dt><dd><p>initial void ratio</p>
+</dd>
+<dt>OCR: Optional[Union[np.ndarray, float]] = None</dt><dd><p>over consolidation ratio</p>
+</dd>
+<dt>K0_NC: Optional[Union[np.ndarray, float]] = None</dt><dd><p>K0-value for normal consolidation</p>
+</dd>
+<dt>Ca: Optional[Union[np.ndarray, float]] = None</dt><dd><p>material constant</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters.calculate_soft_soil_parameters">
+<span class="sig-name descname"><span class="pre">calculate_soft_soil_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters.calculate_soft_soil_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that calculates soft soil parameters according to Vermeer <span id="id1">[<a class="reference internal" href="../references.html#id19" title="P.A. Vermeer and H.P. Neher. A soft soil model that accounts for creep. Beyond 2000 in Computational Geotechnics, pages 249-261, 2019. doi:10.1201/9781315138206-24.">12</a>]</span>.</p>
+<div class="math notranslate nohighlight">
+\[\lambda^{*} = (\frac{C_{c}}{ln(10)(1+e_{0})})\]</div>
+<div class="math notranslate nohighlight">
+\[\kappa^{*} = (\frac{C_{s}}{ln(10)(1+e_{0})}) \frac{ln(OCR)}{ln(\frac{2Ko^{NC}+1}{(2*Ko^{NC}+1) - (1 - \frac{1}{OCR})(2\frac{v_{ur}}{1-v_{ur}} + 1)})}\]</div>
+<div class="math notranslate nohighlight">
+\[\mu^{*} = (\frac{C_{c}}{ln(10)})\]</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="geolib-plus-hardening-soil-parameters-module">
+<h2>geolib_plus.hardening_soil_parameters module<a class="headerlink" href="#geolib-plus-hardening-soil-parameters-module" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.hardening_soil_model_parameters.</span></span><span class="sig-name descname"><span class="pre">HardeningSoilModelParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_50_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_oed_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_ur_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_ur</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_ref_h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_cpt_h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_ref_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K0_NC</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that calculates and stores parameters for the hardening soil model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.E_50_ref">
+<span class="sig-name descname"><span class="pre">E_50_ref</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.E_50_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>secant stiffness in a standard triaxial test</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.E_oed_ref">
+<span class="sig-name descname"><span class="pre">E_oed_ref</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.E_oed_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>tangent stiffness for primary loadind</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.m">
+<span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.m" title="Permalink to this definition">¶</a></dt>
+<dd><p>power for stress-level dependancy of stiffness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.v_ur">
+<span class="sig-name descname"><span class="pre">v_ur</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.v_ur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Poisson’s ratio for unloading-reloading</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.E_ur_ref">
+<span class="sig-name descname"><span class="pre">E_ur_ref</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.E_ur_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>unloading/reloading stiffness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.p_ref">
+<span class="sig-name descname"><span class="pre">p_ref</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.p_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>reference stress for stiffness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.K0_NC">
+<span class="sig-name descname"><span class="pre">K0_NC</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.K0_NC" title="Permalink to this definition">¶</a></dt>
+<dd><p>K0-value for normal consolidation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.R_f">
+<span class="sig-name descname"><span class="pre">R_f</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.R_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>failure ratio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.qc">
+<span class="sig-name descname"><span class="pre">qc</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.qc" title="Permalink to this definition">¶</a></dt>
+<dd><p>cone resistance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.sigma_ref_h">
+<span class="sig-name descname"><span class="pre">sigma_ref_h</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.sigma_ref_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>horizontal reference stress</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.sigma_cpt_h">
+<span class="sig-name descname"><span class="pre">sigma_cpt_h</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.sigma_cpt_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>horizontal cpt stress</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.Cc">
+<span class="sig-name descname"><span class="pre">Cc</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.Cc" title="Permalink to this definition">¶</a></dt>
+<dd><p>compression index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.Cs">
+<span class="sig-name descname"><span class="pre">Cs</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.Cs" title="Permalink to this definition">¶</a></dt>
+<dd><p>swelling index</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.eo">
+<span class="sig-name descname"><span class="pre">eo</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.eo" title="Permalink to this definition">¶</a></dt>
+<dd><p>initial void ratio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.sigma_ref_v">
+<span class="sig-name descname"><span class="pre">sigma_ref_v</span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.sigma_ref_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>vertical reference stress</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]] = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.calculate_stiffness">
+<span class="sig-name descname"><span class="pre">calculate_stiffness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calculation_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">HardingSoilCalculationType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#geolib_plus.hardening_soil_model_parameters.HardeningSoilModelParameters.calculate_stiffness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that calculates hardening soil parameters based on the two following calculation types</p>
+<p>Based on the compressibility parameters:</p>
+<div class="math notranslate nohighlight">
+\[E_{oed,ref} = (\frac{ln(10)(1+e_{0})\sigma_{ref.v}}{C_{C}})\]</div>
+<div class="math notranslate nohighlight">
+\[E_{ur,ref} = (\frac{ln(10)(1+e_{0})\sigma_{ref.v}}{C_{s}})(\frac{(1+v_{ur})(1-2v_{ur})}{(1-v_{ur})})\]</div>
+<p>Based on the cone resistance:</p>
+<div class="math notranslate nohighlight">
+\[G_{0} = 10 q_{c}\]</div>
+<div class="math notranslate nohighlight">
+\[E_{ur,ref} = 0.5G_{0}2(1+v_{ur}) (\frac{\sigma_{ref.h}}{\sigma_{cpt.v}})^m\]</div>
+<div class="math notranslate nohighlight">
+\[E_{50,ref} = (\frac{E_{ur,ref}}{5})\]</div>
+<div class="math notranslate nohighlight">
+\[E_{oed,ref} = E_{50,ref}\]</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="geolib-plus-relative-density-correlared-parameters-module">
+<h2>geolib_plus.relative_density_correlared_parameters module<a class="headerlink" href="#geolib-plus-relative-density-correlared-parameters-module" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.relative_density_correlated_parametes.</span></span><span class="sig-name descname"><span class="pre">RelativeDensityCorrelatedParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RD_percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_unsat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_sat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_50_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_oed_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E_ur_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_o_ref</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_f</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">psi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class that uses input of relative density and empirical formulas to
+calculated numerous model parameters for sands. According to Brinkgreve <span id="id2">[<a class="reference internal" href="../references.html#id23" title="R. Brinkgreve, Erjona Engin, and Harun Kürşat Engin. Validation of empirical formulas to derive model parameters for sands. Technical Report, Plaxis B.V., 06 2010. doi:10.1201/b10551-25.">13</a>]</span></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.RD_percentage">
+<span class="sig-name descname"><span class="pre">RD_percentage</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.RD_percentage" title="Permalink to this definition">¶</a></dt>
+<dd><p>relative density of soil in percentage</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.gamma_unsat">
+<span class="sig-name descname"><span class="pre">gamma_unsat</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.gamma_unsat" title="Permalink to this definition">¶</a></dt>
+<dd><p>unsaturated unit weight of soil</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.gamma_sat">
+<span class="sig-name descname"><span class="pre">gamma_sat</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.gamma_sat" title="Permalink to this definition">¶</a></dt>
+<dd><p>saturated unit weight of soil</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.E_50_ref">
+<span class="sig-name descname"><span class="pre">E_50_ref</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.E_50_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>secant stiffness in a standard triaxial test</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.E_oed_ref">
+<span class="sig-name descname"><span class="pre">E_oed_ref</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.E_oed_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>tangent stiffness for primary loading</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.E_ur_ref">
+<span class="sig-name descname"><span class="pre">E_ur_ref</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.E_ur_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>unloading/reloading stiffness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.G_o_ref">
+<span class="sig-name descname"><span class="pre">G_o_ref</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.G_o_ref" title="Permalink to this definition">¶</a></dt>
+<dd><p>maximal small-strain shear modulus</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.m">
+<span class="sig-name descname"><span class="pre">m</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.m" title="Permalink to this definition">¶</a></dt>
+<dd><p>power for stress-level dependancy of stiffness</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.R_f">
+<span class="sig-name descname"><span class="pre">R_f</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.R_f" title="Permalink to this definition">¶</a></dt>
+<dd><p>failure ratio</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.phi">
+<span class="sig-name descname"><span class="pre">phi</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>friction angle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.psi">
+<span class="sig-name descname"><span class="pre">psi</span></span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.psi" title="Permalink to this definition">¶</a></dt>
+<dd><p>dilation angle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Union[np.ndarray, float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.calculate_using_RD">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_using_RD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">RD_percentage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.relative_density_correlated_parametes.RelativeDensityCorrelatedParameters.calculate_using_RD" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method creates class that stores all parameters calculated with the input of RD,
+using the following equations <span id="id3">[<a class="reference internal" href="../references.html#id23" title="R. Brinkgreve, Erjona Engin, and Harun Kürşat Engin. Validation of empirical formulas to derive model parameters for sands. Technical Report, Plaxis B.V., 06 2010. doi:10.1201/b10551-25.">13</a>]</span></p>
+<div class="math notranslate nohighlight">
+\[\gamma_{unsat} = 15 + 4 \frac{RD}{100}\]</div>
+<div class="math notranslate nohighlight">
+\[\gamma_{sat} = 19 + 1.6 \frac{RD}{100}\]</div>
+<div class="math notranslate nohighlight">
+\[E_{50,ref} = 60000 \frac{RD}{100}\]</div>
+<div class="math notranslate nohighlight">
+\[E_{ur,ref} = 60000 \frac{RD}{100}\]</div>
+<div class="math notranslate nohighlight">
+\[G_{o,ref} = 60000 + 68000 \frac{RD}{100}\]</div>
+<div class="math notranslate nohighlight">
+\[m = 0.7 - \frac{RD}{320}\]</div>
+<div class="math notranslate nohighlight">
+\[R_{f} = 1 - \frac{RD}{800}\]</div>
+<div class="math notranslate nohighlight">
+\[\phi = 28 + 12.5 \frac{RD}{100}\]</div>
+<div class="math notranslate nohighlight">
+\[\psi = -2 + 12.5 \frac{RD}{100}\]</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.plotting.html" title="Previous document">geolib_plus.plot_plotting package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.geolib_connections.html" title="Next document">geolib_plus.geolib_connectionspackage</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Developer API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.plotting.html">geolib_plus.plot_plotting package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geolib_plus.parameters_for_soil_models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/tutorials/overview.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Developer API</a><ul>
+      <li>Previous: <a href="geolib_plus.plotting.html" title="previous chapter">geolib_plus.plot_plotting package</a></li>
+      <li>Next: <a href="geolib_plus.geolib_connections.html" title="next chapter">geolib_plus.geolib_connectionspackage</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

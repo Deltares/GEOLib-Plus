@@ -1,0 +1,745 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>geolib_plus.plot_plotting package &#8212; geolib+ 0.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="geolib_plus.parameters_for_soil_models package" href="geolib_plus.parameters_for_soil_models.html" />
+    <link rel="prev" title="geolib_plus.shm package" href="geolib_plus.shm.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.shm.html" title="Previous document">geolib_plus.shm package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.parameters_for_soil_models.html" title="Next document">geolib_plus.parameters_for_soil_models package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="geolib-plus-plot-plotting-package">
+<h1>geolib_plus.plot_plotting package<a class="headerlink" href="#geolib-plus-plot-plotting-package" title="Permalink to this heading">¶</a></h1>
+<section id="module-geolib_plus.plot_cpt">
+<span id="geolib-plus-plot-cpt-module"></span><h2>geolib_plus.plot_cpt module<a class="headerlink" href="#module-geolib_plus.plot_cpt" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.define_inclination_ticks_and_labels">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">define_inclination_ticks_and_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inclination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">np.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#geolib_plus.plot_cpt.define_inclination_ticks_and_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the location and the labels of the ticks referring to the inclination angle with respect to the depth of the
+cpt. The first tick is at the reference level, the following ticks are spaced exactly 1 meter apart. The tick label
+is defined as the average inclination over the 1 meter above the tick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpt</strong> – </p></li>
+<li><p><strong>depth</strong> – </p></li>
+<li><p><strong>inclination</strong> – </p></li>
+<li><p><strong>ylim</strong> – </p></li>
+<li><p><strong>settings</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.generate_plot">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">generate_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_nr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">plt.Figure</span></span></span><a class="headerlink" href="#geolib_plus.plot_cpt.generate_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots cpt data within vertical limits</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpt</strong> – cpt data</p></li>
+<li><p><strong>settings</strong> – general settings</p></li>
+<li><p><strong>ylim</strong> – current vertical limit</p></li>
+<li><p><strong>ylims</strong> – all vertical limits for the current cpt data</p></li>
+<li><p><strong>plot_nr</strong> – number of the plot within the current cpt data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.get_values_which_exceed_threshold">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">get_values_which_exceed_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#geolib_plus.plot_cpt.get_values_which_exceed_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the values which exceed the given threshold which has to be shown, where a value is shown if the distance
+regarding the previous shown value is greater than the show interval and the value exceeds the threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> – Threshold values of plotted data</p></li>
+<li><p><strong>values</strong> – Plotted data</p></li>
+<li><p><strong>y_data</strong> – Depth data</p></li>
+<li><p><strong>show_interval</strong> – Min distance between shown values</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return shown_values<span class="colon">:</span></dt>
+<dd class="field-even"><p>Values past threshold which are shown in text boxes</p>
+</dd>
+<dt class="field-odd">Return y_coord_shown_value<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Vertical coordinates of the shown_values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.get_y_lims">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">get_y_lims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="headerlink" href="#geolib_plus.plot_cpt.get_y_lims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the vertical plot limits of the cpt. If the length of the cpt exceeds the vertical limit of the plot, a new
+plot is generated. The top of the new plot is the bottom of the previous plot plus the repeated distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpt</strong> – </p></li>
+<li><p><strong>settings</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.plot_cpt_norm">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">plot_cpt_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_cpt.plot_cpt_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots and saves all data in the current cpt according to the norm written in NEN 22476-1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpt</strong> – cpt data</p></li>
+<li><p><strong>settings</strong> – general settings</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.save_figures">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">save_figures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figures</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_folder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_cpt.save_figures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all plots of current cpt in one pdf file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fig</strong> – current figure</p></li>
+<li><p><strong>ylims</strong> – all vertical limits of current cpt</p></li>
+<li><p><strong>cpt</strong> – cpt data</p></li>
+<li><p><strong>plot_nr</strong> – number of the plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.trim_cpt_data">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">trim_cpt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vertical_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_lim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#geolib_plus.plot_cpt.trim_cpt_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trims the requested cpt data (qc ,friction, friction nbr, water) at threshold values and vertical limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>settings</strong> – graph settings</p></li>
+<li><p><strong>vertical_settings</strong> – the vertical settings</p></li>
+<li><p><strong>cpt</strong> – cpt data</p></li>
+<li><p><strong>y_lim</strong> – vertical limit of current graph</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return trimmed_values<span class="colon">:</span></dt>
+<dd class="field-even"><p>Trimmed cpt data at cut off values</p>
+</dd>
+<dt class="field-odd">Return shown_values<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Values past threshold which are shown in text boxes</p>
+</dd>
+<dt class="field-even">Return y_coord_shown_value<span class="colon">:</span></dt>
+<dd class="field-even"><p>Vertical coordinates of the shown_values</p>
+</dd>
+<dt class="field-odd">Return depth_in_range<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Vertical coordinates within y limits</p>
+</dd>
+<dt class="field-even">Return inclination_in_range<span class="colon">:</span></dt>
+<dd class="field-even"><p>Inclination angle within y limits</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.trim_cpt_data_on_vertical_limits">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">trim_cpt_data_on_vertical_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="geolib_plus.html#geolib_plus.cpt_base_model.AbstractCPT" title="geolib_plus.cpt_base_model.AbstractCPT"><span class="pre">AbstractCPT</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_lim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">np.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#geolib_plus.plot_cpt.trim_cpt_data_on_vertical_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trims the cpt data on the vertical limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpt</strong> – cpt data</p></li>
+<li><p><strong>y_lim</strong> – vertical limit of current graph</p></li>
+<li><p><strong>settings</strong> – graph settings</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_cpt.trim_values_at_exceeding_threshold">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_cpt.</span></span><span class="sig-name descname"><span class="pre">trim_values_at_exceeding_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#geolib_plus.plot_cpt.trim_values_at_exceeding_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trims a graph on threshold values when the threshold is exceeded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>threshold</strong> – </p></li>
+<li><p><strong>values</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return trimmed values<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="geolib-plus-plot-settings-module">
+<h2>geolib_plus.plot_settings module<a class="headerlink" href="#geolib-plus-plot-settings-module" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_settings.</span></span><span class="sig-name descname"><span class="pre">PlotSettings</span></span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings.assign_default_settings">
+<span class="sig-name descname"><span class="pre">assign_default_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings.assign_default_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assigns the default plot settings
+:return:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings.label_positions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label_positions</span></span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings.label_positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Position of the label in the plot, options are:
+0 = ‘top_left’,
+1 = ‘top_right’,
+2 = ‘bottom_left’,
+3 = ‘bottom_right’,
+4 = ‘bottom_middle’,</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings.languages">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">languages</span></span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings.languages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Language of the plot, options are:
+0 = ‘Nederlands’,
+1 = ‘English’</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings.plot_sizes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_sizes</span></span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings.plot_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size of the plot, options are:
+0 = ‘a4’;
+1 = ‘unlimited’;</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings.set_friction_number_in_plot">
+<span class="sig-name descname"><span class="pre">set_friction_number_in_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings.set_friction_number_in_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes inverse friction number from the plot and sets the friction number in the plot
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings.set_inversed_friction_number_in_plot">
+<span class="sig-name descname"><span class="pre">set_inversed_friction_number_in_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings.set_inversed_friction_number_in_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes friction number from the plot and sets the inverse friction number in the plot
+:return:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="geolib_plus.plot_settings.PlotSettings.top_types">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">top_types</span></span><a class="headerlink" href="#geolib_plus.plot_settings.PlotSettings.top_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of the top level of the plot, options are:
+0 = ‘relative’ : the top of the plot is relative to the surface level;
+1 = ‘absolute’ : the top of the plot is an absolute value;</p>
+</dd></dl>
+
+</dd></dl>
+
+<p>When the <a class="reference internal" href="#geolib_plus.plot_settings.PlotSettings" title="geolib_plus.plot_settings.PlotSettings"><code class="xref py py-class docutils literal notranslate"><span class="pre">PlotSettings</span></code></a> class is initialised, the class is filled with default settings.
+However, the user might want to change the default settings. Below an overview is given on how to change the default settings.</p>
+<p>The plot settings are built up out of several dictionaries. Below an explanation is given
+of the dictionaries.</p>
+<p>All the settings are stored in <code class="xref py py-class docutils literal notranslate"><span class="pre">general_settings</span></code>. It is recommended to
+not change the settings in the variable, besides the language and the font size of the labels. Below an example is given
+how to change this.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.plot_settings</span> <span class="kn">import</span> <span class="n">PlotSettings</span>
+<span class="n">plot_settings</span> <span class="o">=</span> <span class="n">PlotSettings</span><span class="p">()</span>
+
+<span class="c1"># set language to english</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">general_settings</span><span class="p">[</span><span class="s2">&quot;language&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_settings</span><span class="o">.</span><span class="n">languages</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="c1"># set font size of the labels</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">general_settings</span><span class="p">[</span><span class="s2">&quot;font_size_labels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+</pre></div>
+</div>
+<p>The cpt plotter allows for 5 different data fields: cone resistance, friction resistance, friction number,
+inversed friction number and pore pressure. The settings for these data fields can be altered in the dictionaries:
+<code class="xref py py-class docutils literal notranslate"><span class="pre">plot_qc_settings</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">plot_friction_settings</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">plot_friction_nbr_settings</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">plot_inv_friction_nbr_settings</span></code> and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">plot_water_settings</span></code>.</p>
+<p>Below a code snippet is presented on how to change cone resistance settings</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.plot_settings</span> <span class="kn">import</span> <span class="n">PlotSettings</span>
+<span class="n">plot_settings</span> <span class="o">=</span> <span class="n">PlotSettings</span><span class="p">()</span>
+
+<span class="c1"># Set minimum and maximum threshold for shown values, data which surpasses these tresholds is cut off at the</span>
+<span class="c1"># respective threshold. The units are equal to the units read from the input file in this case it is in MPa</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">plot_qc_settings</span><span class="p">[</span><span class="s2">&quot;threshold&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+
+<span class="c1"># Sets the colour of the graph</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">plot_qc_settings</span><span class="p">[</span><span class="s2">&quot;graph_color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;blue&quot;</span>
+
+<span class="c1"># Sets the style of the line</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">plot_qc_settings</span><span class="p">[</span><span class="s2">&quot;line_style&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;--&quot;</span>
+
+<span class="c1"># Sets the scale of the shown graph. This value represents how much of the respective unit (in this case MPa) is shown</span>
+<span class="c1"># per 2 grid cells.</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">plot_qc_settings</span><span class="p">[</span><span class="s2">&quot;scale_unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="c1"># Shifts the graph away from the vertical axis. The unit is the same as read from the data, in this case MPa. Note that</span>
+<span class="c1"># the absolute shift is based on the scale unit.</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">plot_qc_settings</span><span class="p">[</span><span class="s2">&quot;shift_graph&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># Sets the ticks at the x-axis. In this case, from 0 to 30 (not including 30) with a step size of 5</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">plot_qc_settings</span><span class="p">[</span><span class="s2">&quot;ticks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Besides the horizontal data settings, also the vertical settings related to the depth can be altered. Below a code
+snipped is shown on how to alter the vertical settings:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.plot_settings</span> <span class="kn">import</span> <span class="n">PlotSettings</span>
+<span class="n">plot_settings</span> <span class="o">=</span> <span class="n">PlotSettings</span><span class="p">()</span>
+
+<span class="c1"># sets the type of the top level, top_types[0] for relative top level, top_types[1] for absolute top level</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;top_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plot_settings</span><span class="o">.</span><span class="n">top_types</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Absolute value in meter, of the top of the first graph. This value is used if top type is absolute.</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;absolute_top_level&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="mi">5</span>
+
+<span class="c1"># Rounded down value of the distance in meter above surface level. This value is used if top type is relative.</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;buffer_at_top&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.5</span>
+
+<span class="c1"># Vertical length of the graph in meter</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;length_graph&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.5</span>
+
+<span class="c1"># The distance in meter which is repeated from one graph to the subsequent graph (in case the data exceeds the bottom</span>
+<span class="c1"># of the graph).</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;repeated_distance&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.5</span>
+
+<span class="c1"># Distance in meter of the depth ticks</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;depth_tick_distance&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.5</span>
+
+<span class="c1"># Distance in meter of the inclination ticks if present</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;inclination_tick_distance&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.5</span>
+
+<span class="c1"># Minimal distance in meter between textboxes which show values which exceed the data threshold.</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">vertical_settings</span><span class="p">[</span><span class="s2">&quot;spacing_shown_cut_off_value&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.5</span>
+</pre></div>
+</div>
+<p>Lastly the grid can be altered. It is possible to alter the line distances, the line colours and the line widths. Below
+a code snippet is shown which shows how to alter the grid settings. Note that the grid by default refers to the axis
+related to the cone resistance data. Therefore the scales of the grid are equal to the scales of the cone resistance data.
+The unit is MPa.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.plot_settings</span> <span class="kn">import</span> <span class="n">PlotSettings</span>
+<span class="n">plot_settings</span> <span class="o">=</span> <span class="n">PlotSettings</span><span class="p">()</span>
+
+
+<span class="c1"># Sets the locations of the major grid lines, relative to the cone resistance data</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;vertical_major_line_locations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+
+<span class="c1"># Sets the colour of the major grid lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;vertical_major_line_color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+
+<span class="c1"># Sets the line width of the major grid lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;vertical_major_line_line_width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>
+
+<span class="c1"># sets the distances between minor vertical lines, relative to the cone resistance data. In this case</span>
+<span class="c1"># there are 2 sets off minor vertical lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;vertical_minor_line_distances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Sets the colours of all the sets of minor vertical lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;vertical_minor_line_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">]</span>
+
+<span class="c1"># Sets the line widths of all the sets of minor vertical lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;vertical_minor_line_line_widths&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+
+<span class="c1"># Sets the colour of the major grid lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;horizontal_major_line_color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;black&quot;</span>
+
+<span class="c1"># Sets the line width of the major grid lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;horizontal_major_line_line_width&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.5</span>
+
+<span class="c1"># Sets the locations of the major grid lines, relative to the depth data.</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;horizontal_major_line_locations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">]</span>
+
+<span class="c1"># sets the distances between horizontal lines, relative to the depth data. In this case</span>
+<span class="c1"># there are 2 sets off horizontal lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;horizontal_line_distances&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Sets the colours of all the sets of minor vertical lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;horizontal_line_colors&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">]</span>
+
+<span class="c1"># Sets the line widths of all the sets of horizontal lines</span>
+<span class="n">plot_settings</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="s2">&quot;horizontal_line_line_widths&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="module-geolib_plus.plot_utils">
+<span id="geolib-plus-plot-utils-module"></span><h2>geolib_plus.plot_utils module<a class="headerlink" href="#module-geolib_plus.plot_utils" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.create_bro_information_box">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">create_bro_information_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_nr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_meta_data_from_plot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.create_bro_information_box" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> – current axis</p></li>
+<li><p><strong>scale</strong> – scale of the plot on the paper</p></li>
+<li><p><strong>cpt</strong> – cpt data</p></li>
+<li><p><strong>plot_nr</strong> – number of the plot within the current cpt data</p></li>
+<li><p><strong>ylims</strong> – all vertical limits for the current cpt data</p></li>
+<li><p><strong>distance_meta_data_from_plot</strong> – The distance between the meta data table and the actual plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.create_custom_grid">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">create_custom_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.create_custom_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates custom grid with custom line colours, custom line distances and custom line widths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> – current axis</p></li>
+<li><p><strong>xlim</strong> – horizontal limit</p></li>
+<li><p><strong>ylim</strong> – vertical limit</p></li>
+<li><p><strong>grid</strong> – grid settings</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.create_gef_information_box">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">create_gef_information_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_nr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.create_gef_information_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets textboxes with meta data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> – current axis</p></li>
+<li><p><strong>scale</strong> – scale of the plot on the paper</p></li>
+<li><p><strong>cpt</strong> – cpt data</p></li>
+<li><p><strong>plot_nr</strong> – number of the plot within the current cpt data</p></li>
+<li><p><strong>ylims</strong> – all vertical limits for the current cpt data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.create_information_box">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">create_information_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_nr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylims</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_from_plot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.create_information_box" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.set_figure_size">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">set_figure_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.set_figure_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the figure size in inches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fig</strong> – current figure</p></li>
+<li><p><strong>ylim</strong> – current vertical limit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.set_local_reference_line">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">set_local_reference_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.set_local_reference_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a line in the plot at the depth of the  local reference line, e.g. surface level or sea bed level.
+Also set a textbox with the depth of the reference line relative to the vertical datum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cpt</strong> – </p></li>
+<li><p><strong>ax</strong> – </p></li>
+<li><p><strong>xlim</strong> – </p></li>
+<li><p><strong>language</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.set_multicolor_label">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">set_multicolor_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ylim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_txt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size_arrow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_style</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_axis_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bottom_left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anchorpad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_label_spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.02</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.set_multicolor_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates axes labels with multiple colors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ylim</strong> – vertical limit of current plot</p></li>
+<li><p><strong>ax</strong> – current axis where the labels should be drawn</p></li>
+<li><p><strong>label_txt</strong> – text in label</p></li>
+<li><p><strong>color</strong> – color of label</p></li>
+<li><p><strong>font_size_text</strong> – font size of the text</p></li>
+<li><p><strong>font_size_arrow</strong> – font size of the arrow in the label</p></li>
+<li><p><strong>line_style</strong> – style of the line of the current graph</p></li>
+<li><p><strong>location</strong> – location of the label relative to the plot</p></li>
+<li><p><strong>axis</strong> – ‘x’, ‘y’, or ‘both’ and specifies which label(s) should be drawn</p></li>
+<li><p><strong>anchorpad</strong> – pad around the child for drawing a frame. given in fraction of fontsize.</p></li>
+<li><p><strong>kw</strong> – key word arguments for TextArea</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.set_textbox_at_thresholds">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">set_textbox_at_thresholds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">found_depths_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.set_textbox_at_thresholds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set textboxes in the plot at the location off maximum values past the cut off value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> – axis</p></li>
+<li><p><strong>ylim</strong> – vertical limit</p></li>
+<li><p><strong>max_data</strong> – maximum values past the cut off value</p></li>
+<li><p><strong>found_depths_data</strong> – depths of maximum values past the cut of value</p></li>
+<li><p><strong>threshold</strong> – value at which the data is cut off</p></li>
+<li><p><strong>location</strong> – location of axis label and ticks</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.set_x_axis">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">set_x_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.set_x_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the x-limit, the x-label, and the x-ticks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> – </p></li>
+<li><p><strong>graph</strong> – </p></li>
+<li><p><strong>settings</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="geolib_plus.plot_utils.set_y_axis">
+<span class="sig-prename descclassname"><span class="pre">geolib_plus.plot_utils.</span></span><span class="sig-name descname"><span class="pre">set_y_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cpt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_locations_inclination</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_labels_inclination</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#geolib_plus.plot_utils.set_y_axis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the y-limit, the y-label, the y-ticks and inverts y-axis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> – </p></li>
+<li><p><strong>ylim</strong> – </p></li>
+<li><p><strong>settings</strong> – </p></li>
+<li><p><strong>cpt</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="geolib_plus.shm.html" title="Previous document">geolib_plus.shm package</a>
+        </li>
+        <li>
+          <a href="geolib_plus.parameters_for_soil_models.html" title="Next document">geolib_plus.parameters_for_soil_models package</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Developer API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.html">geolib_plus package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.bro_xml_cpt.html">geolib_plus.bro_xml_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.gef_cpt.html">geolib_plus.gef_cpt package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.robertson_cpt_interpretation.html">geolib_plus.robertson_cpt_interpretation package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">geolib_plus.plot_plotting package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.parameters_for_soil_models.html">geolib_plus.parameters_for_soil_models package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.shm.html">geolib_plus.shm package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="geolib_plus.geolib_connections.html">geolib_plus.geolib_connectionspackage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../community/tutorials/overview.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../community/probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Developer API</a><ul>
+      <li>Previous: <a href="geolib_plus.shm.html" title="previous chapter">geolib_plus.shm package</a></li>
+      <li>Next: <a href="geolib_plus.parameters_for_soil_models.html" title="next chapter">geolib_plus.parameters_for_soil_models package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Tutorial defining and calculating parameters for the Soft Soil Creep model &#8212; geolib+ 0.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Tutorial Defining and calculating parameters for the Hardening Soil model" href="tutorial_hardening_soil_parameters.html" />
+    <link rel="prev" title="Tutorial Custom Cpt interpretation using GEOLIB+" href="tutorial_custom_cpt_interpretation.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+              <div class="related top">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tutorial_custom_cpt_interpretation.html" title="Previous document">Tutorial  Custom Cpt interpretation using GEOLIB+</a>
+        </li>
+        <li>
+          <a href="tutorial_hardening_soil_parameters.html" title="Next document">Tutorial Defining and calculating parameters for the Hardening Soil model</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+
+          <div class="body" role="main">
+            
+  <section id="tutorial-defining-and-calculating-parameters-for-the-soft-soil-creep-model">
+<h1>Tutorial defining and calculating parameters for the Soft Soil Creep model<a class="headerlink" href="#tutorial-defining-and-calculating-parameters-for-the-soft-soil-creep-model" title="Permalink to this heading">¶</a></h1>
+<p>Part of the GEOLIB+ package is also a module that can determine certain parameters
+used as input of the Soft Soil Creep (SSC) model. To do that we can use the
+<a class="reference internal" href="../../dev/geolib_plus.parameters_for_soil_models.html#geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters" title="geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoftSoilCreepParameters</span></code></a> class.
+In this tutorial the user reads will perform the following steps to calculate the SSC parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>read a cpt and interpret it using the <a class="reference internal" href="../../dev/geolib_plus.robertson_cpt_interpretation.html#geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation" title="geolib_plus.robertson_cpt_interpretation.robertson_cpt_interpretation.RobertsonCptInterpretation"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobertsonCptInterpretation</span></code></a> class.</p></li>
+<li><p>calculate the OCR values in every point of the cpt</p></li>
+<li><p>calculate the initial void ratio based on the lithology</p></li>
+<li><p>calculate the compression index based on Nishida (1956) <span id="id1">[<a class="reference internal" href="../../references.html#id18" title="Y. Nishida. A brief note on compression index of soils. Soils Mechanics and Foundation Division, 82:1027, 1956.">16</a>]</span></p></li>
+</ul>
+</div></blockquote>
+<p>To begin with the SSC model calculation the <a class="reference internal" href="../../dev/geolib_plus.parameters_for_soil_models.html#geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters" title="geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoftSoilCreepParameters</span></code></a> class
+should be initialized.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.soft_soil_creep_parameters</span> <span class="kn">import</span> <span class="n">SoftSoilCreepParameters</span>
+<span class="c1"># initialize class</span>
+<span class="n">SSC_model</span> <span class="o">=</span> <span class="n">SoftSoilCreepParameters</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The user will then read and interpret a gef file using GEOLIB+.
+Note that reading the cpt is not neccessary for the SSC parameter determination.
+Input parameters can also come from labtests (which is more accurate).</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">geolib_plus.gef_cpt</span> <span class="kn">import</span> <span class="n">GefCpt</span>
+<span class="kn">from</span> <span class="nn">geolib_plus.robertson_cpt_interpretation</span> <span class="kn">import</span> <span class="n">RobertsonCptInterpretation</span>
+
+<span class="c1"># read cpt from gef file</span>
+<span class="n">cpt_file_gef</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cpt&quot;</span><span class="p">,</span> <span class="s2">&quot;gef&quot;</span><span class="p">,</span> <span class="s2">&quot;test_cpt.gef&quot;</span><span class="p">)</span>
+<span class="n">cpt_gef</span> <span class="o">=</span> <span class="n">GefCpt</span><span class="p">()</span>
+<span class="n">cpt_gef</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">cpt_file_gef</span><span class="p">)</span>
+<span class="n">cpt_gef</span><span class="o">.</span><span class="n">pre_process_data</span><span class="p">()</span>
+<span class="c1"># define interpreter</span>
+<span class="n">interpreter</span> <span class="o">=</span> <span class="n">RobertsonCptInterpretation</span><span class="p">()</span>
+<span class="c1"># perform interpretation</span>
+<span class="n">cpt_gef</span><span class="o">.</span><span class="n">interpret_cpt</span><span class="p">(</span><span class="n">interpreter</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The data stored in the cpt_gef can be used to calculate more parameters that can be
+used as inputs of the SSC parameter calculation. For example, the OCR value can be
+calculated using the following equation <span id="id2">[<a class="reference internal" href="../../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">OCR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">Qtn_value</span> <span class="o">**</span> <span class="mf">1.25</span> <span class="k">for</span> <span class="n">Qtn_value</span> <span class="ow">in</span> <span class="n">cpt_gef</span><span class="o">.</span><span class="n">Qtn</span><span class="p">])</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The initial void ratio is defined by using the lithology attribute.
+From the initial void ratio the compression index can also be calculated.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># assign size to void ratio list</span>
+<span class="n">eo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cpt_gef</span><span class="o">.</span><span class="n">lithology</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lithology_index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cpt_gef</span><span class="o">.</span><span class="n">lithology</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">lithology_index</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">]:</span>
+        <span class="n">eo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.6</span>
+    <span class="k">elif</span> <span class="n">lithology_index</span> <span class="o">==</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span>
+        <span class="n">eo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.33</span>
+    <span class="k">elif</span> <span class="n">lithology_index</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;5&quot;</span><span class="p">,</span> <span class="s2">&quot;6&quot;</span><span class="p">,</span> <span class="s2">&quot;7&quot;</span><span class="p">]:</span>
+        <span class="n">eo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.26</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">eo</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">Cc</span> <span class="o">=</span> <span class="mf">1.15</span> <span class="o">*</span> <span class="p">(</span> <span class="n">eo</span> <span class="o">-</span> <span class="mf">0.35</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now that all the inputs are prepared for the SSC parameter calculation
+the user can input them into the class and perform the calculation.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># input calculated arrays in SSC object</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">eo</span> <span class="o">=</span> <span class="n">eo</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">Cc</span> <span class="o">=</span> <span class="n">Cc</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">v_ur</span> <span class="o">=</span> <span class="n">cpt_gef</span><span class="o">.</span><span class="n">poisson</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">OCR</span> <span class="o">=</span> <span class="n">OCR</span>
+<span class="c1"># some of the inputs can be defined as floats</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">Cs</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">Ca</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">K0_NC</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="c1"># calculate parameters</span>
+<span class="n">SSC_model</span><span class="o">.</span><span class="n">calculate_soft_soil_parameters</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="tutorial_custom_cpt_interpretation.html" title="Previous document">Tutorial  Custom Cpt interpretation using GEOLIB+</a>
+        </li>
+        <li>
+          <a href="tutorial_hardening_soil_parameters.html" title="Next document">Tutorial Defining and calculating parameters for the Hardening Soil model</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../index.html">
+    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user/install.html">Installation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/overview.html">Developer API</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="overview.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="overview.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tutorial_setup_cpt.html">Tutorial setup Cpt class interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_cpt_interpretation.html">Tutorial Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_cpt_plotting.html">Tutorial Cpt plotting using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_custom_cpt_interpretation.html">Tutorial  Custom Cpt interpretation using GEOLIB+</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Tutorial defining and calculating parameters for the Soft Soil Creep model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_hardening_soil_parameters.html">Tutorial Defining and calculating parameters for the Hardening Soil model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_relative_density_correlated_parameters.html">Tutorial derive model parameters for sands using relative density input</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_connecting_dfoundations.html">Create a D-Foundations soil profile using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_nkt.html">Tutorial determine Nkt values using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_shansep_parameters.html">Tutorial determine Shansep parameters using GEOLIB+</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tutorial_determine_state_parameters.html">Tutorial determine state parameters using GEOLIB+</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../probabilistic_macrostability/probabilistic_tutorials.html">Probabilistic Tutorials</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="https://bitbucket.org/DeltaresGEO/geolib-plus/src">@Source code</a></li>
+    
+    <li class="toctree-l1"><a href="https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB">@Issue Tracker</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home">@Project documentation</a></li>
+    
+    <li class="toctree-l1"><a href="https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases">@Releases</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="overview.html">Tutorials</a><ul>
+      <li>Previous: <a href="tutorial_custom_cpt_interpretation.html" title="previous chapter">Tutorial  Custom Cpt interpretation using GEOLIB+</a></li>
+      <li>Next: <a href="tutorial_hardening_soil_parameters.html" title="next chapter">Tutorial Defining and calculating parameters for the Hardening Soil model</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Deltares.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

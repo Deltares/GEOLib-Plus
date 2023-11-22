@@ -1,0 +1,276 @@
+{
+  "Calculations": [
+    {
+      "Label": "Prob Daily conditions FROM",
+      "Beta": 6.4542501003335611,
+      "WaterLevel": 7.5,
+      "Contributions": [
+        {
+          "Stochast": "8",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "7",
+          "Alpha": 0.69926822173646819
+        },
+        {
+          "Stochast": "6",
+          "Alpha": 0.076424849262484912
+        },
+        {
+          "Stochast": "5",
+          "Alpha": 0.68980101850798337
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "1",
+          "Alpha": 0.17134103813760632
+        },
+        {
+          "Stochast": "2",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "0",
+          "Alpha": 0.0
+        }
+      ]
+    },
+    {
+      "Label": "Uplift Van Probabilistic (FORM)",
+      "Beta": 3.3700044328318248,
+      "WaterLevel": 12.0,
+      "Contributions": [
+        {
+          "Stochast": "8",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "7",
+          "Alpha": 0.32352694618729311
+        },
+        {
+          "Stochast": "6",
+          "Alpha": 0.05550259128173634
+        },
+        {
+          "Stochast": "5",
+          "Alpha": 0.14996238549171878
+        },
+        {
+          "Stochast": "4",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "3",
+          "Alpha": 0.8750592512100992
+        },
+        {
+          "Stochast": "10",
+          "Alpha": 0.055947334609209219
+        },
+        {
+          "Stochast": "11",
+          "Alpha": 0.0
+        },
+        {
+          "Stochast": "9",
+          "Alpha": -0.31765116560641743
+        }
+      ]
+    }
+  ],
+  "Stochasts": [
+    {
+      "Id": "0",
+      "Label": "Prob Daily conditions FROM",
+      "ParameterType": "ModelFactor",
+      "DistributionType": "LogNormal",
+      "Mean": 1.0,
+      "StandardDeviation": 0.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "1",
+      "Label": "SP 2 Above",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 15.0,
+      "StandardDeviation": 3.5,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "2",
+      "Label": "SP 2 Below",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 15.0,
+      "StandardDeviation": 3.5,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "3",
+      "Label": "H_vbv_v",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.36,
+      "StandardDeviation": 0.06,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "4",
+      "Label": "H_vbv_v",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.9,
+      "StandardDeviation": 0.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "5",
+      "Label": "H_Rk_ko",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.28,
+      "StandardDeviation": 0.02,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "6",
+      "Label": "H_Rk_ko",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.9,
+      "StandardDeviation": 0.03,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "7",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.3,
+      "StandardDeviation": 0.05,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "8",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.95,
+      "StandardDeviation": 0.025,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "9",
+      "Label": "Uplift Van Probabilistic (FORM)",
+      "ParameterType": "ModelFactor",
+      "DistributionType": "LogNormal",
+      "Mean": 1.05,
+      "StandardDeviation": 0.033,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "10",
+      "Label": "SP 2 Above",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 15.0,
+      "StandardDeviation": 3.5,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "11",
+      "Label": "SP 2 Below",
+      "ParameterType": "Pop",
+      "DistributionType": "LogNormal",
+      "Mean": 15.0,
+      "StandardDeviation": 3.5,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "12",
+      "Label": "H_vbv_v",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.36,
+      "StandardDeviation": 0.06,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "13",
+      "Label": "H_vbv_v",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.9,
+      "StandardDeviation": 0.0,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "14",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.3,
+      "StandardDeviation": 0.05,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "15",
+      "Label": "H_Rk_k_shallow",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.95,
+      "StandardDeviation": 0.025,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "16",
+      "Label": "H_Rk_ko",
+      "ParameterType": "ShearStrengthRatio",
+      "DistributionType": "LogNormal",
+      "Mean": 0.28,
+      "StandardDeviation": 0.02,
+      "VariationCoefficient": 0.0
+    },
+    {
+      "Id": "17",
+      "Label": "H_Rk_ko",
+      "ParameterType": "StrengthIncreaseExponent",
+      "DistributionType": "LogNormal",
+      "Mean": 0.9,
+      "StandardDeviation": 0.03,
+      "VariationCoefficient": 0.0
+    }
+  ],
+  "Correlations": [
+    {
+      "Stochast1": "7",
+      "Stochast2": "8",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "1",
+      "Stochast2": "2",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "14",
+      "Stochast2": "15",
+      "Correlation": 1.0
+    },
+    {
+      "Stochast1": "10",
+      "Stochast2": "11",
+      "Correlation": 1.0
+    }
+  ]
+}
