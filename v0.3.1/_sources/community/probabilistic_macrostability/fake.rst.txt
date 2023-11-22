@@ -1,0 +1,5 @@
+Example: Failure Probability of a Cantilever Beam — OpenTURNS 1.16 documentation
+================================================================================
+
+
+.. math:: \psi(r) = e^{-2r}
