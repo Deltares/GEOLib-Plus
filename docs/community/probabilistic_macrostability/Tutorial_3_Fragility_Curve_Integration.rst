@@ -1,8 +1,8 @@
-Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create base ``class DStabilityFragilityCurve`` for fragility curve operations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 1: Create base ``class DStabilityFragilityCurve`` for fragility curve operations
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -110,8 +110,10 @@ Create base ``class DStabilityFragilityCurve`` for fragility curve operations
             self.P = 10.**self.P
             
 
-Specify the fragility curve names and locations. Instantiate a ``DStabilityFragilityCurve`` class and save in ``FC_list``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 2: Specify the fragility curve names and locations 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Instantiate a ``DStabilityFragilityCurve`` class and save in ``FC_list``
 
 .. code:: ipython3
 
@@ -126,8 +128,8 @@ Specify the fragility curve names and locations. Instantiate a ``DStabilityFragi
         FC = DStabilityFragilityCurve(fc_label, filename)
         FC_list.append( FC )
 
-Plot the fragility points and the extrapolated fragility curve
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 3: Plot the fragility points and the extrapolated fragility curve
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -183,8 +185,8 @@ Plot the fragility points and the extrapolated fragility curve
 
 --------------
 
-Now we integrate the fragility curve with the probability density of water level.
-
+Step 4:  integrate the fragility curve with the probability density of water level
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here we assume the water level follows a Gumbel distribution.
 
@@ -220,8 +222,10 @@ Here we assume the water level follows a Gumbel distribution.
 
 
 
-Calculating the probability of exceedence for range of H
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 5: Calculate the probability of exceedence
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Calculating the probability of exceedence for range of H :
 
 .. math ::
 
@@ -274,7 +278,7 @@ Calculating the probability of exceedence for range of H
 
 
 Calculating the influence coefficients after integration :math:`\alpha \_i \| h`
---------------------------------------------------------------------------------
+
 
 .. math::
 
@@ -290,7 +294,7 @@ where:
 :math:`\alpha\_{T_i}` : transformed influence coefficient(s) of
 strength variable
 
-:math:`\alpha \_i \|h^*`: Influence coefficient(s) of strength
+:math:`\alpha \_i \| h^*`: Influence coefficient(s) of strength
 variable, directly from FORM at design point water level (e.g., based on
 interpolation between fragility points)
 
@@ -303,12 +307,12 @@ interpolation between fragility points)
     P_us=gumbel_r.pdf(Hs, loc=mu, scale=std)          # \Phi^{-1}(F_h(h*))
     us = st.norm.ppf(P_us)                           
     
-    print('u*, design point (genormeerde waterstand) = ', us)
-    print()
+    print('u*, design point (genormeerde waterstand) = ', us "\n")
+    
     alphaH = us/-Beta                                #alphaH = us/-Beta
     
-    print('𝛼_ℎ (invloedscoëfficiënt van het waterstand) =', alphaH)
-    print()
+    print(':math:`\alpha\_{h}` (invloedscoëfficiënt van het waterstand) =', alphaH)
+    
     #Getting alphas befor integrating for H^star ( interpolated through fragility curve)
     
     a=FC_list[0].Alphas                       
@@ -330,8 +334,8 @@ interpolation between fragility points)
     for i in range(len(values)):
         Alphas[i]=values[i][idx]
         
-    print('α_i |h^* = ', Alphas)    
-    print()
+    print('α_i |h*` = ', Alphas "\n")    
+    
     
     print('Sum of influence factors after integrating the probbaility of water level is: ',
           sum(Alphas**2)) 
@@ -347,7 +351,7 @@ interpolation between fragility points)
     
     𝛼_ℎ (invloedscoëfficiënt van het waterstand) = 0.7153517909441423
     
-    α_i |h^* =  [ 0.05643247  0.          0.         -0.30353334  0.83616773  0.06107594
+    α_i |h* =  [ 0.05643247  0.          0.         -0.30353334  0.83616773  0.06107594
       0.34022656  0.          0.17395521]
     
     Sum of influence factors after integrating the probbaility of water level is:  0.9442383788975067
@@ -357,9 +361,8 @@ interpolation between fragility points)
 
     # transformed influence coefficient(s) of parameters to be determined
     Alpha_T = Alphas**2*(1-alphaH**2)                
-    print('The influence factors of strength paramters are:\n', Alpha_T)
+    print('The influence factors of strength paramters are:\n', Alpha_T "\n")
     
-    print()
     print('Influence factor from water level = ', 1-sum(Alpha_T))
 
 

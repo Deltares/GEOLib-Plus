@@ -136,7 +136,7 @@ Load base class for Fragility curve operations
             
 
 Code for plotting
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -198,7 +198,7 @@ Load fragility curves, create DStabilityFragilityCurve objects, and save in list
         FC_list.append( FC )
 
 Plot the fragility points
-~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -213,7 +213,7 @@ Plot the fragility points
 
 
 Extrapolate fragility curves linearly along the given range, with the given discretisation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -225,7 +225,7 @@ Extrapolate fragility curves linearly along the given range, with the given disc
         FC.densify_extrapolate_fc()
 
 Plot the extrapolated fragility curves
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -240,7 +240,7 @@ Plot the extrapolated fragility curves
 
 
 Load the water level dependent scenario probability and densify and extrapolate
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -249,8 +249,8 @@ Load the water level dependent scenario probability and densify and extrapolate
         # Note we linearly extrapolate the logarithmic values of the probability
         FC.densify_extrapolate_scenario_probability(logarithmic=False)
 
-Sanity checks
-~~~~~~~~~~~~~
+Sanity checks:
+^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -271,7 +271,7 @@ Sanity checks
             print(FC.P[~sum_to_one_bool])
 
 Plot the scenario probabilities
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -286,7 +286,7 @@ Plot the scenario probabilities
 
 
 The combination of 2 fragility curves
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -320,7 +320,7 @@ The combination of 2 fragility curves
             print(alphas_combined)    
 
 Plot the combined fragility curve
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
@@ -335,7 +335,7 @@ Plot the combined fragility curve
 
 
 Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code:: ipython3
 
