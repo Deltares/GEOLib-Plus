@@ -18,7 +18,7 @@
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration" href="Tutorial_3_Fragility_Curve_Integration.html" />
+    <link rel="next" title="Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel" href="Tutorial_3_Fragility_Curve_Integration.html" />
     <link rel="prev" title="Tutorial 1: Deriving Lognormal statistics from measurements" href="Tutorial_1_Fit_Lognormal_Distribution.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -41,7 +41,7 @@
           <a href="Tutorial_1_Fit_Lognormal_Distribution.html" title="Previous document">Tutorial 1: Deriving Lognormal statistics from measurements</a>
         </li>
         <li>
-          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Next document">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a>
+          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Next document">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a>
           &rarr;
         </li>
     </ul>
@@ -433,7 +433,7 @@ points!</p>
           <a href="Tutorial_1_Fit_Lognormal_Distribution.html" title="Previous document">Tutorial 1: Deriving Lognormal statistics from measurements</a>
         </li>
         <li>
-          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Next document">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a>
+          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Next document">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a>
           &rarr;
         </li>
     </ul>
@@ -481,20 +481,8 @@ points!</p>
 <li class="toctree-l3"><a class="reference internal" href="#step-8-force-fitting-a-gumbel-distribution">Step 8: Force fitting a Gumbel distribution</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html#now-we-integrate-the-fragility-curve-with-the-probability-density-of-water-level">Now we integrate the fragility curve with the probability density of water level.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html#calculating-the-probability-of-exceedence-for-range-of-h">Calculating the probability of exceedence for range of H</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html">Tutorial 4: Combining 2 fragility curves for different scenario’s.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#code-for-plotting">Code for plotting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-fragility-points">Plot the fragility points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation">Extrapolate fragility curves linearly along the given range, with the given discretisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-extrapolated-fragility-curves">Plot the extrapolated fragility curves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate">Load the water level dependent scenario probability and densify and extrapolate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#sanity-checks">Sanity checks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-scenario-probabilities">Plot the scenario probabilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#the-combination-of-2-fragility-curves">The combination of 2 fragility curves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#plot-the-combined-fragility-curve">Plot the combined fragility curve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability.html#save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit">Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)</a></li>
 </ul>
 </li>
 </ul>
@@ -524,7 +512,7 @@ points!</p>
   <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="probabilistic_tutorials.html">Probabilistic Tutorials</a><ul>
       <li>Previous: <a href="Tutorial_1_Fit_Lognormal_Distribution.html" title="previous chapter">Tutorial 1: Deriving Lognormal statistics from measurements</a></li>
-      <li>Next: <a href="Tutorial_3_Fragility_Curve_Integration.html" title="next chapter">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a></li>
+      <li>Next: <a href="Tutorial_3_Fragility_Curve_Integration.html" title="next chapter">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a></li>
   </ul></li>
   </ul></li>
 </ul>

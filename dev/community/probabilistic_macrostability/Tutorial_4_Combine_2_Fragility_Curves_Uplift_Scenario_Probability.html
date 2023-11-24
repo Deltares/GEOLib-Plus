@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Changelog" href="../../changelog.html" />
-    <link rel="prev" title="Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration" href="Tutorial_3_Fragility_Curve_Integration.html" />
+    <link rel="prev" title="Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel" href="Tutorial_3_Fragility_Curve_Integration.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
@@ -37,7 +37,7 @@
     <ul>
         <li>
           &larr;
-          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Previous document">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a>
+          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Previous document">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a>
         </li>
         <li>
           <a href="../../changelog.html" title="Next document">Changelog</a>
@@ -180,9 +180,8 @@ low, whereas at high water levels, the probability of uplift is high
 </pre></div>
 </div>
 </section>
-</section>
 <section id="code-for-plotting">
-<h1>Code for plotting<a class="headerlink" href="#code-for-plotting" title="Permalink to this heading">¶</a></h1>
+<h2>Code for plotting<a class="headerlink" href="#code-for-plotting" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="n">figures_to_plot</span><span class="p">):</span>
     <span class="c1"># Instantiate a figure with a specified size</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -229,6 +228,8 @@ low, whereas at high water levels, the probability of uplift is high
     <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
 </pre></div>
 </div>
+<section id="load-fragility-curves-create-dstabilityfragilitycurve-objects-and-save-in-list">
+<h3>Load fragility curves, create DStabilityFragilityCurve objects, and save in list<a class="headerlink" href="#load-fragility-curves-create-dstabilityfragilitycurve-objects-and-save-in-list" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fragility_curves_list</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;FC_basis&#39;</span><span class="p">,</span><span class="s1">&#39;FC_tutorial_basis.json&#39;</span> <span class="p">),</span>
                            <span class="p">(</span><span class="s1">&#39;FC_cphi0&#39;</span><span class="p">,</span><span class="s1">&#39;FC_tutorial_cphi0.json&#39;</span> <span class="p">)]</span>
 <span class="n">FC_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -238,8 +239,9 @@ low, whereas at high water levels, the probability of uplift is high
 </pre></div>
 </div>
 </section>
+</section>
 <section id="plot-the-fragility-points">
-<h1>Plot the fragility points<a class="headerlink" href="#plot-the-fragility-points" title="Permalink to this heading">¶</a></h1>
+<h2>Plot the fragility points<a class="headerlink" href="#plot-the-fragility-points" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the figure</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="c1"># Show the figure</span>
@@ -249,7 +251,7 @@ low, whereas at high water levels, the probability of uplift is high
 <img alt="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_10_0.png" src="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_10_0.png" />
 </section>
 <section id="extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation">
-<h1>Extrapolate fragility curves linearly along the given range, with the given discretisation<a class="headerlink" href="#extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation" title="Permalink to this heading">¶</a></h1>
+<h2>Extrapolate fragility curves linearly along the given range, with the given discretisation<a class="headerlink" href="#extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">range_h</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">14</span><span class="p">]</span>
 <span class="n">delta_h</span> <span class="o">=</span> <span class="mf">0.05</span>
 
@@ -260,7 +262,7 @@ low, whereas at high water levels, the probability of uplift is high
 </div>
 </section>
 <section id="plot-the-extrapolated-fragility-curves">
-<h1>Plot the extrapolated fragility curves<a class="headerlink" href="#plot-the-extrapolated-fragility-curves" title="Permalink to this heading">¶</a></h1>
+<h2>Plot the extrapolated fragility curves<a class="headerlink" href="#plot-the-extrapolated-fragility-curves" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the figure</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="c1"># Show the figure</span>
@@ -270,7 +272,7 @@ low, whereas at high water levels, the probability of uplift is high
 <img alt="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_14_0.png" src="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_14_0.png" />
 </section>
 <section id="load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate">
-<h1>Load the water level dependent scenario probability and densify and extrapolate<a class="headerlink" href="#load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate" title="Permalink to this heading">¶</a></h1>
+<h2>Load the water level dependent scenario probability and densify and extrapolate<a class="headerlink" href="#load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
     <span class="n">FC</span><span class="o">.</span><span class="n">get_scenario_probability</span><span class="p">(</span><span class="s1">&#39;ScenarioProbabilityFragilityCurvesUplift_2.xlsx&#39;</span><span class="p">)</span>
     <span class="c1"># Note we linearly extrapolate the logarithmic values of the probability</span>
@@ -279,7 +281,7 @@ low, whereas at high water levels, the probability of uplift is high
 </div>
 </section>
 <section id="sanity-checks">
-<h1>Sanity checks<a class="headerlink" href="#sanity-checks" title="Permalink to this heading">¶</a></h1>
+<h2>Sanity checks:<a class="headerlink" href="#sanity-checks" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check if all arrays in the list are identical</span>
 <span class="n">h_array_identical</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">H</span> <span class="o">==</span> <span class="n">FC_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">H</span><span class="p">)</span> <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">)</span>
 
@@ -299,7 +301,7 @@ low, whereas at high water levels, the probability of uplift is high
 </div>
 </section>
 <section id="plot-the-scenario-probabilities">
-<h1>Plot the scenario probabilities<a class="headerlink" href="#plot-the-scenario-probabilities" title="Permalink to this heading">¶</a></h1>
+<h2>Plot the scenario probabilities<a class="headerlink" href="#plot-the-scenario-probabilities" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the figure</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>\
 <span class="c1"># Show the figure</span>
@@ -309,7 +311,7 @@ low, whereas at high water levels, the probability of uplift is high
 <img alt="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_20_0.png" src="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_20_0.png" />
 </section>
 <section id="the-combination-of-2-fragility-curves">
-<h1>The combination of 2 fragility curves<a class="headerlink" href="#the-combination-of-2-fragility-curves" title="Permalink to this heading">¶</a></h1>
+<h2>The combination of 2 fragility curves<a class="headerlink" href="#the-combination-of-2-fragility-curves" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">h_array_identical</span> <span class="ow">and</span> <span class="n">scenarios_exhaustive</span><span class="p">:</span>
     <span class="c1"># Combine all curves with the respective scenario probabilities</span>
     <span class="n">Pf_combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span> <span class="p">[</span><span class="n">FC</span><span class="o">.</span><span class="n">P</span> <span class="o">*</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="o">-</span> <span class="n">FC</span><span class="o">.</span><span class="n">B</span> <span class="p">)</span> <span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -342,7 +344,7 @@ low, whereas at high water levels, the probability of uplift is high
 </div>
 </section>
 <section id="plot-the-combined-fragility-curve">
-<h1>Plot the combined fragility curve<a class="headerlink" href="#plot-the-combined-fragility-curve" title="Permalink to this heading">¶</a></h1>
+<h2>Plot the combined fragility curve<a class="headerlink" href="#plot-the-combined-fragility-curve" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h_combined</span><span class="p">,</span> <span class="n">beta_combined</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Combined Fragility Curve&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -352,7 +354,7 @@ low, whereas at high water levels, the probability of uplift is high
 <img alt="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_24_0.png" src="../../_images/Tutorial_4_Combine_2_Fragility_Curves_Uplift_Scenario_Probability_24_0.png" />
 </section>
 <section id="save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit">
-<h1>Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)<a class="headerlink" href="#save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit" title="Permalink to this heading">¶</a></h1>
+<h2>Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)<a class="headerlink" href="#save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Store the combined fragility curve to json.</span>
 <span class="n">alpha_values</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">stochasts</span> <span class="o">=</span> <span class="p">[]</span>
@@ -393,6 +395,7 @@ low, whereas at high water levels, the probability of uplift is high
 </pre></div>
 </div>
 </section>
+</section>
 
 
           </div>
@@ -402,7 +405,7 @@ low, whereas at high water levels, the probability of uplift is high
     <ul>
         <li>
           &larr;
-          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Previous document">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a>
+          <a href="Tutorial_3_Fragility_Curve_Integration.html" title="Previous document">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a>
         </li>
         <li>
           <a href="../../changelog.html" title="Next document">Changelog</a>
@@ -443,24 +446,22 @@ low, whereas at high water levels, the probability of uplift is high
 <li class="toctree-l1 current"><a class="reference internal" href="probabilistic_tutorials.html">Probabilistic Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Tutorial_1_Fit_Lognormal_Distribution.html">Tutorial 1: Deriving Lognormal statistics from measurements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Tutorial_2_Fit_GEV_Distribution.html">Tutorial 2: Fit an extreme value distribution for the water level</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html#now-we-integrate-the-fragility-curve-with-the-probability-density-of-water-level">Now we integrate the fragility curve with the probability density of water level.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html#calculating-the-probability-of-exceedence-for-range-of-h">Calculating the probability of exceedence for range of H</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorial_3_Fragility_Curve_Integration.html">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial 4: Combining 2 fragility curves for different scenario’s.</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#import-necessary-python-packages">Import necessary python packages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load-base-class-for-fragility-curve-operations">Load base class for Fragility curve operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code-for-plotting">Code for plotting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-fragility-points">Plot the fragility points</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation">Extrapolate fragility curves linearly along the given range, with the given discretisation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-extrapolated-fragility-curves">Plot the extrapolated fragility curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate">Load the water level dependent scenario probability and densify and extrapolate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sanity-checks">Sanity checks:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-scenario-probabilities">Plot the scenario probabilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-combination-of-2-fragility-curves">The combination of 2 fragility curves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plot-the-combined-fragility-curve">Plot the combined fragility curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit">Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#code-for-plotting">Code for plotting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plot-the-fragility-points">Plot the fragility points</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#extrapolate-fragility-curves-linearly-along-the-given-range-with-the-given-discretisation">Extrapolate fragility curves linearly along the given range, with the given discretisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plot-the-extrapolated-fragility-curves">Plot the extrapolated fragility curves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#load-the-water-level-dependent-scenario-probability-and-densify-and-extrapolate">Load the water level dependent scenario probability and densify and extrapolate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#sanity-checks">Sanity checks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plot-the-scenario-probabilities">Plot the scenario probabilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-combination-of-2-fragility-curves">The combination of 2 fragility curves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#plot-the-combined-fragility-curve">Plot the combined fragility curve</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#save-the-combined-fragility-curve-to-json-e-g-to-import-in-the-probabilistic-toolkit">Save the combined fragility curve to json (e.g. to import in the Probabilistic Toolkit)</a></li>
 </ul>
 </li>
 </ul>
@@ -489,7 +490,7 @@ low, whereas at high water levels, the probability of uplift is high
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="probabilistic_tutorials.html">Probabilistic Tutorials</a><ul>
-      <li>Previous: <a href="Tutorial_3_Fragility_Curve_Integration.html" title="previous chapter">Tutorial 3: Integrating the fragility curve with the probability density function of the waterlevel, and derive influence coefficients after integration</a></li>
+      <li>Previous: <a href="Tutorial_3_Fragility_Curve_Integration.html" title="previous chapter">Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel</a></li>
       <li>Next: <a href="../../changelog.html" title="next chapter">Changelog</a></li>
   </ul></li>
   </ul></li>
