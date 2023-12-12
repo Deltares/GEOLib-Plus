@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "d-geolib-plus"
-version = "0.3.1"
+version = "0.4.0"
 description = "GEOLib+ components"
 authors = ["Maarten Pronk <git@evetion.nl>", "Deltares"]
 license = "LGPL-3.0-or-later"
@@ -80,7 +80,7 @@ profile = "black"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.3.1"
+version = "0.4.0"
 tag-format = "$major.$minor.$patch$prerelease"
 version_files = [
     "pyproject.toml:^version",
