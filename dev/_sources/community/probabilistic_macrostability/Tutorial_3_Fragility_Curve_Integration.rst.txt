@@ -301,10 +301,10 @@ interpolation between fragility points)
 .. code:: ipython3
 
     #calculating alphas in given design point water level (h_Star)
-    Hs= 11.846                                         
+    Hs= 11.067                                          
     
     # Calculating u* for h*
-    P_us=gumbel_r.pdf(Hs, loc=mu, scale=std)          # \Phi^{-1}(F_h(h*))
+    P_us=gumbel_r.cdf(Hs, loc=mu, scale=std)          # \Phi^{-1}(F_h(h*))
     us = st.norm.ppf(P_us)                           
     
     print('u*, design point (genormeerde waterstand) = ', us "\n")
@@ -334,43 +334,52 @@ interpolation between fragility points)
     for i in range(len(values)):
         Alphas[i]=values[i][idx]
         
-    print('α_i |h*` = ', Alphas "\n")    
-    
-    
-    print('Sum of influence factors after integrating the probbaility of water level is: ',
-          sum(Alphas**2)) 
-    
-    # check is equal to 1 if not we should normalize them.
-    # warning:  The Alphas are not added upt to 1 ( error tolerance 1%) 
-    # And your Alphas after integration are not reliable.
+    print('α_i |h^* = ', Alphas)    
+    print()
+
+    print('Sum of the squared influence coefficients alpha at the design point of the water level is: ',sum(Alphas**2)) 
+    print('Due to the linear interpolation of alpha values between the fragility points, the sum may not be equal to 1.')
+    print('The general recommendation in this case is to add an extra fragility point to the fragility curve close to the')
+    print('design point of the water level. However, for now we normalize the values to 1.')
+    print()
+
+    Alphas /= np.sqrt(sum(Alphas**2))
+    print('Sum of the normalized squared influence coefficients alpha at the design point of the water level is: ',sum(Alphas**2))
 
 
 .. parsed-literal::
 
-    u*, design point (genormeerde waterstand) =  -2.860139676806077
+    u*, design point (genormeerde waterstand) =  0.25197669527488287
     
-    𝛼_ℎ (invloedscoëfficiënt van het waterstand) = 0.7153517909441423
+    𝛼_ℎ (invloedscoëfficiënt van het waterstand) = -0.06302209004084777
     
-    α_i |h* =  [ 0.05643247  0.          0.         -0.30353334  0.83616773  0.06107594
-      0.34022656  0.          0.17395521]
+    dict_keys(['Pop.SP 2 Below', 'ShearStrengthRatio.H_Rk_ko', 'ModelFactor', 'StrengthIncreaseExponent.H_Rk_ko', 'StrengthIncreaseExponent.H_Rk_k_shallow', 'StrengthIncreaseExponent.H_vbv_v', 'ShearStrengthRatio.H_vbv_v', 'ShearStrengthRatio.H_Rk_k_shallow', 'Pop.SP 2 Above'])
+    α_i |h^* =  [ 0.          0.25793011 -0.25412093  0.05968704  0.          0.
+      0.7000474   0.3986752   0.07902608]
     
-    Sum of influence factors after integrating the probbaility of water level is:  0.9442383788975067
+    Sum of the squared influence coefficients alpha at the design point of the water level is:  0.7899213344510857
+    Due to the linear interpolation of alpha values between the fragility points, the sum may not be equal to 1.
+    The general recommendation in this case is to add an extra fragility point to the fragility curve close to the
+    design point of the water level. However, for now we normalize the values to 1.
+
+Sum of the normalized squared influence coefficients alpha at the design point of the water level is:  0.9999999999999998
     
 
 .. code:: ipython3
 
     # transformed influence coefficient(s) of parameters to be determined
-    Alpha_T = Alphas**2*(1-alphaH**2)                
-    print('The influence factors of strength paramters are:\n', Alpha_T "\n")
-    
-    print('Influence factor from water level = ', 1-sum(Alpha_T))
+    Alpha_T = Alphas**2*(1-alphaH**2) # Alpha_T is the squared, see equation above.
+    print('The squared influence coefficients of the strength parameters are:\n', Alpha_T)
+
+    print()
+    print('Squared influence coefficient of the water level = ', 1-sum(Alpha_T))
 
 
 .. parsed-literal::
-
-    The influence factors of strength paramters are:
-     [0.00155496 0.         0.         0.0449857  0.34138816 0.00182139
-     0.05651947 0.         0.01477531]
     
-    Influence factor from water level =  0.5389550127608109
+    The squared influence coefficients of the strength parameters are:
+     [0.         0.08388646 0.08142705 0.00449208 0.         0.
+     0.61793486 0.20041316 0.0078746 ]
+    
+    Squared influence coefficient of the water level =  0.003971783833116804
     

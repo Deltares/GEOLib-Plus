@@ -55,170 +55,170 @@
 <h1>Tutorial 3: Integrating the fragility curve with the PDF of the waterlevel<a class="headerlink" href="#tutorial-3-integrating-the-fragility-curve-with-the-pdf-of-the-waterlevel" title="Permalink to this heading">¶</a></h1>
 <section id="step-1-create-base-class-dstabilityfragilitycurve-for-fragility-curve-operations">
 <h2>Step 1: Create base <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">DStabilityFragilityCurve</span></code> for fragility curve operations<a class="headerlink" href="#step-1-create-base-class-dstabilityfragilitycurve-for-fragility-curve-operations" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loading the necesary packages</span>
-<span class="kn">import</span> <span class="nn">json</span> <span class="c1"># for reading fragility curves in D-Stability .json format</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> <span class="c1"># for array calculations</span>
-<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span> <span class="c1"># for statisitcal functions</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># for reading excel files</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Loading the necesary packages
+import json # for reading fragility curves in D-Stability .json format
+import numpy as np # for array calculations
+import scipy.stats as st # for statisitcal functions
+import pandas as pd # for reading excel files
+import matplotlib.pyplot as plt
 
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span> <span class="c1"># for linear interpolation and extrapolation outside the range</span>
-<span class="kn">from</span> <span class="nn">statistics</span> <span class="kn">import</span> <span class="n">NormalDist</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">gumbel_r</span>
+from scipy.interpolate import interp1d # for linear interpolation and extrapolation outside the range
+from statistics import NormalDist
+from scipy.stats import norm
+from scipy.stats import gumbel_r
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define some static functions</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Define some static functions
 
-<span class="k">def</span> <span class="nf">densify_extrapolate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">xrange</span><span class="p">,</span> <span class="n">xdelta</span><span class="p">):</span>
-    <span class="n">xnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xrange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">xdelta</span><span class="p">,</span> <span class="n">xdelta</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s1">&#39;extrapolate&#39;</span><span class="p">)</span>
-    <span class="n">ynew</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">xnew</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">xnew</span><span class="p">,</span> <span class="n">ynew</span>
+def densify_extrapolate(x, y, xrange, xdelta):
+    xnew = np.arange(xrange[0], xrange[1] + xdelta, xdelta)
+    f = interp1d(x, y, kind=&#39;linear&#39;, bounds_error=False, fill_value=&#39;extrapolate&#39;)
+    ynew = f(xnew)
+    return xnew, ynew
 
-<span class="c1"># Preprocess the DStabilityFragilityCurve class</span>
-<span class="k">class</span> <span class="nc">DStabilityFragilityCurve</span><span class="p">:</span>
+# Preprocess the DStabilityFragilityCurve class
+class DStabilityFragilityCurve:
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; --- documentation generated by AI model</span>
-<span class="sd">        Initialize a DStabilityFragilityCurve object, and then</span>
-<span class="sd">        calls `preprocess_rawdata()` to save the raw data in a structured way</span>
+    def __init__(self, label, filename):
+        &quot;&quot;&quot; --- documentation generated by AI model
+        Initialize a DStabilityFragilityCurve object, and then
+        calls `preprocess_rawdata()` to save the raw data in a structured way
 
-<span class="sd">        Args:</span>
-<span class="sd">            label (str): The label for the DStabilityFragilityCurve object.</span>
-<span class="sd">            filename (str): The name of the JSON file containing the raw data.</span>
+        Args:
+            label (str): The label for the DStabilityFragilityCurve object.
+            filename (str): The name of the JSON file containing the raw data.
 
-<span class="sd">        Returns:</span>
-<span class="sd">            None.</span>
+        Returns:
+            None.
 
-<span class="sd">        Raises:</span>
-<span class="sd">            FileNotFoundError: If the specified file does not exist.</span>
+        Raises:
+            FileNotFoundError: If the specified file does not exist.
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Label</span> <span class="o">=</span> <span class="n">label</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_rawdata</span><span class="p">()</span>
+        &quot;&quot;&quot;
+        self.Label = label
+        with open(filename, &#39;r&#39;) as f:
+            self.rawdata = json.load(f)
+        self.preprocess_rawdata()
 
-    <span class="k">def</span> <span class="nf">preprocess_rawdata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Notes</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Calculations&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Stochasts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Stochasts&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Correlations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rawdata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Correlations&#39;</span><span class="p">)</span>
+    def preprocess_rawdata(self):
+        &quot;&quot;&quot;
+        Notes
+        &quot;&quot;&quot;
+        self.FragilityPoints = self.rawdata.get(&#39;Calculations&#39;)
+        self.Stochasts = self.rawdata.get(&#39;Stochasts&#39;)
+        self.Correlations = self.rawdata.get(&#39;Correlations&#39;)
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;WaterLevel&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="n">point</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Beta&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bb</span> <span class="o">=</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span> <span class="n">point</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Beta&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">stochast</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Stochasts</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;ModelFactor&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Id&#39;</span><span class="p">):</span> <span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">)})</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Id&#39;</span><span class="p">):</span> <span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ParameterType&#39;</span><span class="p">)</span><span class="o">+</span>
-                                       <span class="s1">&#39;.&#39;</span><span class="o">+</span><span class="n">stochast</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Label&#39;</span><span class="p">)})</span>
+        self.h = [point.get(&#39;WaterLevel&#39;) for point in self.FragilityPoints]
+        self.b = [point.get(&#39;Beta&#39;) for point in self.FragilityPoints]
+        self.bb =[ -1* point.get(&#39;Beta&#39;) for point in self.FragilityPoints]
+        self.p = norm.cdf(self.bb)
+        self.stochasts = {}
+        for stochast in self.Stochasts:
+            if stochast.get(&#39;ParameterType&#39;) == &#39;ModelFactor&#39;:
+                self.stochasts.update({stochast.get(&#39;Id&#39;): stochast.get(&#39;ParameterType&#39;)})
+            else:
+                self.stochasts.update({stochast.get(&#39;Id&#39;): stochast.get(&#39;ParameterType&#39;)+
+                                       &#39;.&#39;+stochast.get(&#39;Label&#39;)})
 
-    <span class="k">def</span> <span class="nf">get_scenario_probability</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
-        <span class="c1"># Import the scenario probabliity (weights) from excel file.</span>
-        <span class="c1"># Note the column headers match the labels of the fragility curve</span>
-        <span class="n">scenario_probability_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scenario_probability_data</span><span class="p">[</span><span class="s1">&#39;h&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scenario_probability_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">Label</span><span class="p">])</span>
+    def get_scenario_probability(self, file):
+        # Import the scenario probabliity (weights) from excel file.
+        # Note the column headers match the labels of the fragility curve
+        scenario_probability_data = pd.read_excel(file)
+        self.scenario_h = np.array(scenario_probability_data[&#39;h&#39;])
+        self.scenario_p = np.array(scenario_probability_data[self.Label])
 
-    <span class="k">def</span> <span class="nf">set_extrapolation_range_and_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">range_h</span><span class="p">,</span> <span class="n">delta_h</span> <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span> <span class="o">=</span> <span class="n">range_h</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span> <span class="o">=</span> <span class="n">delta_h</span>
+    def set_extrapolation_range_and_density(self, range_h, delta_h ):
+        self.range_h = range_h
+        self.delta_h = delta_h
 
-    <span class="k">def</span> <span class="nf">densify_extrapolate_fc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># beta&#39;s</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">HH</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PP</span> <span class="o">=</span> <span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span>
-                                               <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bb</span><span class="p">),</span>
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span>
-                                               <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
-        <span class="c1"># alpha&#39;s</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">alphas</span><span class="o">=</span><span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Alphas</span><span class="o">=</span><span class="p">{}</span>
-        <span class="k">for</span> <span class="n">unique_stochast_name</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="n">val</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="o">.</span><span class="n">items</span><span class="p">()]):</span>
-            <span class="n">alphas</span> <span class="o">=</span> <span class="p">[</span><span class="n">contribution</span><span class="p">[</span><span class="s1">&#39;Alpha&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">FragilityPoints</span>
-                      <span class="k">for</span> <span class="n">contribution</span> <span class="ow">in</span> <span class="n">point</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Contributions&#39;</span><span class="p">)</span>
-                      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stochasts</span><span class="p">[</span><span class="n">contribution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Stochast&#39;</span><span class="p">)]</span> <span class="o">==</span> <span class="n">unique_stochast_name</span><span class="p">]</span>
-            <span class="n">H</span><span class="p">,</span> <span class="n">Alphas</span> <span class="o">=</span> <span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="n">alphas</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Alphas</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unique_stochast_name</span><span class="p">:</span><span class="n">Alphas</span><span class="p">})</span>
+    def densify_extrapolate_fc(self):
+        # beta&#39;s
+        self.H, self.B = densify_extrapolate(self.h,
+                                             self.b,
+                                             self.range_h,
+                                             self.delta_h)
+        self.HH, self.PP = densify_extrapolate(self.h,
+                                               norm.cdf(self.bb),
+                                               self.range_h,
+                                               self.delta_h)
+        # alpha&#39;s
+        self.alphas={}
+        self.Alphas={}
+        for unique_stochast_name in set([val for key, val in self.stochasts.items()]):
+            alphas = [contribution[&#39;Alpha&#39;] for point in self.FragilityPoints
+                      for contribution in point.get(&#39;Contributions&#39;)
+                      if self.stochasts[contribution.get(&#39;Stochast&#39;)] == unique_stochast_name]
+            H, Alphas = densify_extrapolate(self.h, alphas, self.range_h, self.delta_h)
+            self.Alphas.update({unique_stochast_name:Alphas})
 
-    <span class="k">def</span> <span class="nf">densify_extrapolate_p</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="n">densify_extrapolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_h</span><span class="p">,</span>
-                                             <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_p</span><span class="p">),</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">range_h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_h</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">P</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">P</span>
+    def densify_extrapolate_p(self):
+        self.H, self.P = densify_extrapolate(self.scenario_h,
+                                             np.log10(self.scenario_p),
+                                             self.range_h, self.delta_h)
+        self.P = 10.**self.P
 </pre></div>
 </div>
 </section>
 <section id="step-2-specify-the-fragility-curve-names-and-locations">
 <h2>Step 2: Specify the fragility curve names and locations<a class="headerlink" href="#step-2-specify-the-fragility-curve-names-and-locations" title="Permalink to this heading">¶</a></h2>
 <p>Instantiate a <code class="docutils literal notranslate"><span class="pre">DStabilityFragilityCurve</span></code> class and save in <code class="docutils literal notranslate"><span class="pre">FC_list</span></code></p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Specify the fragility curves in a List( tuple ( label [str] , filename [str] ) )</span>
-<span class="n">fragility_curves_list</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="s1">&#39;FC_q1&#39;</span><span class="p">,</span><span class="s1">&#39;FC1.json&#39;</span> <span class="p">)]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Specify the fragility curves in a List( tuple ( label [str] , filename [str] ) )
+fragility_curves_list = [ (&#39;FC_q1&#39;,&#39;FC1.json&#39; )]
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import Fragility curves and store the data in a DStabilityFragilityCurve object.</span>
-<span class="n">FC_list</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="p">(</span><span class="n">fc_label</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span> <span class="ow">in</span> <span class="n">fragility_curves_list</span><span class="p">:</span>
-    <span class="n">FC</span> <span class="o">=</span> <span class="n">DStabilityFragilityCurve</span><span class="p">(</span><span class="n">fc_label</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
-    <span class="n">FC_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">FC</span> <span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Import Fragility curves and store the data in a DStabilityFragilityCurve object.
+FC_list = []
+for (fc_label, filename) in fragility_curves_list:
+    FC = DStabilityFragilityCurve(fc_label, filename)
+    FC_list.append( FC )
 </pre></div>
 </div>
 </section>
 <section id="step-3-plot-the-fragility-points-and-the-extrapolated-fragility-curve">
 <h2>Step 3: Plot the fragility points and the extrapolated fragility curve<a class="headerlink" href="#step-3-plot-the-fragility-points-and-the-extrapolated-fragility-curve" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose the range to extrapolate the curves to, and the increment size for analysis</span>
-<span class="n">range_h</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="mi">13</span><span class="p">]</span>
-<span class="n">delta_h</span> <span class="o">=</span> <span class="mf">0.1</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Choose the range to extrapolate the curves to, and the increment size for analysis
+range_h = [7,13]
+delta_h = 0.1
 
-<span class="k">for</span> <span class="n">FC</span> <span class="ow">in</span> <span class="n">FC_list</span><span class="p">:</span>
-    <span class="n">FC</span><span class="o">.</span><span class="n">set_extrapolation_range_and_density</span><span class="p">(</span><span class="n">range_h</span><span class="p">,</span> <span class="n">delta_h</span><span class="p">)</span>
-    <span class="n">FC</span><span class="o">.</span><span class="n">densify_extrapolate_fc</span><span class="p">()</span>
+for FC in FC_list:
+    FC.set_extrapolation_range_and_density(range_h, delta_h)
+    FC.densify_extrapolate_fc()
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">):</span>
-    <span class="c1"># Instantiate a figure with a specified size</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def plot_fragility_curves(FC_list):
+    # Instantiate a figure with a specified size
+    fig = plt.figure(figsize=(8, 6))
+    ax = fig.add_subplot(1, 1, 1)
 
-    <span class="c1"># Set the axis labels and title</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Water level, h&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Reliability index, $\beta$&#39;</span><span class="p">)</span>
+    # Set the axis labels and title
+    ax.set_xlabel(&#39;Water level, h&#39;)
+    ax.set_ylabel(r&#39;Reliability index, $\beta$&#39;)
 
-    <span class="k">def</span> <span class="nf">plot_fragility_points</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-        <span class="c1"># Add the fragility points to the figure</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span>
-                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fragility Points </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+    def plot_fragility_points(fig, h, b, label, color):
+        # Add the fragility points to the figure
+        ax.plot(h, b, color=color, marker=&#39;o&#39;, markersize=10, linestyle=&#39;none&#39;,
+                label=&#39;Fragility Points {}&#39;.format(label))
 
-    <span class="k">def</span> <span class="nf">plot_extrapolated_fragility_curve</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-        <span class="c1"># Add the fragility points to the figure</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>  <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span>
-                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Extrapolated Fragility Curve&#39;</span><span class="p">)</span>
+    def plot_extrapolated_fragility_curve(fig, h, b, label, color):
+        # Add the fragility points to the figure
+        ax.plot(h, b, color=color,  marker=&#39;+&#39;, linestyle=&#39;-&#39;,
+                label=&#39;Extrapolated Fragility Curve&#39;)
 
-    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tab:blue&#39;</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">FC</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">FC_list</span><span class="p">):</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">plot_fragility_points</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">FC</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="n">FC</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">Label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
-        <span class="n">plot_extrapolated_fragility_curve</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">FC</span><span class="o">.</span><span class="n">Label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+    colors = [&#39;tab:blue&#39;]
+    for i, FC in enumerate(FC_list):
+        c = colors[i]
+        plot_fragility_points(fig, FC.h, FC.b, label=FC.Label, color=c)
+        plot_extrapolated_fragility_curve(fig, h=FC.H, b=FC.B, label=FC.Label, color=c)
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+    plt.legend()
+    plt.grid()
+    return fig, ax
 
-<span class="c1"># Create the figure</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">)</span>
+# Create the figure
+fig, ax = plot_fragility_curves(FC_list)
 
-<span class="c1"># Show the figure</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+# Show the figure
+plt.show()
 </pre></div>
 </div>
 <img alt="../../_images/Tutorial_3_Fragility_Curve_Integration_9_0.png" src="../../_images/Tutorial_3_Fragility_Curve_Integration_9_0.png" />
@@ -227,28 +227,28 @@
 <section id="step-4-integrate-the-fragility-curve-with-the-probability-density-of-water-level">
 <h2>Step 4:  integrate the fragility curve with the probability density of water level<a class="headerlink" href="#step-4-integrate-the-fragility-curve-with-the-probability-density-of-water-level" title="Permalink to this heading">¶</a></h2>
 <p>Here we assume the water level follows a Gumbel distribution.</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Introduce the water level distribution function and plot</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Introduce the water level distribution function and plot
 
-<span class="c1">## Parameters of the statistical distribution</span>
-<span class="n">mu</span><span class="o">=</span> <span class="mi">11</span>
-<span class="n">std</span> <span class="o">=</span> <span class="mf">0.1</span>
+## Parameters of the statistical distribution
+mu= 11
+std = 0.1
 
-<span class="c1">## Calculating the pdf of the water level f(h);</span>
-<span class="n">xnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">range_h</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">range_h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">delta_h</span><span class="p">,</span> <span class="n">delta_h</span><span class="p">)</span>
-<span class="n">fh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xnew</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+## Calculating the pdf of the water level f(h);
+xnew = np.arange(range_h[0], range_h[1]+delta_h, delta_h)
+fh = np.empty(len(xnew), dtype=object)
 
-<span class="c1">## Plot the Gumbel distribution and the fragility curve.</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">gumbel_r</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">std</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xnew</span><span class="p">)):</span>
-    <span class="n">fh</span><span class="p">[</span><span class="n">h</span><span class="p">]</span><span class="o">=</span><span class="n">gumbel_r</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">xnew</span><span class="p">[</span><span class="n">h</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>
+## Plot the Gumbel distribution and the fragility curve.
+r = gumbel_r.rvs(loc=mu, scale=std, size=1000)
+for h in range(len(xnew)):
+    fh[h]=gumbel_r.pdf(xnew[h], loc=mu, scale=std)
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_fragility_curves</span><span class="p">(</span><span class="n">FC_list</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xnew</span> <span class="p">,</span> <span class="n">fh</span><span class="p">,</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;$f_h$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">histtype</span><span class="o">=</span><span class="s1">&#39;stepfilled&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$f_h$ hist&#39;</span> <span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Water level, h&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Reliability&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+fig, ax = plot_fragility_curves(FC_list)
+plt.plot(xnew , fh,&#39;r-&#39;, lw=5, alpha=0.6, label=&#39;$f_h$&#39;)
+plt.hist(r, density=True, bins=&#39;auto&#39;, histtype=&#39;stepfilled&#39;, alpha=0.5,label=&#39;$f_h$ hist&#39; )
+plt.xlabel(&quot;Water level, h&quot;)
+plt.ylabel(&quot;Reliability&quot;)
+plt.legend(loc=&#39;best&#39;, frameon=False)
+plt.show()
 </pre></div>
 </div>
 <img alt="../../_images/Tutorial_3_Fragility_Curve_Integration_11_0.png" src="../../_images/Tutorial_3_Fragility_Curve_Integration_11_0.png" />
@@ -258,36 +258,36 @@
 <p>Calculating the probability of exceedence for range of H :</p>
 <div class="math notranslate nohighlight">
 \[P_f = \int P(F|h) . f_h(h) dh\]</div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Calculating the f(h);</span>
-<span class="n">xnew</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">range_h</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">range_h</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">delta_h</span><span class="p">,</span> <span class="n">delta_h</span><span class="p">)</span>
-<span class="n">fh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xnew</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>## Calculating the f(h);
+xnew = np.arange(range_h[0], range_h[1]+delta_h, delta_h)
+fh = np.empty(len(xnew), dtype=object)
 
-<span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xnew</span><span class="p">)):</span>
-    <span class="n">fh</span><span class="p">[</span><span class="n">h</span><span class="p">]</span><span class="o">=</span><span class="n">gumbel_r</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">xnew</span><span class="p">[</span><span class="n">h</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>   <span class="c1">#Gumbel distribution</span>
+for h in range(len(xnew)):
+    fh[h]=gumbel_r.pdf(xnew[h], loc=mu, scale=std)   #Gumbel distribution
 
-<span class="c1"># Integrate f(h) with stepsize of delta_h -&gt; 1</span>
-<span class="n">sumFh</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span><span class="o">*</span><span class="n">delta_h</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sum of $f_h$ = &#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span><span class="o">*</span><span class="n">delta_h</span> <span class="p">)</span>
+# Integrate f(h) with stepsize of delta_h -&gt; 1
+sumFh = sum(fh)*delta_h
+print(&#39;Sum of $f_h$ = &#39;, sum(fh)*delta_h )
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Sum of $f_h$ =  1.0006303391435327
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#print(&#39;The fragility curve is now desified over range {} with \</span>
-<span class="c1"># stepsize {}:&#39;.format(range_h,delta_h))</span>
-<span class="c1">#print(&#39;H&#39;,FC_list[0].H)</span>
-<span class="c1">#print(&#39;Beta&#39;,FC_list[0].B)</span>
-<span class="c1">#print(&#39;Pf&#39;,norm.cdf(-1*FC_list[0].B)) #P(f/h)</span>
-<span class="c1">#print(&#39;fh&#39;,fh)  #f(h)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#print(&#39;The fragility curve is now desified over range {} with \
+# stepsize {}:&#39;.format(range_h,delta_h))
+#print(&#39;H&#39;,FC_list[0].H)
+#print(&#39;Beta&#39;,FC_list[0].B)
+#print(&#39;Pf&#39;,norm.cdf(-1*FC_list[0].B)) #P(f/h)
+#print(&#39;fh&#39;,fh)  #f(h)
 
-<span class="n">P_fh</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">FC_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">B</span><span class="p">)</span>                <span class="c1">#P(f|h)</span>
-<span class="n">Pf</span> <span class="o">=</span> <span class="n">P_fh</span><span class="o">*</span> <span class="n">fh</span> <span class="o">*</span> <span class="n">delta_h</span>                         <span class="c1">#P(f/h)*f(h)*delta</span>
+P_fh = norm.cdf(-1*FC_list[0].B)                #P(f|h)
+Pf = P_fh* fh * delta_h                         #P(f/h)*f(h)*delta
 
-<span class="n">sumPf</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Pf</span><span class="p">)</span><span class="o">/</span><span class="n">sumFh</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total failure probability after integration = </span><span class="si">%0.2e</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sumPf</span><span class="p">))</span>
+sumPf = sum(Pf)/sumFh
+print(&#39;Total failure probability after integration = %0.2e&#39;%(sumPf))
 
-<span class="n">Beta</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">sumPf</span><span class="p">)</span>                        <span class="c1">#K2</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Reliability index after integration = </span><span class="si">%0.3f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">Beta</span><span class="p">))</span>
+Beta = -1*norm.ppf(sumPf)                        #K2
+print(&#39;Reliability index after integration = %0.3f&#39;%(Beta))
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Total</span> <span class="n">failure</span> <span class="n">probability</span> <span class="n">after</span> <span class="n">integration</span> <span class="o">=</span> <span class="mf">3.19e-05</span>
@@ -303,73 +303,81 @@ strength variable</p>
 <p><span class="math notranslate nohighlight">\(\alpha \_i \| h^*\)</span>: Influence coefficient(s) of strength
 variable, directly from FORM at design point water level (e.g., based on
 interpolation between fragility points)</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#calculating alphas in given design point water level (h_Star)</span>
-<span class="n">Hs</span><span class="o">=</span> <span class="mf">11.846</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>#calculating alphas in given design point water level (h_Star)
+Hs= 11.067
 
-<span class="c1"># Calculating u* for h*</span>
-<span class="n">P_us</span><span class="o">=</span><span class="n">gumbel_r</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">Hs</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="n">mu</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>          <span class="c1"># \Phi^{-1}(F_h(h*))</span>
-<span class="n">us</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">ppf</span><span class="p">(</span><span class="n">P_us</span><span class="p">)</span>
+# Calculating u* for h*
+P_us=gumbel_r.cdf(Hs, loc=mu, scale=std)          # \Phi^{-1}(F_h(h*))
+us = st.norm.ppf(P_us)
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;u*, design point (genormeerde waterstand) = &#39;</span><span class="p">,</span> <span class="n">us</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+print(&#39;u*, design point (genormeerde waterstand) = &#39;, us &quot;\n&quot;)
 
-<span class="n">alphaH</span> <span class="o">=</span> <span class="n">us</span><span class="o">/-</span><span class="n">Beta</span>                                <span class="c1">#alphaH = us/-Beta</span>
+alphaH = us/-Beta                                #alphaH = us/-Beta
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;:math:`</span><span class="se">\a</span><span class="s1">lpha\_</span><span class="si">{h}</span><span class="s1">` (invloedscoëfficiënt van het waterstand) =&#39;</span><span class="p">,</span> <span class="n">alphaH</span><span class="p">)</span>
+print(&#39;:math:`\alpha\_{h}` (invloedscoëfficiënt van het waterstand) =&#39;, alphaH)
 
-<span class="c1">#Getting alphas befor integrating for H^star ( interpolated through fragility curve)</span>
+#Getting alphas befor integrating for H^star ( interpolated through fragility curve)
 
-<span class="n">a</span><span class="o">=</span><span class="n">FC_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Alphas</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+a=FC_list[0].Alphas
+for i in a.keys():
+    values = np.array(list(a.values()))
 
-<span class="c1"># to see the list of parameters</span>
-<span class="c1">#print(a.keys())</span>
+# to see the list of parameters
+#print(a.keys())
 
-<span class="c1"># a function to find the related alpha set interpolated at given h*</span>
-<span class="k">def</span> <span class="nf">find_nearest</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-    <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
-    <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">array</span> <span class="o">-</span> <span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">idx</span>
+# a function to find the related alpha set interpolated at given h*
+def find_nearest(array, value):
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return idx
 
-<span class="n">idx</span> <span class="o">=</span> <span class="n">find_nearest</span><span class="p">(</span><span class="n">FC_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">Hs</span><span class="p">)</span>    <span class="c1"># Finding the related 𝛼𝑖|ℎ∗  based on the h*</span>
+idx = find_nearest(FC_list[0].H, value=Hs)    # Finding the related 𝛼𝑖|ℎ∗  based on the h*
 
-<span class="n">Alphas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)):</span>
-    <span class="n">Alphas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+Alphas = np.zeros(len(values))
+for i in range(len(values)):
+    Alphas[i]=values[i][idx]
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;α_i |h*` = &#39;</span><span class="p">,</span> <span class="n">Alphas</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+print(&#39;α_i |h^* = &#39;, Alphas)
+print()
 
+print(&#39;Sum of the squared influence coefficients alpha at the design point of the water level is: &#39;,sum(Alphas**2))
+print(&#39;Due to the linear interpolation of alpha values between the fragility points, the sum may not be equal to 1.&#39;)
+print(&#39;The general recommendation in this case is to add an extra fragility point to the fragility curve close to the&#39;)
+print(&#39;design point of the water level. However, for now we normalize the values to 1.&#39;)
+print()
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sum of influence factors after integrating the probbaility of water level is: &#39;</span><span class="p">,</span>
-      <span class="nb">sum</span><span class="p">(</span><span class="n">Alphas</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-
-<span class="c1"># check is equal to 1 if not we should normalize them.</span>
-<span class="c1"># warning:  The Alphas are not added upt to 1 ( error tolerance 1%)</span>
-<span class="c1"># And your Alphas after integration are not reliable.</span>
+Alphas /= np.sqrt(sum(Alphas**2))
+print(&#39;Sum of the normalized squared influence coefficients alpha at the design point of the water level is: &#39;,sum(Alphas**2))
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="o">*</span><span class="p">,</span> <span class="n">design</span> <span class="n">point</span> <span class="p">(</span><span class="n">genormeerde</span> <span class="n">waterstand</span><span class="p">)</span> <span class="o">=</span>  <span class="o">-</span><span class="mf">2.860139676806077</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">u</span><span class="o">*</span><span class="p">,</span> <span class="n">design</span> <span class="n">point</span> <span class="p">(</span><span class="n">genormeerde</span> <span class="n">waterstand</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.25197669527488287</span>
 
-<span class="n">𝛼_ℎ</span> <span class="p">(</span><span class="n">invloedscoëfficiënt</span> <span class="n">van</span> <span class="n">het</span> <span class="n">waterstand</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.7153517909441423</span>
+<span class="n">𝛼_ℎ</span> <span class="p">(</span><span class="n">invloedscoëfficiënt</span> <span class="n">van</span> <span class="n">het</span> <span class="n">waterstand</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.06302209004084777</span>
 
-<span class="n">α_i</span> <span class="o">|</span><span class="n">h</span><span class="o">*</span> <span class="o">=</span>  <span class="p">[</span> <span class="mf">0.05643247</span>  <span class="mf">0.</span>          <span class="mf">0.</span>         <span class="o">-</span><span class="mf">0.30353334</span>  <span class="mf">0.83616773</span>  <span class="mf">0.06107594</span>
-  <span class="mf">0.34022656</span>  <span class="mf">0.</span>          <span class="mf">0.17395521</span><span class="p">]</span>
+<span class="n">dict_keys</span><span class="p">([</span><span class="s1">&#39;Pop.SP 2 Below&#39;</span><span class="p">,</span> <span class="s1">&#39;ShearStrengthRatio.H_Rk_ko&#39;</span><span class="p">,</span> <span class="s1">&#39;ModelFactor&#39;</span><span class="p">,</span> <span class="s1">&#39;StrengthIncreaseExponent.H_Rk_ko&#39;</span><span class="p">,</span> <span class="s1">&#39;StrengthIncreaseExponent.H_Rk_k_shallow&#39;</span><span class="p">,</span> <span class="s1">&#39;StrengthIncreaseExponent.H_vbv_v&#39;</span><span class="p">,</span> <span class="s1">&#39;ShearStrengthRatio.H_vbv_v&#39;</span><span class="p">,</span> <span class="s1">&#39;ShearStrengthRatio.H_Rk_k_shallow&#39;</span><span class="p">,</span> <span class="s1">&#39;Pop.SP 2 Above&#39;</span><span class="p">])</span>
+<span class="n">α_i</span> <span class="o">|</span><span class="n">h</span><span class="o">^*</span> <span class="o">=</span>  <span class="p">[</span> <span class="mf">0.</span>          <span class="mf">0.25793011</span> <span class="o">-</span><span class="mf">0.25412093</span>  <span class="mf">0.05968704</span>  <span class="mf">0.</span>          <span class="mf">0.</span>
+  <span class="mf">0.7000474</span>   <span class="mf">0.3986752</span>   <span class="mf">0.07902608</span><span class="p">]</span>
 
-<span class="n">Sum</span> <span class="n">of</span> <span class="n">influence</span> <span class="n">factors</span> <span class="n">after</span> <span class="n">integrating</span> <span class="n">the</span> <span class="n">probbaility</span> <span class="n">of</span> <span class="n">water</span> <span class="n">level</span> <span class="ow">is</span><span class="p">:</span>  <span class="mf">0.9442383788975067</span>
+<span class="n">Sum</span> <span class="n">of</span> <span class="n">the</span> <span class="n">squared</span> <span class="n">influence</span> <span class="n">coefficients</span> <span class="n">alpha</span> <span class="n">at</span> <span class="n">the</span> <span class="n">design</span> <span class="n">point</span> <span class="n">of</span> <span class="n">the</span> <span class="n">water</span> <span class="n">level</span> <span class="ow">is</span><span class="p">:</span>  <span class="mf">0.7899213344510857</span>
+<span class="n">Due</span> <span class="n">to</span> <span class="n">the</span> <span class="n">linear</span> <span class="n">interpolation</span> <span class="n">of</span> <span class="n">alpha</span> <span class="n">values</span> <span class="n">between</span> <span class="n">the</span> <span class="n">fragility</span> <span class="n">points</span><span class="p">,</span> <span class="n">the</span> <span class="nb">sum</span> <span class="n">may</span> <span class="ow">not</span> <span class="n">be</span> <span class="n">equal</span> <span class="n">to</span> <span class="mf">1.</span>
+<span class="n">The</span> <span class="n">general</span> <span class="n">recommendation</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">case</span> <span class="ow">is</span> <span class="n">to</span> <span class="n">add</span> <span class="n">an</span> <span class="n">extra</span> <span class="n">fragility</span> <span class="n">point</span> <span class="n">to</span> <span class="n">the</span> <span class="n">fragility</span> <span class="n">curve</span> <span class="n">close</span> <span class="n">to</span> <span class="n">the</span>
+<span class="n">design</span> <span class="n">point</span> <span class="n">of</span> <span class="n">the</span> <span class="n">water</span> <span class="n">level</span><span class="o">.</span> <span class="n">However</span><span class="p">,</span> <span class="k">for</span> <span class="n">now</span> <span class="n">we</span> <span class="n">normalize</span> <span class="n">the</span> <span class="n">values</span> <span class="n">to</span> <span class="mf">1.</span>
 </pre></div>
 </div>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># transformed influence coefficient(s) of parameters to be determined</span>
-<span class="n">Alpha_T</span> <span class="o">=</span> <span class="n">Alphas</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">alphaH</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The influence factors of strength paramters are:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">Alpha_T</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<p>Sum of the normalized squared influence coefficients alpha at the design point of the water level is:  0.9999999999999998</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># transformed influence coefficient(s) of parameters to be determined
+Alpha_T = Alphas**2*(1-alphaH**2) # Alpha_T is the squared, see equation above.
+print(&#39;The squared influence coefficients of the strength parameters are:\n&#39;, Alpha_T)
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Influence factor from water level = &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">Alpha_T</span><span class="p">))</span>
+print()
+print(&#39;Squared influence coefficient of the water level = &#39;, 1-sum(Alpha_T))
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">influence</span> <span class="n">factors</span> <span class="n">of</span> <span class="n">strength</span> <span class="n">paramters</span> <span class="n">are</span><span class="p">:</span>
- <span class="p">[</span><span class="mf">0.00155496</span> <span class="mf">0.</span>         <span class="mf">0.</span>         <span class="mf">0.0449857</span>  <span class="mf">0.34138816</span> <span class="mf">0.00182139</span>
- <span class="mf">0.05651947</span> <span class="mf">0.</span>         <span class="mf">0.01477531</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">squared</span> <span class="n">influence</span> <span class="n">coefficients</span> <span class="n">of</span> <span class="n">the</span> <span class="n">strength</span> <span class="n">parameters</span> <span class="n">are</span><span class="p">:</span>
+ <span class="p">[</span><span class="mf">0.</span>         <span class="mf">0.08388646</span> <span class="mf">0.08142705</span> <span class="mf">0.00449208</span> <span class="mf">0.</span>         <span class="mf">0.</span>
+ <span class="mf">0.61793486</span> <span class="mf">0.20041316</span> <span class="mf">0.0078746</span> <span class="p">]</span>
 
-<span class="n">Influence</span> <span class="n">factor</span> <span class="kn">from</span> <span class="nn">water</span> <span class="n">level</span> <span class="o">=</span>  <span class="mf">0.5389550127608109</span>
+<span class="n">Squared</span> <span class="n">influence</span> <span class="n">coefficient</span> <span class="n">of</span> <span class="n">the</span> <span class="n">water</span> <span class="n">level</span> <span class="o">=</span>  <span class="mf">0.003971783833116804</span>
 </pre></div>
 </div>
 </section>
