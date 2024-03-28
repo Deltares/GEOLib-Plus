@@ -60,6 +60,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     unitweightmethod: UnitWeightMethod = UnitWeightMethod.ROBERTSON
     ocrmethod: OCRMethod = OCRMethod.ROBERTSON
     shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
+    relativedensitymethod: RelativeDensityMethod = RelativeDensityMethod.BALDI
     data: AbstractCPT = None
     gamma: Iterable = []
     polygons: Iterable = []
@@ -142,6 +143,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         # compute state parameter
         self.state_parameter_calc()
+
+        # compute relative
+        self.relative_density_calc(method=self.relativedensitymethod)
 
         # filter values
         # lithologies = [""]
