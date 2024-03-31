@@ -174,8 +174,14 @@ class XMLBroCPTReader(CptReader):
 
         # Location
         x, y = self.parse_xml_location(xml)
-        self.bro_data.location_x = float(x)
-        self.bro_data.location_y = float(y)
+        if x is not None:
+            self.bro_data.location_x = float(x)
+        else:
+            self.bro_data.location_x = x
+        if y is not None:
+            self.bro_data.location_y = float(y)
+        else:
+            self.bro_data.location_y = y
 
         # fill in the data structure from bro
         self.get_all_data_from_bro(root=root)
@@ -249,7 +255,8 @@ class XMLBroCPTReader(CptReader):
         """
         root = etree.fromstring(tdata)
         crs = None
-
+        x = None
+        y = None
         for loc in root.iter(ns2 + "deliveredLocation"):
             for point in loc.iter(ns3 + "Point"):
                 srs = point.get("srsName")
@@ -279,7 +286,10 @@ class XMLBroCPTReader(CptReader):
         )
         # Offset to reference point
         z = self.search_values_in_root(root=root, search_item=ns + "offset")
-        self.bro_data.offset_z = float(z)
+        if z is not None:
+            self.bro_data.offset_z = float(z)
+        else:
+            self.bro_data.offset_z = z
         # Local reference point
         self.bro_data.local_reference = self.search_values_in_root(
             root=root, search_item=ns + "localVerticalReferencePoint"
@@ -299,7 +309,7 @@ class XMLBroCPTReader(CptReader):
         # cpt time of result
         for cpt in root.iter(ns + "conePenetrationTest"):
             for loc in cpt.iter(ns5 + "resultTime"):
-                if loc.text.strip() == "":
+                if loc.text is None or loc.text.strip() == "":
                     for loc2 in loc.iter(ns3 + "timePosition"):
                         self.bro_data.result_time = loc2.text
                 else:
@@ -347,12 +357,14 @@ class XMLBroCPTReader(CptReader):
             "a": self.bro_data.a,
             "predrilled_z": self.bro_data.predrilled_z,
         }
-        result_dictionary["water_measurement_type"] = [
-            water_measurement_type
-            for water_measurement_type in self.__water_measurement_types
-            if water_measurement_type in self.bro_data.dataframe
-        ]
-
+        if self.bro_data.dataframe is not None:
+            result_dictionary["water_measurement_type"] = [
+                water_measurement_type
+                for water_measurement_type in self.__water_measurement_types
+                if water_measurement_type in self.bro_data.dataframe
+            ]
+        else:
+            result_dictionary["water_measurement_type"] = []
         # extract values from dataframe
         if self.bro_data.dataframe is not None:
             bro_dataframe = self.bro_data.dataframe
