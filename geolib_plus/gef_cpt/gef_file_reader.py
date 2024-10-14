@@ -170,8 +170,12 @@ class GefFileReader(CptReader):
         inputs from gef file.
         """
         # read gef file
-        with open(gef_file, "r") as f:
-            data = f.readlines()
+        try:
+            with open(gef_file, "r") as f:
+                data = f.readlines()
+        except UnicodeDecodeError:
+            with open(gef_file, "r", encoding='cp1252') as f:
+                data = f.readlines()
 
         # search NAP
         idx_nap = GefFileReader.get_line_index_from_data_starts_with(
