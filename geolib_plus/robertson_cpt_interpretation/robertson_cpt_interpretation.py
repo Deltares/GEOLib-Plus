@@ -727,7 +727,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
     def relative_density_calc(
         self,
-        method: RelativeDensityMethod,
+        method: RelativeDensityMethod = RelativeDensityMethod.BALDI,
         c_0: Union[np.ndarray, float] = 15.7,
         c_2: Union[np.ndarray, float] = 2.41,
         Q_c: Union[np.ndarray, float] = 1,
