@@ -33,9 +33,13 @@ class TestGeolibPlusReading:
             Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
         )
         assert test_file_bro.is_file()
+        test_file_bro_new_version = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A_new_version.xml")
+        )
         # initialise models
         cpt_gef = GefCpt()
         cpt_bro_xml = BroXmlCpt()
+        cpt_bro_xml_new_version = BroXmlCpt()
         # test initial expectations
         assert cpt_gef
         assert cpt_bro_xml
@@ -43,12 +47,16 @@ class TestGeolibPlusReading:
         cpt_gef.read(filepath=test_file_gef)
         # read bro file
         cpt_bro_xml.read(filepath=test_file_bro)
+        # read bro file new version
+        cpt_bro_xml_new_version.read(filepath=test_file_bro_new_version)
 
         cpt_bro_xml = dict(cpt_bro_xml)
         cpt_gef = dict(cpt_gef)
+        cpt_bro_xml_new_version = dict(cpt_bro_xml_new_version)
         for key, value in cpt_bro_xml.items():
             if key not in ["predrilled_z", "undefined_depth", "water_measurement_type"]:
                 assert type(cpt_bro_xml.get(key, None)) == type(cpt_gef.get(key, None))
+                assert type(cpt_bro_xml_new_version.get(key, None)) == type(cpt_gef.get(key, None))
 
     @pytest.mark.systemtest
     def test_has_points_with_error(self):
@@ -214,9 +222,15 @@ class TestGeolibPlusReading:
         bro_file = TestUtils.get_local_test_data_dir(
             "cpt/bro_xml/CPT000000003688_IMBRO_A.xml"
         )
+        bro_file_new_version = TestUtils.get_local_test_data_dir(
+            "cpt/bro_xml/CPT000000003688_IMBRO_A_new_version.xml"
+        )
         assert bro_file.is_file()
+        assert bro_file_new_version.is_file()
         cpt = BroXmlCpt()
         cpt.read(bro_file)
+        cpt_new_version = BroXmlCpt()
+        cpt_new_version.read(bro_file_new_version)
 
         test_coord = [91931.000, 438294.000]
         test_depth = np.arange(0.0, 24.58, 0.02)
@@ -266,6 +280,24 @@ class TestGeolibPlusReading:
         np.testing.assert_array_equal(test_friction_nbr_first, cpt.friction_nbr[7:10])
         np.testing.assert_array_equal(
             test_friction_nbr_last, cpt.friction_nbr[-10 : len(cpt.friction) - 5]
+        )
+        # do the same for the new version
+        np.testing.assert_array_equal("CPT000000003688", cpt_new_version.name)
+        np.testing.assert_array_equal(test_coord, cpt_new_version.coordinates)
+        np.testing.assert_array_almost_equal(test_depth, cpt_new_version.depth)
+        np.testing.assert_array_equal(test_tip_first, cpt_new_version.tip[0:10])
+        np.testing.assert_array_equal(test_tip_last, cpt_new_version.tip[-10:])
+        np.testing.assert_array_equal(test_friction_first, cpt_new_version.friction[6:13])
+        np.testing.assert_array_equal(
+            test_friction_last,
+            cpt_new_version.friction[-10 : len(cpt_new_version.friction) - 5],
+        )
+        np.testing.assert_array_equal(
+            test_friction_nbr_first, cpt_new_version.friction_nbr[7:10]
+        )
+        np.testing.assert_array_equal(
+            test_friction_nbr_last,
+            cpt_new_version.friction_nbr[-10 : len(cpt_new_version.friction) - 5],
         )
 
     # System Test for geolib_plus_read_GEF
@@ -349,10 +381,17 @@ class TestGeolibPlusReading:
             "cpt/bro_xml/CPT000000064413_IMBRO_A.xml"
         )
         assert test_file.is_file()
+        test_file_new_version = TestUtils.get_local_test_data_dir(
+            "cpt/bro_xml/CPT000000064413_IMBRO_A_new_version.xml"
+        )
+        assert test_file_new_version.is_file()
 
         cpt = BroXmlCpt()
         cpt.read(test_file)
         cpt.pore_pressure_u2 = np.array(cpt.depth * 10)
+        cpt_new_version = BroXmlCpt()
+        cpt_new_version.read(test_file_new_version)
+        cpt_new_version.pore_pressure_u2 = np.array(cpt_new_version.depth * 10)
 
         # check cpt before preprocess
         assert cpt.depth.ndim == 1
@@ -371,6 +410,14 @@ class TestGeolibPlusReading:
         )
         np.testing.assert_array_almost_equal(cpt.depth[1:100], expected_depth[0:99])
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
+        # do the same for the new version
+        cpt_new_version.pre_process_data()
+        np.testing.assert_array_almost_equal(
+            cpt_new_version.depth_to_reference, cpt_new_version.local_reference_level - cpt_new_version.depth
+        )
+        np.testing.assert_array_almost_equal(cpt_new_version.depth[1:100], expected_depth[0:99])
+        np.testing.assert_array_almost_equal(cpt_new_version.water, cpt_new_version.pore_pressure_u2)
+
 
     def test_pre_process_bro_data_without_friction_nbr(self):
         """

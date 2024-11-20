@@ -47,6 +47,13 @@ ns5 = "{http://www.opengis.net/om/2.0}"
 nodata = -999999
 to_epsg = "28992"
 
+namespaces = {
+    'brocom': "http://www.broservices.nl/xsd/brocommon/3.0",
+    'cptcommon': "http://www.broservices.nl/xsd/cptcommon/1.1",
+    'gml': "http://www.opengis.net/gml/3.2",
+    'om': "http://www.opengis.net/om/2.0",
+    'xlink': "http://www.w3.org/1999/xlink"
+}
 
 class XMLBroColumnValues(BaseModel):
     penetrationLength: Union[Iterable, None] = None
@@ -299,11 +306,13 @@ class XMLBroCPTReader(CptReader):
         # cpt time of result
         for cpt in root.iter(ns + "conePenetrationTest"):
             for loc in cpt.iter(ns5 + "resultTime"):
-                if loc.text.strip() == "":
+                if loc.text and loc.text.strip():
+                    # If loc.text is not None and not empty, use its value
+                    self.bro_data.result_time = loc.text
+                else:
+                    # Fallback: Look for nested timePosition element
                     for loc2 in loc.iter(ns3 + "timePosition"):
                         self.bro_data.result_time = loc2.text
-                else:
-                    self.bro_data.result_time = loc.text
 
         # Pre drilled depth
         z = self.search_values_in_root(root=root, search_item=ns + "predrilledDepth")
