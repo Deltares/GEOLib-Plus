@@ -48,12 +48,13 @@ nodata = -999999
 to_epsg = "28992"
 
 namespaces = {
-    'brocom': "http://www.broservices.nl/xsd/brocommon/3.0",
-    'cptcommon': "http://www.broservices.nl/xsd/cptcommon/1.1",
-    'gml': "http://www.opengis.net/gml/3.2",
-    'om': "http://www.opengis.net/om/2.0",
-    'xlink': "http://www.w3.org/1999/xlink"
+    "brocom": "http://www.broservices.nl/xsd/brocommon/3.0",
+    "cptcommon": "http://www.broservices.nl/xsd/cptcommon/1.1",
+    "gml": "http://www.opengis.net/gml/3.2",
+    "om": "http://www.opengis.net/om/2.0",
+    "xlink": "http://www.w3.org/1999/xlink",
 }
+
 
 class XMLBroColumnValues(BaseModel):
     penetrationLength: Union[Iterable, None] = None

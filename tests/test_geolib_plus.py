@@ -56,7 +56,9 @@ class TestGeolibPlusReading:
         for key, value in cpt_bro_xml.items():
             if key not in ["predrilled_z", "undefined_depth", "water_measurement_type"]:
                 assert type(cpt_bro_xml.get(key, None)) == type(cpt_gef.get(key, None))
-                assert type(cpt_bro_xml_new_version.get(key, None)) == type(cpt_gef.get(key, None))
+                assert type(cpt_bro_xml_new_version.get(key, None)) == type(
+                    cpt_gef.get(key, None)
+                )
 
     @pytest.mark.systemtest
     def test_has_points_with_error(self):
@@ -413,11 +415,15 @@ class TestGeolibPlusReading:
         # do the same for the new version
         cpt_new_version.pre_process_data()
         np.testing.assert_array_almost_equal(
-            cpt_new_version.depth_to_reference, cpt_new_version.local_reference_level - cpt_new_version.depth
+            cpt_new_version.depth_to_reference,
+            cpt_new_version.local_reference_level - cpt_new_version.depth,
         )
-        np.testing.assert_array_almost_equal(cpt_new_version.depth[1:100], expected_depth[0:99])
-        np.testing.assert_array_almost_equal(cpt_new_version.water, cpt_new_version.pore_pressure_u2)
-
+        np.testing.assert_array_almost_equal(
+            cpt_new_version.depth[1:100], expected_depth[0:99]
+        )
+        np.testing.assert_array_almost_equal(
+            cpt_new_version.water, cpt_new_version.pore_pressure_u2
+        )
 
     def test_pre_process_bro_data_without_friction_nbr(self):
         """
