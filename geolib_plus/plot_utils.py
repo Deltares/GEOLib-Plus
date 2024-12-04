@@ -265,6 +265,55 @@ def set_local_reference_line(cpt, ax, xlim, language):
     ax.add_artist(anchored_xbox)
 
 
+def create_predrilled_depth_line_and_box(cpt, ax, xlim, language):
+    """
+    Sets a black line at the left most side of the plot from the local_reference_level to the
+    local_reference_level - predrilled_depth. Also sets a textbox with the depth of the predrilled depth.
+    This should only happen if the predrilled depth is present and more than 0.5 m.
+
+    :param ax: current axis
+    :param cpt: cpt data
+    :param xlim: horizontal limit
+    :param language: language of the plot
+    :return:
+    """
+
+    if cpt.predrilled_z > 0.5:
+        ax.plot(
+            [xlim[0], xlim[0]],
+            [cpt.local_reference_level, cpt.local_reference_level - cpt.predrilled_z],
+            color="black",
+            linewidth=7,
+        )
+
+        if language == "Nederlands":
+            text = "Voorboordiepte = " + str(cpt.predrilled_z) + " m"
+        else:
+            text = "Predrilled depth = " + str(cpt.predrilled_z) + " m"
+
+        box = [
+            TextArea(
+                text, textprops=dict(color="black", fontsize=9, horizontalalignment="left")
+            )
+        ]
+
+        xbox = HPacker(children=box, align="center", pad=0, sep=5)
+        y_lims = ax.get_ylim()
+        # the graph goes from top to bottom 1 to 0
+        # define the y position of the textbox
+        ys = (cpt.local_reference_level - cpt.predrilled_z) / 2
+        ynew =  1 + (( ys - y_lims[1]) * ( 0 - 1 ) / ( y_lims[0] - y_lims[1] ))
+        anchored_xbox = AnchoredOffsetbox(
+            loc=2,
+            child=xbox,
+            pad=0.25,
+            bbox_to_anchor=(0.5 / 16, ynew),
+            bbox_transform=ax.transAxes,
+            borderpad=0.0,
+        )
+        ax.add_artist(anchored_xbox)
+
+
 def create_custom_grid(ax, xlim, ylim, grid):
     """
     Creates custom grid with custom line colours, custom line distances and custom line widths

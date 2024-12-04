@@ -403,6 +403,10 @@ def generate_plot(
     plot_utils.set_local_reference_line(
         cpt, axes[0], axes[0].get_xlim(), settings["language"]
     )
+    # set predrill line
+    plot_utils.create_predrilled_depth_line_and_box(
+        cpt, axes[0], axes[0].get_xlim(), settings["language"]
+    )
 
     # create custom grid
     plot_utils.create_custom_grid(axes[0], axes[0].get_xlim(), ylim, settings["grid"])
