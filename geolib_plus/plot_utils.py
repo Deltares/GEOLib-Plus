@@ -413,14 +413,19 @@ def set_x_axis(ax, graph, settings, ylim):
 
     # Get tick positions and labels
     tick_labels = ax.get_xticklabels()
-    label_extents = [label.get_window_extent(renderer=ax.figure.canvas.get_renderer()) for label in tick_labels]
+    label_extents = [
+        label.get_window_extent(renderer=ax.figure.canvas.get_renderer())
+        for label in tick_labels
+    ]
     start_label_positions = [tick.intervalx[0] for tick in label_extents]
     end_label_positions = [tick.intervalx[1] for tick in label_extents]
     first_start = start_label_positions[0]
     first_end = end_label_positions[0]
     new_ticks = []
 
-    for counter, (start, end) in enumerate(zip(start_label_positions, end_label_positions)):
+    for counter, (start, end) in enumerate(
+        zip(start_label_positions, end_label_positions)
+    ):
         # check overlap with previous label
         if first_start < start < first_end or first_start < end < first_end:
             new_ticks.append("")

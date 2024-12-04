@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from unittest.mock import MagicMock
 from geolib_plus.plot_utils import set_x_axis, create_predrilled_depth_line_and_box
 import numpy as np
+import pytest
 
 
 class TestSetXAxis:
@@ -60,14 +61,20 @@ class TestSetXAxis:
 
         # Check x-axis limits
         expected_xlim = [0, 20]
-        assert ax.get_xlim() == pytest.approx(expected_xlim), "X-axis limits are incorrect."
+        assert ax.get_xlim() == pytest.approx(
+            expected_xlim
+        ), "X-axis limits are incorrect."
 
         # Check x-axis ticks
-        assert ax.get_xticks().tolist() == sample_graph["ticks"], "X-axis ticks are incorrect."
+        assert (
+            ax.get_xticks().tolist() == sample_graph["ticks"]
+        ), "X-axis ticks are incorrect."
 
         # Check x-axis tick color
         for tick in ax.xaxis.get_ticklines():
-            assert tick.get_color() == sample_graph["graph_color"], "Tick color is incorrect."
+            assert (
+                tick.get_color() == sample_graph["graph_color"]
+            ), "Tick color is incorrect."
 
     @pytest.mark.unittest
     def test_secondary_x_axis(self, mock_ax, sample_graph, sample_settings, ylim):
@@ -76,11 +83,15 @@ class TestSetXAxis:
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
         # Check that the top spine is set to visible
-        assert ax.spines["top"].get_visible(), "Top spine should be visible for secondary axis."
+        assert ax.spines[
+            "top"
+        ].get_visible(), "Top spine should be visible for secondary axis."
 
         # Check x-axis limits
         expected_xlim = [0, 20]
-        assert ax.get_xlim() == pytest.approx(expected_xlim), "X-axis limits are incorrect for secondary axis."
+        assert ax.get_xlim() == pytest.approx(
+            expected_xlim
+        ), "X-axis limits are incorrect for secondary axis."
 
     @pytest.mark.unittest
     def test_no_overlap_ticks(self, mock_ax, sample_graph, sample_settings, ylim):
@@ -89,20 +100,27 @@ class TestSetXAxis:
 
         # Check if overlapping tick labels were removed
         tick_labels = [label.get_text() for label in ax.get_xticklabels()]
-        assert all(label == "" or label.isspace() or label.isprintable() for label in tick_labels), \
-            "Overlapping labels should be removed."
+        assert all(
+            label == "" or label.isspace() or label.isprintable() for label in tick_labels
+        ), "Overlapping labels should be removed."
 
     @pytest.mark.unittest
-    def test_no_overlap_ticks_fine_spacing(self, mock_ax, sample_graph, sample_settings, ylim):
+    def test_no_overlap_ticks_fine_spacing(
+        self, mock_ax, sample_graph, sample_settings, ylim
+    ):
         """Test that tick labels overlap when spacing is fine."""
         # set ticks
         sample_graph["ticks"] = np.arange(0, 20, 0.1).tolist()
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
         tick_labels = [label.get_text() for label in ax.get_xticklabels()]
-        assert len(tick_labels) == len(sample_graph["ticks"]), "All tick labels should be shown."
-        assert any(label != "" and not label.isspace() and label.isprintable() for label in tick_labels), \
-            "No overlapping labels should be shown."
+        assert len(tick_labels) == len(
+            sample_graph["ticks"]
+        ), "All tick labels should be shown."
+        assert any(
+            label != "" and not label.isspace() and label.isprintable()
+            for label in tick_labels
+        ), "No overlapping labels should be shown."
 
     @pytest.mark.unittest
     def test_create_predrilled_depth_line_and_box(self, mock_cpt, mock_ax):
