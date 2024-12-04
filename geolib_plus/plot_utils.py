@@ -293,7 +293,8 @@ def create_predrilled_depth_line_and_box(cpt, ax, xlim, language):
 
         box = [
             TextArea(
-                text, textprops=dict(color="black", fontsize=9, horizontalalignment="left")
+                text,
+                textprops=dict(color="black", fontsize=9, horizontalalignment="left"),
             )
         ]
 
@@ -302,7 +303,7 @@ def create_predrilled_depth_line_and_box(cpt, ax, xlim, language):
         # the graph goes from top to bottom 1 to 0
         # define the y position of the textbox
         ys = (cpt.local_reference_level - cpt.predrilled_z) / 2
-        ynew =  1 + (( ys - y_lims[1]) * ( 0 - 1 ) / ( y_lims[0] - y_lims[1] ))
+        ynew = 1 + ((ys - y_lims[1]) * (0 - 1) / (y_lims[0] - y_lims[1]))
         anchored_xbox = AnchoredOffsetbox(
             loc=2,
             child=xbox,

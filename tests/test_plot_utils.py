@@ -1,9 +1,10 @@
-import pytest
-import matplotlib.pyplot as plt
 from unittest.mock import MagicMock
-from geolib_plus.plot_utils import set_x_axis, create_predrilled_depth_line_and_box
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pytest
+
+from geolib_plus.plot_utils import create_predrilled_depth_line_and_box, set_x_axis
 
 
 class TestSetXAxis:
