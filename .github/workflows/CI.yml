@@ -30,7 +30,6 @@ jobs:
         uses: abatilo/actions-poetry@v2.3.0
         with:
           poetry-version: 1.6.1
-
       - name: Cache Poetry virtualenv
         uses: actions/cache@v3
         id: cache
@@ -46,10 +45,8 @@ jobs:
           poetry config virtualenvs.path ~/.virtualenvs
 
       - name: Install Dependencies
-        run: |
-          poetry run pip install lxml==4.9.4 --no-use-pep517
-          poetry install
-
+        run: poetry install
+        
       - name: Test with pytest
         run: poetry run pytest --cov=geolib-plus --cov-report xml:coverage-reports/coverage-geolib-plus.xml --junitxml=xunit-reports/xunit-result-geolib-plus.xml -m "unittest and not workinprogress"
 
