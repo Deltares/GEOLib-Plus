@@ -9,15 +9,14 @@ from geolib_plus.plot_utils import create_predrilled_depth_line_and_box, set_x_a
 
 class TestSetXAxis:
     """Test suite for the `set_x_axis` function."""
-
     @pytest.fixture
-    def mock_ax(self):
+    def mock_ax(self) -> plt.Axes:
         """Fixture to provide a mocked matplotlib Axes."""
         fig, ax = plt.subplots()
         return ax
 
     @pytest.fixture
-    def sample_graph(self):
+    def sample_graph(self) -> dict:
         """Fixture to provide a sample graph dictionary."""
         return {
             "label": {"en": "Sample X-Axis", "nl": "Voorbeeld X-As"},
@@ -32,7 +31,7 @@ class TestSetXAxis:
         }
 
     @pytest.fixture
-    def sample_settings(self):
+    def sample_settings(self) -> dict:
         """Fixture to provide sample settings dictionary."""
         return {
             "language": "en",
@@ -43,12 +42,12 @@ class TestSetXAxis:
         }
 
     @pytest.fixture
-    def ylim(self):
+    def ylim(self) -> list:
         """Fixture to provide a sample ylim."""
         return [0, 10]
 
     @pytest.fixture
-    def mock_cpt(self):
+    def mock_cpt(self) -> MagicMock:
         """Fixture to create a mock CPT object."""
         cpt = MagicMock()
         cpt.local_reference_level = 10.0
@@ -56,7 +55,7 @@ class TestSetXAxis:
         return cpt
 
     @pytest.mark.unittest
-    def test_primary_x_axis(self, mock_ax, sample_graph, sample_settings, ylim):
+    def test_primary_x_axis(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list) -> None:
         """Test `set_x_axis` with primary x-axis type."""
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
@@ -78,7 +77,7 @@ class TestSetXAxis:
             ), "Tick color is incorrect."
 
     @pytest.mark.unittest
-    def test_secondary_x_axis(self, mock_ax, sample_graph, sample_settings, ylim):
+    def test_secondary_x_axis(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list) -> None:
         """Test `set_x_axis` with secondary x-axis type."""
         sample_graph["x_axis_type"] = "secondary"
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
@@ -95,7 +94,7 @@ class TestSetXAxis:
         ), "X-axis limits are incorrect for secondary axis."
 
     @pytest.mark.unittest
-    def test_no_overlap_ticks(self, mock_ax, sample_graph, sample_settings, ylim):
+    def test_no_overlap_ticks(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list) -> None:
         """Test that tick labels do not overlap."""
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
@@ -106,9 +105,8 @@ class TestSetXAxis:
         ), "Overlapping labels should be removed."
 
     @pytest.mark.unittest
-    def test_no_overlap_ticks_fine_spacing(
-        self, mock_ax, sample_graph, sample_settings, ylim
-    ):
+    def test_no_overlap_ticks_fine_spacing(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict,
+                                           ylim: list) -> None:
         """Test that tick labels overlap when spacing is fine."""
         # set ticks
         sample_graph["ticks"] = np.arange(0, 20, 0.1).tolist()
@@ -124,7 +122,7 @@ class TestSetXAxis:
         ), "No overlapping labels should be shown."
 
     @pytest.mark.unittest
-    def test_create_predrilled_depth_line_and_box(self, mock_cpt, mock_ax):
+    def test_create_predrilled_depth_line_and_box(self, mock_cpt: MagicMock, mock_ax: plt.Axes) -> None:
         xlim = [0, 5]
         language = "English"
 
@@ -148,7 +146,7 @@ class TestSetXAxis:
         assert len(artists) == 1  # One textbox should be added
 
     @pytest.mark.unittest
-    def test_no_plot_for_small_predrilled_depth(self, mock_cpt, mock_ax):
+    def test_no_plot_for_small_predrilled_depth(self, mock_cpt: MagicMock, mock_ax: plt.Axes) -> None:
         # Set predrilled_z to a value less than 0.5
         mock_cpt.predrilled_z = 0.4
 
