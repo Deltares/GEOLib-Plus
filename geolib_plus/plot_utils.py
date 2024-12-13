@@ -5,7 +5,6 @@ from matplotlib.axes import Axes
 from matplotlib.offsetbox import AnchoredOffsetbox, HPacker, TextArea
 from matplotlib.patches import Rectangle
 
-
 CALIBRATED_LENGTH_FIGURE_SIZE = (
     21  # layout figure is calibrated using a plotted depth of 21 m
 )
@@ -436,7 +435,7 @@ def set_x_axis(
 
     # Iterate over the tick label positions and their extents
     for counter, (start, end) in enumerate(
-            zip(start_label_positions, end_label_positions)
+        zip(start_label_positions, end_label_positions)
     ):
         # Check if the current label overlaps with the previous label
         if first_start < start < first_end or first_start < end < first_end:

@@ -9,6 +9,7 @@ from geolib_plus.plot_utils import create_predrilled_depth_line_and_box, set_x_a
 
 class TestSetXAxis:
     """Test suite for the `set_x_axis` function."""
+
     @pytest.fixture
     def mock_ax(self) -> plt.Axes:
         """Fixture to provide a mocked matplotlib Axes."""
@@ -55,7 +56,9 @@ class TestSetXAxis:
         return cpt
 
     @pytest.mark.unittest
-    def test_primary_x_axis(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list) -> None:
+    def test_primary_x_axis(
+        self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list
+    ) -> None:
         """Test `set_x_axis` with primary x-axis type."""
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
@@ -77,7 +80,9 @@ class TestSetXAxis:
             ), "Tick color is incorrect."
 
     @pytest.mark.unittest
-    def test_secondary_x_axis(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list) -> None:
+    def test_secondary_x_axis(
+        self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list
+    ) -> None:
         """Test `set_x_axis` with secondary x-axis type."""
         sample_graph["x_axis_type"] = "secondary"
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
@@ -94,7 +99,9 @@ class TestSetXAxis:
         ), "X-axis limits are incorrect for secondary axis."
 
     @pytest.mark.unittest
-    def test_no_overlap_ticks(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list) -> None:
+    def test_no_overlap_ticks(
+        self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list
+    ) -> None:
         """Test that tick labels do not overlap."""
         ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
@@ -105,8 +112,9 @@ class TestSetXAxis:
         ), "Overlapping labels should be removed."
 
     @pytest.mark.unittest
-    def test_no_overlap_ticks_fine_spacing(self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict,
-                                           ylim: list) -> None:
+    def test_no_overlap_ticks_fine_spacing(
+        self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list
+    ) -> None:
         """Test that tick labels overlap when spacing is fine."""
         # set ticks
         sample_graph["ticks"] = np.arange(0, 20, 0.1).tolist()
@@ -122,7 +130,9 @@ class TestSetXAxis:
         ), "No overlapping labels should be shown."
 
     @pytest.mark.unittest
-    def test_create_predrilled_depth_line_and_box(self, mock_cpt: MagicMock, mock_ax: plt.Axes) -> None:
+    def test_create_predrilled_depth_line_and_box(
+        self, mock_cpt: MagicMock, mock_ax: plt.Axes
+    ) -> None:
         xlim = [0, 5]
         language = "English"
 
@@ -144,5 +154,3 @@ class TestSetXAxis:
         # Verify that a textbox is added
         artists = mock_ax.artists
         assert len(artists) == 1  # One textbox should be added
-
-

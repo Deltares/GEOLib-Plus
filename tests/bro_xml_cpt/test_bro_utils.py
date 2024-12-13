@@ -178,30 +178,27 @@ class TestBroUtil:
 
     @pytest.mark.systemtest
     def test_that_xml_is_passed(self):
-        xml_files = ["CPT000000129426.xml",
-                     "CPT000000129429.xml",
-                     "CPT000000179090.xml",
-                     "CPT000000179092.xml",
-                     "CPT000000179095.xml",
-                     "CPT000000179099.xml",
-                     "CPT000000179101.xml",
-                     "CPT000000179103.xml",
-                     "CPT000000179106.xml",
-                     "CPT000000179107.xml",
-                     "CPT000000179108.xml",
-                     "CPT000000179109.xml",
-                     "CPT000000179114.xml",
-                     "CPT000000179122.xml",
-                     "CPT000000179124.xml"]
+        xml_files = [
+            "CPT000000129426.xml",
+            "CPT000000129429.xml",
+            "CPT000000179090.xml",
+            "CPT000000179092.xml",
+            "CPT000000179095.xml",
+            "CPT000000179099.xml",
+            "CPT000000179101.xml",
+            "CPT000000179103.xml",
+            "CPT000000179106.xml",
+            "CPT000000179107.xml",
+            "CPT000000179108.xml",
+            "CPT000000179109.xml",
+            "CPT000000179114.xml",
+            "CPT000000179122.xml",
+            "CPT000000179124.xml",
+        ]
         # open xml file as byte object
         for file in xml_files:
             fn = TestUtils.get_local_test_data_dir(
-                Path(
-                    "cpt",
-                    "bro_xml",
-                    "xmls_with_various_formats",
-                    file
-                )
+                Path("cpt", "bro_xml", "xmls_with_various_formats", file)
             )
             # test initial expectations
             assert fn.is_file()
@@ -242,5 +239,3 @@ class TestBroUtil:
         assert cpt_data
         # run test
         cpt_data.get_all_data_from_bro(root=root)
-
-
