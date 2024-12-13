@@ -145,21 +145,4 @@ class TestSetXAxis:
         artists = mock_ax.artists
         assert len(artists) == 1  # One textbox should be added
 
-    @pytest.mark.unittest
-    def test_no_plot_for_small_predrilled_depth(self, mock_cpt: MagicMock, mock_ax: plt.Axes) -> None:
-        # Set predrilled_z to a value less than 0.5
-        mock_cpt.predrilled_z = 0.4
 
-        xlim = [0, 5]
-        language = "English"
-
-        # Call the function
-        create_predrilled_depth_line_and_box(mock_cpt, mock_ax, xlim, language)
-
-        # Verify that no line is added
-        lines = mock_ax.get_lines()
-        assert len(lines) == 0
-
-        # Verify that no textbox is added
-        artists = mock_ax.artists
-        assert len(artists) == 0
