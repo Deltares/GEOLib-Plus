@@ -1,4 +1,4 @@
-from typing import List, Dict, Any, Tuple
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 from matplotlib.axes import Axes
@@ -206,7 +206,9 @@ def set_multicolor_label(
         ax.add_artist(anchored_xbox)
 
 
-def set_local_reference_line(cpt: Any, ax: Axes, xlim: List[float], language: str) -> None:
+def set_local_reference_line(
+    cpt: Any, ax: Axes, xlim: List[float], language: str
+) -> None:
     """
     Sets a line in the plot at the depth of the  local reference line, e.g. surface level or sea bed level.
     Also set a textbox with the depth of the reference line relative to the vertical datum.
@@ -265,7 +267,9 @@ def set_local_reference_line(cpt: Any, ax: Axes, xlim: List[float], language: st
     ax.add_artist(anchored_xbox)
 
 
-def create_predrilled_depth_line_and_box(cpt: Any, ax: Axes, xlim: List[float], language: str) -> None:
+def create_predrilled_depth_line_and_box(
+    cpt: Any, ax: Axes, xlim: List[float], language: str
+) -> None:
     """
     Sets a black line at the left most side of the plot from the local_reference_level to the
     local_reference_level - predrilled_depth. Also sets a textbox with the depth of the predrilled depth.
@@ -315,7 +319,9 @@ def create_predrilled_depth_line_and_box(cpt: Any, ax: Axes, xlim: List[float], 
         ax.add_artist(anchored_xbox)
 
 
-def create_custom_grid(ax: Axes, xlim: List[float], ylim: List[float], grid: Dict[str, Any]) -> None:
+def create_custom_grid(
+    ax: Axes, xlim: List[float], ylim: List[float], grid: Dict[str, Any]
+) -> None:
     """
     Creates custom grid with custom line colours, custom line distances and custom line widths
 
@@ -381,7 +387,9 @@ def create_custom_grid(ax: Axes, xlim: List[float], ylim: List[float], grid: Dic
         ]
 
 
-def set_x_axis(ax: Axes, graph: Dict[str, Any], settings: Dict[str, Any], ylim: List[float]) -> None:
+def set_x_axis(
+    ax: Axes, graph: Dict[str, Any], settings: Dict[str, Any], ylim: List[float]
+) -> None:
     """
     Sets the x-limit, the x-label, and the x-ticks
 
@@ -454,8 +462,14 @@ def set_x_axis(ax: Axes, graph: Dict[str, Any], settings: Dict[str, Any], ylim: 
     return ax
 
 
-def set_y_axis(ax: Axes, ylim: List[float],settings: Dict[str, Any],cpt: Any,
-               tick_locations_inclination: List[float], tick_labels_inclination: List[str] ) -> None:
+def set_y_axis(
+    ax: Axes,
+    ylim: List[float],
+    settings: Dict[str, Any],
+    cpt: Any,
+    tick_locations_inclination: List[float],
+    tick_labels_inclination: List[str],
+) -> None:
     """
     Sets the y-limit, the y-label, the y-ticks and inverts y-axis
 
@@ -495,7 +509,13 @@ def set_y_axis(ax: Axes, ylim: List[float],settings: Dict[str, Any],cpt: Any,
         ax2.invert_yaxis()
 
 
-def __add_text_in_rectangle(ax: Axes, text: str, rectangle: Rectangle, rel_vertical_position: float, hor_spacing: float) -> None:
+def __add_text_in_rectangle(
+    ax: Axes,
+    text: str,
+    rectangle: Rectangle,
+    rel_vertical_position: float,
+    hor_spacing: float,
+) -> None:
     """
     Adds text into rectangles
 
@@ -518,8 +538,12 @@ def __add_text_in_rectangle(ax: Axes, text: str, rectangle: Rectangle, rel_verti
 
 
 def create_bro_information_box(
-        ax: Axes, scale: float, cpt: Any, plot_nr: int, ylims: List[Tuple[float, float]],
-        distance_meta_data_from_plot: float
+    ax: Axes,
+    scale: float,
+    cpt: Any,
+    plot_nr: int,
+    ylims: List[Tuple[float, float]],
+    distance_meta_data_from_plot: float,
 ) -> None:
     """
 
@@ -711,7 +735,8 @@ def create_bro_information_box(
     ax.add_patch(empty_box)
 
 
-def create_gef_information_box(   ax: Axes, scale: float, cpt: Any, plot_nr: int, ylims: List[Tuple[float, float]]
+def create_gef_information_box(
+    ax: Axes, scale: float, cpt: Any, plot_nr: int, ylims: List[Tuple[float, float]]
 ) -> None:
     """
     Sets textboxes with meta data
@@ -890,8 +915,13 @@ def create_gef_information_box(   ax: Axes, scale: float, cpt: Any, plot_nr: int
     ax.add_patch(empty_box)
 
 
-def create_information_box(ax: Axes, scale: float, cpt: Any, plot_nr: int, ylims: List[Tuple[float, float]],
-                           distance_from_plot: float
+def create_information_box(
+    ax: Axes,
+    scale: float,
+    cpt: Any,
+    plot_nr: int,
+    ylims: List[Tuple[float, float]],
+    distance_from_plot: float,
 ) -> None:
     if cpt.__class__.__name__ == "BroXmlCpt":
         create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot)
