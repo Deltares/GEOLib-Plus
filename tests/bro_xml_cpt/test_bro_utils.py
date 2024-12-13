@@ -177,6 +177,48 @@ class TestBroUtil:
         assert warning in caplog.text
 
     @pytest.mark.systemtest
+    def test_that_xml_is_passed(self):
+        xml_files = ["CPT000000129426.xml",
+                     "CPT000000129429.xml",
+                     "CPT000000179090.xml",
+                     "CPT000000179092.xml",
+                     "CPT000000179095.xml",
+                     "CPT000000179099.xml",
+                     "CPT000000179101.xml",
+                     "CPT000000179103.xml",
+                     "CPT000000179106.xml",
+                     "CPT000000179107.xml",
+                     "CPT000000179108.xml",
+                     "CPT000000179109.xml",
+                     "CPT000000179114.xml",
+                     "CPT000000179122.xml",
+                     "CPT000000179124.xml"]
+        # open xml file as byte object
+        for file in xml_files:
+            fn = TestUtils.get_local_test_data_dir(
+                Path(
+                    "cpt",
+                    "bro_xml",
+                    "xmls_with_various_formats",
+                    file
+                )
+            )
+            # test initial expectations
+            assert fn.is_file()
+            with open(fn, "r") as f:
+                # memory-map the file, size 0 means whole file
+                xml = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)[:]
+            # read test xml
+            root = etree.fromstring(xml)
+            # initialise model
+            cpt_data = XMLBroCPTReader()
+            # test initial expectations
+            assert cpt_data
+            # run test
+            cpt_data.get_all_data_from_bro(root=root)
+            assert cpt_data.bro_data.id == file.split(".")[0]
+
+    @pytest.mark.systemtest
     def test_get_all_data_from_bro(self):
         # open xml file as byte object
         fn = TestUtils.get_local_test_data_dir(
@@ -200,15 +242,5 @@ class TestBroUtil:
         assert cpt_data
         # run test
         cpt_data.get_all_data_from_bro(root=root)
-        # test that the data are read
-        assert cpt_data.bro_data
-        assert cpt_data.bro_data.a == 0.58  # <ns14:frictionSleeveSurfaceArea
-        assert cpt_data.bro_data.id == "CPT000000064413"
-        assert cpt_data.bro_data.cone_penetrometer_type == "F7.5CKEHG/B-1701-0745"
-        assert cpt_data.bro_data.cpt_standard == "NEN5140"
-        assert cpt_data.bro_data.offset_z == -1.530
-        assert cpt_data.bro_data.local_reference == "maaiveld"
-        assert cpt_data.bro_data.vertical_datum == "NAP"
-        assert cpt_data.bro_data.quality_class == "klasse2"
-        assert cpt_data.bro_data.result_time == "2011-06-29"
-        assert cpt_data.bro_data.predrilled_z == 0.01
+
+

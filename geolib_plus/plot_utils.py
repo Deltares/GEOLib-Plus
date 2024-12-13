@@ -5,6 +5,7 @@ from matplotlib.axes import Axes
 from matplotlib.offsetbox import AnchoredOffsetbox, HPacker, TextArea
 from matplotlib.patches import Rectangle
 
+
 CALIBRATED_LENGTH_FIGURE_SIZE = (
     21  # layout figure is calibrated using a plotted depth of 21 m
 )
@@ -277,42 +278,43 @@ def create_predrilled_depth_line_and_box(cpt: Any, ax: Axes, xlim: List[float], 
     :param language: language of the plot
     :return:
     """
+    if cpt.predrilled_z == None:
+        predrill_value = 0
+    else:
+        predrill_value = cpt.predrilled_z
 
-    if cpt.predrilled_z > 0.5:
-        ax.plot(
-            [xlim[0], xlim[0]],
-            [cpt.local_reference_level, cpt.local_reference_level - cpt.predrilled_z],
-            color="black",
-            linewidth=7,
+    ax.plot(
+        [xlim[0], xlim[0]],
+        [cpt.local_reference_level, cpt.local_reference_level - cpt.predrilled_z],
+        color="black",
+        linewidth=7,
+    )
+
+    if language == "Nederlands":
+        text = "Voorboordiepte = " + str(cpt.predrilled_z) + " m"
+    else:
+        text = "Predrilled depth = " + str(cpt.predrilled_z) + " m"
+
+    box = [
+        TextArea(
+            text,
+            textprops=dict(color="black", fontsize=9, horizontalalignment="left"),
         )
+    ]
 
-        if language == "Nederlands":
-            text = "Voorboordiepte = " + str(cpt.predrilled_z) + " m"
-        else:
-            text = "Predrilled depth = " + str(cpt.predrilled_z) + " m"
-
-        box = [
-            TextArea(
-                text,
-                textprops=dict(color="black", fontsize=9, horizontalalignment="left"),
-            )
-        ]
-
-        xbox = HPacker(children=box, align="center", pad=0, sep=5)
-        y_lims = ax.get_ylim()
-        # the graph goes from top to bottom 1 to 0
-        # define the y position of the textbox
-        ys = (cpt.local_reference_level - cpt.predrilled_z) / 2
-        ynew = 1 + ((ys - y_lims[1]) * (0 - 1) / (y_lims[0] - y_lims[1]))
-        anchored_xbox = AnchoredOffsetbox(
-            loc=2,
-            child=xbox,
-            pad=0.25,
-            bbox_to_anchor=(0.5 / 16, ynew),
-            bbox_transform=ax.transAxes,
-            borderpad=0.0,
-        )
-        ax.add_artist(anchored_xbox)
+    xbox = HPacker(children=box, align="center", pad=0, sep=5)
+    y_lims = ax.get_ylim()
+    # place the textbox at the left side of the plot in the middle of the plot
+    bbox_to_anchor = (5 / 16, 0.975)  # top middle default value
+    anchored_xbox = AnchoredOffsetbox(
+        loc=2,
+        child=xbox,
+        pad=0.25,
+        bbox_to_anchor=bbox_to_anchor,
+        bbox_transform=ax.transAxes,
+        borderpad=0.0,
+    )
+    ax.add_artist(anchored_xbox)
 
 
 def create_custom_grid(ax: Axes, xlim: List[float], ylim: List[float], grid: Dict[str, Any]) -> None:
@@ -424,14 +426,18 @@ def set_x_axis(ax: Axes, graph: Dict[str, Any], settings: Dict[str, Any], ylim: 
     first_end = end_label_positions[0]
     new_ticks = []
 
+    # Iterate over the tick label positions and their extents
     for counter, (start, end) in enumerate(
-        zip(start_label_positions, end_label_positions)
+            zip(start_label_positions, end_label_positions)
     ):
-        # check overlap with previous label
+        # Check if the current label overlaps with the previous label
         if first_start < start < first_end or first_start < end < first_end:
+            # If it overlaps, add an empty string to the new ticks list
             new_ticks.append("")
         else:
+            # If it does not overlap, add the current label to the new ticks list
             new_ticks.append(tick_labels[counter])
+            # Update the positions of the first label to the current label's positions
             first_start = start
             first_end = end
 
