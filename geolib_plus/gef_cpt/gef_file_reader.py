@@ -174,7 +174,7 @@ class GefFileReader(CptReader):
             with open(gef_file, "r") as f:
                 data = f.readlines()
         except UnicodeDecodeError:
-            with open(gef_file, "r", encoding='cp1252') as f:
+            with open(gef_file, "r", encoding="cp1252") as f:
                 data = f.readlines()
 
         # search NAP
