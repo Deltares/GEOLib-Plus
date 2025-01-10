@@ -46,26 +46,34 @@ class Testintegration:
         bro_test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A.xml")
         )
+        bro_test_file_new_version = TestUtils.get_local_test_data_dir(
+            Path("cpt", "bro_xml", "CPT000000003688_IMBRO_A_new_version.xml")
+        )
         assert gef_test_file.is_file()
         assert bro_test_file.is_file()
+        assert bro_test_file_new_version.is_file()
         # initialise models
         gef_cpt = GefCpt()
         bro_cpt = BroXmlCpt()
+        bro_cpt_new_version = BroXmlCpt()
         # test initial expectations
         assert gef_cpt
         assert bro_cpt
         # read gef file
         gef_cpt.read(filepath=gef_test_file)
         bro_cpt.read(filepath=bro_test_file)
+        bro_cpt_new_version.read(filepath=bro_test_file_new_version)
         # do pre-processing
         gef_cpt.pre_process_data()
         bro_cpt.pre_process_data()
+        bro_cpt_new_version.pre_process_data()
         # initialise interpretation model
         robertson = RobertsonCptInterpretation()
         robertson.unitweightmethod = UnitWeightMethod.ROBERTSON
         # interpet the results
         gef_cpt.interpret_cpt(robertson)
         bro_cpt.interpret_cpt(robertson)
+        bro_cpt_new_version.interpret_cpt(robertson)
 
         values_to_test = [
             "friction_nbr",
@@ -94,14 +102,22 @@ class Testintegration:
             "damping",
         ]
 
-        assert bro_cpt.name == gef_cpt.name
-        assert bro_cpt.coordinates == gef_cpt.coordinates
-        assert bro_cpt.pwp == gef_cpt.pwp
-        assert bro_cpt.lithology == gef_cpt.lithology
+        assert bro_cpt.name == gef_cpt.name == bro_cpt_new_version.name
+        assert (
+            bro_cpt.coordinates == gef_cpt.coordinates == bro_cpt_new_version.coordinates
+        )
+        assert bro_cpt.pwp == gef_cpt.pwp == bro_cpt_new_version.pwp
+        assert bro_cpt.lithology == gef_cpt.lithology == bro_cpt_new_version.lithology
         assert np.allclose(bro_cpt.litho_points, gef_cpt.litho_points, atol=1e-2)
+        assert np.allclose(
+            bro_cpt_new_version.litho_points, gef_cpt.litho_points, atol=1e-2
+        )
         for value in ["litho_NEN", "E_NEN", "cohesion_NEN", "fr_angle_NEN"]:
             for i in range(len(gef_cpt.litho_NEN)):
                 assert set(getattr(bro_cpt, value)[i].split("/")) == set(
+                    getattr(gef_cpt, value)[i].split("/")
+                )
+                assert set(getattr(bro_cpt_new_version, value)[i].split("/")) == set(
                     getattr(gef_cpt, value)[i].split("/")
                 )
 
@@ -109,7 +125,9 @@ class Testintegration:
             print(value)
             test = getattr(gef_cpt, value)
             expected_data = getattr(bro_cpt, value)
+            expected_data_new_version = getattr(bro_cpt_new_version, value)
             assert np.allclose(expected_data, test, atol=1e-2)
+            assert np.allclose(expected_data_new_version, test, atol=1e-2)
 
 
 class TestInterpreter:
