@@ -22,8 +22,9 @@
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -55,9 +56,9 @@
 <p>GEOLIB+ contains functionality that lets the user create a D-Foundations profile using inputs from GEOLIB+.
 To do that the user needs to read and interpretate a cpt using the GEOLIB+ module.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># import relevant packages</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">geolib_plus.gef_cpt</span> <span class="kn">import</span> <span class="n">GefCpt</span>
-<span class="kn">from</span> <span class="nn">geolib_plus.robertson_cpt_interpretation</span> <span class="kn">import</span> <span class="n">RobertsonCptInterpretation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.gef_cpt</span><span class="w"> </span><span class="kn">import</span> <span class="n">GefCpt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.robertson_cpt_interpretation</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobertsonCptInterpretation</span>
 
 <span class="n">cpt_file_gef</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cpt&quot;</span><span class="p">,</span> <span class="s2">&quot;gef&quot;</span><span class="p">,</span> <span class="s2">&quot;test_cpt.gef&quot;</span><span class="p">)</span>
 <span class="c1"># initialize model</span>
@@ -76,7 +77,7 @@ can produce the profile and soils, inputs that are required for setting up a DFo
 <li><p>The soils procuded have names which are taken from the cpt.lkithology_merged value.</p></li>
 <li><p>Function <a class="reference internal" href="../../dev/geolib_plus.geolib_connections.html#geolib_plus.geolib_connections.DFoundationsConnector.create_profile_for_d_foundations" title="geolib_plus.geolib_connections.DFoundationsConnector.create_profile_for_d_foundations"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_profile_for_d_foundations()</span></code></a> does not fill out soil parameters automatically.</p></li>
 </ol>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.geolib_connections</span> <span class="kn">import</span> <span class="n">DFoundationsConnector</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.geolib_connections</span><span class="w"> </span><span class="kn">import</span> <span class="n">DFoundationsConnector</span>
 <span class="c1"># run test</span>
 <span class="n">profile</span><span class="p">,</span> <span class="n">soils</span> <span class="o">=</span> <span class="n">DFoundationsConnector</span><span class="o">.</span><span class="n">create_profile_for_d_foundations</span><span class="p">(</span><span class="n">cpt_gef</span><span class="p">)</span>
 </pre></div>
@@ -85,7 +86,7 @@ can produce the profile and soils, inputs that are required for setting up a DFo
 This can be demostrated in the following example. Note that in the following code block the
 DFoundations model is not created from scratch but parsed from an arleady existing file.
 The new file can be later serialized.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geolib</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geolib</span>
 
 <span class="c1"># initialize geolib model</span>
 <span class="n">test_dfoundations</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;geolib_example.foi&quot;</span><span class="p">)</span>
@@ -134,7 +135,7 @@ The new file can be later serialized.</p>
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../index.html">
-    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    <img class="logo" src="../../_static/geolib.png" alt="Logo" />
     
   </a>
 </p>
@@ -229,7 +230,7 @@ The new file can be later serialized.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Deltares.
+      &#169;2020, Deltares.
       
     </div>
 

@@ -22,8 +22,9 @@
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -69,9 +70,9 @@ of the new interpretation model is presented after plotting it.</p>
 <a class="reference internal image-reference" href="../../_images/qc_only_rule.png"><img alt="../../_images/qc_only_rule.png" src="../../_images/qc_only_rule.png" style="width: 400px;" /></a>
 <p>As a first step the user creates a shapefile that represents the qc-only classification method.
 The user can do this by using the following python code:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">geometry</span>
-<span class="kn">import</span> <span class="nn">shapefile</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely</span><span class="w"> </span><span class="kn">import</span> <span class="n">geometry</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shapefile</span>
 
 <span class="c1"># define points</span>
 <span class="n">A</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
@@ -104,7 +105,7 @@ The user can do this by using the following python code:</p>
 </pre></div>
 </div>
 <p>The user can also check if the shapefile contains the correct geometry by plotting it.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="c1"># Plot Shape file</span>
 <span class="n">sf</span> <span class="o">=</span> <span class="n">shapefile</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;qc_only_rule&#39;</span><span class="p">))</span>
@@ -139,19 +140,19 @@ the <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.c
 <p class="admonition-title">Note</p>
 <p>To find out more about the concept of inheritance in python see &lt;<a class="reference external" href="https://docs.python.org/3/tutorial/classes.html">https://docs.python.org/3/tutorial/classes.html</a>&gt; and &lt;<a class="reference external" href="https://www.w3schools.com/python/python_inheritance.asp">https://www.w3schools.com/python/python_inheritance.asp</a>&gt; .</p>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">geolib_plus.cpt_base_model</span> <span class="kn">import</span> <span class="n">AbstractInterpretationMethod</span><span class="p">,</span> <span class="n">AbstractCPT</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span> <span class="nn">shapefile</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.cpt_base_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractInterpretationMethod</span><span class="p">,</span> <span class="n">AbstractCPT</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shapefile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
 
-<span class="k">class</span> <span class="nc">CustomCptInterpretation</span><span class="p">(</span><span class="n">AbstractInterpretationMethod</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CustomCptInterpretation</span><span class="p">(</span><span class="n">AbstractInterpretationMethod</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">cpt_data</span><span class="p">:</span> <span class="n">AbstractCPT</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">soil_types_for_classification</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">path_shapefile</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">unit_weight_soil</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpt</span><span class="p">:</span> <span class="n">AbstractCPT</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cpt</span><span class="p">:</span> <span class="n">AbstractCPT</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function that interprets the cpt inputs.</span>
 <span class="sd">        Lithology for each layer is determined according to</span>
@@ -171,7 +172,7 @@ the <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.c
         <span class="c1"># calculate unit weights based on the lithology found</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unit_weight</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">unit_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unit_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function that determines the unit weight of different soil types depending</span>
 <span class="sd">        on the classification type.</span>
@@ -191,13 +192,13 @@ the <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.c
                 <span class="n">unit_weight</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unit_weight_soil</span> <span class="o">=</span> <span class="n">unit_weight</span>
 
-    <span class="k">def</span> <span class="nf">point_intersects_one_polygon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">point_intersects_one_polygon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">soil_name</span><span class="p">,</span> <span class="n">polygon</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">soil_types_for_classification</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">point</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">polygon</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">soil_name</span>
         <span class="k">return</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">lithology</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">lithology</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function that reads a soil classification shapefile.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -210,7 +211,7 @@ the <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.c
             <span class="n">lithology</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_intersects_one_polygon</span><span class="p">(</span><span class="n">point_to_check</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cpt_data</span><span class="o">.</span><span class="n">lithology</span> <span class="o">=</span> <span class="n">lithology</span>
 
-    <span class="k">def</span> <span class="nf">soil_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">soil_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function that read shapes from shape file and passes them as Polygons.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -225,8 +226,8 @@ the <a class="reference internal" href="../../dev/geolib_plus.html#geolib_plus.c
 </div>
 <p>After defining the custom class the user can use it in the following way.
 First of all, the user has to read a cpt and perform a pre_process calculation:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.gef_cpt</span> <span class="kn">import</span> <span class="n">GefCpt</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.gef_cpt</span><span class="w"> </span><span class="kn">import</span> <span class="n">GefCpt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="n">cpt_file_gef</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cpt&quot;</span><span class="p">,</span> <span class="s2">&quot;gef&quot;</span><span class="p">,</span> <span class="s2">&quot;test_cpt.gef&quot;</span><span class="p">)</span>
 <span class="c1"># initialize models</span>
 <span class="n">cpt_gef</span> <span class="o">=</span> <span class="n">GefCpt</span><span class="p">()</span>
@@ -246,7 +247,7 @@ First of all, the user has to read a cpt and perform a pre_process calculation:<
 </div>
 <p>After the interpretation is performed the user can inspect the results. Plotting them is an easy method to inspect the outcomes.
 To do that use the following code block.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
     <span class="n">interpreter</span><span class="o">.</span><span class="n">unit_weight_soil</span><span class="p">,</span>
@@ -287,7 +288,7 @@ To do that use the following code block.</p>
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../index.html">
-    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    <img class="logo" src="../../_static/geolib.png" alt="Logo" />
     
   </a>
 </p>
@@ -382,7 +383,7 @@ To do that use the following code block.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Deltares.
+      &#169;2020, Deltares.
       
     </div>
 

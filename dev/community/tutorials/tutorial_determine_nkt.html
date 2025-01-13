@@ -22,8 +22,9 @@
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -61,7 +62,7 @@ each method is explained.</p>
 only input is the saturation of the soil. The saturation of the soil can be either a boolean or a numpy array of
 booleans. Below an example is shown:</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.shm.nkt_utils</span> <span class="kn">import</span> <span class="n">NktUtils</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.shm.nkt_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">NktUtils</span>
 
 <span class="c1"># get mean and standard deviation of Nkt</span>
 <span class="n">is_soil_saturated</span> <span class="o">=</span> <span class="kc">True</span>
@@ -84,7 +85,7 @@ q_net values in the same soil type is required (q_net can be calculate in the
 value and the variation coefficient of Nkt/q_net is determined, while taking into account the amount of tests in the
 test set.</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.shm.nkt_utils</span> <span class="kn">import</span> <span class="n">NktUtils</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.shm.nkt_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">NktUtils</span>
 
 <span class="c1"># get mean and standard deviation of Nkt</span>
 <span class="n">su</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">42</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">34</span><span class="p">])</span>  <span class="c1"># in kPa</span>
@@ -104,7 +105,7 @@ characteristic value of Nkt can be determined.</p>
 coefficient of qnet/Nkt can be determined. This method assumes a log-normal distribution of Nkt. And
 it takes into account the amount of tests in the test set. Below an example is shown on how to use this function:</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.shm.nkt_utils</span> <span class="kn">import</span> <span class="n">NktUtils</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.shm.nkt_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">NktUtils</span>
 
 <span class="c1"># get mean and standard deviation of Nkt</span>
 <span class="n">su</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">42</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">34</span><span class="p">])</span>  <span class="c1"># in kPa</span>
@@ -143,7 +144,7 @@ characteristic value of Nkt can be determined.</p>
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../index.html">
-    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    <img class="logo" src="../../_static/geolib.png" alt="Logo" />
     
   </a>
 </p>
@@ -238,7 +239,7 @@ characteristic value of Nkt can be determined.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Deltares.
+      &#169;2020, Deltares.
       
     </div>
 

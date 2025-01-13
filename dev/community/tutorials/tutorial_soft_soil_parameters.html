@@ -22,8 +22,9 @@
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -67,7 +68,7 @@ In this tutorial the user reads will perform the following steps to calculate th
 <p>To begin with the SSC model calculation the <a class="reference internal" href="../../dev/geolib_plus.parameters_for_soil_models.html#geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters" title="geolib_plus.soft_soil_creep_parameters.SoftSoilCreepParameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">SoftSoilCreepParameters</span></code></a> class
 should be initialized.</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">geolib_plus.soft_soil_creep_parameters</span> <span class="kn">import</span> <span class="n">SoftSoilCreepParameters</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.soft_soil_creep_parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">SoftSoilCreepParameters</span>
 <span class="c1"># initialize class</span>
 <span class="n">SSC_model</span> <span class="o">=</span> <span class="n">SoftSoilCreepParameters</span><span class="p">()</span>
 </pre></div>
@@ -77,9 +78,9 @@ should be initialized.</p>
 Note that reading the cpt is not neccessary for the SSC parameter determination.
 Input parameters can also come from labtests (which is more accurate).</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">geolib_plus.gef_cpt</span> <span class="kn">import</span> <span class="n">GefCpt</span>
-<span class="kn">from</span> <span class="nn">geolib_plus.robertson_cpt_interpretation</span> <span class="kn">import</span> <span class="n">RobertsonCptInterpretation</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.gef_cpt</span><span class="w"> </span><span class="kn">import</span> <span class="n">GefCpt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geolib_plus.robertson_cpt_interpretation</span><span class="w"> </span><span class="kn">import</span> <span class="n">RobertsonCptInterpretation</span>
 
 <span class="c1"># read cpt from gef file</span>
 <span class="n">cpt_file_gef</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cpt&quot;</span><span class="p">,</span> <span class="s2">&quot;gef&quot;</span><span class="p">,</span> <span class="s2">&quot;test_cpt.gef&quot;</span><span class="p">)</span>
@@ -97,7 +98,7 @@ Input parameters can also come from labtests (which is more accurate).</p>
 used as inputs of the SSC parameter calculation. For example, the OCR value can be
 calculated using the following equation <span id="id2">[<a class="reference internal" href="../../references.html#id2" title="P.K. Robertson and K.L. Cabal. Guide to Cone Penetration Testing for Geotechnical Engineering. Gregg, 6 edition, 2014.">1</a>]</span>.</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="n">OCR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="n">Qtn_value</span> <span class="o">**</span> <span class="mf">1.25</span> <span class="k">for</span> <span class="n">Qtn_value</span> <span class="ow">in</span> <span class="n">cpt_gef</span><span class="o">.</span><span class="n">Qtn</span><span class="p">])</span>
 </pre></div>
@@ -165,7 +166,7 @@ the user can input them into the class and perform the calculation.</p>
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../index.html">
-    <img class="logo" src="../../_static/geolib.png" alt="Logo"/>
+    <img class="logo" src="../../_static/geolib.png" alt="Logo" />
     
   </a>
 </p>
@@ -260,7 +261,7 @@ the user can input them into the class and perform the calculation.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Deltares.
+      &#169;2020, Deltares.
       
     </div>
 
