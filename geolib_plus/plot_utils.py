@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 from matplotlib.axes import Axes
@@ -98,20 +98,20 @@ def set_textbox_at_thresholds(
 
 
 def set_multicolor_label(
-    ylim,
-    ax,
-    label_txt,
-    color,
-    font_size_text,
-    font_size_arrow,
-    line_style,
-    x_axis_type,
-    location="bottom_left",
-    axis="x",
-    anchorpad=0,
-    extra_label_spacing=0.02,
-    **kw,
-):
+    ylim: List[float],
+    ax: Axes,
+    label_txt: str,
+    color: str,
+    font_size_text: int,
+    font_size_arrow: int,
+    line_style: str,
+    x_axis_type: str,
+    location: str = "bottom_left",
+    axis: str = "x",
+    anchorpad: int = 0,
+    extra_label_spacing: float = 0.02,
+    **kw: Any,
+) -> None:
     """
     This function creates axes labels with multiple colors
 
@@ -206,7 +206,9 @@ def set_multicolor_label(
         ax.add_artist(anchored_xbox)
 
 
-def set_local_reference_line(cpt, ax, xlim, language):
+def set_local_reference_line(
+    cpt: Any, ax: Axes, xlim: List[float], language: str
+) -> None:
     """
     Sets a line in the plot at the depth of the  local reference line, e.g. surface level or sea bed level.
     Also set a textbox with the depth of the reference line relative to the vertical datum.
@@ -265,7 +267,62 @@ def set_local_reference_line(cpt, ax, xlim, language):
     ax.add_artist(anchored_xbox)
 
 
-def create_custom_grid(ax, xlim, ylim, grid):
+def create_predrilled_depth_line_and_box(
+    cpt: Any, ax: Axes, xlim: List[float], language: str
+) -> None:
+    """
+    Sets a black line at the left most side of the plot from the local_reference_level to the
+    local_reference_level - predrilled_depth. Also sets a textbox with the depth of the predrilled depth.
+    This should only happen if the predrilled depth is present and more than 0.5 m.
+
+    :param ax: current axis
+    :param cpt: cpt data
+    :param xlim: horizontal limit
+    :param language: language of the plot
+    :return:
+    """
+    if cpt.predrilled_z == None:
+        predrill_value = 0
+    else:
+        predrill_value = cpt.predrilled_z
+
+    ax.plot(
+        [xlim[0], xlim[0]],
+        [cpt.local_reference_level, cpt.local_reference_level - cpt.predrilled_z],
+        color="black",
+        linewidth=7,
+    )
+
+    if language == "Nederlands":
+        text = "Voorboordiepte = " + str(cpt.predrilled_z) + " m"
+    else:
+        text = "Predrilled depth = " + str(cpt.predrilled_z) + " m"
+
+    box = [
+        TextArea(
+            text,
+            textprops=dict(color="black", fontsize=9, horizontalalignment="left"),
+        )
+    ]
+
+    xbox = HPacker(children=box, align="center", pad=0, sep=5)
+    y_lims = ax.get_ylim()
+    # place the textbox at the left side of the plot in the middle of the plot
+    bbox_to_anchor = (5 / 16, 0.975)  # top middle default value
+    anchored_xbox = AnchoredOffsetbox(
+        loc=2,
+        child=xbox,
+        pad=0.25,
+        bbox_to_anchor=bbox_to_anchor,
+        bbox_transform=ax.transAxes,
+        borderpad=0.0,
+    )
+    ax.add_artist(anchored_xbox)
+
+
+def create_custom_grid(
+    ax: Axes, xlim: List[float], ylim: List[float], grid: Dict[str, Any]
+) -> None:
     """
     Creates custom grid with custom line colours, custom line distances and custom line widths
 
@@ -331,7 +388,9 @@ def create_custom_grid(ax, xlim, ylim, grid):
         ]
 
 
-def set_x_axis(ax, graph, settings, ylim):
+def set_x_axis(
+    ax: Axes, graph: Dict[str, Any], settings: Dict[str, Any], ylim: List[float]
+) -> None:
     """
     Sets the x-limit, the x-label, and the x-ticks
 
@@ -362,6 +421,36 @@ def set_x_axis(ax, graph, settings, ylim):
     ax.set_xticks(ticks)
     ax.tick_params(axis="x", colors=graph["graph_color"])
 
+    # Get tick positions and labels
+    tick_labels = ax.get_xticklabels()
+    label_extents = [
+        label.get_window_extent(renderer=ax.figure.canvas.get_renderer())
+        for label in tick_labels
+    ]
+    start_label_positions = [tick.intervalx[0] for tick in label_extents]
+    end_label_positions = [tick.intervalx[1] for tick in label_extents]
+    first_start = start_label_positions[0]
+    first_end = end_label_positions[0]
+    new_ticks = []
+
+    # Iterate over the tick label positions and their extents
+    for counter, (start, end) in enumerate(
+        zip(start_label_positions, end_label_positions)
+    ):
+        # Check if the current label overlaps with the previous label
+        if first_start < start < first_end or first_start < end < first_end:
+            # If it overlaps, add an empty string to the new ticks list
+            new_ticks.append("")
+        else:
+            # If it does not overlap, add the current label to the new ticks list
+            new_ticks.append(tick_labels[counter])
+            # Update the positions of the first label to the current label's positions
+            first_start = start
+            first_end = end
+
+    # update the new labels
+    ax.set_xticklabels(new_ticks)
+
     set_multicolor_label(
         ylim,
         ax,
@@ -379,8 +468,13 @@ def set_x_axis(ax, graph, settings, ylim):
 
 
 def set_y_axis(
-    ax, ylim, settings, cpt, tick_locations_inclination, tick_labels_inclination
-):
+    ax: Axes,
+    ylim: List[float],
+    settings: Dict[str, Any],
+    cpt: Any,
+    tick_locations_inclination: List[float],
+    tick_labels_inclination: List[str],
+) -> None:
     """
     Sets the y-limit, the y-label, the y-ticks and inverts y-axis
 
@@ -420,7 +514,13 @@ def set_y_axis(
         ax2.invert_yaxis()
 
 
-def __add_text_in_rectangle(ax, text, rectangle, rel_vertical_position, hor_spacing):
+def __add_text_in_rectangle(
+    ax: Axes,
+    text: str,
+    rectangle: Rectangle,
+    rel_vertical_position: float,
+    hor_spacing: float,
+) -> None:
     """
     Adds text into rectangles
 
@@ -443,8 +543,13 @@ def __add_text_in_rectangle(ax, text, rectangle, rel_vertical_position, hor_spac
 
 
 def create_bro_information_box(
-    ax, scale, cpt, plot_nr, ylims, distance_meta_data_from_plot
-):
+    ax: Axes,
+    scale: float,
+    cpt: Any,
+    plot_nr: int,
+    ylims: List[Tuple[float, float]],
+    distance_meta_data_from_plot: float,
+) -> None:
     """
 
     :param ax: current axis
@@ -635,7 +740,9 @@ def create_bro_information_box(
     ax.add_patch(empty_box)
 
 
-def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
+def create_gef_information_box(
+    ax: Axes, scale: float, cpt: Any, plot_nr: int, ylims: List[Tuple[float, float]]
+) -> None:
     """
     Sets textboxes with meta data
 
@@ -813,14 +920,21 @@ def create_gef_information_box(ax, scale, cpt, plot_nr, ylims):
     ax.add_patch(empty_box)
 
 
-def create_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot):
+def create_information_box(
+    ax: Axes,
+    scale: float,
+    cpt: Any,
+    plot_nr: int,
+    ylims: List[Tuple[float, float]],
+    distance_from_plot: float,
+) -> None:
     if cpt.__class__.__name__ == "BroXmlCpt":
         create_bro_information_box(ax, scale, cpt, plot_nr, ylims, distance_from_plot)
     elif cpt.__class__.__name__ == "GefCpt":
         create_gef_information_box(ax, scale, cpt, plot_nr, ylims)
 
 
-def set_figure_size(fig, ylim):
+def set_figure_size(fig: Any, ylim: List[float]) -> None:
     """
     Sets the figure size in inches
 

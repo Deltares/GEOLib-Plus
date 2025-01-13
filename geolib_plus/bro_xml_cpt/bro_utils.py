@@ -299,13 +299,15 @@ class XMLBroCPTReader(CptReader):
         # cpt time of result
         for cpt in root.iter(ns + "conePenetrationTest"):
             for loc in cpt.iter(ns5 + "resultTime"):
-                if loc.text and loc.text.strip():
-                    # If loc.text is not None and not empty, use its value
-                    self.bro_data.result_time = loc.text
-                else:
-                    # Fallback: Look for nested timePosition element
+                if loc.text is None:
                     for loc2 in loc.iter(ns3 + "timePosition"):
                         self.bro_data.result_time = loc2.text
+                else:
+                    if loc.text.strip() == "":
+                        for loc2 in loc.iter(ns3 + "timePosition"):
+                            self.bro_data.result_time = loc2.text
+                    else:
+                        self.bro_data.result_time = loc.text
 
         # Pre drilled depth
         z = self.search_values_in_root(root=root, search_item=ns + "predrilledDepth")
