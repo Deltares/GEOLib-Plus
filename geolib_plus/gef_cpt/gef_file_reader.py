@@ -254,7 +254,9 @@ class GefFileReader(CptReader):
         self.read_column_data(data, idx_EOH)
 
         # get pre drill depth from penetration length data
-        predrilled_z = self.get_pre_drill_depth(data, self.property_dict["penetration_length"].values_from_gef)
+        predrilled_z = self.get_pre_drill_depth(
+            data, self.property_dict["penetration_length"].values_from_gef
+        )
 
         idx_name = GefFileReader.get_line_index_from_data_starts_with(
             code_string=r"#TESTID=", data=data
