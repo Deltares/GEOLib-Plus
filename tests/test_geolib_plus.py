@@ -20,6 +20,33 @@ def test_version():
 
 
 class TestGeolibPlusReading:
+
+    @pytest.mark.systemtest
+    def test_bug_predrill(self):
+        # Read cpts
+        # open the gef file
+        test_file_gef = TestUtils.get_local_test_data_dir(
+            Path("compare_xml_gef", "CPT000000217393_IMBRO.gef")
+        )
+        assert test_file_gef.is_file()
+        # open the bro file
+        test_file_bro = TestUtils.get_local_test_data_dir(
+            Path("compare_xml_gef", "CPT000000217393.xml")
+        )
+        assert test_file_bro.is_file()
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # test initial expectations
+        assert cpt_gef
+        assert cpt_bro_xml
+        # read gef file
+        cpt_gef.read(filepath=test_file_gef)
+        # read bro file
+        cpt_bro_xml.read(filepath=test_file_bro)
+        assert cpt_bro_xml.predrilled_z == cpt_gef.predrilled_z
+
+
     @pytest.mark.systemtest
     def test_that_values_gef_and_cpt_are_of_the_same_type(self):
         # Read cpts

@@ -5,7 +5,7 @@ import numpy as np
 from geolib_plus.bro_xml_cpt import BroXmlCpt
 
 cpt_file_xml = Path(
-    "D:\\bro_xml_viewer\\unit_testing\\unit_testing_files\\xml_example_1\\CPT000000006560_IMBRO_A.xml"
+    "test_files/cpt/bro_xml/xmls_with_various_formats/CPT000000129426.xml"
 )
 cpt = BroXmlCpt()
 cpt.read(cpt_file_xml)
