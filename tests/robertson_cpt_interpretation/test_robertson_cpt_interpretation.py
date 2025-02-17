@@ -1283,8 +1283,9 @@ class TestInterpreter:
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
 
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
-
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
 
     def test_norm_calc_n_method_true(self):
         """
@@ -1293,7 +1294,7 @@ class TestInterpreter:
         """
         # Define dummy input data
         instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
+        instance.data = type("test", (object,), {})()
         instance.data.qt = np.array([10, 50, 100])
         instance.data.tip = np.array([1, 1, 1])
         instance.data.friction_nbr = np.array([1, 2, 3])
@@ -1309,20 +1310,27 @@ class TestInterpreter:
         # Compute expected Cn with n = 0.5: (Pa/effective_stress)**0.5
         Cn = (instance.data.Pa / np.array(instance.data.effective_stress)) ** 0.5
         # Expected Q = ((qt - total_stress) / Pa) * Cn
-        Q_calc = (np.array(instance.data.qt) - np.array(instance.data.total_stress)) / instance.data.Pa * Cn
+        Q_calc = (
+            (np.array(instance.data.qt) - np.array(instance.data.total_stress))
+            / instance.data.Pa
+            * Cn
+        )
         # Apply clamping: if Q<=1, then Q=1, and if Q>=1000, Q=1000.
         Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
         Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
 
         # Expected F = (friction / (qt-total_stress)) * 100, with clamping at 0.1 and 10.0.
-        F_calc = np.array(instance.data.friction) / (np.array(instance.data.qt) - np.array(instance.data.total_stress)) * 100
+        F_calc = (
+            np.array(instance.data.friction)
+            / (np.array(instance.data.qt) - np.array(instance.data.total_stress))
+            * 100
+        )
         F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
         F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
 
         np.testing.assert_allclose(instance.data.n, expected_n, rtol=1e-6)
         np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
         np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
-
 
     def test_norm_calc_n_method_false(self):
         """
@@ -1331,7 +1339,7 @@ class TestInterpreter:
         """
         # Define dummy input data
         instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
+        instance.data = type("test", (object,), {})()
         instance.data.qt = np.array([10, 50, 100])
         instance.data.tip = np.array([1, 1, 1])
         instance.data.friction_nbr = np.array([1, 2, 3])
@@ -1346,10 +1354,18 @@ class TestInterpreter:
         expected_n = np.array([1.0, 1.0, 1.0])
         # Compute expected Cn with n = 1.0: (Pa/effective_stress)**1.0
         Cn = (instance.data.Pa / np.array(instance.data.effective_stress)) ** 1.0
-        Q_calc = (np.array(instance.data.qt) - np.array(instance.data.total_stress)) / instance.data.Pa * Cn
+        Q_calc = (
+            (np.array(instance.data.qt) - np.array(instance.data.total_stress))
+            / instance.data.Pa
+            * Cn
+        )
         Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
         Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
-        F_calc = np.array(instance.data.friction) / (np.array(instance.data.qt) - np.array(instance.data.total_stress)) * 100
+        F_calc = (
+            np.array(instance.data.friction)
+            / (np.array(instance.data.qt) - np.array(instance.data.total_stress))
+            * 100
+        )
         F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
         F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
 
