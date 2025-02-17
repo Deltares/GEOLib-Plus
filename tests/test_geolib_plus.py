@@ -20,7 +20,6 @@ def test_version():
 
 
 class TestGeolibPlusReading:
-
     @pytest.mark.systemtest
     def test_bug_predrill(self):
         # Read cpts
@@ -45,7 +44,6 @@ class TestGeolibPlusReading:
         # read bro file
         cpt_bro_xml.read(filepath=test_file_bro)
         assert cpt_bro_xml.predrilled_z == cpt_gef.predrilled_z
-
 
     @pytest.mark.systemtest
     def test_that_values_gef_and_cpt_are_of_the_same_type(self):
