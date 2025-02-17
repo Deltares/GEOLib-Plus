@@ -1140,7 +1140,7 @@ class TestInterpreter:
 
     def test_stress_calc_total_stress(self, setup_interpreter):
         interpreter = RobertsonCptInterpretation()
-        interpreter.data = type('test', (object,), {})()
+        interpreter.data = type("test", (object,), {})()
         # case that we are bellow the surface
 
         interpreter.data.depth = np.array([0, 1, 2, 3, 4, 5])
@@ -1151,8 +1151,9 @@ class TestInterpreter:
         interpreter = setup_interpreter
         interpreter.stress_calc()
         expected_total_stress = np.array([0, 18, 36, 54, 72, 90])
-        np.testing.assert_array_almost_equal(interpreter.data.total_stress, expected_total_stress)
-
+        np.testing.assert_array_almost_equal(
+            interpreter.data.total_stress, expected_total_stress
+        )
 
     def test_stress_calc_no_pwp_effect(self):
         """
@@ -1160,7 +1161,7 @@ class TestInterpreter:
         so that effective stress equals total stress.
         """
         instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
+        instance.data = type("test", (object,), {})()
         # Set a simple depth array (in meters)
         instance.data.depth = np.array([0, 1, 2, 3, 4], dtype=float)
         # set the pwp to a very low value so that the pwp is negative which will be set to zero
@@ -1180,14 +1181,16 @@ class TestInterpreter:
         expected_effective = expected_total.copy()
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
 
     def test_stress_calc_positive_pwp(self):
         """
         Test a scenario where the computed pwp is positive and reduces effective stress.
         """
         instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
+        instance.data = type("test", (object,), {})()
         # Depth starting at 5 m
         instance.data.depth = np.array([5, 6, 7, 8, 9], dtype=float)
         # Let depth_to_reference be constant at -2 m (typical for below ground surface)
@@ -1210,7 +1213,9 @@ class TestInterpreter:
         expected_effective = expected_total - pwp_val
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
 
     def test_stress_calc_negative_pwp_clipped(self):
         """
@@ -1218,7 +1223,7 @@ class TestInterpreter:
         but is then clipped to zero.
         """
         instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
+        instance.data = type("test", (object,), {})()
         instance.data.depth = np.array([0, 1, 2, 3, 4], dtype=float)
         # Set depth_to_reference such that its values are higher than z_aux will be.
         instance.data.depth_to_reference = np.array([2, 3, 3, 3, 3], dtype=float)
@@ -1237,8 +1242,9 @@ class TestInterpreter:
         expected_effective = expected_total.copy()
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
-
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
 
     def test_stress_calc_negative_effective_clipped(self):
         """
@@ -1246,18 +1252,20 @@ class TestInterpreter:
         stress would be negative, and then it is clipped to zero.
         """
         instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
+        instance.data = type("test", (object,), {})()
         # Use a shallow depth so that total stress is relatively low.
         instance.data.depth = np.array([0, 0.5, 1, 1.5, 2], dtype=float)
         # Let depth_to_reference be -1 m.
-        instance.data.depth_to_reference = np.full(instance.data.depth.shape, -1.0, dtype=float)
+        instance.data.depth_to_reference = np.full(
+            instance.data.depth.shape, -1.0, dtype=float
+        )
         # Set pwp high relative to the depth: here, pwp=2 leads to z_aux = min(2, 1+0)=1.
         instance.data.pwp = 2
         instance.data.g = 9.81
         instance.gamma = np.full(instance.data.depth.shape, 18.0)
-        
+
         instance.stress_calc()
-        
+
         # Compute expected total stress:
         # z = diff([0, 0.5, 1, 1.5, 2]) = [0.5, 0.5, 0.5, 0.5] then appended: [0.5, 0.5, 0.5, 0.5, 0.5]
         # Cumulative sum: 18*0.5 = 9, so: [9, 18, 27, 36, 45]
@@ -1269,8 +1277,12 @@ class TestInterpreter:
         # Clip negative effective stresses to zero.
         effective[effective < 0] = 0
         expected_effective = effective
-        
+
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
         np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
 
 
