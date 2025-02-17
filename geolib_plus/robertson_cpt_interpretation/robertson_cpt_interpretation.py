@@ -386,7 +386,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         z_aux = np.min(
             [self.data.pwp, abs(self.data.depth_to_reference[0]) + self.data.depth[0]]
         )
-        pwp = (z_aux - abs(self.data.depth_to_reference)) * self.data.g
+        pwp = (z_aux - self.data.depth_to_reference) * self.data.g
         # no suction is allowed
         pwp[pwp <= 0] = 0
         # compute effective stress
