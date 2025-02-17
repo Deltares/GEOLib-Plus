@@ -357,7 +357,7 @@ class TestInterpreter:
         assert cpt
         assert interpreter
         # Empty list that will be filled by reading the csv file
-        test_Qtn, total_stress, effective_stress, Pa, tip, friction = (
+        test_Qtn, total_stress, effective_stress, Pa, qt, friction = (
             [],
             [],
             [],
@@ -380,7 +380,7 @@ class TestInterpreter:
                     total_stress.append(float(row[0]))
                     effective_stress.append(float(row[1]))
                     Pa.append(float(row[2]))
-                    tip.append(float(row[3]))
+                    qt.append(float(row[3]))
                     friction.append(float(row[4]))
 
                     # These will be the outputs of the function
@@ -392,7 +392,7 @@ class TestInterpreter:
         interpreter.data.total_stress = np.array(total_stress)
         interpreter.data.effective_stress = np.array(effective_stress)
         interpreter.data.Pa = np.array(Pa)
-        interpreter.data.tip = np.array(tip)
+        interpreter.data.qt = np.array(qt)
         interpreter.data.friction = np.array(friction)
         interpreter.data.friction_nbr = np.array(friction)
         interpreter.norm_calc(n_method=True)

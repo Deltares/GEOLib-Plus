@@ -411,10 +411,10 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         """
 
         # normalisation of qc and friction into Qtn and Fr: following Robertson and Cabal (2014)
-
+        length_of_cpt = len(self.data.qt)
         # iteration around n to compute IC
         # start assuming n=1 for IC calculation
-        n = np.ones(len(self.data.tip))
+        n = np.ones(length_of_cpt)
 
         # switch for the n calculation. default is iterative process
         if not n_method:
@@ -425,7 +425,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             while error >= tolerance:
                 # if did not converge
                 if iteration >= max_iterations:
-                    n = np.ones(len(self.data.tip)) * 0.5
+                    n = np.ones(length_of_cpt) * 0.5
                     break
                 n1 = n_iter(
                     n,
@@ -439,7 +439,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 n = n1
                 iteration += 1
         else:
-            n = np.ones(len(self.data.tip)) * 0.5
+            n = np.ones(length_of_cpt) * 0.5
 
         # parameter Cn
         Cn = (self.data.Pa / self.data.effective_stress) ** n
