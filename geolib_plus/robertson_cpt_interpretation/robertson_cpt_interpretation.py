@@ -444,8 +444,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         # parameter Cn
         Cn = (self.data.Pa / self.data.effective_stress) ** n
         # calculation Q and F
-        Q = (self.data.tip - self.data.total_stress) / self.data.Pa * Cn
-        F = self.data.friction / (self.data.tip - self.data.total_stress) * 100
+        Q = (self.data.qt - self.data.total_stress) / self.data.Pa * Cn
+        F = self.data.friction / (self.data.qt - self.data.total_stress) * 100
         # Q and F cannot be negative. if negative, log10 will be infinite.
         # These values are limited by the contours of soil behaviour of Robertson
         Q[Q <= 1.0] = 1.0
