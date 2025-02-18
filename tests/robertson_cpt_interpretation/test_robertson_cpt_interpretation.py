@@ -1302,6 +1302,28 @@ class TestInterpreter:
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
         np.testing.assert_allclose(instance.data.effective_stress, effective, rtol=1e-5)
 
+    def _verify_norm_calc(self, instance, expected_n, exponent):
+        """
+        Helper to verify norm_calc results.
+
+        Parameters:
+            instance: The instance after norm_calc has been called.
+            expected_n: Expected n values (numpy array).
+            exponent: Exponent to use in the calculation of Cn.
+        """
+        Cn = (instance.data.Pa / instance.data.effective_stress) ** exponent
+        Q_calc = (instance.data.qt - instance.data.total_stress) / instance.data.Pa * Cn
+        Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
+        Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
+
+        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
+        F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
+
+        np.testing.assert_allclose(instance.data.n, expected_n, rtol=1e-6)
+        np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
+        np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
+
     def test_norm_calc_n_method_true(self):
         """
         Test norm_calc when using the simplified method (n_method=True)
@@ -1310,22 +1332,8 @@ class TestInterpreter:
         instance = self._setup_norm_instance()
         instance.norm_calc(n_method=True)
 
-        # Expected n is 0.5 for all data points.
         expected_n = np.array([0.5, 0.5, 0.5])
-        # Calculate Cn and then Qtn.
-        Cn = (instance.data.Pa / instance.data.effective_stress) ** 0.5
-        Q_calc = (instance.data.qt - instance.data.total_stress) / instance.data.Pa * Cn
-        Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
-        Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
-
-        # Calculate friction ratio Fr.
-        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
-        F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
-        F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
-
-        np.testing.assert_allclose(instance.data.n, expected_n, rtol=1e-6)
-        np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
-        np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
+        self._verify_norm_calc(instance, expected_n, exponent=0.5)
 
     def test_norm_calc_n_method_false(self):
         """
@@ -1335,19 +1343,5 @@ class TestInterpreter:
         instance = self._setup_norm_instance()
         instance.norm_calc(n_method=False)
 
-        # Expected n is 1.0 for all data points.
         expected_n = np.array([1.0, 1.0, 1.0])
-        # Calculate Cn and then Qtn.
-        Cn = (instance.data.Pa / instance.data.effective_stress) ** 1.0
-        Q_calc = (instance.data.qt - instance.data.total_stress) / instance.data.Pa * Cn
-        Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
-        Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
-
-        # Calculate friction ratio Fr.
-        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
-        F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
-        F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
-
-        np.testing.assert_allclose(instance.data.n, expected_n, rtol=1e-6)
-        np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
-        np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
+        self._verify_norm_calc(instance, expected_n, exponent=1.0)
