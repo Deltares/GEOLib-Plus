@@ -1206,13 +1206,18 @@ class TestInterpreter:
         instance = self._create_instance()
         instance.data.depth = np.array(depth, dtype=float)
         if np.isscalar(depth_to_reference):
-            instance.data.depth_to_reference = np.full(instance.data.depth.shape, depth_to_reference)
+            instance.data.depth_to_reference = np.full(
+                instance.data.depth.shape, depth_to_reference
+            )
         else:
             instance.data.depth_to_reference = np.array(depth_to_reference, dtype=float)
         instance.data.pwp = pwp
         instance.data.g = g
-        instance.gamma = np.full(instance.data.depth.shape, gamma) if np.isscalar(gamma) else np.array(gamma,
-                                                                                                       dtype=float)
+        instance.gamma = (
+            np.full(instance.data.depth.shape, gamma)
+            if np.isscalar(gamma)
+            else np.array(gamma, dtype=float)
+        )
         return instance
 
     def _setup_norm_instance(self):
@@ -1235,11 +1240,7 @@ class TestInterpreter:
         and reduces effective stress.
         """
         instance = self._setup_stress_instance(
-            depth=[5, 6, 7, 8, 9],
-            depth_to_reference=-2.0,
-            pwp=10,
-            g=9.81,
-            gamma=18.0
+            depth=[5, 6, 7, 8, 9], depth_to_reference=-2.0, pwp=10, g=9.81, gamma=18.0
         )
 
         instance.stress_calc()
@@ -1252,7 +1253,9 @@ class TestInterpreter:
         expected_effective = expected_total - pwp_val
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
 
     def test_stress_calc_negative_pwp_clipped(self):
         """
@@ -1264,7 +1267,7 @@ class TestInterpreter:
             depth_to_reference=[2, 3, 3, 3, 3],
             pwp=10,
             g=9.81,
-            gamma=18.0
+            gamma=18.0,
         )
 
         instance.stress_calc()
@@ -1276,7 +1279,9 @@ class TestInterpreter:
         expected_effective = expected_total.copy()
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
 
     def test_stress_calc_negative_effective_clipped(self):
         """
@@ -1284,11 +1289,7 @@ class TestInterpreter:
         stress would be negative, and then it is clipped to zero.
         """
         instance = self._setup_stress_instance(
-            depth=[0, 0.5, 1, 1.5, 2],
-            depth_to_reference=-1.0,
-            pwp=2,
-            g=9.81,
-            gamma=18.0
+            depth=[0, 0.5, 1, 1.5, 2], depth_to_reference=-1.0, pwp=2, g=9.81, gamma=18.0
         )
 
         instance.stress_calc()
@@ -1319,7 +1320,9 @@ class TestInterpreter:
         Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
 
         # Calculate friction ratio Fr.
-        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        F_calc = (
+            instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        )
         F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
         F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
 
@@ -1344,7 +1347,9 @@ class TestInterpreter:
         Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
 
         # Calculate friction ratio Fr.
-        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        F_calc = (
+            instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        )
         F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
         F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
 
