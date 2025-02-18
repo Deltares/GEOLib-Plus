@@ -1185,115 +1185,41 @@ class TestInterpreter:
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
 
-    def test_stress_calc_positive_pwp(self):
-        """
-        Test a scenario where the computed pwp is positive and reduces effective stress.
-        """
+    def _create_instance(self):
+        """Helper to create an instance with a dummy 'data' attribute."""
         instance = RobertsonCptInterpretation()
-        instance.data = type("test", (object,), {})()
-        # Depth starting at 5 m
-        instance.data.depth = np.array([5, 6, 7, 8, 9], dtype=float)
-        # Let depth_to_reference be constant at -2 m (typical for below ground surface)
-        instance.data.depth_to_reference = np.full(instance.data.depth.shape, -2.0)
-        instance.data.pwp = 10
-        instance.data.g = 9.81
-        instance.gamma = np.full(instance.data.depth.shape, 18.0)
+        # Use a simple dummy object for data
+        instance.data = type("DummyData", (), {})()
+        return instance
 
-        instance.stress_calc()
-
-        # Compute expected total stress:
-        # z = diff([5,6,7,8,9]) = [1,1,1,1] appended to [1,1,1,1,1]
-        # Cumulative sum: [18, 36, 54, 72, 90] then add 5 * mean(gamma) = 5*18 = 90,
-        # so total stress = [108, 126, 144, 162, 180]
-        expected_total = np.array([108, 126, 144, 162, 180], dtype=float)
-        # Compute expected pwp:
-        # z_aux = min(pwp, abs(depth_to_reference[0]) + depth[0]) = min(10, 2 + 5) = 7.
-        # Then, pwp = (7 - (-2)) * 9.81 = 9 * 9.81 ≈ 88.29 (for all depths).
-        pwp_val = 9 * 9.81
-        expected_effective = expected_total - pwp_val
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    def test_stress_calc_negative_pwp_clipped(self):
+    def _setup_stress_instance(self, depth, depth_to_reference, pwp, g, gamma):
         """
-        Test a case where the computed pwp would be negative (indicating suction)
-        but is then clipped to zero.
+        Helper to setup an instance for stress_calc tests.
+
+        Parameters:
+            depth (array-like): Depth values.
+            depth_to_reference (array-like or scalar): Depth-to-reference values.
+            pwp (float): Pore water pressure.
+            g (float): Gravitational acceleration.
+            gamma (float): Unit weight (or a value to fill an array).
         """
-        instance = RobertsonCptInterpretation()
-        instance.data = type("test", (object,), {})()
-        instance.data.depth = np.array([0, 1, 2, 3, 4], dtype=float)
-        # Set depth_to_reference such that its values are higher than z_aux will be.
-        instance.data.depth_to_reference = np.array([2, 3, 3, 3, 3], dtype=float)
-        instance.data.pwp = 10
-        instance.data.g = 9.81
-        instance.gamma = np.full(instance.data.depth.shape, 18.0)
+        instance = self._create_instance()
+        instance.data.depth = np.array(depth, dtype=float)
+        if np.isscalar(depth_to_reference):
+            instance.data.depth_to_reference = np.full(instance.data.depth.shape, depth_to_reference)
+        else:
+            instance.data.depth_to_reference = np.array(depth_to_reference, dtype=float)
+        instance.data.pwp = pwp
+        instance.data.g = g
+        instance.gamma = np.full(instance.data.depth.shape, gamma) if np.isscalar(gamma) else np.array(gamma,
+                                                                                                       dtype=float)
+        return instance
 
-        instance.stress_calc()
-
-        # Expected total stress is as in the first test: [18, 36, 54, 72, 90]
-        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
-        # Compute expected pwp:
-        # z_aux = min(10, abs(2)+0) = min(10,2) = 2.
-        # pwp = (2 - depth_to_reference)*9.81 = [0, -9.81, -9.81, -9.81, -9.81] then clipped to zeros.
-        # Therefore, effective stress = total stress.
-        expected_effective = expected_total.copy()
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    def test_stress_calc_negative_effective_clipped(self):
+    def _setup_norm_instance(self):
         """
-        Test a case where the pore water pressure is so high that the computed effective
-        stress would be negative, and then it is clipped to zero.
+        Helper to setup an instance for norm_calc tests.
         """
-        instance = RobertsonCptInterpretation()
-        instance.data = type("test", (object,), {})()
-        # Use a shallow depth so that total stress is relatively low.
-        instance.data.depth = np.array([0, 0.5, 1, 1.5, 2], dtype=float)
-        # Let depth_to_reference be -1 m.
-        instance.data.depth_to_reference = np.full(
-            instance.data.depth.shape, -1.0, dtype=float
-        )
-        # Set pwp high relative to the depth: here, pwp=2 leads to z_aux = min(2, 1+0)=1.
-        instance.data.pwp = 2
-        instance.data.g = 9.81
-        instance.gamma = np.full(instance.data.depth.shape, 18.0)
-
-        instance.stress_calc()
-
-        # Compute expected total stress:
-        # z = diff([0, 0.5, 1, 1.5, 2]) = [0.5, 0.5, 0.5, 0.5] then appended: [0.5, 0.5, 0.5, 0.5, 0.5]
-        # Cumulative sum: 18*0.5 = 9, so: [9, 18, 27, 36, 45]
-        expected_total = np.array([9, 18, 27, 36, 45], dtype=float)
-        # Compute pwp:
-        # z_aux = min(2, abs(-1)+0)=min(2,1)=1.
-        # pwp = (1 - (-1))*9.81 = 2*9.81 = 19.62 for every depth.
-        effective = expected_total - 19.62
-        # Clip negative effective stresses to zero.
-        effective[effective < 0] = 0
-        expected_effective = effective
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
-
-
-    def test_norm_calc_n_method_true(self):
-        """
-        Test norm_calc when using the simplified method (n_method=True)
-        where the stress exponent n is set to 0.5.
-        """
-        # Define dummy input data
-        instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
+        instance = self._create_instance()
         instance.data.qt = np.array([10, 50, 100])
         instance.data.tip = np.array([1, 1, 1])
         instance.data.friction_nbr = np.array([1, 2, 3])
@@ -1301,21 +1227,99 @@ class TestInterpreter:
         instance.data.total_stress = np.array([5, 10, 20])
         instance.data.Pa = 100
         instance.data.friction = np.array([1, 2, 3])
-        # Call the function to be tested
+        return instance
+
+    def test_stress_calc_positive_pwp(self):
+        """
+        Test a scenario where the computed pore water pressure is positive
+        and reduces effective stress.
+        """
+        instance = self._setup_stress_instance(
+            depth=[5, 6, 7, 8, 9],
+            depth_to_reference=-2.0,
+            pwp=10,
+            g=9.81,
+            gamma=18.0
+        )
+
+        instance.stress_calc()
+
+        # Compute expected total stress:
+        # The cumulative sum of (gamma * depth interval) plus an offset yields:
+        expected_total = np.array([108, 126, 144, 162, 180], dtype=float)
+        # For pwp, z_aux is calculated as min(10, 2 + 5)=7, so:
+        pwp_val = (7 - (-2)) * 9.81  # 9 * 9.81
+        expected_effective = expected_total - pwp_val
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+
+    def test_stress_calc_negative_pwp_clipped(self):
+        """
+        Test a case where the computed pore water pressure would be negative
+        (indicating suction) but is then clipped to zero.
+        """
+        instance = self._setup_stress_instance(
+            depth=[0, 1, 2, 3, 4],
+            depth_to_reference=[2, 3, 3, 3, 3],
+            pwp=10,
+            g=9.81,
+            gamma=18.0
+        )
+
+        instance.stress_calc()
+
+        # Expected total stress remains the same as computed from gamma:
+        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
+        # For pwp, z_aux = min(10, abs(2)+0)=2 leading to negative values,
+        # so effective stress is clipped to be equal to total stress.
+        expected_effective = expected_total.copy()
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+
+    def test_stress_calc_negative_effective_clipped(self):
+        """
+        Test a case where the pore water pressure is so high that the computed effective
+        stress would be negative, and then it is clipped to zero.
+        """
+        instance = self._setup_stress_instance(
+            depth=[0, 0.5, 1, 1.5, 2],
+            depth_to_reference=-1.0,
+            pwp=2,
+            g=9.81,
+            gamma=18.0
+        )
+
+        instance.stress_calc()
+
+        # Calculate expected total stress from the cumulative sum:
+        expected_total = np.array([9, 18, 27, 36, 45], dtype=float)
+        # pwp: z_aux = min(2, abs(-1)+0)=1, so pwp = (1 - (-1)) * 9.81 = 19.62
+        effective = expected_total - 19.62
+        effective[effective < 0] = 0  # Clip negative effective stresses to zero
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(instance.data.effective_stress, effective, rtol=1e-5)
+
+    def test_norm_calc_n_method_true(self):
+        """
+        Test norm_calc when using the simplified method (n_method=True)
+        where the stress exponent n is set to 0.5.
+        """
+        instance = self._setup_norm_instance()
         instance.norm_calc(n_method=True)
 
-        # Expected n is set to 0.5 for all data points
+        # Expected n is 0.5 for all data points.
         expected_n = np.array([0.5, 0.5, 0.5])
-        # Compute expected Cn with n = 0.5: (Pa/effective_stress)**0.5
-        Cn = (instance.data.Pa / np.array(instance.data.effective_stress)) ** 0.5
-        # Expected Q = ((qt - total_stress) / Pa) * Cn
-        Q_calc = (np.array(instance.data.qt) - np.array(instance.data.total_stress)) / instance.data.Pa * Cn
-        # Apply clamping: if Q<=1, then Q=1, and if Q>=1000, Q=1000.
+        # Calculate Cn and then Qtn.
+        Cn = (instance.data.Pa / instance.data.effective_stress) ** 0.5
+        Q_calc = (instance.data.qt - instance.data.total_stress) / instance.data.Pa * Cn
         Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
         Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
 
-        # Expected F = (friction / (qt-total_stress)) * 100, with clamping at 0.1 and 10.0.
-        F_calc = np.array(instance.data.friction) / (np.array(instance.data.qt) - np.array(instance.data.total_stress)) * 100
+        # Calculate friction ratio Fr.
+        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
         F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
         F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
 
@@ -1323,33 +1327,24 @@ class TestInterpreter:
         np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
         np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
 
-
     def test_norm_calc_n_method_false(self):
         """
         Test norm_calc when using the iterative n calculation (n_method=False).
         For the provided dummy data the iteration is expected to converge to n = 1.0.
         """
-        # Define dummy input data
-        instance = RobertsonCptInterpretation()
-        instance.data = type('test', (object,), {})()
-        instance.data.qt = np.array([10, 50, 100])
-        instance.data.tip = np.array([1, 1, 1])
-        instance.data.friction_nbr = np.array([1, 2, 3])
-        instance.data.effective_stress = np.array([50, 50, 50])
-        instance.data.total_stress = np.array([5, 10, 20])
-        instance.data.Pa = 100
-        instance.data.friction = np.array([1, 2, 3])
-        # Call the function to be tested
+        instance = self._setup_norm_instance()
         instance.norm_calc(n_method=False)
 
-        # For these inputs, the iterative process converges to n = 1.0
+        # Expected n is 1.0 for all data points.
         expected_n = np.array([1.0, 1.0, 1.0])
-        # Compute expected Cn with n = 1.0: (Pa/effective_stress)**1.0
-        Cn = (instance.data.Pa / np.array(instance.data.effective_stress)) ** 1.0
-        Q_calc = (np.array(instance.data.qt) - np.array(instance.data.total_stress)) / instance.data.Pa * Cn
+        # Calculate Cn and then Qtn.
+        Cn = (instance.data.Pa / instance.data.effective_stress) ** 1.0
+        Q_calc = (instance.data.qt - instance.data.total_stress) / instance.data.Pa * Cn
         Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
         Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
-        F_calc = np.array(instance.data.friction) / (np.array(instance.data.qt) - np.array(instance.data.total_stress)) * 100
+
+        # Calculate friction ratio Fr.
+        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
         F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
         F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
 
