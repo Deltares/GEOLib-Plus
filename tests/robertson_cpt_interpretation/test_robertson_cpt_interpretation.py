@@ -1317,7 +1317,9 @@ class TestInterpreter:
         Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
         Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
 
-        F_calc = instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        F_calc = (
+            instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        )
         F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
         F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
 
