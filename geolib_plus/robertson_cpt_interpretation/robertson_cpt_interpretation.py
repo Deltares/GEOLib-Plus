@@ -85,6 +85,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         MPa_to_kPa = 1000
         self.data.tip = self.data.tip * MPa_to_kPa
         self.data.friction = self.data.friction * MPa_to_kPa
+        self.data.water = self.data.water * MPa_to_kPa
 
         min_layer_thickness = 0.01
         # compute qc
