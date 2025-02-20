@@ -70,7 +70,6 @@ class TestGeolibPlusReading:
         # check that it is zero
         assert pytest.approx(cpt_gef.predrilled_z) == 0
 
-
     @pytest.mark.systemtest
     def test_that_values_gef_and_cpt_are_of_the_same_type(self):
         # Read cpts
