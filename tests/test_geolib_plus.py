@@ -25,12 +25,12 @@ class TestGeolibPlusReading:
         # Read cpts
         # open the gef file
         test_file_gef = TestUtils.get_local_test_data_dir(
-            Path("compare_xml_gef", "CPT000000217393_IMBRO.gef")
+            str(Path("compare_xml_gef", "CPT000000217393_IMBRO.gef"))
         )
         assert test_file_gef.is_file()
         # open the bro file
         test_file_bro = TestUtils.get_local_test_data_dir(
-            Path("compare_xml_gef", "CPT000000217393.xml")
+            str(Path("compare_xml_gef", "CPT000000217393.xml"))
         )
         assert test_file_bro.is_file()
         # initialise models
@@ -56,7 +56,7 @@ class TestGeolibPlusReading:
         # Read cpts
         # open the gef file
         test_file_gef = TestUtils.get_local_test_data_dir(
-            Path("cpt", "gef", "cpt_missing_predrilled.gef")
+            str(Path("cpt", "gef", "cpt_missing_predrilled.gef"))
         )
         assert test_file_gef.is_file()
         # initialise models
@@ -67,8 +67,8 @@ class TestGeolibPlusReading:
         assert cpt_bro_xml
         # read gef file
         cpt_gef.read(filepath=test_file_gef)
-        # read bro file
-        assert cpt_gef.predrilled_z == 0.0
+        # check that it is zero
+        assert pytest.approx(cpt_gef.predrilled_z) == 0
 
 
     @pytest.mark.systemtest
