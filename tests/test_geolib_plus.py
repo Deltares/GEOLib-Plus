@@ -46,6 +46,32 @@ class TestGeolibPlusReading:
         assert cpt_bro_xml.predrilled_z == cpt_gef.predrilled_z
 
     @pytest.mark.systemtest
+    def test_bug_predrill_avoid_negatives(self):
+        """
+        This cpt has no #MEASUREMENTVAR= 13, value for predrilled_z. Also the first value of the depth is negative.
+        Then it is zero we expect the predrilled_z to be zero.
+
+        """
+
+        # Read cpts
+        # open the gef file
+        test_file_gef = TestUtils.get_local_test_data_dir(
+            Path("cpt", "gef", "cpt_missing_predrilled.gef")
+        )
+        assert test_file_gef.is_file()
+        # initialise models
+        cpt_gef = GefCpt()
+        cpt_bro_xml = BroXmlCpt()
+        # test initial expectations
+        assert cpt_gef
+        assert cpt_bro_xml
+        # read gef file
+        cpt_gef.read(filepath=test_file_gef)
+        # read bro file
+        assert cpt_gef.predrilled_z == 0.0
+
+
+    @pytest.mark.systemtest
     def test_that_values_gef_and_cpt_are_of_the_same_type(self):
         # Read cpts
         # open the gef file
