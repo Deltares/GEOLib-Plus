@@ -179,8 +179,24 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_pre_drill_depth">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_pre_drill_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">penetration_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_pre_drill_depth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the pre-drill depth from the penetration length</p>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_pre_drill_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gef_string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penetration_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#geolib_plus.gef_cpt.gef_file_reader.GefFileReader.get_pre_drill_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the pre-drill depth from the penetration length. From the CUR document  GEOTECHNICAL EXCHANGE FORMAT FOR
+CPT-DATA Version 1.2, the pre-drill depth is defined as the #MEASUREMENTVAR = 13, [figure], m, pre-excavated
+depth. If this does not exist, the pre-drill depth is set to the value of the first penetration length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gef_string</strong> (<em>List</em>) – List of strings from the gef file</p></li>
+<li><p><strong>penetration_length</strong> (<em>List</em>) – List of penetration lengths</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The pre-drill depth</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
