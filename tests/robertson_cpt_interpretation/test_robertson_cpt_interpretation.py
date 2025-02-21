@@ -1398,24 +1398,24 @@ class TestInterpreter:
         interpreter.qt_calc()
         # expected values for the first 16 values
         expected_qt = np.array(
-            [0.03	,
-             0.1504	,
-             0.3408	,
-             0.4412	,
-             0.5294	,
-             0.5492	,
-             0.5794	,
-             0.5792	,
-             0.5794	,
-             0.5994	,
-             0.6082	,
-             0.5978	,
-             0.5974	,
-             0.5772	,
-             0.5666	,
-             0.5662	,
-             ]
-                     )
+            [
+                0.03,
+                0.1504,
+                0.3408,
+                0.4412,
+                0.5294,
+                0.5492,
+                0.5794,
+                0.5792,
+                0.5794,
+                0.5994,
+                0.6082,
+                0.5978,
+                0.5974,
+                0.5772,
+                0.5666,
+                0.5662,
+            ]
+        )
         # check the first 16 values
         np.testing.assert_allclose(interpreter.data.qt[:16], expected_qt, rtol=1e-6)
-
