@@ -1138,19 +1138,19 @@ class TestInterpreter:
         with pytest.raises(ValueError):
             interpreter.pwp_level_calc()
 
-    def test_stress_calc_total_stress(self, setup_interpreter):
+    @pytest.mark.unittest
+    def test_stress_calc_total_stress(self):
         interpreter = RobertsonCptInterpretation()
         interpreter.data = type("test", (object,), {})()
         # case that we are bellow the surface
 
-        interpreter.data.depth = np.array([0, 1, 2, 3, 4, 5])
-        interpreter.data.depth_to_reference = np.array([0, 1, 2, 3, 4, 5])
+        interpreter.data.depth = np.arange(0, 11)
+        interpreter.data.depth_to_reference = np.arange(0, 11)
         interpreter.data.pwp = 2.0
         interpreter.data.g = 9.81
-        interpreter.data.gamma = np.array([18, 18, 18, 18, 18, 18])
-        interpreter = setup_interpreter
+        interpreter.gamma = [18.0] * 11
         interpreter.stress_calc()
-        expected_total_stress = np.array([0, 18, 36, 54, 72, 90])
+        expected_total_stress = np.array([18, 36, 54, 72, 90, 108, 126, 144, 162, 180, 198])
         np.testing.assert_array_almost_equal(
             interpreter.data.total_stress, expected_total_stress
         )
