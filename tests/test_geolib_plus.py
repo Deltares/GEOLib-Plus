@@ -594,8 +594,8 @@ class TestGeolibPlusValidate:
     @pytest.mark.unittest
     def test_calculate_friction_nbr_all_positive(self):
         # Both tip and friction arrays contain only positive values.
-        tip = np.array([100., 200., 300.])
-        friction = np.array([10., 20., 30.])
+        tip = np.array([100.0, 200.0, 300.0])
+        friction = np.array([10.0, 20.0, 30.0])
         cpt = GefCpt()
         cpt.tip = tip
         cpt.friction = friction
