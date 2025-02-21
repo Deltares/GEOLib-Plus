@@ -425,6 +425,7 @@ class TestGeolibPlusReading:
         np.testing.assert_array_almost_equal(cpt.depth[2:], expected_depth)
         np.testing.assert_array_almost_equal(cpt.water, cpt.pore_pressure_u2)
 
+    @pytest.mark.integrationtest
     def test_pre_process_bro_data(self):
         """
         Tests pre process of gef data
@@ -475,6 +476,7 @@ class TestGeolibPlusReading:
             cpt_new_version.water, cpt_new_version.pore_pressure_u2
         )
 
+    @pytest.mark.integrationtest
     def test_pre_process_bro_data_without_friction_nbr(self):
         """
         Tests pre process of bro data in case no friction number is present
@@ -588,3 +590,46 @@ class TestGeolibPlusValidate:
         )
         with pytest.raises(Exception):
             validate_gef_cpt(gef_file)
+
+    @pytest.mark.unittest
+    def test_calculate_friction_nbr_all_positive(self):
+        # Both tip and friction arrays contain only positive values.
+        tip = np.array([100., 200., 300.])
+        friction = np.array([10., 20., 30.])
+        cpt = GefCpt()
+        cpt.tip = tip
+        cpt.friction = friction
+        cpt.calculate_friction_nbr_if_not_available()
+
+        # Expected friction number: (friction / tip * 100) => [10, 10, 10]
+        expected = np.array([10, 10, 10])
+        np.testing.assert_array_almost_equal(cpt.friction_nbr, expected)
+
+    @pytest.mark.unittest
+    def test_calculate_friction_nbr_with_zero_or_negative(self):
+        # Include a negative tip value, which should force the corresponding friction number to 0.
+        tip = np.array([100, -200, 300])
+        friction = np.array([10, 20, 30])
+        cpt = GefCpt()
+        cpt.tip = tip
+        cpt.friction = friction
+        cpt.calculate_friction_nbr_if_not_available()
+
+        # Expected: first element valid (10/100*100 = 10), second element invalid => 0, third valid (30/300*100 = 10)
+        expected = np.array([10, 0, 10])
+        np.testing.assert_array_almost_equal(cpt.friction_nbr, expected)
+
+    @pytest.mark.unittest
+    def test_calculate_friction_nbr_already_calculated(self):
+        # When friction_nbr is already provided, the function should not change it.
+        tip = np.array([100, 200, 300])
+        friction = np.array([10, 20, 30])
+        pre_calculated = np.array([1, 2, 3])
+        cpt = GefCpt()
+        cpt.tip = tip
+        cpt.friction = friction
+        cpt.friction_nbr = pre_calculated
+        cpt.calculate_friction_nbr_if_not_available()
+
+        # The friction_nbr should remain unchanged.
+        np.testing.assert_array_equal(cpt.friction_nbr, pre_calculated)
