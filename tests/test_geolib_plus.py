@@ -20,7 +20,6 @@ def test_version():
 
 
 class TestGeolibPlusReading:
-
     @pytest.mark.systemtest
     def test_bug_predrill(self):
         # Read cpts
