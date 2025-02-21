@@ -10,8 +10,6 @@ from pydantic import BaseModel
 
 from geolib_plus.cpt_base_model import CptReader
 
-from .validate_gef import validate_gef_cpt
-
 
 class GefProperty(BaseModel):
     gef_key: int
@@ -140,12 +138,33 @@ class GefFileReader(CptReader):
         return next((line for line in data if line.endswith(code_string)), None)
 
     @staticmethod
-    def get_pre_drill_depth(penetration_length: List) -> float:
+    def get_pre_drill_depth(gef_string: List, penetration_length: List) -> float:
         """
-        Gets the pre-drill depth from the penetration length
+        Gets the pre-drill depth from the penetration length. From the CUR document  GEOTECHNICAL EXCHANGE FORMAT FOR
+        CPT-DATA Version 1.2, the pre-drill depth is defined as the #MEASUREMENTVAR = 13, [figure], m, pre-excavated
+        depth. If this does not exist, the pre-drill depth is set to the value of the first penetration length.
+
+        Args:
+            gef_string (List): List of strings from the gef file
+            penetration_length (List): List of penetration lengths
+        Returns:
+            float: The pre-drill depth
         """
-        penetration_length = np.array(penetration_length)
-        return min(penetration_length[penetration_length > 0])
+        # Collect the measurmentvar index
+        code_string = r"#MEASUREMENTVAR= 13"
+        line_found = next(
+            (i for i, val in enumerate(gef_string) if val.startswith(code_string)), None
+        )
+        if line_found:
+            idx_measurementvar = GefFileReader.get_line_index_from_data_starts_with(
+                code_string=r"#MEASUREMENTVAR= 13", data=gef_string
+            )
+            # Get the pre-drill depth
+            predrilled_z = float(gef_string[idx_measurementvar].split(",")[1])
+        else:
+            penetration_length = np.array(penetration_length)
+            predrilled_z = min(penetration_length[penetration_length >= 0])
+        return predrilled_z
 
     def map_error_codes_to_external_property_names(self) -> Dict:
         """
@@ -236,7 +255,7 @@ class GefFileReader(CptReader):
 
         # get pre drill depth from penetration length data
         predrilled_z = self.get_pre_drill_depth(
-            self.property_dict["penetration_length"].values_from_gef
+            data, self.property_dict["penetration_length"].values_from_gef
         )
 
         idx_name = GefFileReader.get_line_index_from_data_starts_with(
