@@ -1236,6 +1236,7 @@ class TestInterpreter:
         instance.data.friction = np.array([1, 2, 3])
         return instance
 
+    @pytest.mark.unittest
     def test_stress_calc_positive_pwp(self):
         """
         Test a scenario where the computed pore water pressure is positive
@@ -1259,6 +1260,7 @@ class TestInterpreter:
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
 
+    @pytest.mark.unittest
     def test_stress_calc_negative_pwp_clipped(self):
         """
         Test a case where the computed pore water pressure would be negative
@@ -1285,6 +1287,7 @@ class TestInterpreter:
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
 
+    @pytest.mark.unittest
     def test_stress_calc_negative_effective_clipped(self):
         """
         Test a case where the pore water pressure is so high that the computed effective
@@ -1329,6 +1332,7 @@ class TestInterpreter:
         np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
         np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
 
+    @pytest.mark.unittest
     def test_norm_calc_n_method_true(self):
         """
         Test norm_calc when using the simplified method (n_method=True)
@@ -1340,6 +1344,7 @@ class TestInterpreter:
         expected_n = np.array([0.5, 0.5, 0.5])
         self._verify_norm_calc(instance, expected_n, exponent=0.5)
 
+    @pytest.mark.unittest
     def test_norm_calc_n_method_false(self):
         """
         Test norm_calc when using the iterative n calculation (n_method=False).
@@ -1350,3 +1355,67 @@ class TestInterpreter:
 
         expected_n = np.array([1.0, 1.0, 1.0])
         self._verify_norm_calc(instance, expected_n, exponent=1.0)
+
+    @pytest.mark.unittest
+    def test_qt_calc_numerically(self):
+        """
+        Test the calculation of the total cone resistance (qt) for a range of input values.
+        """
+        instance = self._create_instance()
+        instance.data.tip = np.array([1, 2, 3, 4, 5])
+        instance.data.water = np.array([1, 2, 3, 4, 5])
+        instance.data.a = np.array([1, 1, 1, 1, 1])
+
+        instance.qt_calc()
+
+        expected_qt = np.array([1, 2, 3, 4, 5])
+        np.testing.assert_allclose(instance.data.qt, expected_qt, rtol=1e-6)
+
+    @pytest.mark.unittest
+    def test_qt_calc_from_cpt(self):
+        """
+        Test the calculation of the total cone resistance (qt) from the CPT data (CPT000000240227_IMBRO.gef).
+        The expected values are precisely known for this test.
+
+        """
+        # open the gef file
+        test_file = TestUtils.get_local_test_data_dir(
+            str(Path("cpt", "gef", "CPT000000240227_IMBRO.gef"))
+        )
+        assert test_file.is_file()
+        # initialise models
+        cpt = GefCpt()
+        # test initial expectations
+        assert cpt
+        # read gef file
+        cpt.read(filepath=test_file)
+        # initialise model
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # define the water
+        interpreter.data.water = cpt.pore_pressure_u2
+        # all units are now in MPa
+        interpreter.qt_calc()
+        # expected values for the first 16 values
+        expected_qt = np.array(
+            [0.03	,
+             0.1504	,
+             0.3408	,
+             0.4412	,
+             0.5294	,
+             0.5492	,
+             0.5794	,
+             0.5792	,
+             0.5794	,
+             0.5994	,
+             0.6082	,
+             0.5978	,
+             0.5974	,
+             0.5772	,
+             0.5666	,
+             0.5662	,
+             ]
+                     )
+        # check the first 16 values
+        np.testing.assert_allclose(interpreter.data.qt[:16], expected_qt, rtol=1e-6)
+
