@@ -1150,7 +1150,9 @@ class TestInterpreter:
         interpreter.data.g = 9.81
         interpreter.gamma = [18.0] * 11
         interpreter.stress_calc()
-        expected_total_stress = np.array([18, 36, 54, 72, 90, 108, 126, 144, 162, 180, 198])
+        expected_total_stress = np.array(
+            [18, 36, 54, 72, 90, 108, 126, 144, 162, 180, 198]
+        )
         np.testing.assert_array_almost_equal(
             interpreter.data.total_stress, expected_total_stress
         )
