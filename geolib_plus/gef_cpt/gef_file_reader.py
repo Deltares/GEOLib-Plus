@@ -163,7 +163,7 @@ class GefFileReader(CptReader):
             predrilled_z = float(gef_string[idx_measurementvar].split(",")[1])
         else:
             penetration_length = np.array(penetration_length)
-            predrilled_z = min(penetration_length[penetration_length > 0])
+            predrilled_z = min(penetration_length[penetration_length >= 0])
         return predrilled_z
 
     def map_error_codes_to_external_property_names(self) -> Dict:
