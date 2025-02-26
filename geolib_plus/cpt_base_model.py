@@ -299,7 +299,7 @@ class AbstractCPT(BaseModel):
         have to be zero.
         """
         if data is not None:
-            if data.size != 0 and not data.ndim:
+            if data.size != 0:
                 data[data < 0] = 0
             return data
 
