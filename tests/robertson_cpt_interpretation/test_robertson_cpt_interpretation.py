@@ -1141,9 +1141,7 @@ class TestInterpreter:
     @pytest.mark.unittest
     def test_that_units_are_retained(self):
         # initialise model
-        test_file = TestUtils.get_local_test_data_dir(
-            "cpt/bro_xml/cpt_with_water.xml"
-        )
+        test_file = TestUtils.get_local_test_data_dir("cpt/bro_xml/cpt_with_water.xml")
         cpt = BroXmlCpt()
         cpt.read(test_file)
         cpt.pre_process_data()
@@ -1161,8 +1159,6 @@ class TestInterpreter:
         assert np.allclose(interpreter.data.tip, tip, rtol=1e-5)
         assert np.allclose(interpreter.data.friction, friction, rtol=1e-5)
         assert np.allclose(interpreter.data.water, water, rtol=1e-5)
-
-
 
     @pytest.mark.unittest
     def test_stress_calc_total_stress(self):
