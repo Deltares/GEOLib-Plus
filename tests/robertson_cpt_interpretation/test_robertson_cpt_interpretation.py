@@ -1139,6 +1139,32 @@ class TestInterpreter:
             interpreter.pwp_level_calc()
 
     @pytest.mark.unittest
+    def test_that_units_are_retained(self):
+        # initialise model
+        test_file = TestUtils.get_local_test_data_dir(
+            "cpt/bro_xml/cpt_with_water.xml"
+        )
+        cpt = BroXmlCpt()
+        cpt.read(test_file)
+        cpt.pre_process_data()
+        interpreter = RobertsonCptInterpretation()
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # save the tip , friction and pore water pressure
+        tip = cpt.tip
+        friction = cpt.friction
+        water = cpt.water
+        # run the function
+        interpreter.interpret(cpt)
+        # check if the units are retained assert arrays as equal
+        assert np.allclose(interpreter.data.tip, tip, rtol=1e-5)
+        assert np.allclose(interpreter.data.friction, friction, rtol=1e-5)
+        assert np.allclose(interpreter.data.water, water, rtol=1e-5)
+
+
+
+    @pytest.mark.unittest
     def test_stress_calc_total_stress(self):
         interpreter = RobertsonCptInterpretation()
         interpreter.data = type("test", (object,), {})()

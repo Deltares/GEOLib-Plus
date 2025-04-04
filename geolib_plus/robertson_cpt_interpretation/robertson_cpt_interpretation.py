@@ -163,6 +163,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         self.data.tip = self.data.tip / MPa_to_kPa
         self.data.friction = self.data.friction / MPa_to_kPa
+        self.data.water = self.data.water / MPa_to_kPa
         return self.data
 
     def soil_types(
