@@ -48,7 +48,7 @@ jobs:
         run: poetry install
         
       - name: Test with pytest
-        run: poetry run pytest --cov=geolib-plus --cov-report xml:coverage-reports/coverage-geolib-plus.xml --junitxml=xunit-reports/xunit-result-geolib-plus.xml -m "unittest and not workinprogress"
+        run: poetry run pytest --cov=geolib-plus --cov-report xml:coverage-reports/coverage-geolib-plus.xml --junitxml=xunit-reports/xunit-result-geolib-plus.xml -m "(unittest or integrationtest or systemtest) and not workinprogress"
 
       - name: Autoformat code if the check fails
         if: ${{ (matrix.os == 'ubuntu-22.04') && (matrix.python-version == 3.9) }}

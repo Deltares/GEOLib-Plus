@@ -476,16 +476,16 @@ class AbstractCPT(BaseModel):
             and self.tip is not None
             and self.friction is not None
         ):
+            # find indices where tip resistance or sleeve friction are negative or 0
 
-            self.friction_nbr = np.zeros(len(self.tip))
-
-            # find indices where both tip resistance and sleeve friction are 0
-            non_zero_indices = (self.tip > 0) * (self.friction > 0)
+            zero_indices = (self.tip <= 0) | (self.friction <= 0)
 
             # if both sleeve friction and tip resistance are greater than 0, calculate friction number
-            self.friction_nbr[non_zero_indices] = self.friction / self.tip * 100
 
             self.friction_nbr = self.friction / self.tip * 100
+
+            # otherwise, 0
+            self.friction_nbr[zero_indices] = 0
 
     def pre_process_data(self):
         """
