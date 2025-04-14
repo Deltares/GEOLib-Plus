@@ -357,7 +357,7 @@ class TestInterpreter:
         assert cpt
         assert interpreter
         # Empty list that will be filled by reading the csv file
-        test_Qtn, total_stress, effective_stress, Pa, tip, friction = (
+        test_Qtn, total_stress, effective_stress, Pa, qt, friction = (
             [],
             [],
             [],
@@ -380,7 +380,7 @@ class TestInterpreter:
                     total_stress.append(float(row[0]))
                     effective_stress.append(float(row[1]))
                     Pa.append(float(row[2]))
-                    tip.append(float(row[3]))
+                    qt.append(float(row[3]))
                     friction.append(float(row[4]))
 
                     # These will be the outputs of the function
@@ -392,7 +392,7 @@ class TestInterpreter:
         interpreter.data.total_stress = np.array(total_stress)
         interpreter.data.effective_stress = np.array(effective_stress)
         interpreter.data.Pa = np.array(Pa)
-        interpreter.data.tip = np.array(tip)
+        interpreter.data.qt = np.array(qt)
         interpreter.data.friction = np.array(friction)
         interpreter.data.friction_nbr = np.array(friction)
         interpreter.norm_calc(n_method=True)
@@ -1137,3 +1137,214 @@ class TestInterpreter:
         # call test functions
         with pytest.raises(ValueError):
             interpreter.pwp_level_calc()
+
+    def test_stress_calc_total_stress(self, setup_interpreter):
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = type("test", (object,), {})()
+        # case that we are bellow the surface
+
+        interpreter.data.depth = np.array([0, 1, 2, 3, 4, 5])
+        interpreter.data.depth_to_reference = np.array([0, 1, 2, 3, 4, 5])
+        interpreter.data.pwp = 2.0
+        interpreter.data.g = 9.81
+        interpreter.data.gamma = np.array([18, 18, 18, 18, 18, 18])
+        interpreter = setup_interpreter
+        interpreter.stress_calc()
+        expected_total_stress = np.array([0, 18, 36, 54, 72, 90])
+        np.testing.assert_array_almost_equal(
+            interpreter.data.total_stress, expected_total_stress
+        )
+
+    def test_stress_calc_no_pwp_effect(self):
+        """
+        Test when the computed pore water pressure (pwp) is zero,
+        so that effective stress equals total stress.
+        """
+        instance = RobertsonCptInterpretation()
+        instance.data = type("test", (object,), {})()
+        # Set a simple depth array (in meters)
+        instance.data.depth = np.array([0, 1, 2, 3, 4], dtype=float)
+        # set the pwp to a very low value so that the pwp is negative which will be set to zero
+        instance.data.pwp = -10  # Arbitrary; z_aux will still be 0.
+        instance.data.depth_to_reference = instance.data.depth - 1
+        instance.data.g = 9.81
+        # Use a constant unit weight (gamma) of 18 kN/m3
+        instance.gamma = np.full(instance.data.depth.shape, 18.0)
+
+        instance.stress_calc()
+
+        # Compute expected total stress:
+        # z = diff([0,1,2,3,4]) = [1,1,1,1] then appended becomes [1,1,1,1,1].
+        # Cumulative sum of (18 * 1): [18, 36, 54, 72, 90].
+        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
+        # Since pwp is zero, effective stress equals total stress.
+        expected_effective = expected_total.copy()
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
+    def _create_instance(self):
+        """Helper to create an instance with a dummy 'data' attribute."""
+        instance = RobertsonCptInterpretation()
+        # Use a simple dummy object for data
+        instance.data = type("DummyData", (), {})()
+        return instance
+
+    def _setup_stress_instance(self, depth, depth_to_reference, pwp, g, gamma):
+        """
+        Helper to setup an instance for stress_calc tests.
+
+        Parameters:
+            depth (array-like): Depth values.
+            depth_to_reference (array-like or scalar): Depth-to-reference values.
+            pwp (float): Pore water pressure.
+            g (float): Gravitational acceleration.
+            gamma (float): Unit weight (or a value to fill an array).
+        """
+        instance = self._create_instance()
+        instance.data.depth = np.array(depth, dtype=float)
+        if np.isscalar(depth_to_reference):
+            instance.data.depth_to_reference = np.full(
+                instance.data.depth.shape, depth_to_reference
+            )
+        else:
+            instance.data.depth_to_reference = np.array(depth_to_reference, dtype=float)
+        instance.data.pwp = pwp
+        instance.data.g = g
+        instance.gamma = (
+            np.full(instance.data.depth.shape, gamma)
+            if np.isscalar(gamma)
+            else np.array(gamma, dtype=float)
+        )
+        return instance
+
+    def _setup_norm_instance(self):
+        """
+        Helper to setup an instance for norm_calc tests.
+        """
+        instance = self._create_instance()
+        instance.data.qt = np.array([10, 50, 100])
+        instance.data.tip = np.array([1, 1, 1])
+        instance.data.friction_nbr = np.array([1, 2, 3])
+        instance.data.effective_stress = np.array([50, 50, 50])
+        instance.data.total_stress = np.array([5, 10, 20])
+        instance.data.Pa = 100
+        instance.data.friction = np.array([1, 2, 3])
+        return instance
+
+    def test_stress_calc_positive_pwp(self):
+        """
+        Test a scenario where the computed pore water pressure is positive
+        and reduces effective stress.
+        """
+        instance = self._setup_stress_instance(
+            depth=[5, 6, 7, 8, 9], depth_to_reference=-2.0, pwp=10, g=9.81, gamma=18.0
+        )
+
+        instance.stress_calc()
+
+        # Compute expected total stress:
+        # The cumulative sum of (gamma * depth interval) plus an offset yields:
+        expected_total = np.array([108, 126, 144, 162, 180], dtype=float)
+        # For pwp, z_aux is calculated as min(10, 2 + 5)=7, so:
+        pwp_val = (7 - (-2)) * 9.81  # 9 * 9.81
+        expected_effective = expected_total - pwp_val
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
+    def test_stress_calc_negative_pwp_clipped(self):
+        """
+        Test a case where the computed pore water pressure would be negative
+        (indicating suction) but is then clipped to zero.
+        """
+        instance = self._setup_stress_instance(
+            depth=[0, 1, 2, 3, 4],
+            depth_to_reference=[2, 3, 3, 3, 3],
+            pwp=10,
+            g=9.81,
+            gamma=18.0,
+        )
+
+        instance.stress_calc()
+
+        # Expected total stress remains the same as computed from gamma:
+        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
+        # For pwp, z_aux = min(10, abs(2)+0)=2 leading to negative values,
+        # so effective stress is clipped to be equal to total stress.
+        expected_effective = expected_total.copy()
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
+    def test_stress_calc_negative_effective_clipped(self):
+        """
+        Test a case where the pore water pressure is so high that the computed effective
+        stress would be negative, and then it is clipped to zero.
+        """
+        instance = self._setup_stress_instance(
+            depth=[0, 0.5, 1, 1.5, 2], depth_to_reference=-1.0, pwp=2, g=9.81, gamma=18.0
+        )
+
+        instance.stress_calc()
+
+        # Calculate expected total stress from the cumulative sum:
+        expected_total = np.array([9, 18, 27, 36, 45], dtype=float)
+        # pwp: z_aux = min(2, abs(-1)+0)=1, so pwp = (1 - (-1)) * 9.81 = 19.62
+        effective = expected_total - 19.62
+        effective[effective < 0] = 0  # Clip negative effective stresses to zero
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(instance.data.effective_stress, effective, rtol=1e-5)
+
+    def _verify_norm_calc(self, instance, expected_n, exponent):
+        """
+        Helper to verify norm_calc results.
+
+        Parameters:
+            instance: The instance after norm_calc has been called.
+            expected_n: Expected n values (numpy array).
+            exponent: Exponent to use in the calculation of Cn.
+        """
+        Cn = (instance.data.Pa / instance.data.effective_stress) ** exponent
+        Q_calc = (instance.data.qt - instance.data.total_stress) / instance.data.Pa * Cn
+        Q_expected = np.where(Q_calc <= 1.0, 1.0, Q_calc)
+        Q_expected = np.where(Q_expected >= 1000.0, 1000.0, Q_expected)
+
+        F_calc = (
+            instance.data.friction / (instance.data.qt - instance.data.total_stress) * 100
+        )
+        F_expected = np.where(F_calc <= 0.1, 0.1, F_calc)
+        F_expected = np.where(F_expected >= 10.0, 10.0, F_expected)
+
+        np.testing.assert_allclose(instance.data.n, expected_n, rtol=1e-6)
+        np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
+        np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
+
+    def test_norm_calc_n_method_true(self):
+        """
+        Test norm_calc when using the simplified method (n_method=True)
+        where the stress exponent n is set to 0.5.
+        """
+        instance = self._setup_norm_instance()
+        instance.norm_calc(n_method=True)
+
+        expected_n = np.array([0.5, 0.5, 0.5])
+        self._verify_norm_calc(instance, expected_n, exponent=0.5)
+
+    def test_norm_calc_n_method_false(self):
+        """
+        Test norm_calc when using the iterative n calculation (n_method=False).
+        For the provided dummy data the iteration is expected to converge to n = 1.0.
+        """
+        instance = self._setup_norm_instance()
+        instance.norm_calc(n_method=False)
+
+        expected_n = np.array([1.0, 1.0, 1.0])
+        self._verify_norm_calc(instance, expected_n, exponent=1.0)

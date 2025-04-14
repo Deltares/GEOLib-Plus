@@ -386,7 +386,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         z_aux = np.min(
             [self.data.pwp, abs(self.data.depth_to_reference[0]) + self.data.depth[0]]
         )
-        pwp = (z_aux - abs(self.data.depth_to_reference)) * self.data.g
+        pwp = (z_aux - self.data.depth_to_reference) * self.data.g
         # no suction is allowed
         pwp[pwp <= 0] = 0
         # compute effective stress
@@ -411,10 +411,10 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         """
 
         # normalisation of qc and friction into Qtn and Fr: following Robertson and Cabal (2014)
-
+        length_of_cpt = len(self.data.qt)
         # iteration around n to compute IC
         # start assuming n=1 for IC calculation
-        n = np.ones(len(self.data.tip))
+        n = np.ones(length_of_cpt)
 
         # switch for the n calculation. default is iterative process
         if not n_method:
@@ -425,7 +425,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             while error >= tolerance:
                 # if did not converge
                 if iteration >= max_iterations:
-                    n = np.ones(len(self.data.tip)) * 0.5
+                    n = np.ones(length_of_cpt) * 0.5
                     break
                 n1 = n_iter(
                     n,
@@ -439,13 +439,13 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 n = n1
                 iteration += 1
         else:
-            n = np.ones(len(self.data.tip)) * 0.5
+            n = np.ones(length_of_cpt) * 0.5
 
         # parameter Cn
         Cn = (self.data.Pa / self.data.effective_stress) ** n
         # calculation Q and F
-        Q = (self.data.tip - self.data.total_stress) / self.data.Pa * Cn
-        F = self.data.friction / (self.data.tip - self.data.total_stress) * 100
+        Q = (self.data.qt - self.data.total_stress) / self.data.Pa * Cn
+        F = self.data.friction / (self.data.qt - self.data.total_stress) * 100
         # Q and F cannot be negative. if negative, log10 will be infinite.
         # These values are limited by the contours of soil behaviour of Robertson
         Q[Q <= 1.0] = 1.0
