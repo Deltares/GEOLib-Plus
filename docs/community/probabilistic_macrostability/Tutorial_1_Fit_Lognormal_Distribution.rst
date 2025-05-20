@@ -218,7 +218,7 @@ First we introduce two functions.
         means that Y = ln(X) is normally distributed. 
         INPUT
             mu = mean(X)
-            sigma = mean(X)
+            sigma = std(X)
             shift = default 0
         OUTPUT
             m = mean(Y)
@@ -239,7 +239,7 @@ First we introduce two functions.
             shift = default 0
         OUTPUT
             mu = mean(X)
-            sigma = mean(X)
+            sigma = std(X)
             shift = default 0 
         """
         mu = np.exp(m + s**2 / 2) + shift
