@@ -240,7 +240,7 @@ distribution into the mean and standard deviation of x.</p></li>
     means that Y = ln(X) is normally distributed.
     INPUT
         mu = mean(X)
-        sigma = mean(X)
+        sigma = std(X)
         shift = default 0
     OUTPUT
         m = mean(Y)
@@ -261,7 +261,7 @@ def mu_sigma_from_lognormal_parameters(m,s,shift=0):
         shift = default 0
     OUTPUT
         mu = mean(X)
-        sigma = mean(X)
+        sigma = std(X)
         shift = default 0
     &quot;&quot;&quot;
     mu = np.exp(m + s**2 / 2) + shift
