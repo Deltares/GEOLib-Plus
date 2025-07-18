@@ -482,6 +482,11 @@ class AbstractCPT(BaseModel):
             # find indices where both tip resistance and sleeve friction are 0
             non_zero_indices = (self.tip > 0) * (self.friction > 0)
 
+            #TODO: This calculates the friction ratio "Rf", and accoding to Robertson's book, it is calculated as: Rf = (fs / qt) * 100
+            # at this point in the calculation we dont have qt, we have "tip" (qc), so we can do for now fs / qc * 100 but we need to change this later
+            # alternatively, we can consider moving this calculation to the interpretation method instead of the pre_process_data method and calculate this
+            # when we have the qt
+
             # if both sleeve friction and tip resistance are greater than 0, calculate friction number
             self.friction_nbr[non_zero_indices] = self.friction / self.tip * 100
 
