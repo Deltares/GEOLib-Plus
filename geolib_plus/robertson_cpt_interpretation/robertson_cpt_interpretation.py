@@ -278,7 +278,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     def gamma_calc(
         self,
         method: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
-        gamma_min: float = 10.1, # Changed this value to 10.1 based on Peat values reported in Lengkeek 2022
+        gamma_min: float = 10.1,  # Changed this value to 10.1 based on Peat values reported in Lengkeek 2022
         gamma_max: float = 22,
     ):
         r"""
@@ -360,7 +360,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             # assign gamma
             self.gamma = aux
 
-
     def NEN_calc(self):
         r"""
         Computes the consistency according to the NEN 997-1:2016
@@ -416,7 +415,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             # Calculate the height of the water column above the CPT
             H_water = self.data.pwp - self.data.depth_to_reference[0]
             # Add the weight of the water column to the total stress
-            self.data.total_stress += self.data.g * H_water  # gamma_water is the unit weight of water (typically 9.81 kN/m³)
+            self.data.total_stress += (
+                self.data.g * H_water
+            )  # gamma_water is the unit weight of water (typically 9.81 kN/m³)
 
         # compute pwp
         # determine location of phreatic line: it cannot be above the CPT depth
@@ -466,7 +467,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                     break
                 n1 = n_iter(
                     n,
-                    self.data.qt, # this should be qt
+                    self.data.qt,  # this should be qt
                     self.data.friction_nbr,
                     self.data.effective_stress,
                     self.data.total_stress,
@@ -488,7 +489,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         Q[Q <= 1.0] = 1.0
         F[F <= 0.1] = 0.1
         Q[Q >= 1000.0] = 1000.0
-        #TODO: The new Lengkeek 2022 suggests values up to 20 in RF
+        # TODO: The new Lengkeek 2022 suggests values up to 20 in RF
         F[F >= 10.0] = 10.0
         self.data.Qtn = Q
         self.data.Fr = F
@@ -619,13 +620,13 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         elif method == ShearWaveVelocityMethod.KRUIVER:
             # This formulation works in MPa instead of kPa
             vs = (
-                    359.0
-                    * (self.data.qt/1000 - self.data.total_stress/1000) ** 0.119
-                    * (self.data.friction/1000) ** 0.100
-                    * (self.data.effective_stress/1000) ** 0.204
+                359.0
+                * (self.data.qt / 1000 - self.data.total_stress / 1000) ** 0.119
+                * (self.data.friction / 1000) ** 0.100
+                * (self.data.effective_stress / 1000) ** 0.204
             )
             self.data.vs = ceil_value(vs, 0)
-            self.data.G0 = self.data.rho * self.data.vs ** 2
+            self.data.G0 = self.data.rho * self.data.vs**2
 
     def young_calc(self):
         r"""
