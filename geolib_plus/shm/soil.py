@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 import numpy as np
-from pydantic import BaseModel, field_validator, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class SoilBaseModel(BaseModel):

@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 
 import pytest
 import shapefile
+
 # from matplotlib import pyplot as plt
 from pydantic import BaseModel
 from shapely import geometry
@@ -35,15 +36,15 @@ class CustomCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         sf = shapefile.Reader(str(self.path_shapefile))
         print("number of shapes imported:", len(sf.shapes()))
-        #plt.figure()
-        #for shape in list(sf.iterShapeRecords()):
+        # plt.figure()
+        # for shape in list(sf.iterShapeRecords()):
         #    x_lon, y_lat = zip(*shape.shape.points)
         #    plt.fill(x_lon, y_lat, label=shape.record.name, alpha=0.4)
-        #plt.scatter(self.cpt_data.friction, self.cpt_data.tip)
-        #plt.xlabel("Friction ratio (Fr) [%]")
-        #plt.ylabel("CPT resistance (qc) [MPa]")
-        #plt.yscale("log")
-        #plt.legend()
+        # plt.scatter(self.cpt_data.friction, self.cpt_data.tip)
+        # plt.xlabel("Friction ratio (Fr) [%]")
+        # plt.ylabel("CPT resistance (qc) [MPa]")
+        # plt.yscale("log")
+        # plt.legend()
         # plt.show()
         # read soil classification from shapefile
         self.soil_types()
@@ -136,15 +137,15 @@ class TestCreateCustomInterpretation:
         os.remove(Path(str(shapefile_location) + ".dbf"))
         os.remove(Path(str(shapefile_location) + ".shp"))
         os.remove(Path(str(shapefile_location) + ".shx"))
-        #plt.figure()
-        #plt.plot(
+        # plt.figure()
+        # plt.plot(
         #    interpreter.unit_weight_soil,
         #    cpt.depth_to_reference,
         #    label=cpt.name,
-        #)
-        #plt.xlabel("Unit weight")
-        #plt.ylabel("depth")
-        #plt.legend()
+        # )
+        # plt.xlabel("Unit weight")
+        # plt.ylabel("depth")
+        # plt.legend()
 
     def create_qc_based_rule(self):
 
