@@ -22,7 +22,7 @@ from geolib_plus.cpt_utils import (
 
 class UnitWeightMethod(IntEnum):
     ROBERTSON = 1
-    LENGKEEK = 2
+    LENGKEEK_2018 = 2
 
 
 class OCRMethod(IntEnum):
@@ -36,6 +36,7 @@ class ShearWaveVelocityMethod(IntEnum):
     ANDRUS = 3
     ZANG = 4
     AHMED = 5
+    KRUIVER = 6
 
 
 class RelativeDensityMethod(IntEnum):
@@ -85,14 +86,16 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         MPa_to_kPa = 1000
         self.data.tip = self.data.tip * MPa_to_kPa
         self.data.friction = self.data.friction * MPa_to_kPa
+        # Fix of the water that Bram found, this directly affects the self.qt_calc() of line 94
+        self.data.water = self.data.water * MPa_to_kPa
 
         min_layer_thickness = 0.01
         # compute qc
         self.qt_calc()
 
         # compute unit weight
-        # method = 'Robertson' (Default) or 'Lengkeek'
-        # gamma_min = 10.5, gamma_max = 22 Defaults
+        # method = 'Robertson' (Default) or 'Lengkeek_2018' or 'Lengkeek2022'
+        # gamma_min = 10.1, gamma_max = 22 Defaults
         self.gamma_calc(method=self.unitweightmethod)
 
         # compute density
@@ -117,7 +120,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.NEN_calc()
 
         # compute shear wave velocity and shear modulus
-        # method == "Robertson" (Default|"Mayne"|"Andrus"|"Zang"|"Ahmed")
+        # method == "Robertson" (Default|"Mayne"|"Andrus"|"Zang"|"Ahmed"|"Kruiver")
         self.vs_calc(method=self.shearwavevelocitymethod)
 
         # compute damping
@@ -275,7 +278,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     def gamma_calc(
         self,
         method: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
-        gamma_min: float = 10.5,
+        gamma_min: float = 10.1,  # Changed this value to 10.1 based on Peat values reported in Lengkeek 2022
         gamma_max: float = 22,
     ):
         r"""
@@ -295,6 +298,14 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
             \gamma = \gamma_{sat,ref} - \beta
             \left( \frac{\log \left( \frac{q_{t,ref}}{q_{t}} \right)}{\log \left(\frac{R_{f,ref}}{R_{f}}\right)} \right)
+
+        Alternative method of Lengkeek et al. :cite:`lengkeek_2022`:
+
+        .. math::
+
+            \gamma = \gamma_{sat,ref} - \beta
+            \left( \frac{\log \left( \frac{q_{t,ref}}{q_{t}} \right)}{\log \left(\frac{R_{f,ref}}{R_{f}}\right)} \right)
+            with \gamma_{sat,ref} = 19.5, \beta = 2.87, q_{t,ref} = 9000, R_{f,ref} = 20
 
         Parameters
         ----------
@@ -320,12 +331,28 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             # assign gamma
             self.gamma = aux * self.data.g
 
-        elif method == UnitWeightMethod.LENGKEEK:
+        elif method == UnitWeightMethod.LENGKEEK_2018:
             aux = 19.0 - 4.12 * np.log10(5000.0 / np.array(self.data.qt)) / np.log10(
                 30.0 / self.data.friction_nbr
             )
             # if nan: aux is 19
             aux[np.isnan(aux)] = 19.0
+            # set lower limit
+            aux = ceil_value(aux, gamma_min)
+            # set higher limit
+            aux[np.abs(aux) >= gamma_max] = gamma_max
+            # assign gamma
+            self.gamma = aux
+
+        elif method == UnitWeightMethod.LENGKEEK2022:
+            # Clip friction_nbr to avoid division by zero or log10(0)
+            friction_nbr_safe = np.clip(self.data.friction_nbr, 1e-3, 1e3)
+
+            aux = 19.5 - 2.87 * np.log10(9000.0 / np.array(self.data.qt)) / np.log10(
+                20.0 / friction_nbr_safe
+            )
+            # if nan: aux is 19.5
+            aux[np.isnan(aux)] = 19.5
             # set lower limit
             aux = ceil_value(aux, gamma_min)
             # set higher limit
@@ -381,6 +408,17 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.data.total_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(
             self.gamma[:10]
         )
+
+        # TODO: This does not account for the cases in which the water level is above the CPT depth (like the CPT in a ditch or a lake)
+        # Check if the water level is above the first depth_to_reference and add the weight of the water column
+        if self.data.pwp > self.data.depth_to_reference[0]:
+            # Calculate the height of the water column above the CPT
+            H_water = self.data.pwp - self.data.depth_to_reference[0]
+            # Add the weight of the water column to the total stress
+            self.data.total_stress += (
+                self.data.g * H_water
+            )  # gamma_water is the unit weight of water (typically 9.81 kN/m³)
+
         # compute pwp
         # determine location of phreatic line: it cannot be above the CPT depth
         z_aux = np.min(
@@ -429,7 +467,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                     break
                 n1 = n_iter(
                     n,
-                    self.data.tip,
+                    self.data.qt,  # this should be qt
                     self.data.friction_nbr,
                     self.data.effective_stress,
                     self.data.total_stress,
@@ -451,6 +489,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         Q[Q <= 1.0] = 1.0
         F[F <= 0.1] = 0.1
         Q[Q >= 1000.0] = 1000.0
+        # TODO: The new Lengkeek 2022 suggests values up to 20 in RF
         F[F >= 10.0] = 10.0
         self.data.Qtn = Q
         self.data.Fr = F
@@ -516,6 +555,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         .. math::
 
             v_{s} = 1000 \cdot e^{-0.887 \cdot I_{c}} \cdot \left( \left(1 + 0.443 \cdot F_{r} \right) \cdot \left(\frac{\sigma'_{v}}{p_{a}} \right) \cdot \left(\frac{\gamma_{w}}{\gamma} \right) \right)^{0.5}
+
+        * Kruiver :cite:`kruiver_2020`:
+        .. math::
+
+            v_{s} = 359 \cdot \left( q_{t} - \sigma_{v0} \right)^{0.119} \cdot \left( F_{r} \right)^{0.100} \cdot \left( \sigma'_{v} \right)^{0.204}
         """
         if method == ShearWaveVelocityMethod.ROBERTSON:
             # vs: following Robertson and Cabal (2015)
@@ -524,11 +568,13 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             vs = ceil_value(vs, 0)
             self.data.vs = vs**0.5
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.MAYNE:
             # vs: following Mayne (2006)
             vs = 118.8 * np.log10(self.data.friction) + 18.5
             self.data.vs = ceil_value(vs, 0)
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.ANDRUS:
             # vs: following Andrus (2007)
             vs = (
@@ -539,8 +585,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 * 1
             )
             self.data.vs = ceil_value(vs, 0)
-
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.ZANG:
             # vs: following Zang & Tong (2017)
             vs = (
@@ -551,8 +597,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 * 0.92
             )
             self.data.vs = ceil_value(vs, 0)
-
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.AHMED:
             vs = (
                 1000.0
@@ -567,6 +613,17 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                     / self.gamma
                 )
                 ** 0.5
+            )
+            self.data.vs = ceil_value(vs, 0)
+            self.data.G0 = self.data.rho * self.data.vs**2
+
+        elif method == ShearWaveVelocityMethod.KRUIVER:
+            # This formulation works in MPa instead of kPa
+            vs = (
+                359.0
+                * (self.data.qt / 1000 - self.data.total_stress / 1000) ** 0.119
+                * (self.data.friction / 1000) ** 0.100
+                * (self.data.effective_stress / 1000) ** 0.204
             )
             self.data.vs = ceil_value(vs, 0)
             self.data.G0 = self.data.rho * self.data.vs**2
