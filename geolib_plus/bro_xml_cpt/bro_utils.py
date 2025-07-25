@@ -77,19 +77,19 @@ class XMLBroColumnValues(BaseModel):
 
 
 class XMLBroFullData(XMLBroColumnValues):
-    id: Optional[str]
+    id: Optional[str] = None
     location_x: Optional[float] = None
     location_y: Optional[float] = None
     offset_z: Optional[float] = None
     predrilled_z: Optional[float] = None
     a: Optional[float] = 0.80
-    vertical_datum: Optional[str]
-    local_reference: Optional[str]
-    quality_class: Optional[str]
-    cone_penetrometer_type: Optional[str]
-    cpt_standard: Optional[str]
-    result_time: Optional[str]
-    dataframe: Optional[PandasDataFrame]
+    vertical_datum: Optional[str] = None
+    local_reference: Optional[str] = None
+    quality_class: Optional[str] = None
+    cone_penetrometer_type: Optional[str] = None
+    cpt_standard: Optional[str] = None
+    result_time: Optional[str] = None
+    dataframe: Optional[PandasDataFrame]  = None
 
     @property
     def columns_string_list(self):

@@ -1,5 +1,5 @@
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class GeneralUtils(BaseModel):
@@ -7,8 +7,7 @@ class GeneralUtils(BaseModel):
     Contains general static functions.
     """
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @staticmethod
     def linearise_data_over_layer(

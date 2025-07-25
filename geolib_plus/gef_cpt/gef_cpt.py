@@ -1,5 +1,6 @@
 import numpy
 from numpy import array, unique
+from typing import Dict, Optional
 from pandas import DataFrame
 
 from geolib_plus.cpt_base_model import AbstractCPT, CptReader
@@ -9,7 +10,7 @@ from .gef_file_reader import GefFileReader
 
 class GefCpt(AbstractCPT):
 
-    error_codes = {}
+    error_codes: Dict = {}
 
     @classmethod
     def get_cpt_reader(cls) -> CptReader:

@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from scipy.optimize import curve_fit
 
 from geolib_plus.shm.prob_utils import ProbUtils
@@ -13,8 +13,7 @@ class ShansepUtils(BaseModel):
     :cite:`meer_2019`.
     """
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @staticmethod
     def __S_and_m_not_inputted(x, A, B):

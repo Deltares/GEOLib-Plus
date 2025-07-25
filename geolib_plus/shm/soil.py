@@ -7,15 +7,15 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 import numpy as np
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator, ConfigDict
 
 
 class SoilBaseModel(BaseModel):
-    class Config:
-        extra = "forbid"
+    model_config = ConfigDict(extra="forbid")
 
-    @validator("*")
-    def fail_on_infinite(cls, v, values, field):
+    @field_validator("*", mode="before")
+    @classmethod
+    def fail_on_infinite(cls, v):
         if isinstance(v, float) and not isfinite(v):
             raise ValueError(
                 "Only finite values are supported, don't use nan, -inf or inf."

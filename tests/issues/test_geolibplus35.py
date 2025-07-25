@@ -30,12 +30,6 @@ class TestBugGeolibPlus35:
     def test_import_geolib(self, test_file):
         # import geolib
         import geolib
-
-        # This is a workaround
-        import pydantic
-
-        pydantic.BaseModel.Config.validate_assignment = False
-
         # initialise models
         cpt = GefCpt()
         # read gef file

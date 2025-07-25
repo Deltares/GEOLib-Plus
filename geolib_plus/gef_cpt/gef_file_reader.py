@@ -171,7 +171,7 @@ class GefFileReader(CptReader):
         Matches error keys of GefFileReader dictionary to AbstractCPT class.
         That are used later in pre-processing.
         """
-        error_codes = {}
+        error_codes: Dict = {}
         for key in self.property_dict.keys():
             if key in self.__error_code_keys_map.keys():
                 new_key = self.__error_code_keys_map.get(key, None)
