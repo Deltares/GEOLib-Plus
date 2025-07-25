@@ -30,6 +30,7 @@ class TestBugGeolibPlus35:
     def test_import_geolib(self, test_file):
         # import geolib
         import geolib
+
         # initialise models
         cpt = GefCpt()
         # read gef file

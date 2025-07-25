@@ -89,7 +89,7 @@ class XMLBroFullData(XMLBroColumnValues):
     cone_penetrometer_type: Optional[str] = None
     cpt_standard: Optional[str] = None
     result_time: Optional[str] = None
-    dataframe: Optional[PandasDataFrame]  = None
+    dataframe: Optional[PandasDataFrame] = None
 
     @property
     def columns_string_list(self):

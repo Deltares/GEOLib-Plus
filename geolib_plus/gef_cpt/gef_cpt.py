@@ -1,6 +1,7 @@
+from typing import Dict, Optional
+
 import numpy
 from numpy import array, unique
-from typing import Dict, Optional
 from pandas import DataFrame
 
 from geolib_plus.cpt_base_model import AbstractCPT, CptReader
