@@ -23,6 +23,7 @@ from geolib_plus.cpt_utils import (
 class UnitWeightMethod(IntEnum):
     ROBERTSON = 1
     LENGKEEK_2018 = 2
+    LENGKEEK_2022 = 3
 
 
 class OCRMethod(IntEnum):
@@ -344,7 +345,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             # assign gamma
             self.gamma = aux
 
-        elif method == UnitWeightMethod.LENGKEEK2022:
+        elif method == UnitWeightMethod.LENGKEEK_2022:
             # Clip friction_nbr to avoid division by zero or log10(0)
             friction_nbr_safe = np.clip(self.data.friction_nbr, 1e-3, 1e3)
 
@@ -398,37 +399,63 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
     def stress_calc(self):
         r"""
-        Computes total and effective stress
+        Computes total and effective stress profiles for CPT interpretation.
+
+        This method calculates the vertical stress distribution with depth based on 
+        soil unit weights derived from CPT data and pore water pressure conditions.
+
+        **Assumptions:**
+        1. Unit weights (gamma) represent bulk/saturated unit weights (soil + water)
+        2. One-dimensional vertical stress distribution (lateral effects ignored)
+        3. Hydrostatic pore water pressure distribution below water table
+        4. No negative pore water pressures (suction) allowed
+        5. Water table level is constant and defined by self.data.pwp
+        6. Effective stress cannot be negative (set to zero if calculated as negative)
+        7. Initial stress at surface accounts for any pre-existing loading
+
+        **Calculation Method:**
+        - Total stress: :math:`\sigma_v = Σ(\gamma * Δz)` + water column weight (if above water table)
+        - Pore pressure: :math:`u = \gamma_w * (depth below water table)` for saturated conditions
+        - Effective stress: :math:`\sigma'_v = \sigma_v - u` (with minimum value of 0)
+
+        **Variables:**
+        - self.data.depth: Measurement depths [m]
+        - self.data.depth_to_reference: Depths relative to reference level [m]  
+        - self.data.pwp: Water table level relative to reference [m]
+        - self.gamma: Bulk unit weight profile [kN/m³]
+        - self.data.g: Gravitational acceleration [m/s²]
+
+        **Returns:**
+        Updates the following CPT data attributes:
+        - total_stress: Total vertical stress [kPa]
+        - effective_stress: Effective vertical stress [kPa]
         """
 
         # compute depth diff
         z = np.diff(np.abs((self.data.depth - self.data.depth[0])))
-        z = np.append(z, z[-1])
-        # total stress
-        self.data.total_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(
+        # Insert the initial depth so that the depth array size is consistent
+        z = np.insert(z, 0, self.data.depth[0])
+        # total stress the unit weight is a bulk (solid + water pressure) 
+        # unit weight so we don't need to add the pwp
+        total_vertical_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(
             self.gamma[:10]
         )
-
-        # TODO: This does not account for the cases in which the water level is above the CPT depth (like the CPT in a ditch or a lake)
+        # Calculate the height of the water column above the CPT
+        H_water = self.data.pwp - self.data.depth_to_reference[0]
         # Check if the water level is above the first depth_to_reference and add the weight of the water column
         if self.data.pwp > self.data.depth_to_reference[0]:
-            # Calculate the height of the water column above the CPT
-            H_water = self.data.pwp - self.data.depth_to_reference[0]
             # Add the weight of the water column to the total stress
-            self.data.total_stress += (
-                self.data.g * H_water
-            )  # gamma_water is the unit weight of water (typically 9.81 kN/m³)
-
-        # compute pwp
-        # determine location of phreatic line: it cannot be above the CPT depth
-        z_aux = np.min(
-            [self.data.pwp, abs(self.data.depth_to_reference[0]) + self.data.depth[0]]
-        )
-        pwp = (z_aux - self.data.depth_to_reference) * self.data.g
-        # no suction is allowed
-        pwp[pwp <= 0] = 0
+            total_vertical_stress += self.data.g * H_water
+        pwp_stress = []
+        for i, measurement_depth in enumerate(self.data.depth):
+            if self.data.pwp < self.data.depth_to_reference[i]:
+                pwp_stress.append(0) # don't allow suction
+            else:
+                pwp_stress.append((H_water + measurement_depth)* self.data.g)  
+        # compute total stress
+        self.data.total_stress = total_vertical_stress 
         # compute effective stress
-        self.data.effective_stress = self.data.total_stress - pwp
+        self.data.effective_stress = self.data.total_stress - pwp_stress
         # if effective stress is negative -> effective stress = 0
         self.data.effective_stress[self.data.effective_stress <= 0] = 0
 

@@ -148,7 +148,7 @@ class TestInterpreter:
         cpt.pre_process_data()
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2018
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
         interpreter.ocrmethod = OCRMethod.MAYNE
         # read gef file
@@ -178,7 +178,7 @@ class TestInterpreter:
         cpt.pre_process_data()
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2022
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
         interpreter.ocrmethod = OCRMethod.ROBERTSON
         # read gef file
@@ -208,7 +208,7 @@ class TestInterpreter:
         cpt.pre_process_data()
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2018
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
         interpreter.ocrmethod = OCRMethod.MAYNE
         # read gef file
@@ -243,7 +243,7 @@ class TestInterpreter:
         assert exact_rho.tolist() == cpt.rho.tolist()
 
     @pytest.mark.systemtest
-    def test_gamma_calc(self):
+    def test_gamma_calc_Robertson(self):
         # initialise models
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
@@ -271,14 +271,35 @@ class TestInterpreter:
 
         # Check if they are equal
         assert local_gamma1.tolist() == interpreter.gamma.tolist()
+    
+    @pytest.mark.systemtest
+    def test_gamma_calc_LENGKEEK_2018(self):
+        # initialise models
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # Set all the values
+        gamma_limit = 22
+        interpreter.data.friction_nbr = np.ones(10)
+        interpreter.data.qt = np.ones(10)
+        interpreter.data.Pa = 100
+        interpreter.data.depth_to_reference = range(10)
+        interpreter.data.name = "UNIT_TEST"
 
         # Exact solution Lengkeek
         local_gamma2 = 19 - 4.12 * (
             (np.log10(5000 / interpreter.data.qt))
             / (np.log10(30 / interpreter.data.friction_nbr))
         )
-        interpreter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK)
+        interpreter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2018)
         assert local_gamma2.tolist() == interpreter.gamma.tolist()
+
+    @pytest.mark.systemtest
+    def test_gamma_calc_LENGKEEK_2022(self):
+        pass
 
     @pytest.mark.systemtest
     def test_stress_calc(self):
@@ -313,33 +334,33 @@ class TestInterpreter:
             15,
             15,
         ]
-        interpreter.data.depth_to_reference = np.zeros(20)
+        interpreter.data.depth_to_reference = np.arange(0, 2, 0.1)
         interpreter.data.pwp = 0
         # run test
         interpreter.stress_calc()
 
         # The target list with the desired output
         effective_stress_test = [
-            2.0,
-            4.0,
-            6.0,
-            8.0,
-            10.0,
-            12.0,
-            14.0,
-            16.0,
-            18.0,
-            20.0,
-            21.5,
-            23.0,
-            24.5,
-            26.0,
-            27.5,
-            29.0,
-            30.5,
-            32.0,
-            33.5,
-            35.0,
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            19.5,
+            21,
+            22.5,
+            24,
+            25.5,
+            27,
+            28.5,
+            30,
+            31.5,
+            33,
         ]
 
         # checking equality with the output
@@ -1138,7 +1159,7 @@ class TestInterpreter:
         with pytest.raises(ValueError):
             interpreter.pwp_level_calc()
 
-    @pytest.mark.workinprogress
+    @pytest.mark.unittest
     def test_stress_calc_total_stress(self):
         interpreter = RobertsonCptInterpretation()
         interpreter.data = type("test", (object,), {})()
@@ -1146,7 +1167,7 @@ class TestInterpreter:
 
         interpreter.data.depth = np.array([0, 1, 2, 3, 4, 5])
         interpreter.data.depth_to_reference = np.array([0, 1, 2, 3, 4, 5])
-        interpreter.data.pwp = 2.0
+        interpreter.data.pwp = -10.0
         interpreter.data.g = 9.81
         interpreter.gamma = np.array([18, 18, 18, 18, 18, 18])
         interpreter.stress_calc()
@@ -1174,10 +1195,7 @@ class TestInterpreter:
 
         instance.stress_calc()
 
-        # Compute expected total stress:
-        # z = diff([0,1,2,3,4]) = [1,1,1,1] then appended becomes [1,1,1,1,1].
-        # Cumulative sum of (18 * 1): [18, 36, 54, 72, 90].
-        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
+        expected_total = np.array([0, 18, 36, 54, 72], dtype=float)
         # Since pwp is zero, effective stress equals total stress.
         expected_effective = expected_total.copy()
 
@@ -1207,9 +1225,7 @@ class TestInterpreter:
         instance = self._create_instance()
         instance.data.depth = np.array(depth, dtype=float)
         if np.isscalar(depth_to_reference):
-            instance.data.depth_to_reference = np.full(
-                instance.data.depth.shape, depth_to_reference
-            )
+            instance.data.depth_to_reference = depth_to_reference - instance.data.depth
         else:
             instance.data.depth_to_reference = np.array(depth_to_reference, dtype=float)
         instance.data.pwp = pwp
@@ -1242,17 +1258,13 @@ class TestInterpreter:
         and reduces effective stress.
         """
         instance = self._setup_stress_instance(
-            depth=[5, 6, 7, 8, 9], depth_to_reference=-2.0, pwp=10, g=9.81, gamma=18.0
+            depth=[0, 3, 5, 7, 10], depth_to_reference=-1.0, pwp=2.0, g=9.81, gamma=18.0
         )
 
         instance.stress_calc()
-
-        # Compute expected total stress:
-        # The cumulative sum of (gamma * depth interval) plus an offset yields:
-        expected_total = np.array([108, 126, 144, 162, 180], dtype=float)
-        # For pwp, z_aux is calculated as min(10, 2 + 5)=7, so:
-        pwp_val = (7 - (-2)) * 9.81  # 9 * 9.81
-        expected_effective = expected_total - pwp_val
+        pwp = np.array([3 * 9.81, 6 * 9.81, 8 * 9.81, 10 * 9.81, 13 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 3 * 9.81
+        expected_effective = expected_total - pwp
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
         np.testing.assert_allclose(
@@ -1260,26 +1272,19 @@ class TestInterpreter:
         )
 
     @pytest.mark.unittest
-    def test_stress_calc_negative_pwp_clipped(self):
+    def test_stress_calc_negative_pwp(self):
         """
-        Test a case where the computed pore water pressure would be negative
-        (indicating suction) but is then clipped to zero.
+        Test a scenario where the computed pore water pressure is positive
+        and reduces effective stress.
         """
         instance = self._setup_stress_instance(
-            depth=[0, 1, 2, 3, 4],
-            depth_to_reference=[2, 3, 3, 3, 3],
-            pwp=10,
-            g=9.81,
-            gamma=18.0,
+            depth=[0, 3, 5, 7, 10], depth_to_reference=-2.0, pwp=-1.0, g=9.81, gamma=18.0
         )
 
         instance.stress_calc()
-
-        # Expected total stress remains the same as computed from gamma:
-        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
-        # For pwp, z_aux = min(10, abs(2)+0)=2 leading to negative values,
-        # so effective stress is clipped to be equal to total stress.
-        expected_effective = expected_total.copy()
+        pwp = np.array([ 1 * 9.81, 4 * 9.81, 6 * 9.81, 8 * 9.81, 11 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 1 * 9.81
+        expected_effective = expected_total - pwp
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
         np.testing.assert_allclose(
@@ -1287,25 +1292,91 @@ class TestInterpreter:
         )
 
     @pytest.mark.unittest
-    def test_stress_calc_negative_effective_clipped(self):
+    def test_stress_calc_water_level_below_soil(self):
         """
-        Test a case where the pore water pressure is so high that the computed effective
-        stress would be negative, and then it is clipped to zero.
+        Test a scenario where the computed pore water pressure is positive
+        and reduces effective stress.
         """
         instance = self._setup_stress_instance(
-            depth=[0, 0.5, 1, 1.5, 2], depth_to_reference=-1.0, pwp=2, g=9.81, gamma=18.0
+            depth=[0, 3, 5, 7, 10], depth_to_reference=0.0, pwp=-4.0, g=9.81, gamma=18.0
         )
 
         instance.stress_calc()
-
-        # Calculate expected total stress from the cumulative sum:
-        expected_total = np.array([9, 18, 27, 36, 45], dtype=float)
-        # pwp: z_aux = min(2, abs(-1)+0)=1, so pwp = (1 - (-1)) * 9.81 = 19.62
-        effective = expected_total - 19.62
-        effective[effective < 0] = 0  # Clip negative effective stresses to zero
+        pwp = np.array([ 0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
+        expected_effective = expected_total - pwp
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, effective, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
+
+    @pytest.mark.unittest
+    def test_stress_calc_water_level_below_soil_positive_NAP(self):
+        instance = self._setup_stress_instance(
+            depth=[0, 3, 5, 7, 10], depth_to_reference=6.0, pwp=2.0, g=9.81, gamma=18.0
+        )
+
+        instance.stress_calc()
+        pwp = np.array([ 0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
+        expected_effective = expected_total - pwp
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
+    @pytest.mark.unittest
+    def test_stress_calc_water_level_above_soil_positive_NAP(self):
+        instance = self._setup_stress_instance(
+            depth=[0, 3, 5, 7, 10], depth_to_reference=2.0, pwp=6.0, g=9.81, gamma=18.0
+        )
+
+        instance.stress_calc()
+        pwp = np.array([ 4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 4 * 9.81
+        expected_effective = expected_total - pwp
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
+    @pytest.mark.unittest
+    def test_stress_calc_water_level_bellow_soil_negative_NAP_predrill(self):
+        instance = self._setup_stress_instance(
+            depth=[1, 3, 5, 7, 10], depth_to_reference=-1.0, pwp=-4.0, g=9.81, gamma=18.0
+        )
+
+        instance.stress_calc()
+        pwp = np.array([ 4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
+
+        assert instance.data.total_stress[0] == 18 + 18 # unit weight of the point + pre-drilled depth
+
+
+    @pytest.mark.unittest
+    def test_stress_calc_water_level_below_soil_negative_pwp(self):
+        """
+        Test a scenario where the computed pore water pressure is negative
+        and reduces effective stress.
+        """
+        instance = self._setup_stress_instance(
+            depth=[0, 3, 5, 7, 10], depth_to_reference=-2.0, pwp=-4.0, g=9.81, gamma=18.0
+        )
+
+        instance.stress_calc()
+        pwp = np.array([ 0, 1 * 9.81, 3 * 9.81, 5 * 9.81, 8 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
+        expected_effective = expected_total - pwp
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
 
     def _verify_norm_calc(self, instance, expected_n, exponent):
         """
