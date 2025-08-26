@@ -516,8 +516,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         Q[Q <= 1.0] = 1.0
         F[F <= 0.1] = 0.1
         Q[Q >= 1000.0] = 1000.0
-        # TODO: The new Lengkeek 2022 suggests values up to 20 in RF
-        F[F >= 10.0] = 10.0
+        # The new Lengkeek 2022 suggests values up to 20 in RF
+        if self.unitweightmethod == UnitWeightMethod.LENGKEEK_2022:
+            F[F >= 20.0] = 20.0
+        else:
+            F[F >= 10.0] = 10.0
         self.data.Qtn = Q
         self.data.Fr = F
         self.data.n = n
@@ -648,7 +651,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             # This formulation works in MPa instead of kPa
             vs = (
                 359.0
-                * (self.data.qt / 1000 - self.data.total_stress / 1000) ** 0.119
+                * (self.data.tip / 1000 ) ** 0.119
                 * (self.data.friction / 1000) ** 0.100
                 * (self.data.effective_stress / 1000) ** 0.204
             )

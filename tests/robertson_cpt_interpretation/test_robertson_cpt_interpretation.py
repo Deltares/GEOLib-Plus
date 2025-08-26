@@ -178,7 +178,7 @@ class TestInterpreter:
         cpt.pre_process_data()
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2022
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2018
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
         interpreter.ocrmethod = OCRMethod.ROBERTSON
         # read gef file
@@ -299,7 +299,26 @@ class TestInterpreter:
 
     @pytest.mark.systemtest
     def test_gamma_calc_LENGKEEK_2022(self):
-        pass
+        # initialise models
+        cpt = GefCpt()
+        interpreter = RobertsonCptInterpretation()
+        interpreter.data = cpt
+        # test initial expectations
+        assert cpt
+        assert interpreter
+        # Set all the values
+        gamma_limit = 22
+        interpreter.data.friction_nbr = np.ones(10)
+        interpreter.data.qt = np.ones(10)
+        interpreter.data.Pa = 100
+        interpreter.data.depth_to_reference = range(10)
+        interpreter.data.name = "UNIT_TEST"
+
+        # Exact solution Lengkeek
+        local_gamma2 = 19.5 - 2.87 * ((np.log10(9000 / interpreter.data.qt)) / (np.log10(20 / interpreter.data.friction_nbr)))
+        interpreter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2022)
+        assert local_gamma2.tolist() == interpreter.gamma.tolist()
+
 
     @pytest.mark.systemtest
     def test_stress_calc(self):
@@ -555,6 +574,17 @@ class TestInterpreter:
         # Check their equality
         assert test_vs[0] == interpreter.data.vs[0]
         assert list(test_GO) == list(interpreter.data.G0)
+
+        test_vs = 359 * (interpreter.data.tip /1000) ** 0.119 *  (interpreter.data.friction/1000) ** 0.1 *  (interpreter.data.effective_stress /1000) ** 0.204
+        test_GO = interpreter.data.rho * test_vs**2
+
+        # Call the function
+        interpreter.vs_calc(method=ShearWaveVelocityMethod.KRUIVER)
+
+        # Check their equality
+        assert test_vs[0] == interpreter.data.vs[0]
+        assert list(test_GO) == list(interpreter.data.G0)
+
 
     @pytest.mark.unittest
     def test_poisson_calc(self):
