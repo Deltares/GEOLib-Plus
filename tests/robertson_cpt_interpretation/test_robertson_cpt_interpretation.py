@@ -1343,7 +1343,6 @@ class TestInterpreter:
 
 
 class TestStressCalc:
-
     def _create_instance(self):
         """Helper to create an instance with a dummy 'data' attribute."""
         instance = RobertsonCptInterpretation()
@@ -1381,7 +1380,11 @@ class TestStressCalc:
         self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total=None
     ):
         instance = self._setup_stress_instance(
-            depth=depth, depth_to_reference=depth_to_reference, pwp=pwp_value, g=9.81, gamma=18.0
+            depth=depth,
+            depth_to_reference=depth_to_reference,
+            pwp=pwp_value,
+            g=9.81,
+            gamma=18.0,
         )
         instance.stress_calc()
 
@@ -1392,28 +1395,54 @@ class TestStressCalc:
         expected_effective = expected_total - expected_pwp
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
 
     @pytest.mark.unittest
     @pytest.mark.parametrize(
         "depth, depth_to_reference, pwp_value, expected_pwp, extra_total",
         [
             # water level below soil
-            ([0, 3, 5, 7, 10], 0.0, -4.0, np.array([0, 0, 1*9.81, 3*9.81, 6*9.81]), None),
+            (
+                [0, 3, 5, 7, 10],
+                0.0,
+                -4.0,
+                np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81]),
+                None,
+            ),
             # below soil, positive nap
-            ([0, 3, 5, 7, 10], 6.0, 2.0, np.array([0, 0, 1*9.81, 3*9.81, 6*9.81]), None),
+            (
+                [0, 3, 5, 7, 10],
+                6.0,
+                2.0,
+                np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81]),
+                None,
+            ),
             # above soil, positive nap
-            ([0, 3, 5, 7, 10], 2.0, 6.0,
-             np.array([4*9.81, 7*9.81, 9*9.81, 11*9.81, 14*9.81]),
-             4*9.81),
+            (
+                [0, 3, 5, 7, 10],
+                2.0,
+                6.0,
+                np.array([4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81]),
+                4 * 9.81,
+            ),
             # below soil, negative pwp
-            ([0, 3, 5, 7, 10], -2.0, -4.0,
-             np.array([0, 1*9.81, 3*9.81, 5*9.81, 8*9.81]),
-             None),
-        ]
+            (
+                [0, 3, 5, 7, 10],
+                -2.0,
+                -4.0,
+                np.array([0, 1 * 9.81, 3 * 9.81, 5 * 9.81, 8 * 9.81]),
+                None,
+            ),
+        ],
     )
-    def test_stress_cases(self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total):
-        self._run_stress_test(depth, depth_to_reference, pwp_value, expected_pwp, extra_total)
+    def test_stress_cases(
+        self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total
+    ):
+        self._run_stress_test(
+            depth, depth_to_reference, pwp_value, expected_pwp, extra_total
+        )
 
     @pytest.mark.unittest
     def test_stress_calc_water_level_below_soil_negative_nap_predrill(self):
