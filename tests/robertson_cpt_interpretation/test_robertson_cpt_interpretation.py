@@ -271,7 +271,7 @@ class TestInterpreter:
 
         # Check if they are equal
         assert local_gamma1.tolist() == interpreter.gamma.tolist()
-    
+
     @pytest.mark.systemtest
     def test_gamma_calc_LENGKEEK_2018(self):
         # initialise models
@@ -294,7 +294,9 @@ class TestInterpreter:
             (np.log10(5000 / interpreter.data.qt))
             / (np.log10(30 / interpreter.data.friction_nbr))
         )
-        interpreter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2018)
+        interpreter.gamma_calc(
+            gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2018
+        )
         assert local_gamma2.tolist() == interpreter.gamma.tolist()
 
     @pytest.mark.systemtest
@@ -315,10 +317,14 @@ class TestInterpreter:
         interpreter.data.name = "UNIT_TEST"
 
         # Exact solution Lengkeek
-        local_gamma2 = 19.5 - 2.87 * ((np.log10(9000 / interpreter.data.qt)) / (np.log10(20 / interpreter.data.friction_nbr)))
-        interpreter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2022)
+        local_gamma2 = 19.5 - 2.87 * (
+            (np.log10(9000 / interpreter.data.qt))
+            / (np.log10(20 / interpreter.data.friction_nbr))
+        )
+        interpreter.gamma_calc(
+            gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2022
+        )
         assert local_gamma2.tolist() == interpreter.gamma.tolist()
-
 
     @pytest.mark.systemtest
     def test_stress_calc(self):
@@ -575,7 +581,12 @@ class TestInterpreter:
         assert test_vs[0] == interpreter.data.vs[0]
         assert list(test_GO) == list(interpreter.data.G0)
 
-        test_vs = 359 * (interpreter.data.tip /1000) ** 0.119 *  (interpreter.data.friction/1000) ** 0.1 *  (interpreter.data.effective_stress /1000) ** 0.204
+        test_vs = (
+            359
+            * (interpreter.data.tip / 1000) ** 0.119
+            * (interpreter.data.friction / 1000) ** 0.1
+            * (interpreter.data.effective_stress / 1000) ** 0.204
+        )
         test_GO = interpreter.data.rho * test_vs**2
 
         # Call the function
@@ -584,7 +595,6 @@ class TestInterpreter:
         # Check their equality
         assert test_vs[0] == interpreter.data.vs[0]
         assert list(test_GO) == list(interpreter.data.G0)
-
 
     @pytest.mark.unittest
     def test_poisson_calc(self):
@@ -1312,7 +1322,7 @@ class TestInterpreter:
         )
 
         instance.stress_calc()
-        pwp = np.array([ 1 * 9.81, 4 * 9.81, 6 * 9.81, 8 * 9.81, 11 * 9.81])
+        pwp = np.array([1 * 9.81, 4 * 9.81, 6 * 9.81, 8 * 9.81, 11 * 9.81])
         expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 1 * 9.81
         expected_effective = expected_total - pwp
 
@@ -1332,7 +1342,7 @@ class TestInterpreter:
         )
 
         instance.stress_calc()
-        pwp = np.array([ 0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
+        pwp = np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
         expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
         expected_effective = expected_total - pwp
 
@@ -1341,7 +1351,6 @@ class TestInterpreter:
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
 
-
     @pytest.mark.unittest
     def test_stress_calc_water_level_below_soil_positive_NAP(self):
         instance = self._setup_stress_instance(
@@ -1349,7 +1358,7 @@ class TestInterpreter:
         )
 
         instance.stress_calc()
-        pwp = np.array([ 0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
+        pwp = np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
         expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
         expected_effective = expected_total - pwp
 
@@ -1365,7 +1374,7 @@ class TestInterpreter:
         )
 
         instance.stress_calc()
-        pwp = np.array([ 4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
+        pwp = np.array([4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
         expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 4 * 9.81
         expected_effective = expected_total - pwp
 
@@ -1381,11 +1390,12 @@ class TestInterpreter:
         )
 
         instance.stress_calc()
-        pwp = np.array([ 4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
+        pwp = np.array([4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
         expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
 
-        assert instance.data.total_stress[0] == 18 + 18 # unit weight of the point + pre-drilled depth
-
+        assert (
+            instance.data.total_stress[0] == 18 + 18
+        )  # unit weight of the point + pre-drilled depth
 
     @pytest.mark.unittest
     def test_stress_calc_water_level_below_soil_negative_pwp(self):
@@ -1398,7 +1408,7 @@ class TestInterpreter:
         )
 
         instance.stress_calc()
-        pwp = np.array([ 0, 1 * 9.81, 3 * 9.81, 5 * 9.81, 8 * 9.81])
+        pwp = np.array([0, 1 * 9.81, 3 * 9.81, 5 * 9.81, 8 * 9.81])
         expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
         expected_effective = expected_total - pwp
 
@@ -1406,7 +1416,6 @@ class TestInterpreter:
         np.testing.assert_allclose(
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
-
 
     def _verify_norm_calc(self, instance, expected_n, exponent):
         """

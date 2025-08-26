@@ -401,7 +401,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         r"""
         Computes total and effective stress profiles for CPT interpretation.
 
-        This method calculates the vertical stress distribution with depth based on 
+        This method calculates the vertical stress distribution with depth based on
         soil unit weights derived from CPT data and pore water pressure conditions.
 
         **Assumptions:**
@@ -420,7 +420,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
         **Variables:**
         - self.data.depth: Measurement depths [m]
-        - self.data.depth_to_reference: Depths relative to reference level [m]  
+        - self.data.depth_to_reference: Depths relative to reference level [m]
         - self.data.pwp: Water table level relative to reference [m]
         - self.gamma: Bulk unit weight profile [kN/m³]
         - self.data.g: Gravitational acceleration [m/s²]
@@ -435,7 +435,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         z = np.diff(np.abs((self.data.depth - self.data.depth[0])))
         # Insert the initial depth so that the depth array size is consistent
         z = np.insert(z, 0, self.data.depth[0])
-        # total stress the unit weight is a bulk (solid + water pressure) 
+        # total stress the unit weight is a bulk (solid + water pressure)
         # unit weight so we don't need to add the pwp
         total_vertical_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(
             self.gamma[:10]
@@ -449,11 +449,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         pwp_stress = []
         for i, measurement_depth in enumerate(self.data.depth):
             if self.data.pwp < self.data.depth_to_reference[i]:
-                pwp_stress.append(0) # don't allow suction
+                pwp_stress.append(0)  # don't allow suction
             else:
-                pwp_stress.append((H_water + measurement_depth)* self.data.g)  
+                pwp_stress.append((H_water + measurement_depth) * self.data.g)
         # compute total stress
-        self.data.total_stress = total_vertical_stress 
+        self.data.total_stress = total_vertical_stress
         # compute effective stress
         self.data.effective_stress = self.data.total_stress - pwp_stress
         # if effective stress is negative -> effective stress = 0
@@ -651,7 +651,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             # This formulation works in MPa instead of kPa
             vs = (
                 359.0
-                * (self.data.tip / 1000 ) ** 0.119
+                * (self.data.tip / 1000) ** 0.119
                 * (self.data.friction / 1000) ** 0.100
                 * (self.data.effective_stress / 1000) ** 0.204
             )
