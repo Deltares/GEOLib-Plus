@@ -133,92 +133,53 @@ class Testintegration:
 
 class TestInterpreter:
     @pytest.mark.systemtest
-    def test_RobertsonCptInterpretation_1(self):
+    @pytest.mark.parametrize("unitweight_method,interpretation_method,shearwave_method,ocr_method", [
+        (UnitWeightMethod.LENGKEEK_2022, InterpretationMethod.LENGKEEK_2022, ShearWaveVelocityMethod.ZANG, OCRMethod.MAYNE),
+        (UnitWeightMethod.LENGKEEK_2018, None, ShearWaveVelocityMethod.MAYNE, OCRMethod.ROBERTSON),
+        (UnitWeightMethod.LENGKEEK_2018, None, ShearWaveVelocityMethod.AHMED, OCRMethod.MAYNE),
+    ])
+    def test_robertson_cpt_interpretation_methods(self, unitweight_method, interpretation_method, shearwave_method, ocr_method):
+        """
+        Parametrized test for various Robertson CPT interpretation method combinations.
+        
+        Tests different combinations of:
+        - Unit weight calculation methods (Lengkeek 2018/2022)
+        - Interpretation methods (Lengkeek 2022 or default)
+        - Shear wave velocity methods (Zang, Mayne, Ahmed)
+        - OCR methods (Mayne, Robertson)
+        """
         # open the gef file
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
         )
         assert test_file.is_file()
+        
         # initialise models
         cpt = GefCpt()
-        # test initial expectations
         assert cpt
+        
         # read gef file
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
+        
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2022
-        interpreter.interpretation_method = InterpretationMethod.LENGKEEK_2022
-        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
-        interpreter.ocrmethod = OCRMethod.MAYNE
-        # read gef file
+        interpreter.unitweightmethod = unitweight_method
+        if interpretation_method is not None:
+            interpreter.interpretation_method = interpretation_method
+        interpreter.shearwavevelocitymethod = shearwave_method
+        interpreter.ocrmethod = ocr_method
+        
+        # read gef file (again, as in original tests)
         cpt.read(filepath=test_file)
-        # do pre-processing
+        # do pre-processing (again, as in original tests)  
         cpt.pre_process_data()
-        # interpet the results
+        
+        # interpret the results
         cpt.interpret_cpt(interpreter)
-        assert cpt
-        assert cpt.lithology
-        assert cpt.lithology_merged
-
-    @pytest.mark.systemtest
-    def test_RobertsonCptInterpretation_2(self):
-        # open the gef file
-        test_file = TestUtils.get_local_test_data_dir(
-            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
-        )
-        assert test_file.is_file()
-        # initialise models
-        cpt = GefCpt()
-        # test initial expectations
-        assert cpt
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # initialise interpretation model
-        interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2018
-        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
-        interpreter.ocrmethod = OCRMethod.ROBERTSON
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # interpet the results
-        cpt.interpret_cpt(interpreter)
-        assert cpt
-        assert cpt.lithology
-        assert cpt.lithology_merged
-
-    @pytest.mark.systemtest
-    def test_RobertsonCptInterpretation_3(self):
-        # open the gef file
-        test_file = TestUtils.get_local_test_data_dir(
-            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
-        )
-        assert test_file.is_file()
-        # initialise models
-        cpt = GefCpt()
-        # test initial expectations
-        assert cpt
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # initialise interpretation model
-        interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2018
-        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
-        interpreter.ocrmethod = OCRMethod.MAYNE
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # interpet the results
-        cpt.interpret_cpt(interpreter)
+        
+        # verify results
         assert cpt
         assert cpt.lithology
         assert cpt.lithology_merged
