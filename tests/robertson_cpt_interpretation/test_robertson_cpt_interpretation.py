@@ -14,6 +14,7 @@ from geolib_plus.robertson_cpt_interpretation import (
     RobertsonCptInterpretation,
     ShearWaveVelocityMethod,
     UnitWeightMethod,
+    InterpretationMethod
 )
 from tests.utils import TestUtils
 
@@ -148,7 +149,8 @@ class TestInterpreter:
         cpt.pre_process_data()
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2018
+        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK_2022
+        interpreter.interpretation_method = InterpretationMethod.LENGKEEK_2022
         interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
         interpreter.ocrmethod = OCRMethod.MAYNE
         # read gef file
@@ -220,6 +222,21 @@ class TestInterpreter:
         assert cpt
         assert cpt.lithology
         assert cpt.lithology_merged
+    
+    @pytest.mark.unittest
+    def test_lithology_Lengkeek(self):
+        interpreter = RobertsonCptInterpretation()
+        interpreter.interpretation_method = InterpretationMethod.LENGKEEK_2022
+        model_name = "Lengkeek2024"
+        interpreter.soil_types(model_name=model_name)
+        x = [0.3, 4.2, 14.5, 1.5, 3.2, 1, 0.5, 0.2, 3, 10  ]
+        y = [3, 3.3 , 18, 5, 37, 44, 145, 510, 577, 203]
+        expected_lithology = ["1", "3", "2", "4", "5", "6", "7", "8", "9", "10"]
+        lithology, points = interpreter.lithology(x=x, y=y)
+
+        np.testing.assert_array_equal(expected_lithology, lithology)
+
+
 
     @pytest.mark.systemtest
     def test_rho_calculation(self):
@@ -243,7 +260,7 @@ class TestInterpreter:
         assert exact_rho.tolist() == cpt.rho.tolist()
 
     @pytest.mark.systemtest
-    def test_gamma_calc_Robertson(self):
+    def test_gamma_calc_robertson(self):
         # initialise models
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
@@ -273,7 +290,7 @@ class TestInterpreter:
         assert local_gamma1.tolist() == interpreter.gamma.tolist()
     
     @pytest.mark.systemtest
-    def test_gamma_calc_LENGKEEK_2018(self):
+    def test_gamma_calc_lengkeek_2018(self):
         # initialise models
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
@@ -298,7 +315,7 @@ class TestInterpreter:
         assert local_gamma2.tolist() == interpreter.gamma.tolist()
 
     @pytest.mark.systemtest
-    def test_gamma_calc_LENGKEEK_2022(self):
+    def test_gamma_calc_lengkeek_2022(self):
         # initialise models
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
@@ -1343,7 +1360,7 @@ class TestInterpreter:
 
 
     @pytest.mark.unittest
-    def test_stress_calc_water_level_below_soil_positive_NAP(self):
+    def test_stress_calc_water_level_below_soil_positive_nap(self):
         instance = self._setup_stress_instance(
             depth=[0, 3, 5, 7, 10], depth_to_reference=6.0, pwp=2.0, g=9.81, gamma=18.0
         )
@@ -1359,7 +1376,7 @@ class TestInterpreter:
         )
 
     @pytest.mark.unittest
-    def test_stress_calc_water_level_above_soil_positive_NAP(self):
+    def test_stress_calc_water_level_above_soil_positive_nap(self):
         instance = self._setup_stress_instance(
             depth=[0, 3, 5, 7, 10], depth_to_reference=2.0, pwp=6.0, g=9.81, gamma=18.0
         )
@@ -1375,14 +1392,12 @@ class TestInterpreter:
         )
 
     @pytest.mark.unittest
-    def test_stress_calc_water_level_bellow_soil_negative_NAP_predrill(self):
+    def test_stress_calc_water_level_bellow_soil_negative_nap_predrill(self):
         instance = self._setup_stress_instance(
             depth=[1, 3, 5, 7, 10], depth_to_reference=-1.0, pwp=-4.0, g=9.81, gamma=18.0
         )
 
         instance.stress_calc()
-        pwp = np.array([ 4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
-        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
 
         assert instance.data.total_stress[0] == 18 + 18 # unit weight of the point + pre-drilled depth
 

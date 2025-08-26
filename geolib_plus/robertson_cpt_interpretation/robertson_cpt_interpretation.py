@@ -20,6 +20,10 @@ from geolib_plus.cpt_utils import (
 )
 
 
+class InterpretationMethod(IntEnum):
+    ROBERTSON = 1
+    LENGKEEK_2022 = 2
+
 class UnitWeightMethod(IntEnum):
     ROBERTSON = 1
     LENGKEEK_2018 = 2
@@ -63,6 +67,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     ocrmethod: OCRMethod = OCRMethod.ROBERTSON
     shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
     relativedensitymethod: RelativeDensityMethod = RelativeDensityMethod.BALDI
+    interpretation_method: InterpretationMethod = InterpretationMethod.ROBERTSON
     data: AbstractCPT = None
     gamma: Iterable = []
     polygons: Iterable = []
@@ -192,21 +197,17 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             list_of_polygons.append(Polygon(polygon.points))
         self.polygons = list_of_polygons
 
-    def lithology(self, Qtn: Iterable, Fr: Iterable):
+    def lithology(self, y: Iterable, x: Iterable):
         r"""
-        Identifies lithology of CPT points, following Robertson and Cabal :cite:`robertson_cabal_2014`.
-
-        Parameters
-        ----------
-        :return: lithology array, Qtn, Fr
+        Samples the points from the shapefile and assigns lithology.
         """
 
-        lithology_array = [""] * len(Qtn)
-        coords = np.zeros((len(Qtn), 2))
+        lithology_array = [""] * len(y)
+        coords = np.zeros((len(y), 2))
 
         # determine into which soil type the point is
-        for i in range(len(Qtn)):
-            pnt = Point(Fr[i], Qtn[i])
+        for i in range(len(y)):
+            pnt = Point(x[i], y[i])
             aux = []
             for polygon in self.polygons:
                 aux.append(polygon.contains(pnt))
@@ -219,7 +220,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
             idx = np.where(np.array(aux))[0][0]
             lithology_array[i] = str(idx + 1)
-            coords[i] = [Fr[i], Qtn[i]]
+            coords[i] = [x[i], y[i]]
 
         return lithology_array, np.array(coords)
 
@@ -227,18 +228,35 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         r"""
         Lithology calculation.
 
-        :param soil_classification: shape file with soil classification
         """
-
-        # call object
-        self.soil_types()
-        lithology, points = self.lithology(
-            np.array(self.data.Qtn), np.array(self.data.Fr)
-        )
-
-        # assign to variables
+        if self.interpretation_method == InterpretationMethod.LENGKEEK_2022:
+            model_name = "Lengkeek2024"
+            self.soil_types(model_name=model_name)
+            x = self.data.friction / self.data.qt * 100  # Rf
+            y = self.data.qt / self.data.Pa
+            # max_x= 20 min_x = 0.1 correct array
+            x[x <= 0.1] = 0.1
+            x[x >= 20.0] = 20.0
+            # max_y = 1000 min_y = 1 correct array
+            y[y <= 1.0] = 1.0
+            y[y >= 1000.0] = 1000.0
+            lithology, points = self.lithology(x=x, y=y)
+        elif self.interpretation_method == InterpretationMethod.ROBERTSON:
+            model_name = "Robertson"
+            # call object
+            self.soil_types(model_name=model_name)
+            lithology, points = self.lithology(
+                y=np.array(self.data.Qtn), x=np.array(self.data.Fr)
+            )
+        else:
+            raise ValueError("Interpretation method not recognized")
+                # assign to variables
         self.data.lithology = lithology
         self.data.litho_points = points
+
+
+
+
 
     def pwp_level_calc(self):
         r"""
@@ -352,7 +370,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             aux = 19.5 - 2.87 * np.log10(9000.0 / np.array(self.data.qt)) / np.log10(
                 20.0 / friction_nbr_safe
             )
-            # if nan: aux is 19.5
             aux[np.isnan(aux)] = 19.5
             # set lower limit
             aux = ceil_value(aux, gamma_min)
@@ -441,17 +458,17 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             self.gamma[:10]
         )
         # Calculate the height of the water column above the CPT
-        H_water = self.data.pwp - self.data.depth_to_reference[0]
+        height_of_water_column = self.data.pwp - self.data.depth_to_reference[0]
         # Check if the water level is above the first depth_to_reference and add the weight of the water column
         if self.data.pwp > self.data.depth_to_reference[0]:
             # Add the weight of the water column to the total stress
-            total_vertical_stress += self.data.g * H_water
+            total_vertical_stress += self.data.g * height_of_water_column
         pwp_stress = []
         for i, measurement_depth in enumerate(self.data.depth):
             if self.data.pwp < self.data.depth_to_reference[i]:
                 pwp_stress.append(0) # don't allow suction
             else:
-                pwp_stress.append((H_water + measurement_depth)* self.data.g)  
+                pwp_stress.append((height_of_water_column + measurement_depth)* self.data.g)  
         # compute total stress
         self.data.total_stress = total_vertical_stress 
         # compute effective stress
