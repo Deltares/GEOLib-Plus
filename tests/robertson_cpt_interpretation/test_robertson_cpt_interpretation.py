@@ -1274,110 +1274,6 @@ class TestInterpreter:
         return instance
 
     @pytest.mark.unittest
-    def test_stress_calc_positive_pwp(self):
-        """
-        Test a scenario where the computed pore water pressure is positive
-        and reduces effective stress.
-        """
-        instance = self._setup_stress_instance(
-            depth=[0, 3, 5, 7, 10], depth_to_reference=-1.0, pwp=2.0, g=9.81, gamma=18.0
-        )
-
-        instance.stress_calc()
-        pwp = np.array([3 * 9.81, 6 * 9.81, 8 * 9.81, 10 * 9.81, 13 * 9.81])
-        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 3 * 9.81
-        expected_effective = expected_total - pwp
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    @pytest.mark.unittest
-    def test_stress_calc_negative_pwp(self):
-        """
-        Test a scenario where the computed pore water pressure is positive
-        and reduces effective stress.
-        """
-        instance = self._setup_stress_instance(
-            depth=[0, 3, 5, 7, 10], depth_to_reference=-2.0, pwp=-1.0, g=9.81, gamma=18.0
-        )
-
-        instance.stress_calc()
-        pwp = np.array([1 * 9.81, 4 * 9.81, 6 * 9.81, 8 * 9.81, 11 * 9.81])
-        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 1 * 9.81
-        expected_effective = expected_total - pwp
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    @pytest.mark.unittest
-    def test_stress_calc_water_level_below_soil(self):
-        """
-        Test a scenario where the computed pore water pressure is positive
-        and reduces effective stress.
-        """
-        instance = self._setup_stress_instance(
-            depth=[0, 3, 5, 7, 10], depth_to_reference=0.0, pwp=-4.0, g=9.81, gamma=18.0
-        )
-
-        instance.stress_calc()
-        pwp = np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
-        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
-        expected_effective = expected_total - pwp
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    @pytest.mark.unittest
-    def test_stress_calc_water_level_below_soil_positive_nap(self):
-        instance = self._setup_stress_instance(
-            depth=[0, 3, 5, 7, 10], depth_to_reference=6.0, pwp=2.0, g=9.81, gamma=18.0
-        )
-
-        instance.stress_calc()
-        pwp = np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81])
-        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
-        expected_effective = expected_total - pwp
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    @pytest.mark.unittest
-    def test_stress_calc_water_level_above_soil_positive_nap(self):
-        instance = self._setup_stress_instance(
-            depth=[0, 3, 5, 7, 10], depth_to_reference=2.0, pwp=6.0, g=9.81, gamma=18.0
-        )
-
-        instance.stress_calc()
-        pwp = np.array([4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81])
-        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0) + 4 * 9.81
-        expected_effective = expected_total - pwp
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    @pytest.mark.unittest
-    def test_stress_calc_water_level_bellow_soil_negative_nap_predrill(self):
-        instance = self._setup_stress_instance(
-            depth=[1, 3, 5, 7, 10], depth_to_reference=-1.0, pwp=-4.0, g=9.81, gamma=18.0
-        )
-
-        instance.stress_calc()
-
-        assert (
-            instance.data.total_stress[0] == 18 + 18
-        )  # unit weight of the point + pre-drilled depth
-
-    @pytest.mark.unittest
     def test_stress_calc_water_level_below_soil_negative_pwp(self):
         """
         Test a scenario where the computed pore water pressure is negative
@@ -1444,3 +1340,85 @@ class TestInterpreter:
 
         expected_n = np.array([1.0, 1.0, 1.0])
         self._verify_norm_calc(instance, expected_n, exponent=1.0)
+
+
+class TestStressCalc:
+
+    def _create_instance(self):
+        """Helper to create an instance with a dummy 'data' attribute."""
+        instance = RobertsonCptInterpretation()
+        # Use a simple dummy object for data
+        instance.data = type("DummyData", (), {})()
+        return instance
+
+    def _setup_stress_instance(self, depth, depth_to_reference, pwp, g, gamma):
+        """
+        Helper to setup an instance for stress_calc tests.
+
+        Parameters:
+            depth (array-like): Depth values.
+            depth_to_reference (array-like or scalar): Depth-to-reference values.
+            pwp (float): Pore water pressure.
+            g (float): Gravitational acceleration.
+            gamma (float): Unit weight (or a value to fill an array).
+        """
+        instance = self._create_instance()
+        instance.data.depth = np.array(depth, dtype=float)
+        if np.isscalar(depth_to_reference):
+            instance.data.depth_to_reference = depth_to_reference - instance.data.depth
+        else:
+            instance.data.depth_to_reference = np.array(depth_to_reference, dtype=float)
+        instance.data.pwp = pwp
+        instance.data.g = g
+        instance.gamma = (
+            np.full(instance.data.depth.shape, gamma)
+            if np.isscalar(gamma)
+            else np.array(gamma, dtype=float)
+        )
+        return instance
+
+    def _run_stress_test(
+        self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total=None
+    ):
+        instance = self._setup_stress_instance(
+            depth=depth, depth_to_reference=depth_to_reference, pwp=pwp_value, g=9.81, gamma=18.0
+        )
+        instance.stress_calc()
+
+        expected_total = np.cumsum(np.diff([0] + depth) * 18.0)
+        if extra_total is not None:
+            expected_total += extra_total
+
+        expected_effective = expected_total - expected_pwp
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(instance.data.effective_stress, expected_effective, rtol=1e-5)
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize(
+        "depth, depth_to_reference, pwp_value, expected_pwp, extra_total",
+        [
+            # water level below soil
+            ([0, 3, 5, 7, 10], 0.0, -4.0, np.array([0, 0, 1*9.81, 3*9.81, 6*9.81]), None),
+            # below soil, positive nap
+            ([0, 3, 5, 7, 10], 6.0, 2.0, np.array([0, 0, 1*9.81, 3*9.81, 6*9.81]), None),
+            # above soil, positive nap
+            ([0, 3, 5, 7, 10], 2.0, 6.0,
+             np.array([4*9.81, 7*9.81, 9*9.81, 11*9.81, 14*9.81]),
+             4*9.81),
+            # below soil, negative pwp
+            ([0, 3, 5, 7, 10], -2.0, -4.0,
+             np.array([0, 1*9.81, 3*9.81, 5*9.81, 8*9.81]),
+             None),
+        ]
+    )
+    def test_stress_cases(self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total):
+        self._run_stress_test(depth, depth_to_reference, pwp_value, expected_pwp, extra_total)
+
+    @pytest.mark.unittest
+    def test_stress_calc_water_level_below_soil_negative_nap_predrill(self):
+        instance = self._setup_stress_instance(
+            depth=[1, 3, 5, 7, 10], depth_to_reference=-1.0, pwp=-4.0, g=9.81, gamma=18.0
+        )
+        instance.stress_calc()
+        assert instance.data.total_stress[0] == 18 + 18  # unit weight + predrilled depth
