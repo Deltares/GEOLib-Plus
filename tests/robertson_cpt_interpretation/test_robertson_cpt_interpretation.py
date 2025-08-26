@@ -9,12 +9,12 @@ import pytest
 from geolib_plus.bro_xml_cpt import BroXmlCpt
 from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.robertson_cpt_interpretation import (
+    InterpretationMethod,
     OCRMethod,
     RelativeDensityMethod,
     RobertsonCptInterpretation,
     ShearWaveVelocityMethod,
     UnitWeightMethod,
-    InterpretationMethod
 )
 from tests.utils import TestUtils
 
@@ -222,22 +222,20 @@ class TestInterpreter:
         assert cpt
         assert cpt.lithology
         assert cpt.lithology_merged
-    
+
     @pytest.mark.unittest
     def test_lithology_lengkeek(self):
         interpreter = RobertsonCptInterpretation()
         interpreter.interpretation_method = InterpretationMethod.LENGKEEK_2022
         model_name = "Lengkeek2024"
         interpreter.soil_types(model_name=model_name)
-        x = [0.3, 4.2, 14.5, 1.5, 3.2, 1, 0.5, 0.2, 3, 10  ]
-        y = [3, 3.3 , 18, 5, 37, 44, 145, 510, 577, 203]
+        x = [0.3, 4.2, 14.5, 1.5, 3.2, 1, 0.5, 0.2, 3, 10]
+        y = [3, 3.3, 18, 5, 37, 44, 145, 510, 577, 203]
         expected_lithology = ["1", "3", "2", "4", "5", "6", "7", "8", "9", "10"]
         lithology, points = interpreter.lithology(x=x, y=y)
 
         assert points
         np.testing.assert_array_equal(expected_lithology, lithology)
-
-
 
     @pytest.mark.systemtest
     def test_rho_calculation(self):
