@@ -195,7 +195,7 @@ class TestInterpreter:
         expected_lithology = ["1", "3", "2", "4", "5", "6", "7", "8", "9", "10"]
         lithology, points = interpreter.lithology(x=x, y=y)
 
-        assert points
+        assert points is not None
         np.testing.assert_array_equal(expected_lithology, lithology)
 
     @pytest.mark.systemtest
@@ -220,14 +220,38 @@ class TestInterpreter:
         assert exact_rho.tolist() == cpt.rho.tolist()
 
     @pytest.mark.systemtest
-    def test_gamma_calc_robertson(self):
+    @pytest.mark.parametrize("method,expected_formula", [
+        (
+            UnitWeightMethod.ROBERTSON,
+            lambda qt, friction_nbr, Pa: (0.27 * np.log10(friction_nbr) + 0.36 * np.log10(qt / Pa) + 1.236) * 9.81
+        ),
+        (
+            UnitWeightMethod.LENGKEEK_2018,
+            lambda qt, friction_nbr, Pa: 19 - 4.12 * (np.log10(5000 / qt) / np.log10(30 / friction_nbr))
+        ),
+        (
+            UnitWeightMethod.LENGKEEK_2022,
+            lambda qt, friction_nbr, Pa: 19.5 - 2.87 * (np.log10(9000 / qt) / np.log10(20 / friction_nbr))
+        ),
+    ])
+    def test_gamma_calc_methods(self, method, expected_formula):
+        """
+        Parametrized test for different unit weight calculation methods.
+        
+        Tests:
+        - Robertson method: gamma = (0.27*log10(Rf) + 0.36*log10(qt/Pa) + 1.236) * g
+        - Lengkeek 2018 method: gamma = 19 - 4.12 * (log10(5000/qt) / log10(30/Rf))
+        - Lengkeek 2022 method: gamma = 19.5 - 2.87 * (log10(9000/qt) / log10(20/Rf))
+        """
         # initialise models
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
         interpreter.data = cpt
+        
         # test initial expectations
         assert cpt
         assert interpreter
+        
         # Set all the values
         gamma_limit = 22
         interpreter.data.friction_nbr = np.ones(10)
@@ -236,72 +260,21 @@ class TestInterpreter:
         interpreter.data.depth_to_reference = range(10)
         interpreter.data.name = "UNIT_TEST"
 
-        # Calculate analytically the solution
-        np.seterr(divide="ignore")
-        # Exact solution Robertson
-        aux = 0.27 * np.log10(np.ones(10)) + 0.36 * (np.log10(np.ones(10) / 100)) + 1.236
-        aux[np.abs(aux) == np.inf] = gamma_limit / 9.81
-        local_gamma1 = aux * 9.81
+        # Calculate expected result using the formula
+        if method == UnitWeightMethod.ROBERTSON:
+            # Handle special case for Robertson method (division by zero handling)
+            np.seterr(divide="ignore")
+            aux = expected_formula(interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa)
+            aux[np.abs(aux) == np.inf] = gamma_limit / 9.81
+            expected_gamma = aux
+        else:
+            expected_gamma = expected_formula(interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa)
 
-        # call the function to be checked
-        interpreter.gamma_calc()
+        # Call the function to be checked
+        interpreter.gamma_calc(gamma_max=gamma_limit, method=method)
 
         # Check if they are equal
-        assert local_gamma1.tolist() == interpreter.gamma.tolist()
-
-    @pytest.mark.systemtest
-    def test_gamma_calc_lengkeek_2018(self):
-        # initialise models
-        cpt = GefCpt()
-        interpreter = RobertsonCptInterpretation()
-        interpreter.data = cpt
-        # test initial expectations
-        assert cpt
-        assert interpreter
-        # Set all the values
-        gamma_limit = 22
-        interpreter.data.friction_nbr = np.ones(10)
-        interpreter.data.qt = np.ones(10)
-        interpreter.data.Pa = 100
-        interpreter.data.depth_to_reference = range(10)
-        interpreter.data.name = "UNIT_TEST"
-
-        # Exact solution Lengkeek
-        local_gamma2 = 19 - 4.12 * (
-            (np.log10(5000 / interpreter.data.qt))
-            / (np.log10(30 / interpreter.data.friction_nbr))
-        )
-        interpreter.gamma_calc(
-            gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2018
-        )
-        assert local_gamma2.tolist() == interpreter.gamma.tolist()
-
-    @pytest.mark.systemtest
-    def test_gamma_calc_lengkeek_2022(self):
-        # initialise models
-        cpt = GefCpt()
-        interpreter = RobertsonCptInterpretation()
-        interpreter.data = cpt
-        # test initial expectations
-        assert cpt
-        assert interpreter
-        # Set all the values
-        gamma_limit = 22
-        interpreter.data.friction_nbr = np.ones(10)
-        interpreter.data.qt = np.ones(10)
-        interpreter.data.Pa = 100
-        interpreter.data.depth_to_reference = range(10)
-        interpreter.data.name = "UNIT_TEST"
-
-        # Exact solution Lengkeek
-        local_gamma2 = 19.5 - 2.87 * (
-            (np.log10(9000 / interpreter.data.qt))
-            / (np.log10(20 / interpreter.data.friction_nbr))
-        )
-        interpreter.gamma_calc(
-            gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK_2022
-        )
-        assert local_gamma2.tolist() == interpreter.gamma.tolist()
+        np.testing.assert_array_almost_equal(interpreter.gamma, expected_gamma, decimal=5)
 
     @pytest.mark.systemtest
     def test_stress_calc(self):
