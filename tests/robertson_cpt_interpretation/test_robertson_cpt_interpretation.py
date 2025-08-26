@@ -133,15 +133,35 @@ class Testintegration:
 
 class TestInterpreter:
     @pytest.mark.systemtest
-    @pytest.mark.parametrize("unitweight_method,interpretation_method,shearwave_method,ocr_method", [
-        (UnitWeightMethod.LENGKEEK_2022, InterpretationMethod.LENGKEEK_2022, ShearWaveVelocityMethod.ZANG, OCRMethod.MAYNE),
-        (UnitWeightMethod.LENGKEEK_2018, None, ShearWaveVelocityMethod.MAYNE, OCRMethod.ROBERTSON),
-        (UnitWeightMethod.LENGKEEK_2018, None, ShearWaveVelocityMethod.AHMED, OCRMethod.MAYNE),
-    ])
-    def test_robertson_cpt_interpretation_methods(self, unitweight_method, interpretation_method, shearwave_method, ocr_method):
+    @pytest.mark.parametrize(
+        "unitweight_method,interpretation_method,shearwave_method,ocr_method",
+        [
+            (
+                UnitWeightMethod.LENGKEEK_2022,
+                InterpretationMethod.LENGKEEK_2022,
+                ShearWaveVelocityMethod.ZANG,
+                OCRMethod.MAYNE,
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2018,
+                None,
+                ShearWaveVelocityMethod.MAYNE,
+                OCRMethod.ROBERTSON,
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2018,
+                None,
+                ShearWaveVelocityMethod.AHMED,
+                OCRMethod.MAYNE,
+            ),
+        ],
+    )
+    def test_robertson_cpt_interpretation_methods(
+        self, unitweight_method, interpretation_method, shearwave_method, ocr_method
+    ):
         """
         Parametrized test for various Robertson CPT interpretation method combinations.
-        
+
         Tests different combinations of:
         - Unit weight calculation methods (Lengkeek 2018/2022)
         - Interpretation methods (Lengkeek 2022 or default)
@@ -153,16 +173,16 @@ class TestInterpreter:
             Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
         )
         assert test_file.is_file()
-        
+
         # initialise models
         cpt = GefCpt()
         assert cpt
-        
+
         # read gef file
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
-        
+
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
         interpreter.unitweightmethod = unitweight_method
@@ -170,15 +190,15 @@ class TestInterpreter:
             interpreter.interpretation_method = interpretation_method
         interpreter.shearwavevelocitymethod = shearwave_method
         interpreter.ocrmethod = ocr_method
-        
+
         # read gef file (again, as in original tests)
         cpt.read(filepath=test_file)
-        # do pre-processing (again, as in original tests)  
+        # do pre-processing (again, as in original tests)
         cpt.pre_process_data()
-        
+
         # interpret the results
         cpt.interpret_cpt(interpreter)
-        
+
         # verify results
         assert cpt
         assert cpt.lithology
@@ -220,24 +240,32 @@ class TestInterpreter:
         assert exact_rho.tolist() == cpt.rho.tolist()
 
     @pytest.mark.systemtest
-    @pytest.mark.parametrize("method,expected_formula", [
-        (
-            UnitWeightMethod.ROBERTSON,
-            lambda qt, friction_nbr, Pa: (0.27 * np.log10(friction_nbr) + 0.36 * np.log10(qt / Pa) + 1.236) * 9.81
-        ),
-        (
-            UnitWeightMethod.LENGKEEK_2018,
-            lambda qt, friction_nbr, Pa: 19 - 4.12 * (np.log10(5000 / qt) / np.log10(30 / friction_nbr))
-        ),
-        (
-            UnitWeightMethod.LENGKEEK_2022,
-            lambda qt, friction_nbr, Pa: 19.5 - 2.87 * (np.log10(9000 / qt) / np.log10(20 / friction_nbr))
-        ),
-    ])
+    @pytest.mark.parametrize(
+        "method,expected_formula",
+        [
+            (
+                UnitWeightMethod.ROBERTSON,
+                lambda qt, friction_nbr, Pa: (
+                    0.27 * np.log10(friction_nbr) + 0.36 * np.log10(qt / Pa) + 1.236
+                )
+                * 9.81,
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2018,
+                lambda qt, friction_nbr, Pa: 19
+                - 4.12 * (np.log10(5000 / qt) / np.log10(30 / friction_nbr)),
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2022,
+                lambda qt, friction_nbr, Pa: 19.5
+                - 2.87 * (np.log10(9000 / qt) / np.log10(20 / friction_nbr)),
+            ),
+        ],
+    )
     def test_gamma_calc_methods(self, method, expected_formula):
         """
         Parametrized test for different unit weight calculation methods.
-        
+
         Tests:
         - Robertson method: gamma = (0.27*log10(Rf) + 0.36*log10(qt/Pa) + 1.236) * g
         - Lengkeek 2018 method: gamma = 19 - 4.12 * (log10(5000/qt) / log10(30/Rf))
@@ -247,11 +275,11 @@ class TestInterpreter:
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
         interpreter.data = cpt
-        
+
         # test initial expectations
         assert cpt
         assert interpreter
-        
+
         # Set all the values
         gamma_limit = 22
         interpreter.data.friction_nbr = np.ones(10)
@@ -264,11 +292,15 @@ class TestInterpreter:
         if method == UnitWeightMethod.ROBERTSON:
             # Handle special case for Robertson method (division by zero handling)
             np.seterr(divide="ignore")
-            aux = expected_formula(interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa)
+            aux = expected_formula(
+                interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa
+            )
             aux[np.abs(aux) == np.inf] = gamma_limit / 9.81
             expected_gamma = aux
         else:
-            expected_gamma = expected_formula(interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa)
+            expected_gamma = expected_formula(
+                interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa
+            )
 
         # Call the function to be checked
         interpreter.gamma_calc(gamma_max=gamma_limit, method=method)
