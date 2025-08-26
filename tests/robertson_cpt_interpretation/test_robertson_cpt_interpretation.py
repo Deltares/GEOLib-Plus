@@ -224,7 +224,7 @@ class TestInterpreter:
         assert cpt.lithology_merged
     
     @pytest.mark.unittest
-    def test_lithology_Lengkeek(self):
+    def test_lithology_lengkeek(self):
         interpreter = RobertsonCptInterpretation()
         interpreter.interpretation_method = InterpretationMethod.LENGKEEK_2022
         model_name = "Lengkeek2024"
@@ -234,6 +234,7 @@ class TestInterpreter:
         expected_lithology = ["1", "3", "2", "4", "5", "6", "7", "8", "9", "10"]
         lithology, points = interpreter.lithology(x=x, y=y)
 
+        assert points
         np.testing.assert_array_equal(expected_lithology, lithology)
 
 
