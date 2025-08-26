@@ -24,6 +24,7 @@ class InterpretationMethod(IntEnum):
     ROBERTSON = 1
     LENGKEEK_2022 = 2
 
+
 class UnitWeightMethod(IntEnum):
     ROBERTSON = 1
     LENGKEEK_2018 = 2
@@ -250,13 +251,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             )
         else:
             raise ValueError("Interpretation method not recognized")
-                # assign to variables
+            # assign to variables
         self.data.lithology = lithology
         self.data.litho_points = points
-
-
-
-
 
     def pwp_level_calc(self):
         r"""
@@ -468,7 +465,9 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             if self.data.pwp < self.data.depth_to_reference[i]:
                 pwp_stress.append(0)  # don't allow suction
             else:
-                pwp_stress.append((height_of_water_column + measurement_depth)* self.data.g)  
+                pwp_stress.append(
+                    (height_of_water_column + measurement_depth) * self.data.g
+                )
         # compute total stress
         self.data.total_stress = total_vertical_stress
         # compute effective stress
