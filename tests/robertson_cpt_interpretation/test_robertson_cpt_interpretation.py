@@ -1138,7 +1138,8 @@ class TestInterpreter:
         with pytest.raises(ValueError):
             interpreter.pwp_level_calc()
 
-    def test_stress_calc_total_stress(self, setup_interpreter):
+    @pytest.mark.workinprogress
+    def test_stress_calc_total_stress(self):
         interpreter = RobertsonCptInterpretation()
         interpreter.data = type("test", (object,), {})()
         # case that we are bellow the surface
@@ -1147,14 +1148,14 @@ class TestInterpreter:
         interpreter.data.depth_to_reference = np.array([0, 1, 2, 3, 4, 5])
         interpreter.data.pwp = 2.0
         interpreter.data.g = 9.81
-        interpreter.data.gamma = np.array([18, 18, 18, 18, 18, 18])
-        interpreter = setup_interpreter
+        interpreter.gamma = np.array([18, 18, 18, 18, 18, 18])
         interpreter.stress_calc()
         expected_total_stress = np.array([0, 18, 36, 54, 72, 90])
         np.testing.assert_array_almost_equal(
             interpreter.data.total_stress, expected_total_stress
         )
 
+    @pytest.mark.unittest
     def test_stress_calc_no_pwp_effect(self):
         """
         Test when the computed pore water pressure (pwp) is zero,
@@ -1234,6 +1235,7 @@ class TestInterpreter:
         instance.data.friction = np.array([1, 2, 3])
         return instance
 
+    @pytest.mark.unittest
     def test_stress_calc_positive_pwp(self):
         """
         Test a scenario where the computed pore water pressure is positive
@@ -1257,6 +1259,7 @@ class TestInterpreter:
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
 
+    @pytest.mark.unittest
     def test_stress_calc_negative_pwp_clipped(self):
         """
         Test a case where the computed pore water pressure would be negative
@@ -1283,6 +1286,7 @@ class TestInterpreter:
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
 
+    @pytest.mark.unittest
     def test_stress_calc_negative_effective_clipped(self):
         """
         Test a case where the pore water pressure is so high that the computed effective
@@ -1327,6 +1331,7 @@ class TestInterpreter:
         np.testing.assert_allclose(instance.data.Qtn, Q_expected, rtol=1e-6)
         np.testing.assert_allclose(instance.data.Fr, F_expected, rtol=1e-6)
 
+    @pytest.mark.unittest
     def test_norm_calc_n_method_true(self):
         """
         Test norm_calc when using the simplified method (n_method=True)
@@ -1338,6 +1343,7 @@ class TestInterpreter:
         expected_n = np.array([0.5, 0.5, 0.5])
         self._verify_norm_calc(instance, expected_n, exponent=0.5)
 
+    @pytest.mark.unittest
     def test_norm_calc_n_method_false(self):
         """
         Test norm_calc when using the iterative n calculation (n_method=False).

@@ -1,3 +1,5 @@
+from typing import Dict, Optional
+
 import numpy
 from numpy import array, unique
 from pandas import DataFrame
@@ -9,7 +11,7 @@ from .gef_file_reader import GefFileReader
 
 class GefCpt(AbstractCPT):
 
-    error_codes = {}
+    error_codes: Dict = {}
 
     @classmethod
     def get_cpt_reader(cls) -> CptReader:

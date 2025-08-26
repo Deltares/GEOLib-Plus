@@ -3,7 +3,7 @@ from enum import IntEnum
 from typing import Optional, Union
 
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class RelativeDensityCorrelatedParameters(BaseModel):
@@ -49,8 +49,7 @@ class RelativeDensityCorrelatedParameters(BaseModel):
     phi: Union[np.ndarray, float]
     psi: Union[np.ndarray, float]
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @classmethod
     def calculate_using_RD(cls, RD_percentage: Union[np.ndarray, float]):

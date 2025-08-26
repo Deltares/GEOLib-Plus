@@ -2,7 +2,7 @@ from enum import IntEnum
 from typing import Optional, Union
 
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class SoftSoilCreepParameters(BaseModel):
@@ -60,8 +60,7 @@ class SoftSoilCreepParameters(BaseModel):
     K0_NC: Optional[Union[np.ndarray, float]] = None
     Ca: Optional[Union[np.ndarray, float]] = None
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def check_if_available(self, attribute_name: str):
         if getattr(self, attribute_name) is None:

@@ -3,7 +3,7 @@ from enum import IntEnum
 from typing import Optional, Union
 
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class HardingSoilCalculationType(IntEnum):
@@ -65,8 +65,7 @@ class HardeningSoilModelParameters(BaseModel):
     K0_NC: Optional[Union[np.ndarray, float]] = None
     R_f: Optional[Union[np.ndarray, float]] = None
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def check_if_available(self, attribute_name: str, calculation_type: str):
         if getattr(self, attribute_name) is None:

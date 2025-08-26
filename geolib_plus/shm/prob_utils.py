@@ -1,7 +1,7 @@
 # import packages
 
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from scipy.stats import norm, t
 
 
@@ -11,8 +11,7 @@ class ProbUtils(BaseModel):
     :cite:`meer_2019`.
     """
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     @staticmethod
     def calculate_student_t_factor(ndof: int, quantile: float) -> float:

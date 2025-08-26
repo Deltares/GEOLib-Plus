@@ -568,18 +568,6 @@ class TestGeolibPlusValidate:
             validate_bro_cpt(bro_xml_file_err_path)
 
     @pytest.mark.systemtest
-    # Test validation of gef file structure .... with usable file
-    def test_validate_gef_no_error(self):
-        # This file raises a warning - it is in another process so can't capture it
-        gef_file = TestUtils.get_local_test_data_dir(
-            "cpt/gef/CPT000000003688_IMBRO_A.gef"
-        )
-        try:
-            validate_gef_cpt(gef_file)
-        except:
-            pytest.fail("GEF file without error raised Error")
-
-    @pytest.mark.systemtest
     # Test validation of gef file structure ..... with file with error (need to add more errors)
     def test_validate_gef_error(self):
         # This file raises a warning

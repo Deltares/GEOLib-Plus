@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Iterable, List, Optional, Type
 
 import numpy as np
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from .plot_cpt import plot_cpt_norm
 from .plot_settings import PlotSettings
@@ -25,83 +25,83 @@ class AbstractCPT(BaseModel):
     """Base CPT class, should define abstract."""
 
     #  variables
-    penetration_length: Optional[Iterable]
-    depth: Optional[Iterable]
-    coordinates: Optional[List]
-    local_reference_level: Optional[float]
-    depth_to_reference: Optional[Iterable]
-    tip: Optional[Iterable]
-    friction: Optional[Iterable]
-    friction_nbr: Optional[Iterable]
-    a: Optional[float]
-    name: Optional[str]
-    rho: Optional[Iterable]
-    total_stress: Optional[Iterable]
-    effective_stress: Optional[Iterable]
-    pwp: Optional[Iterable]
-    qt: Optional[Iterable]
-    Qtn: Optional[Iterable]
-    Qtncs: Optional[Iterable]
-    Fr: Optional[Iterable]
-    IC: Optional[Iterable]
-    n: Optional[Iterable]
-    vs: Optional[Iterable]
-    G0: Optional[Iterable]
-    E0: Optional[Iterable]
-    permeability: Optional[Iterable]
-    poisson: Optional[Iterable]
-    damping: Optional[Iterable]
-    relative_density: Optional[Iterable]
-    psi: Optional[Iterable]
+    penetration_length: Optional[Iterable] = None
+    depth: Optional[Iterable] = None
+    coordinates: Optional[List] = None
+    local_reference_level: Optional[float] = None
+    depth_to_reference: Optional[Iterable] = None
+    tip: Optional[Iterable] = None
+    friction: Optional[Iterable] = None
+    friction_nbr: Optional[Iterable] = None
+    a: Optional[float] = None
+    name: Optional[str] = None
+    rho: Optional[Iterable] = None
+    total_stress: Optional[Iterable] = None
+    effective_stress: Optional[Iterable] = None
+    pwp: Optional[Iterable] = None
+    qt: Optional[Iterable] = None
+    Qtn: Optional[Iterable] = None
+    Qtncs: Optional[Iterable] = None
+    Fr: Optional[Iterable] = None
+    IC: Optional[Iterable] = None
+    n: Optional[Iterable] = None
+    vs: Optional[Iterable] = None
+    G0: Optional[Iterable] = None
+    E0: Optional[Iterable] = None
+    permeability: Optional[Iterable] = None
+    poisson: Optional[Iterable] = None
+    damping: Optional[Iterable] = None
+    relative_density: Optional[Iterable] = None
+    psi: Optional[Iterable] = None
 
-    pore_pressure_u1: Optional[Iterable]
-    pore_pressure_u2: Optional[Iterable]
-    pore_pressure_u3: Optional[Iterable]
+    pore_pressure_u1: Optional[Iterable] = None
+    pore_pressure_u2: Optional[Iterable] = None
+    pore_pressure_u3: Optional[Iterable] = None
 
-    water: Optional[Iterable]
-    lithology: Optional[Iterable]
-    litho_points: Optional[Iterable]
+    water: Optional[Iterable] = None
+    lithology: Optional[Iterable] = None
+    litho_points: Optional[Iterable] = None
 
-    lithology_merged: Optional[Iterable]
-    depth_merged: Optional[Iterable]
-    index_merged: Optional[Iterable]
-    vertical_datum: Optional[str]
-    local_reference: Optional[str]
-    inclination_x: Optional[Iterable]
-    inclination_y: Optional[Iterable]
-    inclination_ns: Optional[Iterable]
-    inclination_ew: Optional[Iterable]
-    inclination_resultant: Optional[Iterable]
-    time: Optional[Iterable]
-    net_tip: Optional[Iterable]
-    pore_ratio: Optional[Iterable]
-    tip_nbr: Optional[Iterable]
-    unit_weight_measured: Optional[Iterable]
-    pwp_ini: Optional[Iterable]
-    total_pressure_measured: Optional[Iterable]
-    effective_pressure_measured: Optional[Iterable]
-    electric_cond: Optional[Iterable]
-    magnetic_strength_x: Optional[Iterable]
-    magnetic_strength_y: Optional[Iterable]
-    magnetic_strength_z: Optional[Iterable]
-    magnetic_strength_tot: Optional[Iterable]
-    magnetic_inclination: Optional[Iterable]
-    magnetic_declination: Optional[Iterable]
-    temperature: Optional[Iterable]
-    predrilled_z: Optional[float]
-    undefined_depth: Optional[float]
+    lithology_merged: Optional[Iterable] = None
+    depth_merged: Optional[Iterable] = None
+    index_merged: Optional[Iterable] = None
+    vertical_datum: Optional[str] = None
+    local_reference: Optional[str] = None
+    inclination_x: Optional[Iterable] = None
+    inclination_y: Optional[Iterable] = None
+    inclination_ns: Optional[Iterable] = None
+    inclination_ew: Optional[Iterable] = None
+    inclination_resultant: Optional[Iterable] = None
+    time: Optional[Iterable] = None
+    net_tip: Optional[Iterable] = None
+    pore_ratio: Optional[Iterable] = None
+    tip_nbr: Optional[Iterable] = None
+    unit_weight_measured: Optional[Iterable] = None
+    pwp_ini: Optional[Iterable] = None
+    total_pressure_measured: Optional[Iterable] = None
+    effective_pressure_measured: Optional[Iterable] = None
+    electric_cond: Optional[Iterable] = None
+    magnetic_strength_x: Optional[Iterable] = None
+    magnetic_strength_y: Optional[Iterable] = None
+    magnetic_strength_z: Optional[Iterable] = None
+    magnetic_strength_tot: Optional[Iterable] = None
+    magnetic_inclination: Optional[Iterable] = None
+    magnetic_declination: Optional[Iterable] = None
+    temperature: Optional[Iterable] = None
+    predrilled_z: Optional[float] = None
+    undefined_depth: Optional[float] = None
 
-    cpt_standard: Optional[str]
-    quality_class: Optional[str]
-    cpt_type: Optional[str]
-    result_time: Optional[str]
-    water_measurement_type: Optional[str]
+    cpt_standard: Optional[str] = None
+    quality_class: Optional[str] = None
+    cpt_type: Optional[str] = None
+    result_time: Optional[str] = None
+    water_measurement_type: Optional[str] = None
 
     # NEN results
-    litho_NEN: Optional[Iterable]
-    E_NEN: Optional[Iterable]
-    cohesion_NEN: Optional[Iterable]
-    fr_angle_NEN: Optional[Iterable]
+    litho_NEN: Optional[Iterable] = None
+    E_NEN: Optional[Iterable] = None
+    cohesion_NEN: Optional[Iterable] = None
+    fr_angle_NEN: Optional[Iterable] = None
 
     # plot settings
     plot_settings: PlotSettings = PlotSettings()
@@ -248,8 +248,7 @@ class AbstractCPT(BaseModel):
     def get_cpt_reader(cls) -> CptReader:
         raise NotImplementedError("Should be implemented in concrete class.")
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     def interpret_cpt(self, method: AbstractInterpretationMethod):
         method.interpret(self)
