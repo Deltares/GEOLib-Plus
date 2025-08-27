@@ -1341,41 +1341,6 @@ class TestInterpreter:
         expected_n = np.array([1.0, 1.0, 1.0])
         self._verify_norm_calc(instance, expected_n, exponent=1.0)
 
-
-class TestStressCalc:
-    def _create_instance(self):
-        """Helper to create an instance with a dummy 'data' attribute."""
-        instance = RobertsonCptInterpretation()
-        # Use a simple dummy object for data
-        instance.data = type("DummyData", (), {})()
-        return instance
-
-    def _setup_stress_instance(self, depth, depth_to_reference, pwp, g, gamma):
-        """
-        Helper to setup an instance for stress_calc tests.
-
-        Parameters:
-            depth (array-like): Depth values.
-            depth_to_reference (array-like or scalar): Depth-to-reference values.
-            pwp (float): Pore water pressure.
-            g (float): Gravitational acceleration.
-            gamma (float): Unit weight (or a value to fill an array).
-        """
-        instance = self._create_instance()
-        instance.data.depth = np.array(depth, dtype=float)
-        if np.isscalar(depth_to_reference):
-            instance.data.depth_to_reference = depth_to_reference - instance.data.depth
-        else:
-            instance.data.depth_to_reference = np.array(depth_to_reference, dtype=float)
-        instance.data.pwp = pwp
-        instance.data.g = g
-        instance.gamma = (
-            np.full(instance.data.depth.shape, gamma)
-            if np.isscalar(gamma)
-            else np.array(gamma, dtype=float)
-        )
-        return instance
-
     def _run_stress_test(
         self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total=None
     ):
