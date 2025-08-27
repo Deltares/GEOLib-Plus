@@ -202,7 +202,7 @@ class TestLayers:
                 cpt_gef
             )
         )
-        assert len(soil_layers) == 35
+        assert len(soil_layers) == 36
 
 
 class TestGefCptGeolibPlusToGeolib:

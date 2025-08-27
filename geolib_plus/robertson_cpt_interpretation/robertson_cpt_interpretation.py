@@ -20,9 +20,15 @@ from geolib_plus.cpt_utils import (
 )
 
 
+class InterpretationMethod(IntEnum):
+    ROBERTSON = 1
+    LENGKEEK_2022 = 2
+
+
 class UnitWeightMethod(IntEnum):
     ROBERTSON = 1
-    LENGKEEK = 2
+    LENGKEEK_2018 = 2
+    LENGKEEK_2022 = 3
 
 
 class OCRMethod(IntEnum):
@@ -36,6 +42,7 @@ class ShearWaveVelocityMethod(IntEnum):
     ANDRUS = 3
     ZANG = 4
     AHMED = 5
+    KRUIVER = 6
 
 
 class RelativeDensityMethod(IntEnum):
@@ -61,6 +68,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     ocrmethod: OCRMethod = OCRMethod.ROBERTSON
     shearwavevelocitymethod: ShearWaveVelocityMethod = ShearWaveVelocityMethod.ROBERTSON
     relativedensitymethod: RelativeDensityMethod = RelativeDensityMethod.BALDI
+    interpretation_method: InterpretationMethod = InterpretationMethod.ROBERTSON
     data: AbstractCPT = None
     gamma: Iterable = []
     polygons: Iterable = []
@@ -85,14 +93,16 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         MPa_to_kPa = 1000
         self.data.tip = self.data.tip * MPa_to_kPa
         self.data.friction = self.data.friction * MPa_to_kPa
+        # Fix of the water that Bram found, this directly affects the self.qt_calc() of line 94
+        self.data.water = self.data.water * MPa_to_kPa
 
         min_layer_thickness = 0.01
         # compute qc
         self.qt_calc()
 
         # compute unit weight
-        # method = 'Robertson' (Default) or 'Lengkeek'
-        # gamma_min = 10.5, gamma_max = 22 Defaults
+        # method = 'Robertson' (Default) or 'Lengkeek_2018' or 'Lengkeek2022'
+        # gamma_min = 10.1, gamma_max = 22 Defaults
         self.gamma_calc(method=self.unitweightmethod)
 
         # compute density
@@ -117,7 +127,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         self.NEN_calc()
 
         # compute shear wave velocity and shear modulus
-        # method == "Robertson" (Default|"Mayne"|"Andrus"|"Zang"|"Ahmed")
+        # method == "Robertson" (Default|"Mayne"|"Andrus"|"Zang"|"Ahmed"|"Kruiver")
         self.vs_calc(method=self.shearwavevelocitymethod)
 
         # compute damping
@@ -188,21 +198,17 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             list_of_polygons.append(Polygon(polygon.points))
         self.polygons = list_of_polygons
 
-    def lithology(self, Qtn: Iterable, Fr: Iterable):
+    def lithology(self, y: Iterable, x: Iterable):
         r"""
-        Identifies lithology of CPT points, following Robertson and Cabal :cite:`robertson_cabal_2014`.
-
-        Parameters
-        ----------
-        :return: lithology array, Qtn, Fr
+        Samples the points from the shapefile and assigns lithology.
         """
 
-        lithology_array = [""] * len(Qtn)
-        coords = np.zeros((len(Qtn), 2))
+        lithology_array = [""] * len(y)
+        coords = np.zeros((len(y), 2))
 
         # determine into which soil type the point is
-        for i in range(len(Qtn)):
-            pnt = Point(Fr[i], Qtn[i])
+        for i in range(len(y)):
+            pnt = Point(x[i], y[i])
             aux = []
             for polygon in self.polygons:
                 aux.append(polygon.contains(pnt))
@@ -215,7 +221,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
             idx = np.where(np.array(aux))[0][0]
             lithology_array[i] = str(idx + 1)
-            coords[i] = [Fr[i], Qtn[i]]
+            coords[i] = [x[i], y[i]]
 
         return lithology_array, np.array(coords)
 
@@ -223,16 +229,29 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         r"""
         Lithology calculation.
 
-        :param soil_classification: shape file with soil classification
         """
-
-        # call object
-        self.soil_types()
-        lithology, points = self.lithology(
-            np.array(self.data.Qtn), np.array(self.data.Fr)
-        )
-
-        # assign to variables
+        if self.interpretation_method == InterpretationMethod.LENGKEEK_2022:
+            model_name = "Lengkeek2024"
+            self.soil_types(model_name=model_name)
+            x = self.data.friction / self.data.qt * 100  # Rf
+            y = self.data.qt / self.data.Pa
+            # max_x= 20 min_x = 0.1 correct array
+            x[x <= 0.1] = 0.1
+            x[x >= 20.0] = 20.0
+            # max_y = 1000 min_y = 1 correct array
+            y[y <= 1.0] = 1.0
+            y[y >= 1000.0] = 1000.0
+            lithology, points = self.lithology(x=x, y=y)
+        elif self.interpretation_method == InterpretationMethod.ROBERTSON:
+            model_name = "Robertson"
+            # call object
+            self.soil_types(model_name=model_name)
+            lithology, points = self.lithology(
+                y=np.array(self.data.Qtn), x=np.array(self.data.Fr)
+            )
+        else:
+            raise ValueError("Interpretation method not recognized")
+            # assign to variables
         self.data.lithology = lithology
         self.data.litho_points = points
 
@@ -275,7 +294,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
     def gamma_calc(
         self,
         method: UnitWeightMethod = UnitWeightMethod.ROBERTSON,
-        gamma_min: float = 10.5,
+        gamma_min: float = 10.1,  # Changed this value to 10.1 based on Peat values reported in Lengkeek 2022
         gamma_max: float = 22,
     ):
         r"""
@@ -295,6 +314,14 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
             \gamma = \gamma_{sat,ref} - \beta
             \left( \frac{\log \left( \frac{q_{t,ref}}{q_{t}} \right)}{\log \left(\frac{R_{f,ref}}{R_{f}}\right)} \right)
+
+        Alternative method of Lengkeek et al. :cite:`lengkeek_2022`:
+
+        .. math::
+
+            \gamma = \gamma_{sat,ref} - \beta
+            \left( \frac{\log \left( \frac{q_{t,ref}}{q_{t}} \right)}{\log \left(\frac{R_{f,ref}}{R_{f}}\right)} \right)
+            with \gamma_{sat,ref} = 19.5, \beta = 2.87, q_{t,ref} = 9000, R_{f,ref} = 20
 
         Parameters
         ----------
@@ -320,12 +347,27 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             # assign gamma
             self.gamma = aux * self.data.g
 
-        elif method == UnitWeightMethod.LENGKEEK:
+        elif method == UnitWeightMethod.LENGKEEK_2018:
             aux = 19.0 - 4.12 * np.log10(5000.0 / np.array(self.data.qt)) / np.log10(
                 30.0 / self.data.friction_nbr
             )
             # if nan: aux is 19
             aux[np.isnan(aux)] = 19.0
+            # set lower limit
+            aux = ceil_value(aux, gamma_min)
+            # set higher limit
+            aux[np.abs(aux) >= gamma_max] = gamma_max
+            # assign gamma
+            self.gamma = aux
+
+        elif method == UnitWeightMethod.LENGKEEK_2022:
+            # Clip friction_nbr to avoid division by zero or log10(0)
+            friction_nbr_safe = np.clip(self.data.friction_nbr, 1e-3, 1e3)
+
+            aux = 19.5 - 2.87 * np.log10(9000.0 / np.array(self.data.qt)) / np.log10(
+                20.0 / friction_nbr_safe
+            )
+            aux[np.isnan(aux)] = 19.5
             # set lower limit
             aux = ceil_value(aux, gamma_min)
             # set higher limit
@@ -371,26 +413,65 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
 
     def stress_calc(self):
         r"""
-        Computes total and effective stress
+        Computes total and effective stress profiles for CPT interpretation.
+
+        This method calculates the vertical stress distribution with depth based on
+        soil unit weights derived from CPT data and pore water pressure conditions.
+
+        **Assumptions:**
+        1. Unit weights (gamma) represent bulk/saturated unit weights (soil + water)
+        2. One-dimensional vertical stress distribution (lateral effects ignored)
+        3. Hydrostatic pore water pressure distribution below water table
+        4. No negative pore water pressures (suction) allowed
+        5. Water table level is constant and defined by self.data.pwp
+        6. Effective stress cannot be negative (set to zero if calculated as negative)
+        7. Initial stress at surface accounts for any pre-existing loading
+
+        **Calculation Method:**
+        - Total stress: :math:`\sigma_v = Σ(\gamma * Δz)` + water column weight (if above water table)
+        - Pore pressure: :math:`u = \gamma_w * (depth below water table)` for saturated conditions
+        - Effective stress: :math:`\sigma'_v = \sigma_v - u` (with minimum value of 0)
+
+        **Variables:**
+        - self.data.depth: Measurement depths [m]
+        - self.data.depth_to_reference: Depths relative to reference level [m]
+        - self.data.pwp: Water table level relative to reference [m]
+        - self.gamma: Bulk unit weight profile [kN/m³]
+        - self.data.g: Gravitational acceleration [m/s²]
+
+        **Returns:**
+        Updates the following CPT data attributes:
+        - total_stress: Total vertical stress [kPa]
+        - effective_stress: Effective vertical stress [kPa]
         """
 
         # compute depth diff
         z = np.diff(np.abs((self.data.depth - self.data.depth[0])))
-        z = np.append(z, z[-1])
-        # total stress
-        self.data.total_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(
+        # Insert the initial depth so that the depth array size is consistent
+        z = np.insert(z, 0, self.data.depth[0])
+        # total stress the unit weight is a bulk (solid + water pressure)
+        # unit weight so we don't need to add the pwp
+        total_vertical_stress = np.cumsum(self.gamma * z) + self.data.depth[0] * np.mean(
             self.gamma[:10]
         )
-        # compute pwp
-        # determine location of phreatic line: it cannot be above the CPT depth
-        z_aux = np.min(
-            [self.data.pwp, abs(self.data.depth_to_reference[0]) + self.data.depth[0]]
-        )
-        pwp = (z_aux - self.data.depth_to_reference) * self.data.g
-        # no suction is allowed
-        pwp[pwp <= 0] = 0
+        # Calculate the height of the water column above the CPT
+        height_of_water_column = self.data.pwp - self.data.depth_to_reference[0]
+        # Check if the water level is above the first depth_to_reference and add the weight of the water column
+        if self.data.pwp > self.data.depth_to_reference[0]:
+            # Add the weight of the water column to the total stress
+            total_vertical_stress += self.data.g * height_of_water_column
+        pwp_stress = []
+        for i, measurement_depth in enumerate(self.data.depth):
+            if self.data.pwp < self.data.depth_to_reference[i]:
+                pwp_stress.append(0)  # don't allow suction
+            else:
+                pwp_stress.append(
+                    (height_of_water_column + measurement_depth) * self.data.g
+                )
+        # compute total stress
+        self.data.total_stress = total_vertical_stress
         # compute effective stress
-        self.data.effective_stress = self.data.total_stress - pwp
+        self.data.effective_stress = self.data.total_stress - pwp_stress
         # if effective stress is negative -> effective stress = 0
         self.data.effective_stress[self.data.effective_stress <= 0] = 0
 
@@ -429,7 +510,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                     break
                 n1 = n_iter(
                     n,
-                    self.data.tip,
+                    self.data.qt,  # this should be qt
                     self.data.friction_nbr,
                     self.data.effective_stress,
                     self.data.total_stress,
@@ -451,7 +532,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         Q[Q <= 1.0] = 1.0
         F[F <= 0.1] = 0.1
         Q[Q >= 1000.0] = 1000.0
-        F[F >= 10.0] = 10.0
+        # The new Lengkeek 2022 suggests values up to 20 in RF
+        if self.unitweightmethod == UnitWeightMethod.LENGKEEK_2022:
+            F[F >= 20.0] = 20.0
+        else:
+            F[F >= 10.0] = 10.0
         self.data.Qtn = Q
         self.data.Fr = F
         self.data.n = n
@@ -516,6 +601,11 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         .. math::
 
             v_{s} = 1000 \cdot e^{-0.887 \cdot I_{c}} \cdot \left( \left(1 + 0.443 \cdot F_{r} \right) \cdot \left(\frac{\sigma'_{v}}{p_{a}} \right) \cdot \left(\frac{\gamma_{w}}{\gamma} \right) \right)^{0.5}
+
+        * Kruiver :cite:`kruiver_2020`:
+        .. math::
+
+            v_{s} = 359 \cdot \left( q_{t} - \sigma_{v0} \right)^{0.119} \cdot \left( F_{r} \right)^{0.100} \cdot \left( \sigma'_{v} \right)^{0.204}
         """
         if method == ShearWaveVelocityMethod.ROBERTSON:
             # vs: following Robertson and Cabal (2015)
@@ -524,11 +614,13 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             vs = ceil_value(vs, 0)
             self.data.vs = vs**0.5
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.MAYNE:
             # vs: following Mayne (2006)
             vs = 118.8 * np.log10(self.data.friction) + 18.5
             self.data.vs = ceil_value(vs, 0)
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.ANDRUS:
             # vs: following Andrus (2007)
             vs = (
@@ -539,8 +631,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 * 1
             )
             self.data.vs = ceil_value(vs, 0)
-
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.ZANG:
             # vs: following Zang & Tong (2017)
             vs = (
@@ -551,8 +643,8 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 * 0.92
             )
             self.data.vs = ceil_value(vs, 0)
-
             self.data.G0 = self.data.rho * self.data.vs**2
+
         elif method == ShearWaveVelocityMethod.AHMED:
             vs = (
                 1000.0
@@ -567,6 +659,17 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                     / self.gamma
                 )
                 ** 0.5
+            )
+            self.data.vs = ceil_value(vs, 0)
+            self.data.G0 = self.data.rho * self.data.vs**2
+
+        elif method == ShearWaveVelocityMethod.KRUIVER:
+            # This formulation works in MPa instead of kPa
+            vs = (
+                359.0
+                * (self.data.tip / 1000) ** 0.119
+                * (self.data.friction / 1000) ** 0.100
+                * (self.data.effective_stress / 1000) ** 0.204
             )
             self.data.vs = ceil_value(vs, 0)
             self.data.G0 = self.data.rho * self.data.vs**2

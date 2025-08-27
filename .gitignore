@@ -58,3 +58,4 @@ test-reports
 __pycache__
 tests/test_output/
 .hypothesis
+venv/

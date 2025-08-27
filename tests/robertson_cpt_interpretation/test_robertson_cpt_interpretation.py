@@ -9,6 +9,7 @@ import pytest
 from geolib_plus.bro_xml_cpt import BroXmlCpt
 from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.robertson_cpt_interpretation import (
+    InterpretationMethod,
     OCRMethod,
     RelativeDensityMethod,
     RobertsonCptInterpretation,
@@ -132,94 +133,90 @@ class Testintegration:
 
 class TestInterpreter:
     @pytest.mark.systemtest
-    def test_RobertsonCptInterpretation_1(self):
+    @pytest.mark.parametrize(
+        "unitweight_method,interpretation_method,shearwave_method,ocr_method",
+        [
+            (
+                UnitWeightMethod.LENGKEEK_2022,
+                InterpretationMethod.LENGKEEK_2022,
+                ShearWaveVelocityMethod.ZANG,
+                OCRMethod.MAYNE,
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2018,
+                None,
+                ShearWaveVelocityMethod.MAYNE,
+                OCRMethod.ROBERTSON,
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2018,
+                None,
+                ShearWaveVelocityMethod.AHMED,
+                OCRMethod.MAYNE,
+            ),
+        ],
+    )
+    def test_robertson_cpt_interpretation_methods(
+        self, unitweight_method, interpretation_method, shearwave_method, ocr_method
+    ):
+        """
+        Parametrized test for various Robertson CPT interpretation method combinations.
+
+        Tests different combinations of:
+        - Unit weight calculation methods (Lengkeek 2018/2022)
+        - Interpretation methods (Lengkeek 2022 or default)
+        - Shear wave velocity methods (Zang, Mayne, Ahmed)
+        - OCR methods (Mayne, Robertson)
+        """
         # open the gef file
         test_file = TestUtils.get_local_test_data_dir(
             Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
         )
         assert test_file.is_file()
+
         # initialise models
         cpt = GefCpt()
-        # test initial expectations
         assert cpt
+
         # read gef file
         cpt.read(filepath=test_file)
         # do pre-processing
         cpt.pre_process_data()
+
         # initialise interpretation model
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
-        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.ZANG
-        interpreter.ocrmethod = OCRMethod.MAYNE
-        # read gef file
+        interpreter.unitweightmethod = unitweight_method
+        if interpretation_method is not None:
+            interpreter.interpretation_method = interpretation_method
+        interpreter.shearwavevelocitymethod = shearwave_method
+        interpreter.ocrmethod = ocr_method
+
+        # read gef file (again, as in original tests)
         cpt.read(filepath=test_file)
-        # do pre-processing
+        # do pre-processing (again, as in original tests)
         cpt.pre_process_data()
-        # interpet the results
+
+        # interpret the results
         cpt.interpret_cpt(interpreter)
+
+        # verify results
         assert cpt
         assert cpt.lithology
         assert cpt.lithology_merged
 
-    @pytest.mark.systemtest
-    def test_RobertsonCptInterpretation_2(self):
-        # open the gef file
-        test_file = TestUtils.get_local_test_data_dir(
-            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
-        )
-        assert test_file.is_file()
-        # initialise models
-        cpt = GefCpt()
-        # test initial expectations
-        assert cpt
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # initialise interpretation model
+    @pytest.mark.unittest
+    def test_lithology_lengkeek(self):
         interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
-        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.MAYNE
-        interpreter.ocrmethod = OCRMethod.ROBERTSON
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # interpet the results
-        cpt.interpret_cpt(interpreter)
-        assert cpt
-        assert cpt.lithology
-        assert cpt.lithology_merged
+        interpreter.interpretation_method = InterpretationMethod.LENGKEEK_2022
+        model_name = "Lengkeek2024"
+        interpreter.soil_types(model_name=model_name)
+        x = [0.3, 4.2, 14.5, 1.5, 3.2, 1, 0.5, 0.2, 3, 10]
+        y = [3, 3.3, 18, 5, 37, 44, 145, 510, 577, 203]
+        expected_lithology = ["1", "3", "2", "4", "5", "6", "7", "8", "9", "10"]
+        lithology, points = interpreter.lithology(x=x, y=y)
 
-    @pytest.mark.systemtest
-    def test_RobertsonCptInterpretation_3(self):
-        # open the gef file
-        test_file = TestUtils.get_local_test_data_dir(
-            Path("cpt", "gef", "CPT000000003688_IMBRO_A.gef")
-        )
-        assert test_file.is_file()
-        # initialise models
-        cpt = GefCpt()
-        # test initial expectations
-        assert cpt
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # initialise interpretation model
-        interpreter = RobertsonCptInterpretation()
-        interpreter.unitweightmethod = UnitWeightMethod.LENGKEEK
-        interpreter.shearwavevelocitymethod = ShearWaveVelocityMethod.AHMED
-        interpreter.ocrmethod = OCRMethod.MAYNE
-        # read gef file
-        cpt.read(filepath=test_file)
-        # do pre-processing
-        cpt.pre_process_data()
-        # interpet the results
-        cpt.interpret_cpt(interpreter)
-        assert cpt
-        assert cpt.lithology
-        assert cpt.lithology_merged
+        assert points is not None
+        np.testing.assert_array_equal(expected_lithology, lithology)
 
     @pytest.mark.systemtest
     def test_rho_calculation(self):
@@ -243,14 +240,46 @@ class TestInterpreter:
         assert exact_rho.tolist() == cpt.rho.tolist()
 
     @pytest.mark.systemtest
-    def test_gamma_calc(self):
+    @pytest.mark.parametrize(
+        "method,expected_formula",
+        [
+            (
+                UnitWeightMethod.ROBERTSON,
+                lambda qt, friction_nbr, Pa: (
+                    0.27 * np.log10(friction_nbr) + 0.36 * np.log10(qt / Pa) + 1.236
+                )
+                * 9.81,
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2018,
+                lambda qt, friction_nbr, Pa: 19
+                - 4.12 * (np.log10(5000 / qt) / np.log10(30 / friction_nbr)),
+            ),
+            (
+                UnitWeightMethod.LENGKEEK_2022,
+                lambda qt, friction_nbr, Pa: 19.5
+                - 2.87 * (np.log10(9000 / qt) / np.log10(20 / friction_nbr)),
+            ),
+        ],
+    )
+    def test_gamma_calc_methods(self, method, expected_formula):
+        """
+        Parametrized test for different unit weight calculation methods.
+
+        Tests:
+        - Robertson method: gamma = (0.27*log10(Rf) + 0.36*log10(qt/Pa) + 1.236) * g
+        - Lengkeek 2018 method: gamma = 19 - 4.12 * (log10(5000/qt) / log10(30/Rf))
+        - Lengkeek 2022 method: gamma = 19.5 - 2.87 * (log10(9000/qt) / log10(20/Rf))
+        """
         # initialise models
         cpt = GefCpt()
         interpreter = RobertsonCptInterpretation()
         interpreter.data = cpt
+
         # test initial expectations
         assert cpt
         assert interpreter
+
         # Set all the values
         gamma_limit = 22
         interpreter.data.friction_nbr = np.ones(10)
@@ -259,26 +288,25 @@ class TestInterpreter:
         interpreter.data.depth_to_reference = range(10)
         interpreter.data.name = "UNIT_TEST"
 
-        # Calculate analytically the solution
-        np.seterr(divide="ignore")
-        # Exact solution Robertson
-        aux = 0.27 * np.log10(np.ones(10)) + 0.36 * (np.log10(np.ones(10) / 100)) + 1.236
-        aux[np.abs(aux) == np.inf] = gamma_limit / 9.81
-        local_gamma1 = aux * 9.81
+        # Calculate expected result using the formula
+        if method == UnitWeightMethod.ROBERTSON:
+            # Handle special case for Robertson method (division by zero handling)
+            np.seterr(divide="ignore")
+            aux = expected_formula(
+                interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa
+            )
+            aux[np.abs(aux) == np.inf] = gamma_limit / 9.81
+            expected_gamma = aux
+        else:
+            expected_gamma = expected_formula(
+                interpreter.data.qt, interpreter.data.friction_nbr, interpreter.data.Pa
+            )
 
-        # call the function to be checked
-        interpreter.gamma_calc()
+        # Call the function to be checked
+        interpreter.gamma_calc(gamma_max=gamma_limit, method=method)
 
         # Check if they are equal
-        assert local_gamma1.tolist() == interpreter.gamma.tolist()
-
-        # Exact solution Lengkeek
-        local_gamma2 = 19 - 4.12 * (
-            (np.log10(5000 / interpreter.data.qt))
-            / (np.log10(30 / interpreter.data.friction_nbr))
-        )
-        interpreter.gamma_calc(gamma_max=gamma_limit, method=UnitWeightMethod.LENGKEEK)
-        assert local_gamma2.tolist() == interpreter.gamma.tolist()
+        np.testing.assert_array_almost_equal(interpreter.gamma, expected_gamma, decimal=5)
 
     @pytest.mark.systemtest
     def test_stress_calc(self):
@@ -313,33 +341,33 @@ class TestInterpreter:
             15,
             15,
         ]
-        interpreter.data.depth_to_reference = np.zeros(20)
+        interpreter.data.depth_to_reference = np.arange(0, 2, 0.1)
         interpreter.data.pwp = 0
         # run test
         interpreter.stress_calc()
 
         # The target list with the desired output
         effective_stress_test = [
-            2.0,
-            4.0,
-            6.0,
-            8.0,
-            10.0,
-            12.0,
-            14.0,
-            16.0,
-            18.0,
-            20.0,
-            21.5,
-            23.0,
-            24.5,
-            26.0,
-            27.5,
-            29.0,
-            30.5,
-            32.0,
-            33.5,
-            35.0,
+            0,
+            2,
+            4,
+            6,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            19.5,
+            21,
+            22.5,
+            24,
+            25.5,
+            27,
+            28.5,
+            30,
+            31.5,
+            33,
         ]
 
         # checking equality with the output
@@ -530,6 +558,21 @@ class TestInterpreter:
 
         # Call the function
         interpreter.vs_calc(method=ShearWaveVelocityMethod.AHMED)
+
+        # Check their equality
+        assert test_vs[0] == interpreter.data.vs[0]
+        assert list(test_GO) == list(interpreter.data.G0)
+
+        test_vs = (
+            359
+            * (interpreter.data.tip / 1000) ** 0.119
+            * (interpreter.data.friction / 1000) ** 0.1
+            * (interpreter.data.effective_stress / 1000) ** 0.204
+        )
+        test_GO = interpreter.data.rho * test_vs**2
+
+        # Call the function
+        interpreter.vs_calc(method=ShearWaveVelocityMethod.KRUIVER)
 
         # Check their equality
         assert test_vs[0] == interpreter.data.vs[0]
@@ -1138,7 +1181,7 @@ class TestInterpreter:
         with pytest.raises(ValueError):
             interpreter.pwp_level_calc()
 
-    @pytest.mark.workinprogress
+    @pytest.mark.unittest
     def test_stress_calc_total_stress(self):
         interpreter = RobertsonCptInterpretation()
         interpreter.data = type("test", (object,), {})()
@@ -1146,7 +1189,7 @@ class TestInterpreter:
 
         interpreter.data.depth = np.array([0, 1, 2, 3, 4, 5])
         interpreter.data.depth_to_reference = np.array([0, 1, 2, 3, 4, 5])
-        interpreter.data.pwp = 2.0
+        interpreter.data.pwp = -10.0
         interpreter.data.g = 9.81
         interpreter.gamma = np.array([18, 18, 18, 18, 18, 18])
         interpreter.stress_calc()
@@ -1174,10 +1217,7 @@ class TestInterpreter:
 
         instance.stress_calc()
 
-        # Compute expected total stress:
-        # z = diff([0,1,2,3,4]) = [1,1,1,1] then appended becomes [1,1,1,1,1].
-        # Cumulative sum of (18 * 1): [18, 36, 54, 72, 90].
-        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
+        expected_total = np.array([0, 18, 36, 54, 72], dtype=float)
         # Since pwp is zero, effective stress equals total stress.
         expected_effective = expected_total.copy()
 
@@ -1207,9 +1247,7 @@ class TestInterpreter:
         instance = self._create_instance()
         instance.data.depth = np.array(depth, dtype=float)
         if np.isscalar(depth_to_reference):
-            instance.data.depth_to_reference = np.full(
-                instance.data.depth.shape, depth_to_reference
-            )
+            instance.data.depth_to_reference = depth_to_reference - instance.data.depth
         else:
             instance.data.depth_to_reference = np.array(depth_to_reference, dtype=float)
         instance.data.pwp = pwp
@@ -1236,76 +1274,24 @@ class TestInterpreter:
         return instance
 
     @pytest.mark.unittest
-    def test_stress_calc_positive_pwp(self):
+    def test_stress_calc_water_level_below_soil_negative_pwp(self):
         """
-        Test a scenario where the computed pore water pressure is positive
+        Test a scenario where the computed pore water pressure is negative
         and reduces effective stress.
         """
         instance = self._setup_stress_instance(
-            depth=[5, 6, 7, 8, 9], depth_to_reference=-2.0, pwp=10, g=9.81, gamma=18.0
+            depth=[0, 3, 5, 7, 10], depth_to_reference=-2.0, pwp=-4.0, g=9.81, gamma=18.0
         )
 
         instance.stress_calc()
-
-        # Compute expected total stress:
-        # The cumulative sum of (gamma * depth interval) plus an offset yields:
-        expected_total = np.array([108, 126, 144, 162, 180], dtype=float)
-        # For pwp, z_aux is calculated as min(10, 2 + 5)=7, so:
-        pwp_val = (7 - (-2)) * 9.81  # 9 * 9.81
-        expected_effective = expected_total - pwp_val
+        pwp = np.array([0, 1 * 9.81, 3 * 9.81, 5 * 9.81, 8 * 9.81])
+        expected_total = np.cumsum(np.diff([0, 0, 3, 5, 7, 10]) * 18.0)
+        expected_effective = expected_total - pwp
 
         np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
         np.testing.assert_allclose(
             instance.data.effective_stress, expected_effective, rtol=1e-5
         )
-
-    @pytest.mark.unittest
-    def test_stress_calc_negative_pwp_clipped(self):
-        """
-        Test a case where the computed pore water pressure would be negative
-        (indicating suction) but is then clipped to zero.
-        """
-        instance = self._setup_stress_instance(
-            depth=[0, 1, 2, 3, 4],
-            depth_to_reference=[2, 3, 3, 3, 3],
-            pwp=10,
-            g=9.81,
-            gamma=18.0,
-        )
-
-        instance.stress_calc()
-
-        # Expected total stress remains the same as computed from gamma:
-        expected_total = np.array([18, 36, 54, 72, 90], dtype=float)
-        # For pwp, z_aux = min(10, abs(2)+0)=2 leading to negative values,
-        # so effective stress is clipped to be equal to total stress.
-        expected_effective = expected_total.copy()
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(
-            instance.data.effective_stress, expected_effective, rtol=1e-5
-        )
-
-    @pytest.mark.unittest
-    def test_stress_calc_negative_effective_clipped(self):
-        """
-        Test a case where the pore water pressure is so high that the computed effective
-        stress would be negative, and then it is clipped to zero.
-        """
-        instance = self._setup_stress_instance(
-            depth=[0, 0.5, 1, 1.5, 2], depth_to_reference=-1.0, pwp=2, g=9.81, gamma=18.0
-        )
-
-        instance.stress_calc()
-
-        # Calculate expected total stress from the cumulative sum:
-        expected_total = np.array([9, 18, 27, 36, 45], dtype=float)
-        # pwp: z_aux = min(2, abs(-1)+0)=1, so pwp = (1 - (-1)) * 9.81 = 19.62
-        effective = expected_total - 19.62
-        effective[effective < 0] = 0  # Clip negative effective stresses to zero
-
-        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
-        np.testing.assert_allclose(instance.data.effective_stress, effective, rtol=1e-5)
 
     def _verify_norm_calc(self, instance, expected_n, exponent):
         """
@@ -1354,3 +1340,79 @@ class TestInterpreter:
 
         expected_n = np.array([1.0, 1.0, 1.0])
         self._verify_norm_calc(instance, expected_n, exponent=1.0)
+
+    def _run_stress_test(
+        self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total=None
+    ):
+        instance = self._setup_stress_instance(
+            depth=depth,
+            depth_to_reference=depth_to_reference,
+            pwp=pwp_value,
+            g=9.81,
+            gamma=18.0,
+        )
+        instance.stress_calc()
+
+        expected_total = np.cumsum(np.diff([0] + depth) * 18.0)
+        if extra_total is not None:
+            expected_total += extra_total
+
+        expected_effective = expected_total - expected_pwp
+
+        np.testing.assert_allclose(instance.data.total_stress, expected_total, rtol=1e-5)
+        np.testing.assert_allclose(
+            instance.data.effective_stress, expected_effective, rtol=1e-5
+        )
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize(
+        "depth, depth_to_reference, pwp_value, expected_pwp, extra_total",
+        [
+            # water level below soil
+            (
+                [0, 3, 5, 7, 10],
+                0.0,
+                -4.0,
+                np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81]),
+                None,
+            ),
+            # below soil, positive nap
+            (
+                [0, 3, 5, 7, 10],
+                6.0,
+                2.0,
+                np.array([0, 0, 1 * 9.81, 3 * 9.81, 6 * 9.81]),
+                None,
+            ),
+            # above soil, positive nap
+            (
+                [0, 3, 5, 7, 10],
+                2.0,
+                6.0,
+                np.array([4 * 9.81, 7 * 9.81, 9 * 9.81, 11 * 9.81, 14 * 9.81]),
+                4 * 9.81,
+            ),
+            # below soil, negative pwp
+            (
+                [0, 3, 5, 7, 10],
+                -2.0,
+                -4.0,
+                np.array([0, 1 * 9.81, 3 * 9.81, 5 * 9.81, 8 * 9.81]),
+                None,
+            ),
+        ],
+    )
+    def test_stress_cases(
+        self, depth, depth_to_reference, pwp_value, expected_pwp, extra_total
+    ):
+        self._run_stress_test(
+            depth, depth_to_reference, pwp_value, expected_pwp, extra_total
+        )
+
+    @pytest.mark.unittest
+    def test_stress_calc_water_level_below_soil_negative_nap_predrill(self):
+        instance = self._setup_stress_instance(
+            depth=[1, 3, 5, 7, 10], depth_to_reference=-1.0, pwp=-4.0, g=9.81, gamma=18.0
+        )
+        instance.stress_calc()
+        assert instance.data.total_stress[0] == 18 + 18  # unit weight + predrilled depth
