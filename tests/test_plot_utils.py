@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
-from geolib_plus.plot_utils import create_predrilled_depth_line_and_box, set_x_axis
-
+from geolib_plus.plot_utils import (calculate_top_spine_position,
+    create_predrilled_depth_line_and_box,
+    set_x_axis,
+    CALIBRATED_LENGTH_FIGURE_SIZE)
 
 class TestSetXAxis:
     """Test suite for the `set_x_axis` function."""
@@ -78,6 +80,8 @@ class TestSetXAxis:
             assert (
                 tick.get_color() == sample_graph["graph_color"]
             ), "Tick color is incorrect."
+        # default location of the label is bottom
+        assert ax.spines["top"]._position == ("outward", 0), "Top spine position should be outward 0."
 
     @pytest.mark.unittest
     def test_secondary_x_axis(
@@ -97,6 +101,10 @@ class TestSetXAxis:
         assert ax.get_xlim() == pytest.approx(
             expected_xlim
         ), "X-axis limits are incorrect for secondary axis."
+
+        # Check the position of the top spine
+        test_position = 1 + 0.06 * 21 / (ylim[0] - ylim[1])  + 0.02 * 21 / (ylim[0] - ylim[1])
+        assert (ax.spines["top"]._position == ("axes", pytest.approx(test_position))), "Top spine position is incorrect for secondary axis."     
 
     @pytest.mark.unittest
     def test_no_overlap_ticks(
@@ -154,3 +162,33 @@ class TestSetXAxis:
         # Verify that a textbox is added
         artists = mock_ax.artists
         assert len(artists) == 1  # One textbox should be added
+
+    @pytest.mark.unittest
+    def test_calculate_top_spine_position_normal_range(self) -> None:
+        """Test with standard y_range (50m)."""
+        ylim = [10.0, -40.0]  # 50m range
+        
+        result = calculate_top_spine_position(ylim)
+        
+        y_range = ylim[0] - ylim[1]  # 50
+        expected_vertical_spacing = (0.06 * CALIBRATED_LENGTH_FIGURE_SIZE) / y_range
+        expected_extra_spacing = (0.02 * CALIBRATED_LENGTH_FIGURE_SIZE) / y_range
+        expected = 1.0 + expected_vertical_spacing + expected_extra_spacing
+        
+        assert result == pytest.approx(expected)
+        assert result == pytest.approx(1.0336)  # For 50m range
+
+    @pytest.mark.unittest
+    def test_spine_position_always_greater_than_one(self) -> None:
+        """Test that spine position is always > 1.0 (above the plot)."""
+        test_ylims = [
+            [10.0, -10.0],   # 20m
+            [10.0, -40.0],   # 50m
+            [5.0, -95.0],    # 100m
+            [100.0, 0.0],    # 100m
+            [0.0, -200.0],   # 200m
+        ]
+        
+        for ylim in test_ylims:
+            result = calculate_top_spine_position(ylim)
+            assert result > 1.0, f"Spine position should be > 1.0 for ylim={ylim}, got {result}"

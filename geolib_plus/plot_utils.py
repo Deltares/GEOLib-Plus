@@ -137,7 +137,7 @@ def set_multicolor_label(
     is_inverted = False
     vertical_rel_spacing = 0.06 * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
     if not (x_axis_type == "primary"):
-        vertical_rel_spacing += extra_label_spacing
+        vertical_rel_spacing += extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
     axis_plot = ax.xaxis
     if location == "top_left":
         bbox_to_anchor = (0.0, 1 + vertical_rel_spacing)
@@ -388,15 +388,53 @@ def create_custom_grid(
         ]
 
 
+def calculate_top_spine_position(
+    ylim: List[float],
+) -> float:
+    """
+    Calculates the position of the top spine in axes coordinates to avoid intersection with information box.
+
+    :param ylim: vertical limit [y_max, y_min]
+    :param scale: scale factor (typically 0.8)
+    :param height_box: actual height of information box in data coordinates. If None, uses default calculation.
+    :param cpt_type: either "bro" or "gef"
+    :return: position of top spine in axes coordinates
+    """
+    y_min = ylim[1]
+    y_max = ylim[0]
+    y_range = y_max - y_min
+
+    # Calculate the vertical spacing used for multicolor labels
+    # From set_multicolor_label: vertical_rel_spacing = 0.06 * CALIBRATED_LENGTH_FIGURE_SIZE / y_range
+    # Plus extra spacing for secondary axes: extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / y_range
+    # CALIBRATED_LENGTH_FIGURE_SIZE = 21 meters
+    #  extra_label_spacing = 0.02
+
+    vertical_label_spacing = (0.06 * CALIBRATED_LENGTH_FIGURE_SIZE) / y_range  # ~0.0252 for 50m, smaller for larger plots
+    extra_label_spacing = (0.02 * CALIBRATED_LENGTH_FIGURE_SIZE) / y_range  # Additional for secondary axes
+    total_label_offset = vertical_label_spacing + extra_label_spacing  # Total offset above 1.0
+
+    # Spine should be positioned above the multicolor labels
+    # Labels are at: 1.0 (start of the top of the plot)  + total_label_offset
+    spine_position_axes = 1.0 + total_label_offset
+    return spine_position_axes
+
+
 def set_x_axis(
-    ax: Axes, graph: Dict[str, Any], settings: Dict[str, Any], ylim: List[float]
+    ax: Axes,
+    graph: Dict[str, Any],
+    settings: Dict[str, Any],
+    ylim: List[float],
 ) -> None:
     """
     Sets the x-limit, the x-label, and the x-ticks
 
-    :param ax:
-    :param graph:
-    :param settings:
+    :param ax: current axis
+    :param graph: graph settings
+    :param settings: general settings
+    :param ylim: vertical limit [y_max, y_min]
+    :param cpt_type: CPT type ("bro" or "gef") for spine positioning
+    :param height_box: actual height of information box in data coordinates (optional for better precision)
     :return:
     """
 
@@ -412,7 +450,9 @@ def set_x_axis(
     ticks = graph["ticks"]
 
     if not (graph["x_axis_type"] == "primary"):
-        ax.spines["top"].set_position(("axes", settings["secondary_top_axis_position"]))
+        # Calculate spine position to avoid intersection with information box
+        spine_position = calculate_top_spine_position(ylim)
+        ax.spines["top"].set_position(("axes", spine_position))
         for sp in ax.spines.values():
             sp.set_visible(False)
         ax.spines["top"].set_visible(True)

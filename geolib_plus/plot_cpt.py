@@ -361,7 +361,6 @@ def generate_plot(
                 linestyle=graph["line_style"],
             )
 
-            # set x axis
             ax = plot_utils.set_x_axis(
                 ax,
                 graph,
