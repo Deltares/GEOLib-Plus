@@ -108,9 +108,7 @@ class TestSetXAxis:
         ), "X-axis limits are incorrect for secondary axis."
 
         # Check the position of the top spine
-        test_position = (
-            1 + 0.06 * 21 / (ylim[0] - ylim[1]) + 5 * 21 / (ylim[0] - ylim[1])
-        )
+        test_position = 1 + 0.06 * 21 / (ylim[0] - ylim[1]) + 5 * 21 / (ylim[0] - ylim[1])
         assert mock_ax.spines["top"]._position == (
             "axes",
             pytest.approx(test_position),

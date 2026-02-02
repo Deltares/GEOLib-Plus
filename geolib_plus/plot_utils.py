@@ -136,7 +136,9 @@ def set_multicolor_label(
         line_style_string = "\\"
 
     is_inverted = False
-    vertical_rel_spacing = LABEL_VERTICAL_SPACING_RATIO * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+    vertical_rel_spacing = (
+        LABEL_VERTICAL_SPACING_RATIO * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+    )
     if not (x_axis_type == "primary"):
         vertical_rel_spacing += (
             extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
@@ -459,7 +461,9 @@ def set_x_axis(
 
     if not (graph["x_axis_type"] == "primary"):
         # Calculate spine position to avoid intersection with information box
-        spine_position = calculate_top_spine_position(ylim, settings["extra_label_spacing"])
+        spine_position = calculate_top_spine_position(
+            ylim, settings["extra_label_spacing"]
+        )
         ax.spines["top"].set_position(("axes", spine_position))
         for sp in ax.spines.values():
             sp.set_visible(False)
