@@ -1,5 +1,5 @@
-
 from pathlib import Path
+
 import matplotlib
 import numpy as np
 import pytest
@@ -10,7 +10,8 @@ from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.plot_settings import PlotSettings
 from tests.utils import TestUtils
 
-matplotlib.use('Agg')
+matplotlib.use("Agg")
+
 
 class TestPlotCpt:
     @pytest.mark.unittest
