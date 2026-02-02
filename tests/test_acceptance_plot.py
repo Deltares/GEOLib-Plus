@@ -108,7 +108,6 @@ class TestPlotAcceptance:
 
             cpt.plot_settings.general_settings["distance_meta_data_from_plot"] = -0.1
             cpt.plot_settings.general_settings["extra_label_spacing"] = 0.02
-            cpt.plot_settings.general_settings["secondary_top_axis_position"] = 1.08
             cpt.plot_settings.general_settings["graph_settings"]["qc"][
                 "x_axis_type"
             ] = "primary"

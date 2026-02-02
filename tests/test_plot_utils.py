@@ -42,7 +42,6 @@ class TestSetXAxis:
         return {
             "language": "en",
             "nbr_scale_units": 5,
-            "secondary_top_axis_position": 1.2,
             "font_size_labels": 10,
             "extra_label_spacing": 5,
         }
@@ -110,7 +109,7 @@ class TestSetXAxis:
 
         # Check the position of the top spine
         test_position = (
-            1 + 0.06 * 21 / (ylim[0] - ylim[1]) + 0.02 * 21 / (ylim[0] - ylim[1])
+            1 + 0.06 * 21 / (ylim[0] - ylim[1]) + 5 * 21 / (ylim[0] - ylim[1])
         )
         assert mock_ax.spines["top"]._position == (
             "axes",
