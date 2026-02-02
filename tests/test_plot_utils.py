@@ -65,26 +65,26 @@ class TestSetXAxis:
         self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list
     ) -> None:
         """Test `set_x_axis` with primary x-axis type."""
-        ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
+        set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
         # Check x-axis limits
         expected_xlim = [0, 20]
-        assert ax.get_xlim() == pytest.approx(
+        assert mock_ax.get_xlim() == pytest.approx(
             expected_xlim
         ), "X-axis limits are incorrect."
 
         # Check x-axis ticks
         assert (
-            ax.get_xticks().tolist() == sample_graph["ticks"]
+            mock_ax.get_xticks().tolist() == sample_graph["ticks"]
         ), "X-axis ticks are incorrect."
 
         # Check x-axis tick color
-        for tick in ax.xaxis.get_ticklines():
+        for tick in mock_ax.xaxis.get_ticklines():
             assert (
                 tick.get_color() == sample_graph["graph_color"]
             ), "Tick color is incorrect."
         # default location of the label is bottom
-        assert ax.spines["top"]._position == (
+        assert mock_ax.spines["top"]._position == (
             "outward",
             0,
         ), "Top spine position should be outward 0."
@@ -95,16 +95,16 @@ class TestSetXAxis:
     ) -> None:
         """Test `set_x_axis` with secondary x-axis type."""
         sample_graph["x_axis_type"] = "secondary"
-        ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
+        set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
         # Check that the top spine is set to visible
-        assert ax.spines[
+        assert mock_ax.spines[
             "top"
         ].get_visible(), "Top spine should be visible for secondary axis."
 
         # Check x-axis limits
         expected_xlim = [0, 20]
-        assert ax.get_xlim() == pytest.approx(
+        assert mock_ax.get_xlim() == pytest.approx(
             expected_xlim
         ), "X-axis limits are incorrect for secondary axis."
 
@@ -112,7 +112,7 @@ class TestSetXAxis:
         test_position = (
             1 + 0.06 * 21 / (ylim[0] - ylim[1]) + 0.02 * 21 / (ylim[0] - ylim[1])
         )
-        assert ax.spines["top"]._position == (
+        assert mock_ax.spines["top"]._position == (
             "axes",
             pytest.approx(test_position),
         ), "Top spine position is incorrect for secondary axis."
@@ -122,10 +122,10 @@ class TestSetXAxis:
         self, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list
     ) -> None:
         """Test that tick labels do not overlap."""
-        ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
+        set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
         # Check if overlapping tick labels were removed
-        tick_labels = [label.get_text() for label in ax.get_xticklabels()]
+        tick_labels = [label.get_text() for label in mock_ax.get_xticklabels()]
         assert all(
             label == "" or label.isspace() or label.isprintable() for label in tick_labels
         ), "Overlapping labels should be removed."
@@ -137,9 +137,9 @@ class TestSetXAxis:
         """Test that tick labels overlap when spacing is fine."""
         # set ticks
         sample_graph["ticks"] = np.arange(0, 20, 0.1).tolist()
-        ax = set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
+        set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
 
-        tick_labels = [label.get_text() for label in ax.get_xticklabels()]
+        tick_labels = [label.get_text() for label in mock_ax.get_xticklabels()]
         assert len(tick_labels) == len(
             sample_graph["ticks"]
         ), "All tick labels should be shown."
