@@ -10,6 +10,7 @@ CALIBRATED_LENGTH_FIGURE_SIZE = (
 )
 A4_WIDTH = 8.27  # inches
 A4_LENGTH = 11.69  # inches
+LABEL_VERTICAL_SPACING_RATIO = 0.06  # vertical spacing ratio for multicolor labels
 
 
 def set_textbox_at_thresholds(
@@ -135,7 +136,7 @@ def set_multicolor_label(
         line_style_string = "\\"
 
     is_inverted = False
-    vertical_rel_spacing = 0.06 * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+    vertical_rel_spacing = LABEL_VERTICAL_SPACING_RATIO * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
     if not (x_axis_type == "primary"):
         vertical_rel_spacing += (
             extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
@@ -392,14 +393,12 @@ def create_custom_grid(
 
 def calculate_top_spine_position(
     ylim: List[float],
+    extra_label_spacing: float = 0.02,
 ) -> float:
     """
     Calculates the position of the top spine in axes coordinates to avoid intersection with information box.
 
     :param ylim: vertical limit [y_max, y_min]
-    :param scale: scale factor (typically 0.8)
-    :param height_box: actual height of information box in data coordinates. If None, uses default calculation.
-    :param cpt_type: either "bro" or "gef"
     :return: position of top spine in axes coordinates
     """
     y_min = ylim[1]
@@ -413,13 +412,13 @@ def calculate_top_spine_position(
     #  extra_label_spacing = 0.02
 
     vertical_label_spacing = (
-        0.06 * CALIBRATED_LENGTH_FIGURE_SIZE
+        LABEL_VERTICAL_SPACING_RATIO * CALIBRATED_LENGTH_FIGURE_SIZE
     ) / y_range  # ~0.0252 for 50m, smaller for larger plots
-    extra_label_spacing = (
-        0.02 * CALIBRATED_LENGTH_FIGURE_SIZE
+    extra_label_spacing_calibrated = (
+        extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE
     ) / y_range  # Additional for secondary axes
     total_label_offset = (
-        vertical_label_spacing + extra_label_spacing
+        vertical_label_spacing + extra_label_spacing_calibrated
     )  # Total offset above 1.0
 
     # Spine should be positioned above the multicolor labels
@@ -459,7 +458,7 @@ def set_x_axis(
 
     if not (graph["x_axis_type"] == "primary"):
         # Calculate spine position to avoid intersection with information box
-        spine_position = calculate_top_spine_position(ylim)
+        spine_position = calculate_top_spine_position(ylim, settings["extra_label_spacing"])
         ax.spines["top"].set_position(("axes", spine_position))
         for sp in ax.spines.values():
             sp.set_visible(False)
