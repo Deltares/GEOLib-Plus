@@ -1,7 +1,8 @@
 from pathlib import Path
-import pytest
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pytest
 
 from geolib_plus.bro_xml_cpt import BroXmlCpt
 from tests.utils import TestUtils
@@ -10,22 +11,21 @@ from tests.utils import TestUtils
 class TestPlotAcceptance:
     """Acceptance test for plotting Bro XML CPT files with various formats."""
 
-    def are_plots_identical(
-        self, generated_pdf: Path, reference_pdf: Path) -> bool:
+    def are_plots_identical(self, generated_pdf: Path, reference_pdf: Path) -> bool:
         """Compare generated PDF to reference PDF."""
-        with open(generated_pdf, 'rb') as f1, open(reference_pdf, 'rb') as f2:
+        with open(generated_pdf, "rb") as f1, open(reference_pdf, "rb") as f2:
             data1 = f1.read()
             data2 = f2.read()
-        
+
         max_len = max(len(data1), len(data2))
-        
+
         # Create byte arrays for visualization
-        arr1 = np.frombuffer(data1.ljust(max_len, b'\x00'), dtype=np.uint8)
-        arr2 = np.frombuffer(data2.ljust(max_len, b'\x00'), dtype=np.uint8)
-        
+        arr1 = np.frombuffer(data1.ljust(max_len, b"\x00"), dtype=np.uint8)
+        arr2 = np.frombuffer(data2.ljust(max_len, b"\x00"), dtype=np.uint8)
+
         # Find differences
         diff = arr1 != arr2
-        
+
         if np.any(diff):
             return True
         return False
@@ -48,7 +48,7 @@ class TestPlotAcceptance:
             from geolib_plus.plot_settings import PlotSettings
 
             plot_settings = PlotSettings()
-            cpt.plot_settings.general_settings['plot_size'] = 'unlimited'
+            cpt.plot_settings.general_settings["plot_size"] = "unlimited"
 
             # Set minimum and maximum threshold for shown values, data which surpasses these tresholds is cut off at the
             # respective threshold. The units are equal to the units read from the input file in this case it is in MPa
@@ -109,15 +109,21 @@ class TestPlotAcceptance:
             cpt.plot_settings.general_settings["distance_meta_data_from_plot"] = -0.1
             cpt.plot_settings.general_settings["extra_label_spacing"] = 0.02
             cpt.plot_settings.general_settings["secondary_top_axis_position"] = 1.08
-            cpt.plot_settings.general_settings["graph_settings"]["qc"]["x_axis_type"] = "primary"
-            cpt.plot_settings.general_settings["graph_settings"]["water"]["x_axis_type"] = "secondary"
+            cpt.plot_settings.general_settings["graph_settings"]["qc"][
+                "x_axis_type"
+            ] = "primary"
+            cpt.plot_settings.general_settings["graph_settings"]["water"][
+                "x_axis_type"
+            ] = "secondary"
             cpt.plot_settings.general_settings["graph_settings"]["friction"][
                 "x_axis_type"
             ] = "secondary"
             cpt.plot_settings.general_settings["graph_settings"]["friction_nbr"][
                 "x_axis_type"
             ] = "secondary"
-            cpt.plot_settings.general_settings["graph_settings"]["qc"]["position_label"] = "top_left"
+            cpt.plot_settings.general_settings["graph_settings"]["qc"][
+                "position_label"
+            ] = "top_left"
             cpt.plot_settings.general_settings["graph_settings"]["water"][
                 "position_label"
             ] = "top_middle"
@@ -130,8 +136,10 @@ class TestPlotAcceptance:
 
             cpt.plot(Path("test_output"))
 
-            reference_path = TestUtils.get_local_test_data_dir(
-                "xml_acceptance_plots") / f"{cpt_file_xml.stem}.pdf"
+            reference_path = (
+                TestUtils.get_local_test_data_dir("xml_acceptance_plots")
+                / f"{cpt_file_xml.stem}.pdf"
+            )
             generated_path = Path("test_output") / f"{cpt_file_xml.stem}.pdf"
             assert self.are_plots_identical(
                 generated_path, reference_path
