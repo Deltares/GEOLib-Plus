@@ -137,7 +137,9 @@ def set_multicolor_label(
     is_inverted = False
     vertical_rel_spacing = 0.06 * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
     if not (x_axis_type == "primary"):
-        vertical_rel_spacing += extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+        vertical_rel_spacing += (
+            extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+        )
     axis_plot = ax.xaxis
     if location == "top_left":
         bbox_to_anchor = (0.0, 1 + vertical_rel_spacing)
@@ -410,9 +412,15 @@ def calculate_top_spine_position(
     # CALIBRATED_LENGTH_FIGURE_SIZE = 21 meters
     #  extra_label_spacing = 0.02
 
-    vertical_label_spacing = (0.06 * CALIBRATED_LENGTH_FIGURE_SIZE) / y_range  # ~0.0252 for 50m, smaller for larger plots
-    extra_label_spacing = (0.02 * CALIBRATED_LENGTH_FIGURE_SIZE) / y_range  # Additional for secondary axes
-    total_label_offset = vertical_label_spacing + extra_label_spacing  # Total offset above 1.0
+    vertical_label_spacing = (
+        0.06 * CALIBRATED_LENGTH_FIGURE_SIZE
+    ) / y_range  # ~0.0252 for 50m, smaller for larger plots
+    extra_label_spacing = (
+        0.02 * CALIBRATED_LENGTH_FIGURE_SIZE
+    ) / y_range  # Additional for secondary axes
+    total_label_offset = (
+        vertical_label_spacing + extra_label_spacing
+    )  # Total offset above 1.0
 
     # Spine should be positioned above the multicolor labels
     # Labels are at: 1.0 (start of the top of the plot)  + total_label_offset
