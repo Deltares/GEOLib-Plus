@@ -425,7 +425,7 @@ def set_x_axis(
     graph: Dict[str, Any],
     settings: Dict[str, Any],
     ylim: List[float],
-) -> None:
+) -> Axes:
     """
     Sets the x-limit, the x-label, and the x-ticks
 
@@ -435,7 +435,7 @@ def set_x_axis(
     :param ylim: vertical limit [y_max, y_min]
     :param cpt_type: CPT type ("bro" or "gef") for spine positioning
     :param height_box: actual height of information box in data coordinates (optional for better precision)
-    :return:
+    :return: ax with updated x-axis
     """
 
     x_label = graph["label"][settings["language"]]
