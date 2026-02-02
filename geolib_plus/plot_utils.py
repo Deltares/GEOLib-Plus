@@ -399,6 +399,7 @@ def calculate_top_spine_position(
     Calculates the position of the top spine in axes coordinates to avoid intersection with information box.
 
     :param ylim: vertical limit [y_max, y_min]
+    :param extra_label_spacing: extra spacing for secondary axes
     :return: position of top spine in axes coordinates
     """
     y_min = ylim[1]
