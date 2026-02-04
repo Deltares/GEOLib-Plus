@@ -179,15 +179,14 @@ class AbstractCPT(BaseModel):
 
     def are_data_available_plotting(self):
         list_to_be_checked = [
-            "undefined_depth", 
+            "undefined_depth",
             "local_reference_level",
             "depth_to_reference",
             "tip",
-            "water", 
+            "water",
             "name",
         ]
         self.check_if_attribute(list_to_be_checked=list_to_be_checked, method="plotting")
-
 
     def check_if_lists_have_the_same_size(self):
         same_size = []
@@ -526,8 +525,11 @@ class AbstractCPT(BaseModel):
             plot_cpt_norm(self, directory, self.plot_settings.general_settings)
 
         except (ValueError, IndexError) as error:
-            print("Cpt data and/or settings are not valid for plotting."
-                  " Please check the data and settings. Error details: ", str(error))
+            print(
+                "Cpt data and/or settings are not valid for plotting."
+                " Please check the data and settings. Error details: ",
+                str(error),
+            )
         except PermissionError as error:
             print(error)
         # report other exceptions
