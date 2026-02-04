@@ -525,7 +525,11 @@ class AbstractCPT(BaseModel):
         try:
             plot_cpt_norm(self, directory, self.plot_settings.general_settings)
 
-        except (ValueError, IndexError):
-            print("Cpt data and/or settings are not valid")
+        except (ValueError, IndexError) as error:
+            print("Cpt data and/or settings are not valid for plotting."
+                  " Please check the data and settings. Error details: ", str(error))
         except PermissionError as error:
             print(error)
+        # report other exceptions
+        except Exception as e:
+            print("An unexpected error occurred:", str(e))
