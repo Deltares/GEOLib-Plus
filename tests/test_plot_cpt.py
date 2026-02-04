@@ -625,7 +625,7 @@ class TestPlotCpt:
         Test that the plot method catches IndexError and prints appropriate error message
         """
         test_cpt = cpt_with_water.copy()
-        test_cpt.friction = test_cpt.friction[:100]
+        test_cpt.friction = test_cpt.friction[:50]
         # Mock plot_cpt_norm to raise IndexError
         test_cpt.plot(Path("test_output"))
         # Capture printed output
