@@ -359,3 +359,239 @@ class TestPlotCpt:
         :return:
         """
         return PlotSettings()
+
+    @pytest.mark.unittest
+    def test_generate_plot_raises_error_when_qc_tip_missing(self, cpt_with_water, plot_settings):
+        """
+        Test that generate_plot raises ValueError when qc is in graph_settings but tip data is missing
+        """
+        cpt_with_water.tip = None
+
+        ylims = plot_cpt.get_y_lims(cpt_with_water, plot_settings.general_settings)
+
+        with pytest.raises(ValueError, match="Tip data is not available for plotting, this is required for plotting."):
+            plot_cpt.generate_plot(
+                cpt_with_water,
+                plot_settings.general_settings,
+                ylims[0],
+                ylims,
+                0
+            )
+
+    @pytest.mark.unittest
+    def test_generate_plot_skips_unavailable_data(self, cpt_with_water, plot_settings):
+        """
+        Test that generate_plot successfully creates a plot while skipping unavailable data types
+        """
+        # Remove friction data so friction graphs are skipped
+        cpt_with_water.friction = None
+        cpt_with_water.friction_nbr = None
+
+        ylims = plot_cpt.get_y_lims(cpt_with_water, plot_settings.general_settings)
+
+        # Should not raise an error, just skip the unavailable data
+        fig = plot_cpt.generate_plot(
+            cpt_with_water,
+            plot_settings.general_settings,
+            ylims[0],
+            ylims,
+            0
+        )
+
+        assert fig is not None
+        # 3 axes as qc, water are available, friction and friction_nbr are not
+        # plus the main axis
+        assert len(fig.axes) == 3 
+
+    @pytest.mark.unittest
+    def test_generate_plot_skips_all_data_available(self, cpt_with_water, plot_settings):
+        """
+        Test that generate_plot successfully creates a plot while all data types are available
+        """
+
+        ylims = plot_cpt.get_y_lims(cpt_with_water, plot_settings.general_settings)
+
+        # Should not raise an error, just skip the unavailable data
+        fig = plot_cpt.generate_plot(
+            cpt_with_water,
+            plot_settings.general_settings,
+            ylims[0],
+            ylims,
+            0
+        )
+
+        assert fig is not None
+        # 5 axes as qc, water, friction and friction_nbr are available
+        # plus the main axis
+        assert len(fig.axes) == 5 
+
+
+    @pytest.mark.unittest
+    def test_check_data_availability_qc_with_tip_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when tip data is available for qc plotting
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = np.array([1.0, 2.0, 3.0])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "qc")
+
+        assert result is True
+
+    @pytest.mark.unittest
+    def test_check_data_availability_qc_without_tip_data(self):
+        """
+        Test that check_data_availability_for_plotting raises ValueError when tip data is not available for qc plotting
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = None
+
+        with pytest.raises(ValueError, match="Tip data is not available for plotting, this is required for plotting."):
+            plot_cpt.check_data_availability_for_plotting(cpt, "qc")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_with_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when friction data is available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction = np.array([0.1, 0.2, 0.3])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction")
+
+        assert result is True
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_without_data(self):
+        """
+        Test that check_data_availability_for_plotting returns False when friction data is not available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction = None
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction")
+
+        assert result is False
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_nbr_with_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when friction_nbr data is available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction_nbr = np.array([1.5, 2.0, 2.5])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
+
+        assert result is True
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_nbr_without_data(self):
+        """
+        Test that check_data_availability_for_plotting returns False when friction_nbr data is not available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction_nbr = None
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
+
+        assert result is False
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_with_both_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when both tip and friction data are available for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = np.array([1.0, 2.0, 3.0])
+        cpt.friction = np.array([0.1, 0.2, 0.3])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+        assert result is True
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_without_tip(self):
+        """
+        Test that check_data_availability_for_plotting returns False when tip data is missing for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = None
+        cpt.friction = np.array([0.1, 0.2, 0.3])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+        assert result is False
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_without_friction(self):
+        """
+        Test that check_data_availability_for_plotting returns False when friction data is missing for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = np.array([1.0, 2.0, 3.0])
+        cpt.friction = None
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+        assert result is False
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_without_both(self):
+        """
+        Test that check_data_availability_for_plotting returns False when both tip and friction data are missing for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = None
+        cpt.friction = None
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+        assert result is False
+
+    @pytest.mark.unittest
+    def test_check_data_availability_water_with_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when water data is available
+        """
+        cpt = BroXmlCpt()
+        cpt.water = np.array([10.0, 20.0, 30.0])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "water")
+
+        assert result is True
+
+    @pytest.mark.unittest
+    def test_check_data_availability_water_without_data(self):
+        """
+        Test that check_data_availability_for_plotting returns False when water data is not available
+        """
+        cpt = BroXmlCpt()
+        cpt.water = None
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "water")
+
+        assert result is False
+
+    @pytest.mark.unittest
+    def test_check_data_availability_unknown_key(self):
+        """
+        Test that check_data_availability_for_plotting returns True for unknown keys (default behavior)
+        """
+        cpt = BroXmlCpt()
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "unknown_key")
+
+        assert result is True
+    
+    @pytest.mark.unittest
+    def test_check_data_availability_qc_raises_value_error_without_tip(self):
+        """
+        Test that check_data_availability_for_plotting raises ValueError with correct message 
+        when tip data is not available for qc plotting
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = None
+
+        with pytest.raises(ValueError, match="Tip data is not available for plotting, this is required for plotting."):
+            plot_cpt.check_data_availability_for_plotting(cpt, "qc")

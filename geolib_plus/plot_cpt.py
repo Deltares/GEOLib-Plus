@@ -327,6 +327,30 @@ def save_figures(figures: List, cpt: AbstractCPT, output_folder: Path):
 
     pdf.close()
 
+def check_data_availability_for_plotting(cpt: AbstractCPT, key) -> bool:
+    """
+    Checks if the data required for plotting is available in the cpt.
+    raise an error if tip data is not available for plotting qc data.
+    :param cpt: cpt data
+    :param key: data key to be checked
+    :return: True if data is available, False otherwise, error raised if tip data is not available for qc plotting
+    """
+    if key == "qc":
+        if cpt.tip is None:
+            raise ValueError("Tip data is not available for plotting, this is required for plotting.")
+    if key == "friction":
+        if cpt.friction is None:
+            return False
+    if key == "friction_nbr":
+        if cpt.friction_nbr is None:
+            return False
+    if key == "inv_friction_nbr":
+        if cpt.tip is None or cpt.friction is None:
+            return False
+    if key == "water":
+        if cpt.water is None:
+            return False
+    return True
 
 def generate_plot(
     cpt: AbstractCPT, settings: Dict, ylim: List, ylims: List, plot_nr: int
@@ -345,6 +369,9 @@ def generate_plot(
     axes = [fig.add_subplot(111)]
 
     for idx, (key, graph) in enumerate(settings["graph_settings"].items()):
+        do_create_axis = check_data_availability_for_plotting(cpt, key)
+        if not do_create_axis:
+            continue
         trimmed_data, max_data, found_depths_data, depths, inclination = trim_cpt_data(
             graph, settings["vertical_settings"], cpt, ylim
         )
