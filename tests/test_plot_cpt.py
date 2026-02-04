@@ -1,6 +1,6 @@
-from pathlib import Path
 import os
 import stat
+from pathlib import Path
 
 import matplotlib
 import numpy as np
@@ -363,7 +363,9 @@ class TestPlotCpt:
         return PlotSettings()
 
     @pytest.mark.unittest
-    def test_generate_plot_raises_error_when_qc_tip_missing(self, cpt_with_water, plot_settings):
+    def test_generate_plot_raises_error_when_qc_tip_missing(
+        self, cpt_with_water, plot_settings
+    ):
         """
         Test that generate_plot raises ValueError when qc is in graph_settings but tip data is missing
         """
@@ -372,13 +374,12 @@ class TestPlotCpt:
 
         ylims = plot_cpt.get_y_lims(test_cpt, plot_settings.general_settings)
 
-        with pytest.raises(ValueError, match="Tip data is not available for plotting, this is required for plotting."):
+        with pytest.raises(
+            ValueError,
+            match="Tip data is not available for plotting, this is required for plotting.",
+        ):
             plot_cpt.generate_plot(
-                test_cpt,
-                plot_settings.general_settings,
-                ylims[0],
-                ylims,
-                0
+                test_cpt, plot_settings.general_settings, ylims[0], ylims, 0
             )
 
     @pytest.mark.unittest
@@ -395,17 +396,13 @@ class TestPlotCpt:
 
         # Should not raise an error, just skip the unavailable data
         fig = plot_cpt.generate_plot(
-            test_cpt,
-            plot_settings.general_settings,
-            ylims[0],
-            ylims,
-            0
+            test_cpt, plot_settings.general_settings, ylims[0], ylims, 0
         )
 
         assert fig is not None
         # 3 axes as qc, water are available, friction and friction_nbr are not
         # plus the main axis
-        assert len(fig.axes) == 3 
+        assert len(fig.axes) == 3
 
     @pytest.mark.unittest
     def test_generate_plot_all_data_available(self, cpt_with_water, plot_settings):
@@ -419,18 +416,13 @@ class TestPlotCpt:
 
         # Should not raise an error, just skip the unavailable data
         fig = plot_cpt.generate_plot(
-            test_cpt,
-            plot_settings.general_settings,
-            ylims[0],
-            ylims,
-            0
+            test_cpt, plot_settings.general_settings, ylims[0], ylims, 0
         )
 
         assert fig is not None
         # 5 axes as qc, water, friction and friction_nbr are available
         # plus the main axis
-        assert len(fig.axes) == 5 
-
+        assert len(fig.axes) == 5
 
     @pytest.mark.unittest
     def test_check_data_availability_qc_with_tip_data(self):
@@ -452,7 +444,10 @@ class TestPlotCpt:
         cpt = BroXmlCpt()
         cpt.tip = None
 
-        with pytest.raises(ValueError, match="Tip data is not available for plotting, this is required for plotting."):
+        with pytest.raises(
+            ValueError,
+            match="Tip data is not available for plotting, this is required for plotting.",
+        ):
             plot_cpt.check_data_availability_for_plotting(cpt, "qc")
 
     @pytest.mark.unittest
@@ -589,17 +584,20 @@ class TestPlotCpt:
         result = plot_cpt.check_data_availability_for_plotting(cpt, "unknown_key")
 
         assert result is True
-    
+
     @pytest.mark.unittest
     def test_check_data_availability_qc_raises_value_error_without_tip(self):
         """
-        Test that check_data_availability_for_plotting raises ValueError with correct message 
+        Test that check_data_availability_for_plotting raises ValueError with correct message
         when tip data is not available for qc plotting
         """
         cpt = BroXmlCpt()
         cpt.tip = None
 
-        with pytest.raises(ValueError, match="Tip data is not available for plotting, this is required for plotting."):
+        with pytest.raises(
+            ValueError,
+            match="Tip data is not available for plotting, this is required for plotting.",
+        ):
             plot_cpt.check_data_availability_for_plotting(cpt, "qc")
 
     @pytest.mark.unittest
@@ -610,10 +608,10 @@ class TestPlotCpt:
         test_cpt = cpt_with_water.copy()
         # Set tip to None to trigger ValueError
         test_cpt.tip = None
-        
+
         # Call plot method - should catch ValueError and print message
         test_cpt.plot(Path("test_output"))
-        
+
         # Capture printed output
         captured = capsys.readouterr()
         assert "Cpt data and/or settings are not valid for plotting." in captured.out
@@ -630,30 +628,36 @@ class TestPlotCpt:
         test_cpt.plot(Path("test_output"))
         # Capture printed output
         captured = capsys.readouterr()
-        assert "Cpt data and/or settings are not valid for plotting. Please check the data and settings." in captured.out
-        assert "Property friction does not have the same size as the other properties" in captured.out
+        assert (
+            "Cpt data and/or settings are not valid for plotting. Please check the data and settings."
+            in captured.out
+        )
+        assert (
+            "Property friction does not have the same size as the other properties"
+            in captured.out
+        )
 
     @pytest.mark.unittest
     def test_plot_method_catches_permission_error(self, cpt_with_water, capsys, tmp_path):
         """
         Test that the plot method catches PermissionError and prints the error
         """
-        
+
         # Create output directory
         output_dir = tmp_path / "output"
         output_dir.mkdir()
-        
+
         # Create a read-only file with the expected output filename to trigger PermissionError
         output_file = output_dir / f"{cpt_with_water.name}.pdf"
         output_file.write_text("dummy")
-        
+
         # Make the file read-only
         os.chmod(output_file, stat.S_IREAD)
-        
+
         try:
             # Call plot method - should catch PermissionError when trying to overwrite read-only file
             cpt_with_water.plot(output_dir)
-            
+
             # Capture printed output
             captured = capsys.readouterr()
             assert "Permission denied" in captured.out
@@ -671,7 +675,7 @@ class TestPlotCpt:
         test_cpt.name = 12345  # Invalid type to trigger exception
 
         test_cpt.plot(Path("test_output"))
-        
+
         # Capture printed output
         captured = capsys.readouterr()
         assert "An unexpected error occurred:" in captured.out
@@ -685,21 +689,21 @@ class TestPlotCpt:
         test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
         filename = "cpt_with_water.xml"
         test_file = test_folder / filename
-        
+
         cpt = BroXmlCpt()
         cpt.read(test_file)
         cpt.pre_process_data()
-        
+
         # Ensure all required data is present
         assert cpt.tip is not None
         assert cpt.water is not None
         assert cpt.depth_to_reference is not None
-        
+
         # Call plot method - should execute without errors
         output_dir = tmp_path / "test_output"
         output_dir.mkdir()
         cpt.plot(output_dir)
-        
+
         # Check that a PDF file was created
         pdf_files = list(output_dir.glob("*.pdf"))
         assert len(pdf_files) > 0, "No PDF file was created"

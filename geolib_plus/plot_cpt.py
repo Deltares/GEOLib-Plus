@@ -327,6 +327,7 @@ def save_figures(figures: List, cpt: AbstractCPT, output_folder: Path):
 
     pdf.close()
 
+
 def check_data_availability_for_plotting(cpt: AbstractCPT, key) -> bool:
     """
     Checks if the data required for plotting is available in the cpt.
@@ -337,7 +338,9 @@ def check_data_availability_for_plotting(cpt: AbstractCPT, key) -> bool:
     """
     if key == "qc":
         if cpt.tip is None:
-            raise ValueError("Tip data is not available for plotting, this is required for plotting.")
+            raise ValueError(
+                "Tip data is not available for plotting, this is required for plotting."
+            )
     if key == "friction":
         if cpt.friction is None:
             return False
@@ -351,6 +354,7 @@ def check_data_availability_for_plotting(cpt: AbstractCPT, key) -> bool:
         if cpt.water is None:
             return False
     return True
+
 
 def generate_plot(
     cpt: AbstractCPT, settings: Dict, ylim: List, ylims: List, plot_nr: int
