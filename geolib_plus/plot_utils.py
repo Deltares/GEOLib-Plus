@@ -11,6 +11,7 @@ CALIBRATED_LENGTH_FIGURE_SIZE = (
 A4_WIDTH = 8.27  # inches
 A4_LENGTH = 11.69  # inches
 LABEL_VERTICAL_SPACING_RATIO = 0.06  # vertical spacing ratio for multicolor labels
+REFERENCE_BOX_HEIGHT_RATIO = 0.023  # vertical spacing ratio for predrilled depth box below reference line box
 
 
 def set_textbox_at_thresholds(
@@ -136,13 +137,10 @@ def set_multicolor_label(
         line_style_string = "\\"
 
     is_inverted = False
-    vertical_rel_spacing = (
-        LABEL_VERTICAL_SPACING_RATIO * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
-    )
+    vertical_scale_factor = CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+    vertical_rel_spacing = LABEL_VERTICAL_SPACING_RATIO * vertical_scale_factor
     if not (x_axis_type == "primary"):
-        vertical_rel_spacing += (
-            extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
-        )
+        vertical_rel_spacing += extra_label_spacing * vertical_scale_factor
     axis_plot = ax.xaxis
     if location == "top_left":
         bbox_to_anchor = (0.0, 1 + vertical_rel_spacing)
@@ -286,22 +284,22 @@ def create_predrilled_depth_line_and_box(
     :param language: language of the plot
     :return:
     """
-    if cpt.predrilled_z == None:
+    if cpt.predrilled_z is None:
         predrill_value = 0
     else:
         predrill_value = cpt.predrilled_z
 
     ax.plot(
         [xlim[0], xlim[0]],
-        [cpt.local_reference_level, cpt.local_reference_level - cpt.predrilled_z],
+        [cpt.local_reference_level, cpt.local_reference_level - predrill_value],
         color="black",
         linewidth=7,
     )
 
     if language == "Nederlands":
-        text = "Voorboordiepte = " + str(cpt.predrilled_z) + " m"
+        text = "Voorboordiepte = " + str(predrill_value) + " m"
     else:
-        text = "Predrilled depth = " + str(cpt.predrilled_z) + " m"
+        text = "Predrilled depth = " + str(predrill_value) + " m"
 
     box = [
         TextArea(
@@ -311,9 +309,16 @@ def create_predrilled_depth_line_and_box(
     ]
 
     xbox = HPacker(children=box, align="center", pad=0, sep=5)
-    y_lims = ax.get_ylim()
-    # place the textbox at the left side of the plot in the middle of the plot
-    bbox_to_anchor = (5 / 16, 0.975)  # top middle default value
+    ylim = ax.get_ylim()
+    # Calculate vertical spacing based on plot scale (same as set_multicolor_label)
+    vertical_scale_factor = CALIBRATED_LENGTH_FIGURE_SIZE / (ylim[0] - ylim[1])
+    # Reference box height estimated as 2x label spacing
+    vertical_offset = - REFERENCE_BOX_HEIGHT_RATIO * vertical_scale_factor
+    
+    # Position predrilled box directly below reference line box
+    y_position = 1.0 - vertical_offset
+    bbox_to_anchor = (5 / 16, y_position)
+    
     anchored_xbox = AnchoredOffsetbox(
         loc=2,
         child=xbox,
@@ -398,21 +403,21 @@ def calculate_top_spine_position(
     extra_label_spacing: float = 0.02,
 ) -> float:
     """
-    Calculates the position of the top spine in axes coordinates to avoid intersection with information box.
+    Calculate the position of the top spine in axes coordinates to avoid intersection with information box.
+    
+    The vertical spacing for the top spine accounts for:
+    - Base label spacing: LABEL_VERTICAL_SPACING_RATIO (0.06) * CALIBRATED_LENGTH_FIGURE_SIZE / y_range
+    - Extra spacing for secondary axes: extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / y_range
+    
+    Final position = 1.0 + (0.06 * 21 / y_range) + (extra_label_spacing * 21 / y_range)
 
     :param ylim: vertical limit [y_max, y_min]
-    :param extra_label_spacing: extra spacing for secondary axes
+    :param extra_label_spacing: extra spacing for secondary axes (default: 0.02)
     :return: position of top spine in axes coordinates
     """
     y_min = ylim[1]
     y_max = ylim[0]
     y_range = y_max - y_min
-
-    # Calculate the vertical spacing used for multicolor labels
-    # From set_multicolor_label: vertical_rel_spacing = 0.06 * CALIBRATED_LENGTH_FIGURE_SIZE / y_range
-    # Plus extra spacing for secondary axes: extra_label_spacing * CALIBRATED_LENGTH_FIGURE_SIZE / y_range
-    # CALIBRATED_LENGTH_FIGURE_SIZE = 21 meters
-    #  extra_label_spacing = 0.02
 
     vertical_label_spacing = (
         LABEL_VERTICAL_SPACING_RATIO * CALIBRATED_LENGTH_FIGURE_SIZE
@@ -424,8 +429,6 @@ def calculate_top_spine_position(
         vertical_label_spacing + extra_label_spacing_calibrated
     )  # Total offset above 1.0
 
-    # Spine should be positioned above the multicolor labels
-    # Labels are at: 1.0 (start of the top of the plot)  + total_label_offset
     spine_position_axes = 1.0 + total_label_offset
     return spine_position_axes
 
@@ -515,9 +518,6 @@ def set_x_axis(
         location=graph["position_label"],
         extra_label_spacing=settings["extra_label_spacing"],
     )
-
-    return None
-
 
 def set_y_axis(
     ax: Axes,
