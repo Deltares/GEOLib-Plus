@@ -26,9 +26,7 @@ class TestPlotAcceptance:
         # Find differences
         diff = arr1 != arr2
 
-        if np.any(diff):
-            return True
-        return False
+        return np.any(diff)
 
     @pytest.mark.integrationtest
     def test_plot_bro_xml_cpt_various_formats(self):
@@ -138,6 +136,6 @@ class TestPlotAcceptance:
                 / f"{cpt_file_xml.stem}.pdf"
             )
             generated_path = Path("test_output") / f"{cpt_file_xml.stem}.pdf"
-            #assert self.are_plots_identical(
-            #    generated_path, reference_path
-            #), f"Generated plot for {cpt_file_xml.name} does not match reference."
+            assert self.are_plots_identical(
+                generated_path, reference_path
+            ), f"Generated plot for {cpt_file_xml.name} does not match reference."
