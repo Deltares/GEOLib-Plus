@@ -336,23 +336,18 @@ def check_data_availability_for_plotting(cpt: AbstractCPT, key) -> bool:
     :param key: data key to be checked
     :return: True if data is available, False otherwise, error raised if tip data is not available for qc plotting
     """
-    if key == "qc":
-        if cpt.tip is None:
-            raise ValueError(
-                "Tip data is not available for plotting, this is required for plotting."
-            )
-    if key == "friction":
-        if cpt.friction is None:
-            return False
-    if key == "friction_nbr":
-        if cpt.friction_nbr is None:
-            return False
-    if key == "inv_friction_nbr":
-        if cpt.tip is None or cpt.friction is None:
-            return False
-    if key == "water":
-        if cpt.water is None:
-            return False
+    if key == "qc" and cpt.tip is None:
+        raise ValueError(
+            "Tip data is not available for plotting, this is required for plotting."
+        )
+    if key == "friction" and cpt.friction is None:
+        return False
+    if key == "friction_nbr" and cpt.friction_nbr is None:
+        return False
+    if key == "inv_friction_nbr" and (cpt.tip is None or cpt.friction is None):
+        return False
+    if key == "water" and cpt.water is None:
+        return False
     return True
 
 
