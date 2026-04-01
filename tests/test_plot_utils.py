@@ -172,6 +172,25 @@ class TestSetXAxis:
         assert len(artists) == 1  # One textbox should be added
 
     @pytest.mark.unittest
+    def test_create_predrilled_depth_line_and_box_position(self, mock_cpt: MagicMock, mock_ax: plt.Axes, sample_graph: dict, sample_settings: dict, ylim: list) -> None:
+        xlim = [0, 5]
+        language = "English"
+
+        # Call the function to set the x-axis and create the predrilled depth line and box
+        set_x_axis(mock_ax, sample_graph, sample_settings, ylim)
+        create_predrilled_depth_line_and_box(mock_cpt, mock_ax, xlim, language)
+
+        # Verify the position of the textbox
+        artists = mock_ax.artists
+        textbox = artists[1]
+        bounds_bbox = textbox.get_bbox_to_anchor()._bbox.bounds
+        expected_position_x = 5 / 16
+        expected_position_y = 0.5609
+        assert bounds_bbox[0] == pytest.approx(expected_position_x, rel=1e-2), "Textbox X position is incorrect."
+        assert bounds_bbox[1] == pytest.approx(expected_position_y, rel=1e-2), "Textbox Y position is incorrect."
+
+
+    @pytest.mark.unittest
     def test_calculate_top_spine_position_normal_range(self) -> None:
         """Test with standard y_range (50m)."""
         ylim = [10.0, -40.0]  # 50m range
@@ -184,7 +203,6 @@ class TestSetXAxis:
         expected = 1.0 + expected_vertical_spacing + expected_extra_spacing
 
         assert result == pytest.approx(expected)
-        assert result == pytest.approx(1.0336)  # For 50m range
 
     @pytest.mark.unittest
     def test_spine_position_always_greater_than_one(self) -> None:

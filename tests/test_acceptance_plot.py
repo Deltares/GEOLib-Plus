@@ -26,9 +26,7 @@ class TestPlotAcceptance:
         # Find differences
         diff = arr1 != arr2
 
-        if np.any(diff):
-            return True
-        return False
+        return np.any(diff)
 
     @pytest.mark.integrationtest
     def test_plot_bro_xml_cpt_various_formats(self):
@@ -83,8 +81,6 @@ class TestPlotAcceptance:
             cpt.plot_settings.vertical_settings["buffer_at_top"] = 1.5
 
             # Vertical length of the graph in meter
-            # cpt.plot_settings.vertical_settings["length_graph"] = 50
-
             # The distance in meter which is repeated from one graph to the subsequent graph (in case the data exceeds the bottom
             # of the graph).
             cpt.plot_settings.vertical_settings["repeated_distance"] = 1.5
