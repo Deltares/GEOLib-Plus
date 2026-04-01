@@ -87,10 +87,10 @@ html_theme_options = {
     "show_related": False,
     "note_bg": "#FFF59C",
     "extra_nav_links": {
-        "@Source code": "https://bitbucket.org/DeltaresGEO/geolib-plus/src",
-        "@Issue Tracker": "https://issuetracker.deltares.nl/secure/RapidBoard.jspa?projectKey=GEOLIB",
+        "@Source code": "https://github.com/Deltares/GEOLib-Plus",
+        "@Issue Tracker": "https://github.com/Deltares/GEOLib-Plus/issues",
         "@Project documentation": "https://publicwiki.deltares.nl/display/GEOLIB/GEOLIB+Home",
-        "@Releases": "https://publicwiki.deltares.nl/display/GEOLIB/GEOLib+releases",
+        "@Releases": "https://github.com/Deltares/GEOLib-Plus/releases",
     },
     "show_related": False,
     "show_relbars": True,
@@ -117,8 +117,8 @@ html_show_sphinx = False
 todo_include_todos = True
 
 # Releases config
-releases_release_uri = "https://publicwiki.deltares.nl/download/attachments/166462065/geolib_plus-%s-py3-none-any.whl?api=v2"
-releases_issue_uri = "https://issuetracker.deltares.nl/browse/%s"
+releases_release_uri = "https://pypi.org/project/d-geolib-plus/#files"
+releases_issue_uri = "https://github.com/Deltares/GEOLib-Plus"
 releases_unstable_prehistory = True
 
 # Bibliography
