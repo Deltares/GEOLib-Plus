@@ -434,7 +434,7 @@ class TestPlotCpt:
 
         result = plot_cpt.check_data_availability_for_plotting(cpt, "qc")
 
-        assert result is True
+        assert result
 
     @pytest.mark.unittest
     def test_check_data_availability_qc_without_tip_data(self):
