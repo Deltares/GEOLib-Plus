@@ -331,24 +331,26 @@ def save_figures(figures: List, cpt: AbstractCPT, output_folder: Path):
 def check_data_availability_for_plotting(cpt: AbstractCPT, key) -> bool:
     """
     Checks if the data required for plotting is available in the cpt.
-    raise an error if tip data is not available for plotting qc data.
+    Raises an error if tip data is not available for plotting qc data, as qc is required.
     :param cpt: cpt data
     :param key: data key to be checked
     :return: True if data is available, False otherwise, error raised if tip data is not available for qc plotting
     """
-    if key == "qc" and cpt.tip is None:
-        raise ValueError(
-            "Tip data is not available for plotting, this is required for plotting."
-        )
-    if key == "friction" and cpt.friction is None:
-        return False
-    if key == "friction_nbr" and cpt.friction_nbr is None:
-        return False
-    if key == "inv_friction_nbr" and (cpt.tip is None or cpt.friction is None):
-        return False
-    if key == "water" and cpt.water is None:
-        return False
-    return True
+    if key == "qc":
+        if cpt.tip is None:
+            raise ValueError(
+                "Tip data is not available for plotting, this is required for plotting."
+            )
+        return True
+    if key == "friction":
+        return cpt.friction is not None
+    if key == "friction_nbr":
+        return cpt.friction_nbr is not None
+    if key == "inv_friction_nbr":
+        return cpt.tip is not None and cpt.friction is not None
+    if key == "water":
+        return cpt.water is not None
+    return False
 
 
 def generate_plot(

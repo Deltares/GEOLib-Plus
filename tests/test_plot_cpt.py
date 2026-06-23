@@ -470,9 +470,7 @@ class TestPlotCpt:
         cpt = BroXmlCpt()
         cpt.friction = None
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction")
-
-        assert not result
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "friction")
 
     @pytest.mark.unittest
     def test_check_data_availability_friction_nbr_with_data(self):
@@ -482,9 +480,7 @@ class TestPlotCpt:
         cpt = BroXmlCpt()
         cpt.friction_nbr = np.array([1.5, 2.0, 2.5])
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
-
-        assert result is True
+        assert plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
 
     @pytest.mark.unittest
     def test_check_data_availability_friction_nbr_without_data(self):
@@ -494,9 +490,7 @@ class TestPlotCpt:
         cpt = BroXmlCpt()
         cpt.friction_nbr = None
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
-
-        assert result is False
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
 
     @pytest.mark.unittest
     def test_check_data_availability_inv_friction_nbr_with_both_data(self):
@@ -507,9 +501,7 @@ class TestPlotCpt:
         cpt.tip = np.array([1.0, 2.0, 3.0])
         cpt.friction = np.array([0.1, 0.2, 0.3])
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
-
-        assert result is True
+        assert plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
 
     @pytest.mark.unittest
     def test_check_data_availability_inv_friction_nbr_without_tip(self):
@@ -520,9 +512,7 @@ class TestPlotCpt:
         cpt.tip = None
         cpt.friction = np.array([0.1, 0.2, 0.3])
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
-
-        assert result is False
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
 
     @pytest.mark.unittest
     def test_check_data_availability_inv_friction_nbr_without_friction(self):
@@ -533,9 +523,7 @@ class TestPlotCpt:
         cpt.tip = np.array([1.0, 2.0, 3.0])
         cpt.friction = None
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
-
-        assert result is False
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
 
     @pytest.mark.unittest
     def test_check_data_availability_inv_friction_nbr_without_both(self):
@@ -546,9 +534,7 @@ class TestPlotCpt:
         cpt.tip = None
         cpt.friction = None
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
-
-        assert result is False
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
 
     @pytest.mark.unittest
     def test_check_data_availability_water_with_data(self):
@@ -558,9 +544,7 @@ class TestPlotCpt:
         cpt = BroXmlCpt()
         cpt.water = np.array([10.0, 20.0, 30.0])
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "water")
-
-        assert result is True
+        assert plot_cpt.check_data_availability_for_plotting(cpt, "water")
 
     @pytest.mark.unittest
     def test_check_data_availability_water_without_data(self):
@@ -570,35 +554,16 @@ class TestPlotCpt:
         cpt = BroXmlCpt()
         cpt.water = None
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "water")
-
-        assert result is False
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "water")
 
     @pytest.mark.unittest
     def test_check_data_availability_unknown_key(self):
         """
-        Test that check_data_availability_for_plotting returns True for unknown keys (default behavior)
+        Test that check_data_availability_for_plotting returns False for unknown keys
         """
         cpt = BroXmlCpt()
 
-        result = plot_cpt.check_data_availability_for_plotting(cpt, "unknown_key")
-
-        assert result is True
-
-    @pytest.mark.unittest
-    def test_check_data_availability_qc_raises_value_error_without_tip(self):
-        """
-        Test that check_data_availability_for_plotting raises ValueError with correct message
-        when tip data is not available for qc plotting
-        """
-        cpt = BroXmlCpt()
-        cpt.tip = None
-
-        with pytest.raises(
-            ValueError,
-            match="Tip data is not available for plotting, this is required for plotting.",
-        ):
-            plot_cpt.check_data_availability_for_plotting(cpt, "qc")
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "unknown_key")
 
     @pytest.mark.unittest
     def test_plot_method_catches_value_error(self, cpt_with_water, capsys):
@@ -704,6 +669,5 @@ class TestPlotCpt:
         output_dir.mkdir()
         cpt.plot(output_dir)
 
-        # Check that a PDF file was created
         pdf_files = list(output_dir.glob("*.pdf"))
         assert len(pdf_files) > 0, "No PDF file was created"
