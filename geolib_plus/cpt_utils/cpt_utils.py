@@ -14,6 +14,7 @@ import numpy as np
 
 from geolib_plus.cpt_base_model import AbstractCPT
 
+TOL = 1e-12  # Tolerance value to avoid division by zero or log of zero
 resource_default_path = Path(__file__).parent.parent.parent
 
 
@@ -40,10 +41,10 @@ def n_iter(
     """
 
     # convergence of n
-    Cn = (Pa / np.array(sigma_eff)) ** n
+    Cn = (Pa / (np.array(sigma_eff) + TOL)) ** n
 
     Q = ((np.array(qt) - np.array(sigma_tot)) / Pa) * Cn
-    F = (np.array(friction_nb) / (np.array(qt) - np.array(sigma_tot))) * 100
+    F = (np.array(friction_nb) / (np.array(qt) - np.array(sigma_tot) + TOL)) * 100
 
     # Q and F cannot be negative. if negative, log10 will be infinite.
     # These values are limited by the contours of soil behaviour of Robertson

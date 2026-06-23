@@ -9,6 +9,7 @@ import pytest
 from geolib_plus.bro_xml_cpt import BroXmlCpt
 from geolib_plus.gef_cpt import GefCpt
 from geolib_plus.robertson_cpt_interpretation import (
+    TOL,
     InterpretationMethod,
     OCRMethod,
     RelativeDensityMethod,
@@ -749,7 +750,7 @@ class TestInterpreter:
         OCR = (
             0.33
             * (interpreter.data.qt - interpreter.data.total_stress)
-            / interpreter.data.effective_stress
+            / (interpreter.data.effective_stress + TOL)
         )
         freq = 1
         test_damping = (
