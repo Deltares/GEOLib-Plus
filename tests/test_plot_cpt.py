@@ -472,7 +472,7 @@ class TestPlotCpt:
 
         result = plot_cpt.check_data_availability_for_plotting(cpt, "friction")
 
-        assert result is False
+        assert not result
 
     @pytest.mark.unittest
     def test_check_data_availability_friction_nbr_with_data(self):
