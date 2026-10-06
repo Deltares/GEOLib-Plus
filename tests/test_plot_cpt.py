@@ -1,3 +1,5 @@
+import os
+import stat
 from pathlib import Path
 
 import matplotlib
@@ -359,3 +361,313 @@ class TestPlotCpt:
         :return:
         """
         return PlotSettings()
+
+    @pytest.mark.unittest
+    def test_generate_plot_raises_error_when_qc_tip_missing(
+        self, cpt_with_water, plot_settings
+    ):
+        """
+        Test that generate_plot raises ValueError when qc is in graph_settings but tip data is missing
+        """
+        test_cpt = cpt_with_water.copy()
+        test_cpt.tip = None
+
+        ylims = plot_cpt.get_y_lims(test_cpt, plot_settings.general_settings)
+
+        with pytest.raises(
+            ValueError,
+            match="Tip data is not available for plotting, this is required for plotting.",
+        ):
+            plot_cpt.generate_plot(
+                test_cpt, plot_settings.general_settings, ylims[0], ylims, 0
+            )
+
+    @pytest.mark.unittest
+    def test_generate_plot_skips_unavailable_data(self, cpt_with_water, plot_settings):
+        """
+        Test that generate_plot successfully creates a plot while skipping unavailable data types
+        """
+        # Remove friction data so friction graphs are skipped
+        test_cpt = cpt_with_water.copy()
+        test_cpt.friction = None
+        test_cpt.friction_nbr = None
+
+        ylims = plot_cpt.get_y_lims(test_cpt, plot_settings.general_settings)
+
+        # Should not raise an error, just skip the unavailable data
+        fig = plot_cpt.generate_plot(
+            test_cpt, plot_settings.general_settings, ylims[0], ylims, 0
+        )
+
+        assert fig is not None
+        # 3 axes as qc, water are available, friction and friction_nbr are not
+        # plus the main axis
+        assert len(fig.axes) == 3
+
+    @pytest.mark.unittest
+    def test_generate_plot_all_data_available(self, cpt_with_water, plot_settings):
+        """
+        Test that generate_plot successfully creates a plot while all data types are available
+        """
+
+        test_cpt = cpt_with_water.copy()
+
+        ylims = plot_cpt.get_y_lims(test_cpt, plot_settings.general_settings)
+
+        # Should not raise an error, just skip the unavailable data
+        fig = plot_cpt.generate_plot(
+            test_cpt, plot_settings.general_settings, ylims[0], ylims, 0
+        )
+
+        assert fig is not None
+        # 5 axes as qc, water, friction and friction_nbr are available
+        # plus the main axis
+        assert len(fig.axes) == 5
+
+    @pytest.mark.unittest
+    def test_check_data_availability_qc_with_tip_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when tip data is available for qc plotting
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = np.array([1.0, 2.0, 3.0])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "qc")
+
+        assert result
+
+    @pytest.mark.unittest
+    def test_check_data_availability_qc_without_tip_data(self):
+        """
+        Test that check_data_availability_for_plotting raises ValueError when tip data is not available for qc plotting
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = None
+
+        with pytest.raises(
+            ValueError,
+            match="Tip data is not available for plotting, this is required for plotting.",
+        ):
+            plot_cpt.check_data_availability_for_plotting(cpt, "qc")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_with_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when friction data is available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction = np.array([0.1, 0.2, 0.3])
+
+        result = plot_cpt.check_data_availability_for_plotting(cpt, "friction")
+
+        assert result
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_without_data(self):
+        """
+        Test that check_data_availability_for_plotting returns False when friction data is not available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction = None
+
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "friction")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_nbr_with_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when friction_nbr data is available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction_nbr = np.array([1.5, 2.0, 2.5])
+
+        assert plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_friction_nbr_without_data(self):
+        """
+        Test that check_data_availability_for_plotting returns False when friction_nbr data is not available
+        """
+        cpt = BroXmlCpt()
+        cpt.friction_nbr = None
+
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "friction_nbr")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_with_both_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when both tip and friction data are available for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = np.array([1.0, 2.0, 3.0])
+        cpt.friction = np.array([0.1, 0.2, 0.3])
+
+        assert plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_without_tip(self):
+        """
+        Test that check_data_availability_for_plotting returns False when tip data is missing for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = None
+        cpt.friction = np.array([0.1, 0.2, 0.3])
+
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_without_friction(self):
+        """
+        Test that check_data_availability_for_plotting returns False when friction data is missing for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = np.array([1.0, 2.0, 3.0])
+        cpt.friction = None
+
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_inv_friction_nbr_without_both(self):
+        """
+        Test that check_data_availability_for_plotting returns False when both tip and friction data are missing for inv_friction_nbr
+        """
+        cpt = BroXmlCpt()
+        cpt.tip = None
+        cpt.friction = None
+
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "inv_friction_nbr")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_water_with_data(self):
+        """
+        Test that check_data_availability_for_plotting returns True when water data is available
+        """
+        cpt = BroXmlCpt()
+        cpt.water = np.array([10.0, 20.0, 30.0])
+
+        assert plot_cpt.check_data_availability_for_plotting(cpt, "water")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_water_without_data(self):
+        """
+        Test that check_data_availability_for_plotting returns False when water data is not available
+        """
+        cpt = BroXmlCpt()
+        cpt.water = None
+
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "water")
+
+    @pytest.mark.unittest
+    def test_check_data_availability_unknown_key(self):
+        """
+        Test that check_data_availability_for_plotting returns False for unknown keys
+        """
+        cpt = BroXmlCpt()
+
+        assert not plot_cpt.check_data_availability_for_plotting(cpt, "unknown_key")
+
+    @pytest.mark.unittest
+    def test_plot_method_catches_value_error(self, cpt_with_water, capsys):
+        """
+        Test that the plot method catches ValueError and prints appropriate error message
+        """
+        test_cpt = cpt_with_water.copy()
+        # Set tip to None to trigger ValueError
+        test_cpt.tip = None
+
+        # Call plot method - should catch ValueError and print message
+        test_cpt.plot(Path("test_output"))
+
+        # Capture printed output
+        captured = capsys.readouterr()
+        assert "Cpt data and/or settings are not valid for plotting." in captured.out
+        assert "Please check the data and settings." in captured.out
+
+    @pytest.mark.unittest
+    def test_plot_method_catches_index_error(self, cpt_with_water, capsys):
+        """
+        Test that the plot method catches IndexError and prints appropriate error message
+        """
+        test_cpt = cpt_with_water.copy()
+        test_cpt.friction = test_cpt.friction[:50]
+        # Mock plot_cpt_norm to raise IndexError
+        test_cpt.plot(Path("test_output"))
+        # Capture printed output
+        captured = capsys.readouterr()
+        assert (
+            "Cpt data and/or settings are not valid for plotting. Please check the data and settings."
+            in captured.out
+        )
+        assert (
+            "Property friction does not have the same size as the other properties"
+            in captured.out
+        )
+
+    @pytest.mark.unittest
+    def test_plot_method_catches_permission_error(self, cpt_with_water, capsys, tmp_path):
+        """
+        Test that the plot method catches PermissionError and prints the error
+        """
+
+        # Create output directory
+        output_dir = tmp_path / "output"
+        output_dir.mkdir()
+
+        # Create a read-only file with the expected output filename to trigger PermissionError
+        output_file = output_dir / f"{cpt_with_water.name}.pdf"
+        output_file.write_text("dummy")
+
+        # Make the file read-only
+        os.chmod(output_file, stat.S_IREAD)
+
+        try:
+            # Call plot method - should catch PermissionError when trying to overwrite read-only file
+            cpt_with_water.plot(output_dir)
+
+            # Capture printed output
+            captured = capsys.readouterr()
+            assert "Permission denied" in captured.out
+        finally:
+            # Restore write permissions for cleanup
+            os.chmod(output_file, stat.S_IWRITE | stat.S_IREAD)
+
+    @pytest.mark.unittest
+    def test_plot_method_catches_generic_exception(self, cpt_with_water, capsys):
+        """
+        Test that the plot method catches unexpected exceptions and reports them
+        """
+        test_cpt = cpt_with_water.copy()
+        # Introduce an unexpected error by setting an invalid type
+        test_cpt.name = 12345  # Invalid type to trigger exception
+
+        test_cpt.plot(Path("test_output"))
+
+        # Capture printed output
+        captured = capsys.readouterr()
+        assert "An unexpected error occurred:" in captured.out
+
+    @pytest.mark.unittest
+    def test_plot_method_successful_execution(self, tmp_path):
+        """
+        Test that the plot method executes successfully with valid data
+        """
+        # Create a fresh CPT instance with all required data
+        test_folder = Path(TestUtils.get_local_test_data_dir("cpt/bro_xml"))
+        filename = "cpt_with_water.xml"
+        test_file = test_folder / filename
+
+        cpt = BroXmlCpt()
+        cpt.read(test_file)
+        cpt.pre_process_data()
+
+        # Ensure all required data is present
+        assert cpt.tip is not None
+        assert cpt.water is not None
+        assert cpt.depth_to_reference is not None
+
+        # Call plot method - should execute without errors
+        output_dir = tmp_path / "test_output"
+        output_dir.mkdir()
+        cpt.plot(output_dir)
+
+        pdf_files = list(output_dir.glob("*.pdf"))
+        assert len(pdf_files) > 0, "No PDF file was created"
