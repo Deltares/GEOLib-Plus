@@ -19,7 +19,7 @@ from geolib_plus.cpt_utils import (
     resource_path,
 )
 
-
+TOL = 1e-12  # Tolerance value to avoid division by zero or log of zero
 class InterpretationMethod(IntEnum):
     ROBERTSON = 1
     LENGKEEK_2022 = 2
@@ -218,7 +218,6 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                 aux = []
                 for polygon in self.polygons:
                     aux.append(polygon.intersection(pnt) or polygon.touches(pnt))
-
             idx = np.where(np.array(aux))[0][0]
             lithology_array[i] = str(idx + 1)
             coords[i] = [x[i], y[i]]
@@ -233,7 +232,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         if self.interpretation_method == InterpretationMethod.LENGKEEK_2022:
             model_name = "Lengkeek2024"
             self.soil_types(model_name=model_name)
-            x = self.data.friction / self.data.qt * 100  # Rf
+            x = self.data.friction / (self.data.qt + TOL) * 100  # Rf
             y = self.data.qt / self.data.Pa
             # max_x= 20 min_x = 0.1 correct array
             x[x <= 0.1] = 0.1
@@ -383,7 +382,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         """
 
         # Correction of the effective stress
-        Cq0 = (self.data.Pa / self.data.effective_stress) ** 0.67
+        Cq0 = (self.data.Pa / (self.data.effective_stress + TOL)) ** 0.67
         # calculation of the corrected tip resistance
         qcdq = self.data.qt * Cq0
 
@@ -523,7 +522,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
             n = np.ones(length_of_cpt) * 0.5
 
         # parameter Cn
-        Cn = (self.data.Pa / self.data.effective_stress) ** n
+        Cn = (self.data.Pa / (self.data.effective_stress + TOL)) ** n
         # calculation Q and F
         Q = (self.data.qt - self.data.total_stress) / self.data.Pa * Cn
         F = self.data.friction / (self.data.qt - self.data.total_stress) * 100
@@ -738,7 +737,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
                     OCR[i] = (
                         0.33
                         * (self.data.qt[i] - self.data.total_stress[i])
-                        / self.data.effective_stress[i]
+                        / (self.data.effective_stress[i] + TOL)
                     )
                 elif method == OCRMethod.ROBERTSON:
                     OCR[i] = 0.25 * self.data.Qtn[i] ** 1.25
@@ -880,7 +879,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         if method == RelativeDensityMethod.BALDI:
             # calculate normalised cpt resistance, corrected for overburden pressure
             Q_cn = (self.data.qt / self.data.Pa) / (
-                self.data.effective_stress / self.data.Pa
+                (self.data.effective_stress + TOL) / self.data.Pa
             ) ** 0.5
 
             # calculate rd if Q_cn > c_0
@@ -890,7 +889,7 @@ class RobertsonCptInterpretation(AbstractInterpretationMethod, BaseModel):
         elif method == RelativeDensityMethod.KULHAWY:
             # calculate normalised cpt resistance, corrected for overburden pressure
             Q_cn = (self.data.qt / self.data.Pa) / (
-                self.data.effective_stress / self.data.Pa
+                (self.data.effective_stress + TOL) / self.data.Pa
             ) ** 0.5
 
             # calculate overconsolidation factor
