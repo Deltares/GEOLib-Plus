@@ -14,23 +14,23 @@ jobs:
           os: [ubuntu-22.04]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
 
       - name: Install Dependencies
-        run: uv sync --locked --extra docs
+        run: uv sync --locked --no-build --no-install-project --extra docs
 
       - name: Build sphinx documentation
         run: |
           cd docs
-          uv run python -m sphinx . build -b html -c .
+          uv run --frozen --no-sync --no-build python -m sphinx . build -b html -c .
       - name: Commit documentation changes
         run: |
           git clone https://github.com/Deltares/geolib-plus.git --branch gh-pages --single-branch gh-pages
@@ -46,7 +46,7 @@ jobs:
           # the return code.
           
       - name: Push changes
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@7fba72704ad2db819788db8f2d9e7d1dfbebe089 # master
         with:
           branch: gh-pages
           directory: gh-pages

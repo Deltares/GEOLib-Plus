@@ -17,30 +17,30 @@ jobs:
         os: [ubuntu-22.04, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
       - name: Set up uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
 
       - name: Install Dependencies
-        run: uv sync --locked --extra dev
+        run: uv sync --locked --no-build --no-install-project --extra dev
 
       - name: Check installation
-        run: uv pip check
+        run: uv pip check --no-build
 
       - name: Test with pytest
-        run: uv run pytest --cov=geolib_plus --cov-report xml:coverage-reports/coverage-geolib-plus.xml --junitxml=xunit-reports/xunit-result-geolib-plus.xml -m "not workinprogress"
+        run: uv run --frozen --no-sync --no-build pytest --cov=geolib_plus --cov-report xml:coverage-reports/coverage-geolib-plus.xml --junitxml=xunit-reports/xunit-result-geolib-plus.xml -m "not workinprogress"
 
       - name: Autoformat code if the check fails
         if: ${{ (matrix.os == 'ubuntu-22.04') && (matrix.python-version == '3.12') && (github.event_name == 'pull_request') }}
         run: |
-          uv run isort .
-          uv run black .
+          uv run --frozen --no-sync --no-build isort .
+          uv run --frozen --no-sync --no-build black .
           git config --global user.name '${{ github.actor }}'
           git config --global user.email '${{ github.actor }}@users.noreply.github.com'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
