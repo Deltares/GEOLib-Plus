@@ -38,7 +38,6 @@ The main packages used are:
 - Matplotlib_ Python plotting package
 - Numpy_ NumPy is the fundamental package for array computing with Python.
 - Pandas_ Powerful data structures for data analysis, time series, and statistics
-- Poetry_ for package management (replacing setuptools) see also `PEP 518 <https://www.python.org/dev/peps/pep-0518/>`_.
 - Pydantic_ for validation of types and some parameters (min/max/defaults).
 - Pyproj_ Python interface to PROJ (cartographic projections and coordinate transformations library)
 - Scipy_ SciPy: Scientific Library for Python
@@ -49,7 +48,6 @@ The main packages used are:
 .. _Matplotlib: https://matplotlib.org/
 .. _Numpy: https://numpy.org/
 .. _Pandas: https://pandas.pydata.org/
-.. _Poetry: https://python-poetry.org/docs/
 .. _Pydantic: https://pydantic-docs.helpmanual.io/
 .. _Pyproj: https://pyproj4.github.io/pyproj/stable/
 .. _Scipy: https://www.scipy.org/
@@ -72,6 +70,7 @@ Once you have a copy of the source, you can embed it in your own Python
 package, or install it into your site-packages easily::
 
     $ cd geolib-plus
-    $ pip install poetry
-    $ poetry install
+    $ pip install -e .
+
+GEOLib+ requires Python 3.12 or newer.
 

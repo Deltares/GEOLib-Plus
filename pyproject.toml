@@ -1,74 +1,72 @@
-[tool.poetry]
+[project]
 name = "d-geolib-plus"
 version = "0.4.1"
 description = "GEOLib+ components"
-authors = ["Maarten Pronk <git@evetion.nl>", "Deltares"]
-license = "LGPL-3.0-or-later"
-homepage = "https://deltares.github.io/geolib-plus/"
-documentation = "https://deltares.github.io/geolib-plus/"
-repository = "https://github.com/Deltares/geolib-plus"
 readme = "README.rst"
-packages = [
-    {include = "geolib_plus"}
+requires-python = ">=3.12"
+license = "LGPL-3.0-or-later"
+authors = [
+    { name = "Maarten Pronk", email = "git@evetion.nl" },
+    { name = "Deltares" },
+]
+dependencies = [
+    "pydantic>=2.0",
+    "pyproj>=3.7.2",
+    "pandas>=2.1.3,<3",
+    "tqdm>=4.66.1",
+    "scipy>=1.17.0",
+    "lxml>=6.0.2",
+    "numpy>=2.2.0",
+    "matplotlib>=3.8.1",
+    "pyshp>=2.3.1,<3",
+    "more-itertools>=10.1.0",
+    "netCDF4>=1.6.5",
+    "requests>=2.26",
+    "d-geolib>=2.9.1",
+    "shapely>=2.0.2",
+    "seaborn>=0.13.0",
+    "folium>=0.14",
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.10,<3.14"
-pydantic = "^2.0"
-pyproj = [
-    {version = "^3.6.1", python = ">=3.10,<3.11"},
-    {version = "^3.7.2", python = "^3.11"}
+[project.optional-dependencies]
+dev = [
+    "teamcity-messages>=1.32",
+    "pytest>=8.0",
+    "coverage>=7.0",
+    "pytest-cov>=5.0",
+    "isort>=5.10.1",
+    "black>=24.0",
+    "mypy>=1.8",
 ]
-pandas = "^2.1.3"
-tqdm = "^4.66.1"
-scipy = [
-    {version = "^1.11.3", python = ">=3.10,<3.11"},
-    {version = "^1.17.0", python = "^3.11"}
+docs = [
+    "sphinx>=7.0",
+    "sphinxcontrib-bibtex>=2.5.0",
+    "sphinx-math-dollar>=1.2.1",
+    "releases>=2.1",
+    "rst2pdf>=0.101",
+    "folium>=0.14",
 ]
-lxml = [
-    {version = "^4.9.3", python = ">=3.10,<3.11"},
-    {version = "^6.0.2", python = "^3.11"}
-]
-numpy = [
-    {version = "^1.26.2", python = ">=3.10,<3.11"},
-    {version = "^2.2.0", python = ">=3.11"}
-]
-matplotlib = "^3.8.1"
-pyshp = "^2.3.1"
-more-itertools = "^10.1.0"
-netCDF4 = "^1.6.5"
-requests = "^2.26"
-d-geolib = "^1.3.3 || ^2.0.0"
-shapely = "^2.0.2"
-seaborn = "^0.13.0"
-sphinx-math-dollar = "^1.2.1"
 
-[tool.poetry.group.dev.dependencies]
-teamcity-messages = "^1.32"
-pytest = "^7.2.0"
-coverage = "^6.5.0"
-pytest-cov = "^4.0.0"
-releases = "^1.6.3"
-rst2pdf = "^0.99"
-isort = "^5.10.1"
-black = ">=22.8.0,<22.10.0"
-sphinx = "^5.3.0"
-mypy = "^0.991"
-sphinxcontrib-bibtex = "^2.5.0"
-folium = "^0.13.0"
+[project.urls]
+Homepage = "https://deltares.github.io/geolib-plus/"
+Documentation = "https://deltares.github.io/geolib-plus/"
+Repository = "https://github.com/Deltares/geolib-plus"
 
 [build-system]
-requires = ["poetry>=1.2.2"]
-build-backend = "poetry.masonry.api"
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
 
-[tox]
-isolated_build = true
-envlist = "py310, py311, py312, py313, py314"
+[tool.setuptools.packages.find]
+include = ["geolib_plus*"]
+
+[tool.setuptools.package-data]
+geolib_plus = ["**/resources/*"]
 
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
 ]
+pythonpath = ["."]
 markers = [
     "unittest",
     "integrationtest",
@@ -80,7 +78,7 @@ markers = [
 
 [tool.black]
 line-length = 90
-target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
+target-version = ['py312', 'py313', 'py314']
 
 [isort]
 multi_line_output=3

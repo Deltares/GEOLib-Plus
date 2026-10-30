@@ -12,19 +12,21 @@ from tests.utils import TestUtils
 class TestGefFileReaderInit:
     @pytest.mark.unittest
     def test_when_init_default_properties_are_set(self):
-        # Define expected property_dict
-        expected_dict = {
-            "depth": GefProperty(gef_key=1, multiplication_factor=1.0),
-            "tip": GefProperty(gef_key=2, multiplication_factor=1000.0),
-            "friction": GefProperty(gef_key=3, multiplication_factor=1000.0),
-            "friction_nb": GefProperty(gef_key=4, multiplication_factor=1.0),
-            "pwp": GefProperty(gef_key=6, multiplication_factor=1000.0),
+        # Define expected gef keys of the default property_dict
+        expected_keys = {
+            "penetration_length": 1,
+            "tip": 2,
+            "friction": 3,
+            "friction_nb": 4,
+            "pwp_u2": 6,
+            "depth": 11,
         }
         file_reader = GefFileReader()
         assert file_reader.name == ""
         assert file_reader.coord == []
         assert isinstance(file_reader.property_dict, dict)
-        assert file_reader.__eq__(expected_dict)
+        for key, gef_key in expected_keys.items():
+            assert file_reader.property_dict[key].gef_key == gef_key
 
 
 class TestGetLineIndexFromDataStartsWith:
