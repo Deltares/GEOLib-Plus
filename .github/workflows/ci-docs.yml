@@ -18,20 +18,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
+          enable-cache: true
 
       - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[docs]"
+        run: uv sync --locked --extra docs
 
       - name: Build sphinx documentation
         run: |
           cd docs
-          python -m sphinx . build -b html -c .
+          uv run python -m sphinx . build -b html -c .
       - name: Commit documentation changes
         run: |
           git clone https://github.com/Deltares/geolib-plus.git --branch gh-pages --single-branch gh-pages
