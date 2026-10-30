@@ -31,7 +31,7 @@ jobs:
         run: uv sync --locked --no-build --no-install-project --extra dev
 
       - name: Check installation
-        run: uv pip check --no-build
+        run: uv pip check
 
       - name: Test with pytest
         run: uv run --frozen --no-sync --no-build pytest --cov=geolib_plus --cov-report xml:coverage-reports/coverage-geolib-plus.xml --junitxml=xunit-reports/xunit-result-geolib-plus.xml -m "not workinprogress"
