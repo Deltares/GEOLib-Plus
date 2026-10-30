@@ -17,27 +17,22 @@ Install GEOLib+ with:
 Requirements
 ------------
 
-To install the required dependencies to run GEOLib+ code, run:
+GEOLib+ requires Python 3.12 or newer. The dependencies are installed
+automatically by pip. To install from a clone of the repository, run:
 
 .. code-block:: bash
 
-    $ pip install -r requirements
-
-Or, when having poetry installed (you should):
-
-.. code-block:: bash
-
-    $ poetry install
+    $ pip install -e .
 
 
 Testing & Development
 ---------------------
 
-Make sure to have the server dependencies installed: 
+Install the development dependencies:
 
 .. code-block:: bash
 
-    $ poetry install -E server
+    $ pip install -e ".[dev]"
 
 In order to run the testcode, from the root of the repository, run:
 
@@ -45,17 +40,11 @@ In order to run the testcode, from the root of the repository, run:
 
     $ pytest
 
-or, in case of using Poetry
-
-.. code-block:: bash
-
-    $ poetry run pytest
-
 Running flake8, mypy is also recommended. For mypy use:
 
 .. code-block:: bash
 
-    $ mypy --config-file pyproject.toml geolib
+    $ mypy --config-file mypy.ini geolib_plus
 
 
 Documentation
@@ -65,6 +54,7 @@ In order to run the documentation, from the root of the repository, run:
 
 .. code-block:: bash
 
+    $ pip install -e ".[docs]"
     $ cd docs
     $ sphinx-build . build -b html -c .
 
@@ -79,6 +69,7 @@ To build a distributable wheel package, run:
 
 .. code-block:: bash
 
-    $ poetry build
+    $ pip install build
+    $ python -m build
 
 The distributable packages are now built in the `dist` subfolder.
