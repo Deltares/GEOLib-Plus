@@ -6,11 +6,6 @@ from typing import List
 import pytest
 from teamcity import is_running_under_teamcity
 
-try:
-    from pip import main as pipmain
-except:
-    from pip._internal import main as pipmain
-
 only_teamcity = pytest.mark.skipif(
     not (is_running_under_teamcity() or "FORCE_TEAMCITY" in os.environ),
     reason="Console test only installed on TC.",
@@ -22,16 +17,6 @@ class TestUtils:
     _name_external = "external_test_data"
     _name_local = "test_files"
     _name_output = "test_output"
-
-    @staticmethod
-    def install_package(package: str):
-        """Installs a package that is normally only used
-        by a test configuration.
-
-        Arguments:
-            package {str} -- Name of the PIP package.
-        """
-        pipmain(["install", package])
 
     @staticmethod
     def get_test_files_from_local_test_dir(dir_name: str, glob_filter: str) -> List[Path]:
